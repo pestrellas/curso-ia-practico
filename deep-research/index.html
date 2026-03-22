@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts para Deep Research — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e4e2dc;
+    --border-strong: #c8c5bc;
+    --text: #1a1917;
+    --text-muted: #6b6860;
+    --text-faint: #9e9b95;
+    --accent-bg: #eef3fb;
+    --accent-text: #0c407a;
+    --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef;
+    --teal-text: #0d6348;
+    --teal-border: #9fe1cb;
+    --green-bg: #eaf3de;
+    --green-text: #27500a;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header {
+    padding: 2rem 0 1.75rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--teal-bg);
+    color: var(--teal-text);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+
+  .stats {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
+  .stat-value { font-size: 20px; font-weight: 500; }
+
+  .prompt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .prompt-card:hover { border-color: var(--border-strong); }
+
+  .prompt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 12px;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .prompt-left { display: flex; align-items: center; gap: 10px; }
+
+  .prompt-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--teal-text);
+    background: var(--teal-bg);
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+
+  .prompt-title { font-size: 15px; font-weight: 500; color: var(--text); }
+
+  .chevron {
+    width: 18px;
+    height: 18px;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+
+  .chevron.open { transform: rotate(180deg); }
+
+  .prompt-body {
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .prompt-body.open { display: block; }
+
+  .prompt-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    padding: 14px 16px;
+    white-space: pre-wrap;
+  }
+
+  .prompt-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 16px 14px;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--accent-border);
+    background: var(--accent-bg);
+    color: var(--accent-text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { background: var(--accent-border); }
+
+  .copy-btn.copied {
+    background: var(--green-bg);
+    color: var(--green-text);
+    border-color: var(--teal-border);
+  }
+
+  .copy-btn svg { width: 13px; height: 13px; }
+
+  .tip {
+    background: var(--teal-bg);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--teal-text);
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+  }
+
+  .tip b { font-weight: 500; }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 22px; }
+    .stat { min-width: 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — Deep Research</div>
+    <h1>Prompts para Investigación Profunda</h1>
+    <p class="subtitle">Prompts listos para usar en cualquier LLM. Cada uno está diseñado para generar una investigación completa sobre conceptos clave de inteligencia artificial.</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Prompts disponibles</div><div class="stat-value">8</div></div>
+    <div class="stat"><div class="stat-label">Compatibles con</div><div class="stat-value">Todos los LLMs</div></div>
+  </div>
+
+  <div class="tip">
+    <b>¿Cómo usar estos prompts?</b> Haz clic en cualquier tarjeta para expandirla, luego usa el botón <b>Copiar prompt</b> para pegarlo directamente en ChatGPT, Claude, Gemini, Grok u otro LLM de tu preferencia.
+  </div>
+
+  <div id="prompts-list"></div>
+
+</div>
+
+<script>
+const prompts = [
+  {
+    id: 1,
+    title: "Tokens",
+    text: `Genera una investigación sobre que son Tokens en la IA, junto con una explicación de las relaciones aproximadas con la cantidad de palabras y como los diferentes LLM existentes utilizan los tokens. Añade por qué es importante entender el uso de tokens, principalmente en el uso de los APIs disponibles, y cómo esto incide por ejemplo en conversaciones de chat (como WhatsApp, o Telegram), donde los clientes interactúan con la inteligencia artificial. Concluye con un detalle aproximado de los costos de Tokens en diferentes plataformas.`
+  },
+  {
+    id: 2,
+    title: "Embeddings",
+    text: `Genera una investigación acerca de Embeddings, qué son, el concepto matemático detrás, el espacio latente, y lo relacionado con el funcionamiento en LLM y transformers. Cómo los Embeddings se relacionan con RAG (Retrieval-Augmented Generation) y la Búsqueda Semántica, y por qué es importante este concepto.`
+  },
+  {
+    id: 3,
+    title: "Ventana de contexto",
+    text: `Genera una investigación sobre Ventana de Contexto en IA. Explica los conceptos básicos de la ventana de contexto, haciendo ejemplos. Incluye una revisión histórica de la ventana y su incremento en estos dos últimos años, y obtén un detalle de la ventana de contexto disponible en ChatGPT, Claude, Grok y Gemini, categorizando de acuerdo a versiones gratuitas y versiones pagadas. Por qué es importante la ventana de contexto, y cómo podemos hacer eficiente este límite valiéndonos de diferentes técnicas, como RAG. El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA.`
+  },
+  {
+    id: 4,
+    title: "Data",
+    text: `Genera una investigación sobre cómo la data es importante para la IA, cómo priorizar el manejo de data en esta era, en que la IA consume data, tanto para entrenarse, como para generar nueva data. Incluye los desafíos a los que se enfrenta la humanidad hoy, en relación con la cantidad de data existente y que se está generando de manera rápida todos los días, y cómo la gobernanza de data es clave para generar procesos de inteligencia artificial que requieran data que deba estar estructurada y que se deba actualizar en el tiempo. Incluye una explicación de data sintética, y explica qué beneficios otorgaría tener data sintética para tener una mejor IA, por qué y en que incide.`
+  },
+  {
+    id: 5,
+    title: "RAG",
+    text: `Genera una investigación sobre RAG (Retrieval-Augmented Generation), cómo RAG conecta la IA a la documentación, archivos y datos de una organización. Incluye el concepto principal y casos de uso, además de por qué los conceptos de embeddings, chunking, bases vectoriales, son importantes para entender mejor cómo funciona un RAG. Añade herramientas actuales que permiten hacer RAG y métodos disponibles.`
+  },
+  {
+    id: 6,
+    title: "Alucinaciones",
+    text: `Genera una investigación sobre las alucinaciones en IA, qué son, razones y su relación con el entrenamiento de los LLMs, una pobre contextualización de consultas. Incluye en tu investigación información sobre sesgo geográfico, ejemplos de alucinación y tipos. Añade cómo detectarlas, y claves para corregir una vez que la hemos detectado. Explica también el concepto human-in-the-loop.`
+  },
+  {
+    id: 7,
+    title: "Agentic AI",
+    text: `Haz una investigación para generar un documento que explique que es Agentic AI, en qué consiste, qué abarca, en qué se diferencia o qué adiciona sobre una interacción común de chat. Incluye además un repaso cronológico de su aparición indicando herramientas. Explica todas las características de la chat agéntica y hacia dónde se estima que evolucionará, incluyendo ejemplos de uso. El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA.`
+  },
+  {
+    id: 8,
+    title: "AGI y Singularidad",
+    text: `Haz una investigación para generar un ensayo didáctico sobre la AGI Inteligencia Artificial General y la singularidad. Explica cada una de ellas y en qué se diferencian de los modelos actuales de IA que usamos hoy. Incluye posiciones de expertos sobre ambas, tanto si son opiniones a favor, en contra o enfoques cautelosos. Prioriza datos de organismos técnicos y científicos relacionados con la investigación de IA, con las empresas detrás del entrenamiento y masificación de IA (a través de LLMs). El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA.`
+  }
+];
+
+function render() {
+  const list = document.getElementById('prompts-list');
+  list.innerHTML = prompts.map((p, i) => `
+    <div class="prompt-card">
+      <div class="prompt-header" onclick="toggle(${p.id})">
+        <div class="prompt-left">
+          <span class="prompt-num">${String(i+1).padStart(2,'0')}</span>
+          <span class="prompt-title">${p.title}</span>
+        </div>
+        <svg class="chevron" id="chev-${p.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="prompt-body" id="body-${p.id}">
+        <div class="prompt-text">${p.text}</div>
+        <div class="prompt-footer">
+          <button class="copy-btn" id="btn-${p.id}" onclick="copyPrompt(${p.id})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar prompt
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggle(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.prompt-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+function copyPrompt(id) {
+  const p = prompts.find(x => x.id === id);
+  if (!p) return;
+  navigator.clipboard.writeText(p.text).then(() => {
+    const btn = document.getElementById('btn-' + id);
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar prompt`;
+    }, 2000);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
