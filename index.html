@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e4e2dc;
+    --border-strong: #c8c5bc;
+    --text: #1a1917;
+    --text-muted: #6b6860;
+    --text-faint: #9e9b95;
+    --accent: #1a5fb4;
+    --accent-bg: #eef3fb;
+    --accent-text: #0c407a;
+    --teal-bg: #e3f5ef;
+    --teal-text: #0d6348;
+    --amber-bg: #fdf0d8;
+    --amber-text: #7a4a0a;
+    --coral-bg: #faeae5;
+    --coral-text: #8c3318;
+    --pink-bg: #faeaf1;
+    --pink-text: #7a2050;
+    --purple-bg: #eeedfb;
+    --purple-text: #3d348a;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 760px; margin: 0 auto; }
+
+  header {
+    padding: 2rem 0 1.75rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .course-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--accent-bg);
+    color: var(--accent-text);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle { font-size: 14px; color: var(--text-muted); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
+  .stat-value { font-size: 22px; font-weight: 500; color: var(--text); }
+
+  .controls { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+
+  .search-wrap { flex: 1; min-width: 200px; }
+
+  input[type="text"] {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input[type="text"]:focus { border-color: var(--accent); }
+
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .filter-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--border-strong); color: var(--text); }
+  .filter-btn.active { background: var(--accent-bg); color: var(--accent-text); border-color: transparent; font-weight: 500; }
+
+  .clase-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 0.75rem 0 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .faq-item:hover { border-color: var(--border-strong); }
+
+  .faq-q {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .q-meta { display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; padding-top: 1px; }
+
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-text);
+    background: var(--accent-bg);
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  .q-tag {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  .tag-fundamentos { background: var(--teal-bg); color: var(--teal-text); }
+  .tag-modelos { background: var(--amber-bg); color: var(--amber-text); }
+  .tag-arquitectura { background: var(--purple-bg); color: var(--purple-text); }
+  .tag-agentes { background: var(--coral-bg); color: var(--coral-text); }
+  .tag-gestion { background: var(--pink-bg); color: var(--pink-text); }
+
+  .faq-question {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--text-faint);
+    transition: transform 0.2s;
+    margin-top: 2px;
+  }
+
+  .chevron.open { transform: rotate(180deg); }
+
+  .faq-answer {
+    display: none;
+    padding: 0 16px 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-answer.open { display: block; }
+
+  .answer-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 12px 0 6px;
+  }
+
+  .answer-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .empty { font-size: 13px; color: var(--text-faint); padding: 1rem 0; }
+
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 22px; }
+    .q-tag { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="course-badge">IA Práctico — FAQ Académico</div>
+    <h1>Preguntas Frecuentes del Curso</h1>
+    <p class="subtitle">Compilado de las clases 1 y 2 · 22 preguntas organizadas por tema</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total de preguntas</div><div class="stat-value">22</div></div>
+    <div class="stat"><div class="stat-label">Temas cubiertos</div><div class="stat-value">5</div></div>
+    <div class="stat"><div class="stat-label">Clases</div><div class="stat-value">2</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Buscar pregunta o concepto..." oninput="renderList()" />
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-tag="all">Todas</button>
+    <button class="filter-btn" data-tag="fundamentos">Fundamentos</button>
+    <button class="filter-btn" data-tag="modelos">Modelos LLM</button>
+    <button class="filter-btn" data-tag="arquitectura">RAG / Arquitectura</button>
+    <button class="filter-btn" data-tag="agentes">Agentes</button>
+    <button class="filter-btn" data-tag="gestion">Gestión empresarial</button>
+  </div>
+
+  <div id="faq-list" style="margin-top:1.25rem"></div>
+
+</div>
+
+<script>
+const faqs = [
+  { id:1, clase:1, tag:"fundamentos", tagLabel:"Fundamentos", q:"¿Los conceptos de IA aplican solo en versiones de pago?", a:"No. Los fundamentos del diseño de prompts, la naturaleza probabilística de los modelos, los tokens y el contexto limitado aplican tanto a herramientas gratuitas como a versiones de pago. Lo que varía en las versiones pagas es el acceso a modelos más capaces, ventanas de contexto más grandes y mayor control. Un prompt mal diseñado es ineficaz en cualquier plan." },
+  { id:2, clase:1, tag:"fundamentos", tagLabel:"Fundamentos", q:"¿Tiene la IA memoria de conversaciones anteriores?", a:"No. Los modelos de lenguaje de gran escala (LLMs) no poseen memoria permanente. Solo procesan la información que se encuentra dentro de su ventana de contexto activa. Por ello, repetir instrucciones clave, resumir información relevante y reenfocar objetivos son prácticas de buen diseño conversacional, no redundancias." },
+  { id:3, clase:1, tag:"fundamentos", tagLabel:"Fundamentos", q:"¿Qué significa que un modelo de IA 'alucina'?", a:"Una alucinación ocurre cuando el modelo genera información incorrecta con alta confianza aparente. Esto se debe a que los LLMs no distinguen entre verdad y plausibilidad estadística: predicen el token más probable dado el contexto, sin mecanismos de verificación factual. Las alucinaciones no son fallas esporádicas sino una propiedad inherente del diseño probabilístico." },
+  { id:4, clase:1, tag:"modelos", tagLabel:"Modelos LLM", q:"¿Qué es el parámetro de temperatura y cómo afecta los resultados?", a:"La temperatura regula el grado de aleatoriedad en la selección de respuestas. Con temperatura baja (0.1–0.3) se obtienen respuestas más deterministas y consistentes, indicadas para contextos de finanzas, legal o procesos críticos. Con temperatura alta (0.7–1.0) las respuestas son más variadas y creativas, adecuadas para marketing, storytelling o generación de ideas. No modifica el conocimiento del modelo, sino cómo elige entre opciones posibles." },
+  { id:5, clase:1, tag:"modelos", tagLabel:"Modelos LLM", q:"¿Por qué la IA produce respuestas de calidad variable ante prompts similares?", a:"El prompting es un proceso iterativo, no un evento único. La primera respuesta raramente es la óptima. El ciclo profesional implica: formular la instrucción, evaluar la respuesta, e iterar ajustando el prompt. La variabilidad es también consecuencia de la naturaleza estocástica del modelo." },
+  { id:6, clase:1, tag:"fundamentos", tagLabel:"Fundamentos", q:"¿Ha superado la IA el Test de Turing?", a:"Depende de la interpretación del test. En conversaciones breves, los LLMs pueden parecer indistinguibles de un humano (fluidez lingüística). Sin embargo, en sentido estricto, los modelos no poseen comprensión, intención ni conciencia. El Test de Turing actual mide habilidad lingüística, no inteligencia general ni razonamiento genuino." },
+  { id:7, clase:1, tag:"fundamentos", tagLabel:"Fundamentos", q:"¿La IA reemplazará a los desarrolladores y otros profesionales?", a:"La IA reemplaza tareas, no profesiones completas. Desaparecen las tareas repetitivas y de bajo valor añadido. Se vuelven más relevantes el criterio profesional, el diseño de soluciones, la validación de resultados y la integración de sistemas. El rol humano se desplaza de la ejecución hacia la toma de decisiones estratégicas." },
+  { id:8, clase:1, tag:"agentes", tagLabel:"Agentes", q:"¿Qué es la IA Agéntica (Agentic AI) y cuál es su importancia práctica?", a:"La IA agéntica se refiere a sistemas que no solo generan respuestas, sino que ejecutan acciones: enviar correos, actualizar registros, coordinar procesos entre sistemas. Su valor reside en la orquestación de flujos de trabajo, no en la autonomía total. Reduce fricción operativa y conecta áreas de negocio, manteniendo al humano como definidor de objetivos." },
+  { id:9, clase:1, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿Qué es RAG y cómo garantiza la confidencialidad de los datos?", a:"RAG (Retrieval-Augmented Generation) es una arquitectura que permite a la IA recuperar fragmentos relevantes de documentos internos y usarlos como contexto en la generación de respuestas, sin entrenarse con esos datos. Bien implementado, RAG no expone información sensible y es significativamente más seguro que pegar datos confidenciales en un chat público." },
+  { id:10, clase:1, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿RAG se conecta al chatbot o al agente?", a:"RAG no es un chatbot ni un agente: es una capa intermedia de conocimiento. Puede alimentar simultáneamente a un chatbot, un agente o múltiples sistemas. La distinción es clara: RAG aporta conocimiento contextual, mientras que el agente ejecuta acciones sobre la base de ese conocimiento." },
+  { id:11, clase:2, tag:"modelos", tagLabel:"Modelos LLM", q:"¿Un GPT personalizado puede manejar varios proyectos o contextos distintos?", a:"No. Un GPT personalizado opera bajo un único conjunto de instrucciones y contexto. Para comportamientos distintos o bases documentales diferentes se deben crear GPTs o Projects separados. Cada GPT/Project encapsula un propósito específico. Herramientas equivalentes en otros proveedores incluyen los GEMs de Gemini y los Proyectos de Claude." },
+  { id:12, clase:2, tag:"modelos", tagLabel:"Modelos LLM", q:"¿Por qué las versiones gratuitas no permiten crear GPTs o Projects?", a:"Es una limitación de producto, no del modelo subyacente. Las versiones de pago habilitan contexto persistente, carga de documentos y mayor control del comportamiento. El modelo base es similar; lo que varía es la capa de orquestación y control disponible para el usuario." },
+  { id:13, clase:2, tag:"modelos", tagLabel:"Modelos LLM", q:"¿La memoria amplificada hace más inteligente a un modelo de IA?", a:"No. La memoria no incrementa la capacidad de razonamiento del modelo; únicamente mantiene estado entre sesiones. Puede ser útil para continuidad de tareas y preferencias de usuario, pero también introduce riesgos: acumulación de ruido, menor control y posibilidad de errores que persisten entre conversaciones. Más memoria no equivale necesariamente a mejor desempeño." },
+  { id:14, clase:2, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿Notebook LM entrena el modelo con los documentos cargados?", a:"No. Notebook LM utiliza los documentos únicamente como contexto en tiempo de inferencia, no para entrenar el modelo ni para compartir datos. Esto lo convierte en una de las formas más seguras de trabajar con documentos propios dentro de una interfaz de IA generativa." },
+  { id:15, clase:2, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿Notebook LM es equivalente a un sistema RAG empresarial?", a:"No completamente. Notebook LM puede describirse como un 'RAG ligero': adecuado para análisis, estudio y casos de uso pequeños. No cuenta con búsqueda dinámica a gran escala, gestión de versiones ni gobernanza empresarial. Un RAG real en entornos corporativos requiere embeddings, bases vectoriales, pipeline de recuperación y control de contexto avanzado." },
+  { id:16, clase:2, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿Es posible implementar RAG con cualquier LLM?", a:"Conceptualmente, sí. RAG es una arquitectura independiente del modelo. El LLM actúa como motor de generación, pero se requiere adicionalmente: embeddings para representación semántica, una base de datos vectorial, un sistema de recuperación y control de contexto. El valor de RAG reside en el pipeline completo, no en el modelo generador." },
+  { id:17, clase:2, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿Qué ocurre si los documentos en un sistema RAG contienen errores o contradicciones?", a:"La IA no corrige esos problemas; los amplifica. Si la documentación fuente está desactualizada, es contradictoria o ambigua, el sistema RAG hará esos problemas más visibles en las respuestas generadas. La calidad del output de un RAG es directamente proporcional a la calidad de los datos de entrada." },
+  { id:18, clase:2, tag:"arquitectura", tagLabel:"RAG / Arquitectura", q:"¿Un sistema RAG expone información confidencial?", a:"No, si está correctamente implementado. Un RAG bien diseñado no entrena el modelo con los datos, envía únicamente fragmentos relevantes como contexto y mantiene los datos bajo control de la organización. Copiar y pegar información sensible en chats públicos representa un riesgo significativamente mayor." },
+  { id:19, clase:2, tag:"agentes", tagLabel:"Agentes", q:"¿Cuál es la diferencia fundamental entre un bot y un agente de IA?", a:"Un bot responde preguntas dentro de un flujo predefinido. Un agente ejecuta acciones orientadas a un objetivo: puede usar herramientas, seguir pasos secuenciales e interactuar con sistemas externos. Sin embargo, el agente no tiene intención propia ni evalúa si el objetivo asignado es correcto. El humano define el objetivo; el agente lo ejecuta." },
+  { id:20, clase:2, tag:"agentes", tagLabel:"Agentes", q:"¿Pueden los agentes de IA operar sin supervisión humana?", a:"No deberían hacerlo. Sin reglas claras, validaciones y supervisión humana en el proceso, los agentes pueden escalar errores rápidamente. Automatizar sin criterio equivale a automatizar problemas. El principio 'human-in-the-loop' es esencial para garantizar que la autonomía del agente no genere consecuencias no deseadas." },
+  { id:21, clase:2, tag:"gestion", tagLabel:"Gestión empresarial", q:"¿Quién debe validar los resultados generados por IA en un entorno empresarial?", a:"Depende del nivel de riesgo del caso de uso. Una buena práctica es: bajo riesgo → mayor autonomía del sistema; alto riesgo → validación humana obligatoria; crítico → el humano tiene la última palabra. La IA asiste la decisión pero no asume responsabilidad. Están emergiendo nuevos roles especializados en supervisión y gobernanza de datos en IA." },
+  { id:22, clase:2, tag:"gestion", tagLabel:"Gestión empresarial", q:"¿Cuándo es conveniente considerar una estrategia de IA in-house?", a:"Cuando la organización maneja datos sensibles, opera procesos críticos, requiere control estricto de la arquitectura o necesita integración profunda con sistemas internos. IA in-house no implica necesariamente entrenar modelos propios, sino controlar la arquitectura, los datos y los flujos de procesamiento. Un concepto relevante para profundizar es el Fine Tuning." }
+];
+
+let activeTag = 'all';
+
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  activeTag = btn.dataset.tag;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+  renderList();
+});
+
+function renderList() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = faqs.filter(f =>
+    (activeTag === 'all' || f.tag === activeTag) &&
+    (!q || f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q))
+  );
+
+  const container = document.getElementById('faq-list');
+  if (!filtered.length) {
+    container.innerHTML = '<p class="empty">No se encontraron preguntas para esta búsqueda.</p>';
+    return;
+  }
+
+  let html = '';
+  filtered.forEach((f, i) => {
+    html += `
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(${f.id})">
+        <div class="q-meta">
+          <span class="q-num">${String(i+1).padStart(2,'0')}</span>
+          <span class="q-tag tag-${f.tag}">${f.tagLabel}</span>
+        </div>
+        <span class="faq-question">${f.q}</span>
+        <svg class="chevron" id="chev-${f.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="faq-answer" id="ans-${f.id}">
+        <div class="answer-label">Respuesta académica</div>
+        <div class="answer-text">${f.a}</div>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function toggle(id) {
+  const ans = document.getElementById('ans-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { ans.classList.add('open'); chev.classList.add('open'); }
+}
+
+renderList();
+</script>
+</body>
+</html>
