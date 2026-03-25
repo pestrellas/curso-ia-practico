@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts de Ejercicios — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--amber-bg); color: var(--amber-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
+  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
+  .stat-value { font-size: 20px; font-weight: 500; }
+
+  .framework-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .framework-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; font-weight: 500; color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .framework-title svg { width: 16px; height: 16px; color: var(--amber-text); }
+  .framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+  .fw-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .fw-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+  .fw-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .fw-contexto .fw-tag { color: var(--teal-text); }
+  .fw-referencia .fw-tag { color: var(--accent-text); }
+  .fw-evaluacion .fw-tag { color: var(--amber-text); }
+  .fw-iteracion .fw-tag { color: var(--purple-text); }
+
+  .tip-box { background: var(--amber-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--amber-text); line-height: 1.65; margin-bottom: 1.75rem; }
+  .tip-box b { font-weight: 500; }
+
+  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
+  .prompt-card:hover { border-color: var(--border-strong); }
+  .prompt-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 12px; gap: 12px; cursor: pointer; user-select: none; }
+  .prompt-left { display: flex; align-items: center; gap: 10px; }
+  .prompt-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--amber-text); background: var(--amber-bg); padding: 2px 7px; border-radius: var(--radius-sm); flex-shrink: 0; }
+  .prompt-meta { display: flex; flex-direction: column; gap: 2px; }
+  .prompt-title { font-size: 15px; font-weight: 500; color: var(--text); }
+  .prompt-category { font-size: 11px; color: var(--text-faint); }
+  .chevron { width: 18px; height: 18px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .prompt-body { display: none; border-top: 1px solid var(--border); }
+  .prompt-body.open { display: block; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab { font-size: 12px; font-weight: 500; padding: 10px 16px; cursor: pointer; color: var(--text-faint); border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .tab:hover { color: var(--text-muted); }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .prompt-section { padding: 14px 16px; }
+
+  .struct-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+  .struct-row:last-child { border-bottom: none; }
+  .struct-label { font-size: 11px; font-weight: 500; min-width: 80px; flex-shrink: 0; padding-top: 1px; }
+  .struct-val { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .label-contexto { color: var(--teal-text); }
+  .label-referencia { color: var(--accent-text); }
+  .label-evaluacion { color: var(--amber-text); }
+  .label-iteracion { color: var(--purple-text); }
+  .label-prompt { color: var(--coral-text); }
+
+  .tips-grid { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
+  .tip-item { display: flex; gap: 10px; align-items: flex-start; }
+  .tip-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+  .tip-dot-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .tip-dot-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .tip-dot-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .tip-dot-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .tip-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .tip-text b { font-weight: 500; color: var(--text); }
+
+  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
+  .copy-trigger:hover { background: var(--accent-border); }
+  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
+  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
+  .copy-hint b { font-weight: 500; opacity: 1; }
+
+  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
+  .copy-box.open { display: block; }
+  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
+  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
+  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .copy-box-footer strong { font-weight: 500; }
+
+  @media (max-width: 480px) { h1 { font-size: 22px; } .copy-hint { display: none; } .framework-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — Ejercicios</div>
+    <h1>Prompts de Ejercicios Prácticos</h1>
+    <p class="subtitle">Ejercicios diseñados para practicar prompting profesional en contextos reales de negocio. Cada prompt incluye estructura, tips y una versión lista para copiar.</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Ejercicios</div><div class="stat-value">6</div></div>
+    <div class="stat"><div class="stat-label">Contextos</div><div class="stat-value">Negocios reales</div></div>
+    <div class="stat"><div class="stat-label">Incluye</div><div class="stat-value">Tips + iteración</div></div>
+  </div>
+
+  <div class="framework-box">
+    <div class="framework-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Estructura de cada prompt — framework C.R.E.I.
+    </div>
+    <div class="framework-grid">
+      <div class="fw-item fw-contexto"><div class="fw-tag">Contexto</div><div class="fw-desc">Define la situación, empresa o audiencia. Cuanto más específico, mejor resultado.</div></div>
+      <div class="fw-item fw-referencia"><div class="fw-tag">Referencia</div><div class="fw-desc">El tono, estilo o formato que debe tener la respuesta.</div></div>
+      <div class="fw-item fw-evaluacion"><div class="fw-tag">Evaluación</div><div class="fw-desc">Los criterios mínimos que debe cumplir una buena respuesta.</div></div>
+      <div class="fw-item fw-iteracion"><div class="fw-tag">Iteración</div><div class="fw-desc">Una variación del prompt para profundizar o cambiar el enfoque.</div></div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <b>¿Cómo usar estos ejercicios?</b> Revisa la pestaña <b>Estructura</b> para entender el prompt, luego lee los <b>Tips</b> antes de ejecutarlo. Cuando estés listo, ve a <b>Copiar prompt</b> para seleccionar el texto y pegarlo en tu LLM favorito.
+  </div>
+
+  <div id="prompts-list"></div>
+
+</div>
+<script>
+const prompts = [
+  {
+    id: 1,
+    title: "Reactivación de cliente inactivo",
+    category: "Ventas / CRM",
+    prompt: "Redacta un correo para reactivar un cliente que dejó de comprar hace 6 meses.\nContexto: empresa SaaS B2B de CRM.\nReferencia: tono consultivo, no agresivo.\nEvaluación: debe incluir propuesta de valor clara y call to action.\nIteración: genera una segunda versión más directa y corta.",
+    estructura: [
+      { label: "Prompt", clase: "label-prompt", val: "Redacta un correo para reactivar un cliente que dejó de comprar hace 6 meses." },
+      { label: "Contexto", clase: "label-contexto", val: "Empresa SaaS B2B de CRM." },
+      { label: "Referencia", clase: "label-referencia", val: "Tono consultivo, no agresivo." },
+      { label: "Evaluación", clase: "label-evaluacion", val: "Debe incluir propuesta de valor clara y call to action." },
+      { label: "Iteración", clase: "label-iteracion", val: "Genera una segunda versión más directa y corta." }
+    ],
+    tips: [
+      { color: "amber", text: "<b>Sé específico con el cliente.</b> Si lo sabes, añade el nombre del cliente, el producto que usaba y por qué crees que dejó de comprar. Más contexto = mejor correo." },
+      { color: "teal", text: "<b>Pide primero la versión consultiva</b> y evalúa si cumple los criterios antes de pedir la versión corta. No pidas las dos al mismo tiempo." },
+      { color: "purple", text: "<b>Usa la iteración como experimento.</b> Compara ambas versiones y decide cuál funciona mejor según el perfil del cliente." },
+      { color: "blue", text: "<b>Añade restricciones de longitud</b> si el resultado es muy largo: 'máximo 150 palabras' o 'cabe en un email de celular'." }
+    ]
+  },
+  {
+    id: 2,
+    title: "Funcionalidad de producto en formato PRD",
+    category: "Producto / Tecnología",
+    prompt: "Describe una nueva funcionalidad para un CRM que automatiza seguimiento de leads.\nContexto: equipo técnico y comercial.\nReferencia: estilo tipo Product Requirement Document (PRD).\nEvaluación: debe incluir problema, solución y beneficios.\nIteración: simplifica la explicación para un usuario no técnico.",
+    estructura: [
+      { label: "Prompt", clase: "label-prompt", val: "Describe una nueva funcionalidad para un CRM que automatiza seguimiento de leads." },
+      { label: "Contexto", clase: "label-contexto", val: "Equipo técnico y comercial." },
+      { label: "Referencia", clase: "label-referencia", val: "Estilo tipo Product Requirement Document (PRD)." },
+      { label: "Evaluación", clase: "label-evaluacion", val: "Debe incluir problema, solución y beneficios." },
+      { label: "Iteración", clase: "label-iteracion", val: "Simplifica la explicación para un usuario no técnico." }
+    ],
+    tips: [
+      { color: "amber", text: "<b>Describe la funcionalidad con más detalle.</b> En lugar de 'automatiza seguimiento', di: 'envía un recordatorio automático al vendedor 3 días después de una demo sin respuesta'." },
+      { color: "teal", text: "<b>Especifica el formato del PRD.</b> Puedes pedir secciones concretas: 'incluye: objetivo, usuarios afectados, requisitos funcionales, criterios de aceptación'." },
+      { color: "purple", text: "<b>La iteración es clave aquí.</b> La versión para no técnicos es la más difícil de lograr bien — pídela por separado y compara si realmente es más simple." },
+      { color: "blue", text: "<b>Prueba el rol.</b> Añade 'Actúa como Product Manager senior' para obtener una perspectiva más estructurada y profesional." }
+    ]
+  },
+  {
+    id: 3,
+    title: "Post sobre IA y transformación del empleo",
+    category: "Comunicación / LinkedIn",
+    prompt: "Escribe un post sobre por qué la IA no reemplaza empleos, sino los transforma.\nContexto: público profesional LATAM.\nReferencia: estilo cercano pero con autoridad.\nEvaluación: debe incluir un ejemplo concreto.\nIteración: añade una pregunta para generar interacción.",
+    estructura: [
+      { label: "Prompt", clase: "label-prompt", val: "Escribe un post sobre por qué la IA no reemplaza empleos, sino los transforma." },
+      { label: "Contexto", clase: "label-contexto", val: "Público profesional LATAM." },
+      { label: "Referencia", clase: "label-referencia", val: "Estilo cercano pero con autoridad." },
+      { label: "Evaluación", clase: "label-evaluacion", val: "Debe incluir un ejemplo concreto." },
+      { label: "Iteración", clase: "label-iteracion", val: "Añade una pregunta para generar interacción." }
+    ],
+    tips: [
+      { color: "amber", text: "<b>Define tu voz antes de pedir el post.</b> Añade: 'escribe en primera persona, como si fuera mi experiencia' o 'usa un tono de mentor, no de experto distante'." },
+      { color: "teal", text: "<b>Pide el ejemplo de tu industria.</b> 'Incluye un ejemplo del sector financiero' o 'del área de recursos humanos' hace el post mucho más relevante para tu audiencia." },
+      { color: "purple", text: "<b>Para LinkedIn, pide formato.</b> Añade: 'usa párrafos cortos, máximo 3 líneas cada uno, con un emoji al inicio de cada bloque' para mejorar la lectura en móvil." },
+      { color: "blue", text: "<b>La pregunta de cierre es todo.</b> Pide que sea específica, no genérica: '¿cómo ha cambiado tu trabajo en el último año?' es mejor que '¿qué opinas?'." }
+    ]
+  },
+  {
+    id: 4,
+    title: "Feedback constructivo para evaluación de desempeño",
+    category: "Recursos Humanos / Liderazgo",
+    prompt: "Redacta feedback para un analista con buen desempeño técnico pero baja comunicación.\nContexto: evaluación semestral.\nReferencia: estilo constructivo.\nEvaluación: debe incluir acciones concretas de mejora.\nIteración: convierte el mensaje en puntos clave para reunión.",
+    estructura: [
+      { label: "Prompt", clase: "label-prompt", val: "Redacta feedback para un analista con buen desempeño técnico pero baja comunicación." },
+      { label: "Contexto", clase: "label-contexto", val: "Evaluación semestral." },
+      { label: "Referencia", clase: "label-referencia", val: "Estilo constructivo." },
+      { label: "Evaluación", clase: "label-evaluacion", val: "Debe incluir acciones concretas de mejora." },
+      { label: "Iteración", clase: "label-iteracion", val: "Convierte el mensaje en puntos clave para reunión." }
+    ],
+    tips: [
+      { color: "amber", text: "<b>Añade un ejemplo real del comportamiento.</b> 'No comunica bien' es vago. Di: 'no actualiza el estado de sus proyectos en las reuniones semanales' para que el feedback sea accionable." },
+      { color: "teal", text: "<b>Especifica la relación.</b> '¿Eres su jefe directo o par?' cambia el tono completamente. Añade tu rol al contexto." },
+      { color: "purple", text: "<b>Pide el balance explícitamente.</b> Añade: 'empieza con el reconocimiento técnico antes de abordar la comunicación, en proporción 60/40'." },
+      { color: "blue", text: "<b>La iteración para reunión es muy útil.</b> Pide que los puntos clave estén en formato de agenda con tiempo estimado para cada uno." }
+    ]
+  },
+  {
+    id: 5,
+    title: "Resumen ejecutivo de propuesta de transformación digital",
+    category: "Consultoría / Negocios",
+    prompt: "Resume una propuesta de transformación digital para una pyme.\nContexto: cliente sin conocimiento técnico.\nReferencia: lenguaje simple, orientado a negocio.\nEvaluación: máximo 5 líneas, enfoque en beneficios.\nIteración: agrega una versión con enfoque en ROI.",
+    estructura: [
+      { label: "Prompt", clase: "label-prompt", val: "Resume una propuesta de transformación digital para una pyme." },
+      { label: "Contexto", clase: "label-contexto", val: "Cliente sin conocimiento técnico." },
+      { label: "Referencia", clase: "label-referencia", val: "Lenguaje simple, orientado a negocio." },
+      { label: "Evaluación", clase: "label-evaluacion", val: "Máximo 5 líneas, enfoque en beneficios." },
+      { label: "Iteración", clase: "label-iteracion", val: "Agrega una versión con enfoque en ROI." }
+    ],
+    tips: [
+      { color: "amber", text: "<b>Pega tu propuesta original en el prompt.</b> En lugar de pedir un resumen genérico, añade: 'aquí está mi propuesta: [texto]' y pide que la resuma. El resultado será mucho más útil." },
+      { color: "teal", text: "<b>Define el sector de la pyme.</b> Una pyme de retail tiene prioridades distintas a una de servicios. Añade ese detalle para que los beneficios sean más concretos." },
+      { color: "purple", text: "<b>El ROI requiere números.</b> Para la iteración de ROI, añade datos reales si los tienes: 'la implementación cuesta X y se estima ahorrar Y horas mensuales'." },
+      { color: "blue", text: "<b>Prueba pedir metáforas.</b> Para clientes no técnicos, pide: 'usa una analogía del mundo cotidiano para explicar cada beneficio'." }
+    ]
+  },
+  {
+    id: 6,
+    title: "Respuesta a cliente molesto por caída del sistema",
+    category: "Atención al Cliente / Crisis",
+    prompt: "Responde a un cliente molesto por una caída del sistema.\nContexto: servicio crítico con impacto operativo.\nReferencia: tono empático pero firme.\nEvaluación: debe reconocer el problema sin admitir culpa legal.\nIteración: genera una versión más corta para WhatsApp.",
+    estructura: [
+      { label: "Prompt", clase: "label-prompt", val: "Responde a un cliente molesto por una caída del sistema." },
+      { label: "Contexto", clase: "label-contexto", val: "Servicio crítico con impacto operativo." },
+      { label: "Referencia", clase: "label-referencia", val: "Tono empático pero firme." },
+      { label: "Evaluación", clase: "label-evaluacion", val: "Debe reconocer el problema sin admitir culpa legal." },
+      { label: "Iteración", clase: "label-iteracion", val: "Genera una versión más corta para WhatsApp." }
+    ],
+    tips: [
+      { color: "amber", text: "<b>Añade el mensaje original del cliente.</b> Pega lo que escribió el cliente molesto para que la IA ajuste el tono de respuesta a la intensidad exacta de su queja." },
+      { color: "teal", text: "<b>Especifica qué puedes ofrecer.</b> ¿Hay compensación disponible? ¿Un crédito, una extensión de servicio? Añádelo al contexto para que la respuesta sea real y no genérica." },
+      { color: "purple", text: "<b>El límite legal es importante.</b> Si tu empresa tiene restricciones específicas sobre admisión de responsabilidad, añádelas explícitamente: 'no puedes mencionar tiempos de resolución ni garantías'." },
+      { color: "blue", text: "<b>Para WhatsApp, pide límite de caracteres.</b> Añade: 'máximo 3 párrafos cortos, sin saludos formales, tono directo y humano'." }
+    ]
+  }
+];
+
+function render() {
+  document.getElementById('prompts-list').innerHTML = prompts.map((p, i) => `
+    <div class="prompt-card">
+      <div class="prompt-header" onclick="toggle(${p.id})">
+        <div class="prompt-left">
+          <span class="prompt-num">${String(i+1).padStart(2,'0')}</span>
+          <div class="prompt-meta">
+            <span class="prompt-title">${p.title}</span>
+            <span class="prompt-category">${p.category}</span>
+          </div>
+        </div>
+        <svg class="chevron" id="chev-${p.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="prompt-body" id="body-${p.id}">
+        <div class="tabs" id="tabs-${p.id}">
+          <div class="tab active" onclick="setTab(${p.id}, 'estructura', this)">Estructura</div>
+          <div class="tab" onclick="setTab(${p.id}, 'tips', this)">Tips para mejorarlo</div>
+          <div class="tab" onclick="setTab(${p.id}, 'copiar', this)">Copiar prompt</div>
+        </div>
+
+        <div class="tab-content active" id="tc-${p.id}-estructura">
+          <div class="prompt-section">
+            ${p.estructura.map(e => `
+              <div class="struct-row">
+                <span class="struct-label ${e.clase}">${e.label}</span>
+                <span class="struct-val">${e.val}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="tab-content" id="tc-${p.id}-tips">
+          <div class="tips-grid">
+            ${p.tips.map((t, ti) => `
+              <div class="tip-item">
+                <div class="tip-dot tip-dot-${t.color}">${ti+1}</div>
+                <div class="tip-text">${t.text}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="tab-content" id="tc-${p.id}-copiar">
+          <div class="copy-trigger" onclick="selectPrompt(${p.id})">
+            <div class="copy-trigger-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Seleccionar prompt para copiar
+            </div>
+            <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+          </div>
+          <div class="copy-box" id="box-${p.id}">
+            <textarea id="ta-${p.id}" rows="6" readonly>${p.prompt}</textarea>
+            <div class="copy-box-footer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggle(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.prompt-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+function setTab(id, tab, el) {
+  const tabs = document.getElementById('tabs-' + id).querySelectorAll('.tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['estructura','tips','copiar'].forEach(t => {
+    document.getElementById('tc-' + id + '-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab !== 'copiar') {
+    document.getElementById('box-' + id).classList.remove('open');
+  }
+}
+
+function selectPrompt(id) {
+  const box = document.getElementById('box-' + id);
+  const ta = document.getElementById('ta-' + id);
+  box.classList.add('open');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+  ta.select();
+}
+
+render();
+</script>
+</body>
+</html>
