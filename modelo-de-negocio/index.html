@@ -1,170 +1,450 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <style>
-    body { font-family: Arial, sans-serif; color: #2d2d2d; max-width: 860px; margin: 0 auto; padding: 20px; }
-    h2 { color: #1a4a7a; border-bottom: 2px solid #1a4a7a; padding-bottom: 6px; margin-top: 32px; }
-    h3 { color: #2e75b6; margin-top: 24px; }
-    p { line-height: 1.7; }
-    table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
-    thead tr { background-color: #1a4a7a; color: #ffffff; }
-    thead th { padding: 11px 14px; text-align: left; }
-    tbody tr:nth-child(even) { background-color: #f0f5fb; }
-    tbody tr:hover { background-color: #dce8f5; }
-    tbody td { padding: 10px 14px; border-bottom: 1px solid #d0dce8; }
-    .highlight-box { background-color: #eaf3fb; border-left: 4px solid #2e75b6; padding: 14px 18px; border-radius: 4px; margin: 20px 0; }
-    .warning-box { background-color: #fff8e1; border-left: 4px solid #f5a623; padding: 14px 18px; border-radius: 4px; margin: 20px 0; }
-    .success-box { background-color: #e8f5e9; border-left: 4px solid #388e3c; padding: 14px 18px; border-radius: 4px; margin: 20px 0; }
-    .badge-section { background-color: #f3e5f5; border-left: 4px solid #7b1fa2; padding: 14px 18px; border-radius: 4px; margin: 20px 0; }
-    .stat { display: inline-block; background-color: #1a4a7a; color: white; border-radius: 6px; padding: 8px 18px; margin: 6px 6px 6px 0; font-weight: bold; font-size: 1.05em; }
-    ul { padding-left: 20px; line-height: 1.8; }
-    .category-tag { display: inline-block; background-color: #e3edf7; color: #1a4a7a; border-radius: 12px; padding: 2px 10px; font-size: 0.88em; font-weight: bold; margin-bottom: 4px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistente de Modelo de Negocio — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --pink-bg: #faeaf1; --pink-text: #7a2050;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--purple-bg); color: var(--purple-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
+  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
+  .stat-value { font-size: 18px; font-weight: 500; line-height: 1.3; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* HOW TO USE */
+  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 0.5rem; }
+  .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .how-step { font-size: 11px; font-weight: 500; color: var(--text-faint); margin-bottom: 6px; }
+  .how-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .how-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .how-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .how-icon svg { width: 14px; height: 14px; }
+  .ic-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .ic-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .ic-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .ic-blue { background: var(--accent-bg); color: var(--accent-text); }
+
+  /* ROUTES */
+  .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0.5rem; }
+  .route-card { border-radius: var(--radius); padding: 14px 16px; }
+  .route-a { background: var(--teal-bg); border: 1px solid var(--teal-border); }
+  .route-b { background: var(--purple-bg); border: 1px solid var(--purple-border); }
+  .route-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .route-a .route-tag { color: var(--teal-text); }
+  .route-b .route-tag { color: var(--purple-text); }
+  .route-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .route-a .route-title { color: var(--teal-text); }
+  .route-b .route-title { color: var(--purple-text); }
+  .route-desc { font-size: 12px; line-height: 1.6; }
+  .route-a .route-desc { color: var(--teal-text); opacity: 0.85; }
+  .route-b .route-desc { color: var(--purple-text); opacity: 0.85; }
+  .route-steps { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+  .route-step { font-size: 11px; }
+  .route-a .route-step { color: var(--teal-text); }
+  .route-b .route-step { color: var(--purple-text); }
+
+  /* STARTER PHRASES */
+  .phrase-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; transition: border-color 0.15s; }
+  .phrase-card:hover { border-color: var(--border-strong); }
+  .phrase-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 13px 16px; gap: 12px; cursor: pointer; user-select: none; }
+  .phrase-left { display: flex; align-items: flex-start; gap: 10px; }
+  .phrase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .phrase-meta { display: flex; flex-direction: column; gap: 3px; }
+  .phrase-label { font-size: 11px; font-weight: 500; }
+  .phrase-text { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.5; font-family: 'DM Mono', monospace; }
+  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; margin-top: 2px; }
+  .chevron.open { transform: rotate(180deg); }
+  .phrase-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px 14px; }
+  .phrase-body.open { display: block; }
+  .phrase-explanation { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; }
+  .phrase-explanation b { font-weight: 500; color: var(--text); }
+  .phrase-tip { font-size: 12px; color: var(--text-faint); line-height: 1.6; padding: 8px 12px; background: var(--bg); border-radius: var(--radius-sm); }
+  .phrase-tip b { font-weight: 500; color: var(--text-muted); }
+
+  /* COPY AREA */
+  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
+  .copy-trigger:hover { background: var(--accent-border); }
+  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
+  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
+  .copy-hint b { font-weight: 500; opacity: 1; }
+  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
+  .copy-box.open { display: block; }
+  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
+  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
+  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .copy-box-footer strong { font-weight: 500; }
+
+  /* FULL PROMPT */
+  .prompt-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .prompt-block-header { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .prompt-block-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .prompt-block-sub { font-size: 12px; color: var(--text-faint); }
+  .prompt-preview { font-size: 12px; color: var(--text-muted); line-height: 1.7; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; max-height: 100px; overflow: hidden; mask-image: linear-gradient(to bottom, black 60%, transparent 100%); }
+
+  /* COLORS per phrase */
+  .c-cliente .phrase-dot { background: #E24B4A; }
+  .c-cliente .phrase-label { color: #A32D2D; }
+  .c-estrategia .phrase-dot { background: var(--purple-text); }
+  .c-estrategia .phrase-label { color: var(--purple-text); }
+  .c-simplificacion .phrase-dot { background: var(--teal-text); }
+  .c-simplificacion .phrase-label { color: var(--teal-text); }
+  .c-indicadores .phrase-dot { background: var(--amber-text); }
+  .c-indicadores .phrase-label { color: var(--amber-text); }
+  .c-competencia .phrase-dot { background: var(--accent-text); }
+  .c-competencia .phrase-label { color: var(--accent-text); }
+  .c-claridad .phrase-dot { background: var(--green-text); }
+  .c-claridad .phrase-label { color: var(--green-text); }
+
+  .tip-global { background: var(--purple-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--purple-text); line-height: 1.65; margin-bottom: 1.75rem; }
+  .tip-global b { font-weight: 500; }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 22px; }
+    .routes { grid-template-columns: 1fr; }
+    .how-grid { grid-template-columns: 1fr; }
+    .copy-hint { display: none; }
+  }
+</style>
 </head>
 <body>
+<div class="page">
 
-<h2>📋 Evaluación Final: Taller de IA Aplicada</h2>
+  <header>
+    <div class="badge">IA Práctico — Asistentes</div>
+    <h1>Asistente de Modelo de Negocio</h1>
+    <p class="subtitle">Un consultor estratégico especializado en Business Model Canvas para Pymes, con contexto latinoamericano. Úsalo para construir tu modelo desde cero o auditar uno existente.</p>
+  </header>
 
-<p>Esta evaluación pone a prueba los conocimientos y habilidades adquiridos a lo largo de las tres sesiones del taller. Está diseñada para medir tanto la <strong>comprensión teórica</strong> de los conceptos fundamentales de IA como la <strong>capacidad práctica</strong> de aplicarlos en contextos reales de trabajo.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Compatible con</div><div class="stat-value">ChatGPT, Claude, Gemini</div></div>
+    <div class="stat"><div class="stat-label">Bloques cubiertos</div><div class="stat-value">9 del Canvas</div></div>
+    <div class="stat"><div class="stat-label">Frases de inicio</div><div class="stat-value">6 + 2 principales</div></div>
+  </div>
 
-<div class="highlight-box">
-  <strong>Resumen del examen</strong><br><br>
-  <span class="stat">20 preguntas</span>
-  <span class="stat">Selección múltiple</span>
-  <span class="stat">2 intentos</span>
-  <span class="stat">Nota mínima: 70%</span>
+  <div class="tip-global">
+    <b>Antes de empezar:</b> Este asistente funciona mejor si tienes algo preparado — una descripción de tu negocio, un Canvas existente, o al menos una idea clara de a quién sirves y cómo generas dinero. Cuanto más contexto le des, más específicas serán sus respuestas.
+  </div>
+
+  <!-- CÓMO USARLO -->
+  <div class="section-label">Cómo funciona</div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-icon ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div class="how-step">Paso 1</div>
+      <div class="how-title">Copia el prompt</div>
+      <div class="how-desc">Ve a la sección "Prompt completo" al final de esta página, selecciona el texto y cópialo.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-icon ic-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div class="how-step">Paso 2</div>
+      <div class="how-title">Configura el asistente</div>
+      <div class="how-desc">En ChatGPT: crea un GPT personalizado. En Claude: crea un Proyecto. En Gemini: crea un GEM. Pega el prompt en las instrucciones del sistema.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-icon ic-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="how-step">Paso 3</div>
+      <div class="how-title">Elige tu ruta</div>
+      <div class="how-desc">El asistente te preguntará si quieres construir un modelo nuevo o revisar uno existente. Ambas rutas tienen flujos distintos y entregables específicos.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-icon ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="how-step">Paso 4</div>
+      <div class="how-title">Usa las frases de inicio</div>
+      <div class="how-desc">Una vez configurado, las frases de inicio activan análisis específicos dentro de cualquier conversación. Úsalas en cualquier momento.</div>
+    </div>
+  </div>
+
+  <!-- RUTAS -->
+  <div class="section-label">Dos rutas disponibles</div>
+  <div class="routes">
+    <div class="route-card route-a">
+      <div class="route-tag">Ruta A</div>
+      <div class="route-title">Construir desde cero</div>
+      <div class="route-desc">Para quien quiere diseñar su modelo de negocio por primera vez, bloque a bloque.</div>
+      <div class="route-steps">
+        <div class="route-step">→ 11 pasos secuenciales</div>
+        <div class="route-step">→ Entrevista guiada por el asistente</div>
+        <div class="route-step">→ Canvas completo al final</div>
+      </div>
+    </div>
+    <div class="route-card route-b">
+      <div class="route-tag">Ruta B</div>
+      <div class="route-title">Revisar uno existente</div>
+      <div class="route-desc">Para quien ya tiene un modelo y quiere auditarlo, mejorarlo o someterlo a análisis.</div>
+      <div class="route-steps">
+        <div class="route-step">→ 7 tipos de análisis a elegir</div>
+        <div class="route-step">→ Semáforo por bloque</div>
+        <div class="route-step">→ Decisión estratégica de 30 días</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRASES DE INICIO -->
+  <div class="section-label">Frases de inicio</div>
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">Estas frases activan análisis específicos dentro de una conversación ya iniciada con el asistente. Expande cada una para ver qué hace y cuándo usarla.</p>
+
+  <div id="phrases-list"></div>
+
+  <!-- PROMPT COMPLETO -->
+  <div class="section-label">Prompt completo</div>
+  <div class="prompt-block">
+    <div class="prompt-block-header">
+      <div class="prompt-block-title">Prompt del Asistente de Modelo de Negocio</div>
+      <div class="prompt-block-sub">Pégalo en las instrucciones del sistema de tu GPT, Proyecto de Claude o GEM de Gemini</div>
+    </div>
+    <div class="prompt-preview">## ROL Y PROPÓSITO
+
+Eres un consultor estratégico especializado en modelos de negocio para empresas que operan en Ecuador, con profundo conocimiento del Business Model Canvas (BMC) y sus 9 bloques: Segmento de Clientes, Propuesta de Valor, Canales, Relación con Clientes, Fuentes de Ingreso, Recursos Clave, Actividades Clave, Socios Clave y Estructura de Costos...</div>
+    <div class="copy-trigger" onclick="selectPrompt()">
+      <div class="copy-trigger-left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Seleccionar prompt completo para copiar
+      </div>
+      <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+    </div>
+    <div class="copy-box" id="prompt-box">
+      <textarea id="prompt-ta" rows="12" readonly>## ROL Y PROPÓSITO
+
+Eres un consultor estratégico especializado en modelos de negocio para empresas que operan en Ecuador, con profundo conocimiento del Business Model Canvas (BMC) y sus 9 bloques: Segmento de Clientes, Propuesta de Valor, Canales, Relación con Clientes, Fuentes de Ingreso, Recursos Clave, Actividades Clave, Socios Clave y Estructura de Costos.
+
+Tu enfoque es práctico, directo y orientado a decisiones. No das respuestas genéricas. Cada análisis debe estar anclado en la realidad ecuatoriana: normativa del SRI, IESS, Superintendencia de Compañías, entorno de Pymes locales, comportamiento del consumidor ecuatoriano y condiciones del mercado del país.
+
+---
+
+## INICIO DE CADA CONVERSACIÓN
+
+Lo primero que debes hacer SIEMPRE es preguntar:
+
+"¿Estás aquí para (1) construir tu modelo de negocio por primera vez, o (2) revisar y auditar un modelo que ya tienes?"
+
+Espera la respuesta antes de continuar. No asumas ni adelantes ningún análisis.
+
+---
+
+## RUTA A: CONSTRUCCIÓN POR PRIMERA VEZ
+
+Si el usuario elige opción 1, guíalo con este flujo secuencial. No saltes pasos. Espera respuesta en cada etapa antes de continuar:
+
+Paso 1 — Entender el negocio:
+Pide que describa en 2-3 oraciones qué hace o quiere hacer, a quién le sirve y cómo genera o generaría dinero.
+
+Paso 2 — Segmento de Clientes:
+Ayuda a definirlo con precisión usando los 4 criterios: geográfico, demográfico, psicográfico y conductual. Identifica también el anti-cliente (a quién NO se le sirve). Distingue entre cliente (quien paga) y usuario (quien usa) si aplica. Para B2B, define industria, tamaño y rol del tomador de decisión.
+
+Paso 3 — Propuesta de Valor:
+Construye la propuesta desde el dolor del cliente, no desde los atributos del producto. Debe ser clara, específica, diferenciada, convincente y basada en evidencia. Advierte si se detectan promesas no verificables.
+
+Paso 4 — Canales:
+Mapea canales por etapa: adquisición, conversión, entrega y post-venta. Para cada canal sugerido, indica el costo-beneficio estimado y si es coherente con el segmento definido.
+
+Paso 5 — Relación con Clientes:
+Define el tipo de relación (personalizada, automatizada, autoservicio, comunidad, proactiva). Alerta si la relación depende de una sola persona.
+
+Paso 6 — Fuentes de Ingreso:
+Identifica los mecanismos de precio y la frecuencia. Prioriza ingresos recurrentes. Calcula o estima la ecuación CAC vs LTV si hay datos disponibles.
+
+Paso 7 — Recursos Clave:
+Clasifica en físicos, intelectuales, humanos, financieros y tecnológicos. Señala si algún recurso crea una dependencia crítica.
+
+Paso 8 — Actividades Clave:
+Distingue lo que toca directamente al cliente de lo que es soporte interno. Todo proceso no documentado es un riesgo.
+
+Paso 9 — Socios Clave:
+Solo incluir socios cuya ausencia generaría una crisis operativa o de propuesta de valor. Aplicar el criterio: "¿Puedo reemplazarlo en menos de 2 semanas sin impacto grave?" Si la respuesta es sí, no es socio clave.
+
+Paso 10 — Estructura de Costos:
+Incluir todos los costos reales, incluyendo tiempo del fundador, costos de formalidad (SRI, IESS, patentes municipales), depreciación de equipos y costos de canales digitales.
+
+Paso 11 — Coherencia y entrega:
+Verifica que los 9 bloques sean coherentes entre sí. Presenta el Canvas completo en formato tabla y señala las 2-3 áreas que requieren fortalecimiento antes de operar.
+
+---
+
+## RUTA B: REVISIÓN Y AUDITORÍA
+
+Si el usuario elige opción 2, pide que comparta su Canvas actual (texto, tabla o descripción por bloques). No comiences el análisis hasta tenerlo.
+
+Una vez recibido el Canvas, presenta el siguiente menú y pide que elija una o varias opciones:
+
+[1] AUDITORÍA COMPLETA
+Evalúa los 9 bloques por coherencia interna, actualización y solidez. Identifica debilidades invisibles: dependencias de personas, concentración de clientes, conocimiento no documentado, procesos sin respaldo. Entrega un semáforo por bloque (Verde / Ámbar / Rojo) con acciones concretas.
+
+[2] STRESS TEST
+Somete el modelo a 5 escenarios de crisis: pérdida del 30% de ingresos en 60 días, desaparición del principal socio o proveedor, entrada de competidor con precio 30% menor, cambio regulatorio adverso, y caída del canal principal de adquisición. Para cada escenario, evalúa el impacto y si existe un plan de contingencia real.
+
+[3] PROPUESTA DE VALOR BAJO LA LUPA
+Evalúa la propuesta de valor en 4 dimensiones: (a) Claridad — ¿se entiende en una sola lectura?, (b) Diferenciación — ¿la competencia puede usar exactamente las mismas palabras?, (c) Poder de convicción — ¿habla del dolor del cliente antes que de los atributos?, (d) Dificultad de copia — ¿está basada en ejecución o solo en palabras? Entrega calificación 1-5 por criterio y 3 versiones alternativas mejoradas.
+
+[4] CLIENTE ESCÉPTICO
+Adopta el rol del cliente ideal de este negocio. Actúa como alguien que considera contratar, pero es crítico y realista. Formula las 10 preguntas más duras que haría antes de decidir. Luego evalúa, siendo honesto, qué tan probable es que contrates y por qué.
+
+[5] INDICADORES ESTRATÉGICOS
+Deriva exactamente 5 indicadores clave verdaderamente estratégicos. Para cada uno: nombre, fórmula de cálculo, bloque del Canvas al que está ligado, frecuencia de medición, valor benchmark esperado, y qué decisión generaría si está en rojo. Señala además qué métricas actuales deberían eliminarse por no generar ninguna decisión.
+
+[6] OPTIMIZACIÓN Y SIMPLIFICACIÓN
+Identifica las 3 partes más sobre-complicadas del modelo. Aplica Pareto 80/20: ¿qué 20% de clientes, canales o actividades genera el 80% del valor? ¿Qué puede automatizarse, tercerizarse o eliminarse sin afectar la propuesta de valor? Si el negocio compite contra empresas más grandes y con mayor presupuesto, ¿qué ventajas estructurales puede explotar?
+
+[7] DECISIÓN ESTRATÉGICA PRIORITARIA
+Basado en el modelo completo y los hallazgos del análisis, identifica la ÚNICA decisión estratégica más importante para los próximos 30 días. Justifica por qué esa y no otra. Define los 3 primeros pasos de ejecución, el indicador de éxito y el valor objetivo al día 30.
+
+---
+
+## REGLAS DE COMPORTAMIENTO
+
+- Nunca des análisis genéricos. Todo debe estar anclado en los datos del Canvas compartido.
+- Si el Canvas está incompleto o tiene bloques vacíos, señálalo antes de analizar y pide que los complete.
+- Usa lenguaje directo, sin eufemismos. Si algo está mal, dilo con claridad y con una solución concreta.
+- El formato de cada entrega debe ser: resumen ejecutivo en 3 líneas → análisis por sección → tabla de hallazgos → próximos pasos priorizados.
+- Máximo 7 indicadores de resultado (lagging) y 15 indicadores proactivos (leading) en cualquier propuesta de KPIs.
+- Cuando detectes una dependencia crítica (persona, cliente, proveedor, tecnología), siempre ofrece las 3 opciones de mitigación: reemplazar localmente, tercerizar, o automatizar.
+- Considera siempre el contexto legal y operativo de Ecuador: obligaciones con SRI, IESS, regulaciones sectoriales, comportamiento del mercado local y acceso a financiamiento en el sistema financiero ecuatoriano.</textarea>
+      <div class="copy-box-footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- ============================================================ -->
-<h2>📂 Categorías y pesos del banco de preguntas</h2>
+<script>
+const phrases = [
+  {
+    id: 1,
+    clase: "c-cliente",
+    label: "Cliente",
+    text: "Actúa como cliente ideal de este negocio. Explícame por qué NO debería comprar. Sé realista y crítico.",
+    explanation: "Pone al asistente en el rol de tu cliente más escéptico. En lugar de venderte el modelo, te dice exactamente qué objeciones tendría alguien antes de comprarte. <b>Es incómodo y muy útil.</b>",
+    tip: "<b>Cuándo usarla:</b> Antes de lanzar, después de definir tu propuesta de valor, o cuando sientes que tu discurso de ventas no está convenciendo."
+  },
+  {
+    id: 2,
+    clase: "c-estrategia",
+    label: "Estrategia",
+    text: "Basado en este modelo de negocio, ¿cuál es la decisión estratégica más importante que debería tomar en los próximos 30 días para mejorar coherencia, rentabilidad o crecimiento? Justifica.",
+    explanation: "Fuerza al asistente a priorizar: en lugar de darte una lista de 20 cosas, te da <b>una sola decisión con justificación</b> y los primeros pasos para ejecutarla.",
+    tip: "<b>Cuándo usarla:</b> Cuando tienes demasiadas prioridades y necesitas enfocar. Ideal al inicio de cada trimestre o después de una auditoría."
+  },
+  {
+    id: 3,
+    clase: "c-simplificacion",
+    label: "Simplificación",
+    text: "Analiza este modelo y dime qué parte podría simplificarse.",
+    explanation: "Aplica el principio Pareto 80/20 a tu modelo: identifica qué actividades, canales o relaciones consumen recursos sin generar valor proporcional. <b>Muchos modelos crecen en complejidad sin crecer en resultados.</b>",
+    tip: "<b>Cuándo usarla:</b> Cuando sientes que el negocio es difícil de operar, cuando el equipo está saturado, o cuando los márgenes se están comprimiendo."
+  },
+  {
+    id: 4,
+    clase: "c-indicadores",
+    label: "Indicadores",
+    text: "Basado en este modelo de negocio, sugiere 5 indicadores clave verdaderamente estratégicos.",
+    explanation: "No genera una lista genérica de KPIs. Deriva exactamente 5 indicadores anclados a tu Canvas, con su fórmula, frecuencia de medición y <b>qué decisión tomarías si estuviera en rojo.</b>",
+    tip: "<b>Cuándo usarla:</b> Cuando tienes muchas métricas pero ninguna te dice qué hacer. O cuando quieres construir tu primer tablero de control estratégico."
+  },
+  {
+    id: 5,
+    clase: "c-competencia",
+    label: "Competencia",
+    text: "Si este negocio compite contra empresas más grandes y con mayor presupuesto, ¿qué ventajas estructurales podría explotar?",
+    explanation: "Identifica las ventajas que <b>solo una Pyme puede tener</b> frente a una empresa grande: velocidad, personalización, conocimiento local, relaciones directas. Evita competir por precio o escala.",
+    tip: "<b>Cuándo usarla:</b> Cuando un competidor grande entra a tu mercado, cuando pierdes clientes por precio, o cuando necesitas reposicionarte."
+  },
+  {
+    id: 6,
+    clase: "c-claridad",
+    label: "Claridad",
+    text: "Evalúa esta propuesta de valor y dime si es: clara, diferenciada, convincente y difícil de copiar.",
+    explanation: "Evalúa tu propuesta de valor en 4 dimensiones con calificación del 1 al 5. <b>Si la competencia puede usar exactamente las mismas palabras, tu propuesta no está diferenciada.</b> Incluye 3 versiones alternativas mejoradas.",
+    tip: "<b>Cuándo usarla:</b> Antes de lanzar una campaña, al rediseñar tu web, o cuando sientes que los clientes no entienden bien qué ofreces."
+  }
+];
 
-<p>El banco de preguntas está organizado en <strong>7 categorías temáticas</strong>. Cada examen selecciona 20 preguntas de forma aleatoria, respetando la distribución por categoría que se indica a continuación. Esto garantiza que cada intento sea diferente y que la evaluación cubra de forma equilibrada todos los temas del taller.</p>
+document.getElementById('phrases-list').innerHTML = phrases.map(p => `
+  <div class="phrase-card ${p.clase}">
+    <div class="phrase-header" onclick="togglePhrase(${p.id})">
+      <div class="phrase-left">
+        <div class="phrase-dot"></div>
+        <div class="phrase-meta">
+          <span class="phrase-label">${p.label}</span>
+          <span class="phrase-text">${p.text}</span>
+        </div>
+      </div>
+      <svg class="chevron" id="pc-${p.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="phrase-body" id="pb-${p.id}">
+      <p class="phrase-explanation">${p.explanation}</p>
+      <p class="phrase-tip">${p.tip}</p>
+      <div class="copy-trigger" onclick="selectPhrase(${p.id})" style="margin-top:12px;border-radius:6px;">
+        <div class="copy-trigger-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Seleccionar frase para copiar
+        </div>
+        <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+      </div>
+      <div class="copy-box" id="pbox-${p.id}">
+        <textarea id="pta-${p.id}" rows="3" readonly>${p.text}</textarea>
+        <div class="copy-box-footer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+        </div>
+      </div>
+    </div>
+  </div>
+`).join('');
 
-<table>
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Categoría</th>
-      <th>Peso</th>
-      <th>Preguntas en el banco</th>
-      <th>Preguntas en tu examen</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td><span class="category-tag">Prompt Engineering</span></td>
-      <td>25%</td>
-      <td>8</td>
-      <td>5</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td><span class="category-tag">Plataformas y Herramientas de IA</span></td>
-      <td>20%</td>
-      <td>6</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td><span class="category-tag">Aplicaciones Empresariales Prácticas</span></td>
-      <td>20%</td>
-      <td>6</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td><span class="category-tag">Generación de Contenido y Marketing</span></td>
-      <td>15%</td>
-      <td>5</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td><span class="category-tag">Gestión de Datos y RAG</span></td>
-      <td>10%</td>
-      <td>5</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td><span class="category-tag">Análisis Estratégico y Modelo de Negocio</span></td>
-      <td>7%</td>
-      <td>5</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td><span class="category-tag">Fundamentos de los LLMs</span></td>
-      <td>3%</td>
-      <td>5</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><strong>Total</strong></td>
-      <td><strong>100%</strong></td>
-      <td><strong>40</strong></td>
-      <td><strong>20</strong></td>
-    </tr>
-  </tbody>
-</table>
+function togglePhrase(id) {
+  const body = document.getElementById('pb-' + id);
+  const chev = document.getElementById('pc-' + id);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.phrase-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
 
-<!-- ============================================================ -->
-<h2>📝 Qué evalúa cada categoría</h2>
+function selectPhrase(id) {
+  const box = document.getElementById('pbox-' + id);
+  const ta = document.getElementById('pta-' + id);
+  box.classList.add('open');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+  ta.select();
+}
 
-<h3>1. Prompt Engineering <span style="color:#888;font-weight:normal;font-size:0.9em;">(25%)</span></h3>
-<p>Evalúa tu capacidad para diseñar instrucciones claras y efectivas para modelos de IA. Incluye conceptos como la estructura del prompt, el uso de roles y contexto, la definición del formato de salida, la optimización de tokens y el refinamiento iterativo.</p>
-
-<h3>2. Plataformas y Herramientas de IA <span style="color:#888;font-weight:normal;font-size:0.9em;">(20%)</span></h3>
-<p>Evalúa tu conocimiento sobre las principales herramientas del mercado: ChatGPT, Claude, Gemini y Copilot. Abarca criterios de selección según el caso de uso, diferencias entre planes gratuitos y pagados, y el concepto de tokens.</p>
-
-<h3>3. Aplicaciones Empresariales Prácticas <span style="color:#888;font-weight:normal;font-size:0.9em;">(20%)</span></h3>
-<p>Evalúa tu capacidad para identificar y aplicar la IA en contextos reales de trabajo: análisis de reuniones y documentos, integración con Google Workspace u Office 365, gestión de datos internos e inteligencia competitiva.</p>
-
-<h3>4. Generación de Contenido y Marketing <span style="color:#888;font-weight:normal;font-size:0.9em;">(15%)</span></h3>
-<p>Evalúa el uso de IA para crear materiales de comunicación y marketing: publicaciones, correos, landing pages y propuestas de valor. También incluye buenas prácticas de revisión y edición del contenido generado.</p>
-
-<h3>5. Gestión de Datos y RAG <span style="color:#888;font-weight:normal;font-size:0.9em;">(10%)</span></h3>
-<p>Evalúa la comprensión del concepto de Retrieval-Augmented Generation (RAG), la importancia de la calidad de los datos y el uso de funcionalidades como "Proyectos" en Claude o ChatGPT para mantener contexto persistente.</p>
-
-<h3>6. Análisis Estratégico y Modelo de Negocio <span style="color:#888;font-weight:normal;font-size:0.9em;">(7%)</span></h3>
-<p>Evalúa el uso de IA como apoyo para decisiones estratégicas: desarrollo de propuestas de valor, análisis de competencia, revisión del Business Model Canvas y configuración de asistentes especializados.</p>
-
-<h3>7. Fundamentos de los LLMs <span style="color:#888;font-weight:normal;font-size:0.9em;">(3%)</span></h3>
-<p>Evalúa conocimientos básicos sobre cómo funcionan los modelos de lenguaje: tokenización, embeddings, fecha de corte de conocimiento y el fenómeno de alucinación.</p>
-
-<!-- ============================================================ -->
-<h2>⚙️ Condiciones del examen</h2>
-
-<ul>
-  <li><strong>Formato:</strong> 20 preguntas de selección múltiple con una única respuesta correcta.</li>
-  <li><strong>Intentos disponibles:</strong> Tienes <strong>2 intentos</strong>. Si no apruebas en el primer intento, puedes realizarlo una segunda vez. Se tomará en cuenta la <strong>mejor nota obtenida</strong>.</li>
-  <li><strong>Nota mínima para aprobar:</strong> Debes responder correctamente al menos <strong>14 de 20 preguntas</strong> (70%).</li>
-  <li><strong>Aleatoriedad:</strong> Las preguntas se seleccionan aleatoriamente del banco en cada intento, por lo que los dos intentos serán diferentes entre sí.</li>
-  <li><strong>Tiempo:</strong> No hay límite de tiempo establecido; responde con calma y reflexión.</li>
-</ul>
-
-<div class="warning-box">
-  💡 <strong>Consejo:</strong> Revisa bien tus respuestas antes de enviar el examen. Una vez enviado, no podrás modificarlas dentro del mismo intento.
-</div>
-
-<!-- ============================================================ -->
-<h2>🏅 Insignia digital al aprobar</h2>
-
-<div class="badge-section">
-  <p>Al aprobar el examen con una nota igual o superior al 70%, recibirás automáticamente una <strong>insignia digital basada en el estándar Open Badges</strong>.</p>
-  <ul>
-    <li>La insignia es una credencial verificable que puedes compartir en tu perfil de LinkedIn, portafolio digital o correo electrónico.</li>
-    <li>Certifica que completaste satisfactoriamente el <em>Taller de IA Aplicada</em> y que demostraste competencias en el uso de herramientas de inteligencia artificial para contextos profesionales.</li>
-    <li>La insignia incluye metadatos verificables: nombre del emisor, fecha de emisión y criterios de logro, de acuerdo con el estándar <strong>IMS Open Badges</strong>.</li>
-  </ul>
-</div>
-
-<div class="success-box">
-  ✅ <strong>¿Listo para comenzar?</strong> Haz clic en el botón de abajo para iniciar el examen. ¡Mucho éxito!
-</div>
-
+function selectPrompt() {
+  const box = document.getElementById('prompt-box');
+  const ta = document.getElementById('prompt-ta');
+  box.classList.add('open');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+  ta.select();
+}
+</script>
 </body>
 </html>
