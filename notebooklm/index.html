@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts para NotebookLM — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --blue-bg: #e6f1fb; --blue-text: #185fa5; --blue-border: #85b7eb;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--blue-bg); color: var(--blue-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* WHAT IS NOTEBOOKLM */
+  .intro-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; }
+  .intro-top { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .intro-logo { width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--blue-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .intro-logo svg { width: 20px; height: 20px; color: var(--blue-text); }
+  .intro-name { font-size: 16px; font-weight: 500; color: var(--text); }
+  .intro-maker { font-size: 12px; color: var(--text-faint); }
+  .intro-desc { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1rem; }
+  .intro-desc b { font-weight: 500; color: var(--text); }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+  .feature-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .feature-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .ft-blue .feature-tag { color: var(--blue-text); }
+  .ft-teal .feature-tag { color: var(--teal-text); }
+  .ft-purple .feature-tag { color: var(--purple-text); }
+  .ft-amber .feature-tag { color: var(--amber-text); }
+
+  /* HOW TO USE NOTEBOOKLM */
+  .steps-row { display: flex; gap: 0; margin-bottom: 1.75rem; overflow-x: auto; padding-bottom: 4px; }
+  .step-box { flex: 1; min-width: 130px; background: var(--surface); border: 1px solid var(--border); border-radius: 0; padding: 12px 14px; border-right: none; }
+  .step-box:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .step-box:last-child { border-right: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; }
+  .step-n { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-faint); margin-bottom: 4px; }
+  .step-t { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.4; }
+  .step-d { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* PROMPT CARDS */
+  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
+  .prompt-card-header { padding: 16px 18px 14px; border-bottom: 1px solid var(--border); }
+  .prompt-card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .prompt-num { font-family: 'DM Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: var(--radius-sm); flex-shrink: 0; margin-top: 2px; font-weight: 500; }
+  .pn-1 { background: var(--blue-bg); color: var(--blue-text); }
+  .pn-2 { background: var(--teal-bg); color: var(--teal-text); }
+  .prompt-meta { flex: 1; }
+  .prompt-title { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .prompt-subtitle { font-size: 12px; color: var(--text-faint); }
+  .where-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 999px; }
+  .wb-1 { background: var(--blue-bg); color: var(--blue-text); }
+  .wb-2 { background: var(--teal-bg); color: var(--teal-text); }
+  .where-badge svg { width: 11px; height: 11px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab { font-size: 12px; font-weight: 500; padding: 10px 16px; cursor: pointer; color: var(--text-faint); border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  .tab:hover { color: var(--text-muted); }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* CONTEXT TAB */
+  .context-section { padding: 14px 18px; }
+  .context-what { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; }
+  .context-what b { font-weight: 500; color: var(--text); }
+  .context-row { display: flex; gap: 10px; margin-bottom: 8px; }
+  .context-tag { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; min-width: 70px; flex-shrink: 0; padding-top: 1px; }
+  .ct-blue { color: var(--blue-text); }
+  .ct-teal { color: var(--teal-text); }
+  .ct-amber { color: var(--amber-text); }
+  .context-val { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .context-val b { font-weight: 500; color: var(--text); }
+
+  /* COPY AREA */
+  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
+  .copy-trigger:hover { background: var(--accent-border); }
+  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
+  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
+  .copy-hint b { font-weight: 500; opacity: 1; }
+  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
+  .copy-box.open { display: block; }
+  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 18px; resize: none; line-height: 1.75; cursor: text; outline: none; }
+  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 18px 10px; font-size: 12px; color: var(--accent-text); }
+  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .copy-box-footer strong { font-weight: 500; }
+
+  .tip-global { background: var(--blue-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--blue-text); line-height: 1.65; margin-bottom: 1.75rem; }
+  .tip-global b { font-weight: 500; }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 22px; }
+    .feature-grid { grid-template-columns: 1fr 1fr; }
+    .copy-hint { display: none; }
+    .steps-row { flex-direction: column; }
+    .step-box { border-right: 1px solid var(--border); border-bottom: none; border-radius: 0; }
+    .step-box:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .step-box:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — NotebookLM</div>
+    <h1>Prompts para NotebookLM</h1>
+    <p class="subtitle">Dos prompts de alto rendimiento para construir bases de conocimiento y localizar fuentes de autoridad directamente desde NotebookLM.</p>
+  </header>
+
+  <!-- QUÉ ES NOTEBOOKLM -->
+  <div class="section-label">¿Qué es NotebookLM?</div>
+  <div class="intro-card">
+    <div class="intro-top">
+      <div class="intro-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div>
+        <div class="intro-name">NotebookLM</div>
+        <div class="intro-maker">Google Labs — basado en Gemini</div>
+      </div>
+    </div>
+    <div class="intro-desc">
+      NotebookLM es una herramienta de investigación con IA desarrollada por Google que funciona como un <b>asistente anclado a tus propios documentos</b>. A diferencia de un chatbot convencional, no responde desde su conocimiento general — responde exclusivamente desde las fuentes que tú le cargas: PDFs, artículos, documentos de Google Drive, páginas web o notas.<br><br>
+      Su función más poderosa para este curso es el <b>Deep Research</b>, que permite enviar al agente a navegar la web y traer fuentes verificadas directamente a tu cuaderno, listas para analizar.
+    </div>
+    <div class="feature-grid">
+      <div class="feature-item ft-blue">
+        <div class="feature-tag">Source grounding</div>
+        <div class="feature-desc">Responde solo desde tus documentos. Cita la fuente exacta en cada respuesta.</div>
+      </div>
+      <div class="feature-item ft-teal">
+        <div class="feature-tag">Deep Research</div>
+        <div class="feature-desc">Navega la web y localiza fuentes de autoridad para importarlas a tu cuaderno.</div>
+      </div>
+      <div class="feature-item ft-purple">
+        <div class="feature-tag">Audio Overview</div>
+        <div class="feature-desc">Convierte tus documentos en un podcast de dos voces que resume los puntos clave.</div>
+      </div>
+      <div class="feature-item ft-amber">
+        <div class="feature-tag">Gratis</div>
+        <div class="feature-desc">Disponible sin costo en notebooklm.google.com con cuenta de Google.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CÓMO SE USA -->
+  <div class="section-label">Cómo funciona con estos prompts</div>
+  <div class="steps-row">
+    <div class="step-box">
+      <div class="step-n">01</div>
+      <div class="step-t">Abre NotebookLM</div>
+      <div class="step-d">Ve a notebooklm.google.com y crea un cuaderno nuevo.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">02</div>
+      <div class="step-t">Activa Deep Research</div>
+      <div class="step-d">En el panel de fuentes, busca el botón "Discover Sources" o el icono de búsqueda web.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">03</div>
+      <div class="step-t">Copia el prompt</div>
+      <div class="step-d">Usa el botón de cada prompt en esta página para seleccionar el texto y copiarlo.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">04</div>
+      <div class="step-t">Pégalo y ejecuta</div>
+      <div class="step-d">Pega el prompt en el campo de búsqueda y ejecuta. El agente navega y trae resultados.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">05</div>
+      <div class="step-t">Importa las fuentes</div>
+      <div class="step-d">Selecciona las fuentes relevantes y agrégalas a tu cuaderno para comenzar el análisis.</div>
+    </div>
+  </div>
+
+  <div class="tip-global">
+    <b>Importante:</b> Estos prompts están diseñados para la función <b>Deep Research / Discover Sources</b> de NotebookLM, no para el chat del cuaderno. Úsalos en el panel de fuentes donde el agente puede navegar la web. La calidad de las fuentes encontradas depende de cuánto detalle incluyas sobre tu contexto específico.
+  </div>
+
+  <!-- PROMPTS -->
+  <div class="section-label">Los dos prompts</div>
+
+  <!-- PROMPT 1 -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-top">
+        <span class="prompt-num pn-1">01</span>
+        <div class="prompt-meta">
+          <div class="prompt-title">Base de conocimiento sobre NotebookLM</div>
+          <div class="prompt-subtitle">Construcción de biblioteca de autoridad sobre la propia herramienta</div>
+        </div>
+      </div>
+      <span class="where-badge wb-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Usar en: Discover Sources
+      </span>
+    </div>
+
+    <div class="tabs" id="tabs-1">
+      <div class="tab active" onclick="setTab(1,'contexto',this)">Contexto</div>
+      <div class="tab" onclick="setTab(1,'copiar',this)">Copiar prompt</div>
+    </div>
+
+    <div class="tab-content active" id="tc-1-contexto">
+      <div class="context-section">
+        <div class="context-what">
+          Este prompt convierte al agente de NotebookLM en un <b>estratega de gestión del conocimiento</b> especializado en localizar documentación oficial y análisis de expertos sobre la propia herramienta. Ideal para quienes quieren aprender NotebookLM desde sus fuentes más autorizadas.
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-blue">Qué hace</span>
+          <span class="context-val">Genera un plan de investigación que desglosa la consulta en subtemas específicos — filosofía del producto, arquitectura técnica, tutoriales especializados — y escanea la red usando vectores semánticos para conceptos como <b>Audio Overview</b>, <b>Source-grounded AI</b> e integración con Gemini.</span>
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-teal">Fuentes que busca</span>
+          <span class="context-val">Blog de Google Labs, Centro de Ayuda oficial, escritos de <b>Steven Johnson</b> (co-fundador) y <b>Raiza Martin</b> (Product Manager), tutoriales de DataCamp, guías de Cyberclick y Xataka, publicados entre 2023 y 2026.</span>
+        </div>
+        <div class="context-row" style="margin-bottom:0">
+          <span class="context-tag ct-amber">Resultado</span>
+          <span class="context-val">Lista curada de <b>15 fuentes de alta autoridad</b> con justificación del valor técnico de cada una, listas para importar y generar una guía de estudio integral sobre NotebookLM.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tc-1-copiar">
+      <div class="copy-trigger" onclick="selectPrompt(1)">
+        <div class="copy-trigger-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Seleccionar prompt para copiar
+        </div>
+        <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+      </div>
+      <div class="copy-box" id="box-1">
+        <textarea id="ta-1" rows="8" readonly>Actúa como un Estratega de Gestión del Conocimiento e IA para realizar un Deep Research exhaustivo con el objetivo de construir una biblioteca de alta autoridad sobre NotebookLM. Localiza y prepara para importación inmediata documentos técnicos, guías oficiales y análisis de expertos publicados entre 2023 y 2026. Prioriza el anclaje de fuentes (source-grounding) en el contenido oficial de Google Labs, el Centro de Ayuda de NotebookLM y los anuncios de producto en el blog de Google. Busca y sintetiza el pensamiento estratégico de Steven Johnson (Co-fundador), incluyendo su serie 'Adjacent Possible' y su guía en Medium sobre NotebookLM como herramienta de investigación. Localiza intervenciones técnicas de Raiza Martin (Product Manager) sobre el desarrollo de la arquitectura agéntica de la herramienta. Identifica y filtra tutoriales especializados de DataCamp (por Amberle McKee), guías empresariales de Cyberclick, análisis técnicos de Xataka y la guía 2025 de Un Viaje Digital. El agente debe navegar por la web utilizando vectores semánticos para conceptos como 'Audio Overview', 'Source-grounded AI' y la integración con Gemini 3. Ignora contenido redundante, noticias cortas sin valor técnico o tutoriales obsoletos de versiones previas a 2025. El objetivo es identificar fuentes que permitan explicar fundamentos, configuración de interfaz, gestión avanzada de fuentes y casos de uso para investigadores y profesionales. Presenta una lista curada de las 15 fuentes con mayor autoridad, justificando el valor técnico de cada una, para proceder a su importación y posterior generación de una guía de estudio integral.</textarea>
+        <div class="copy-box-footer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMPT 2 -->
+  <div class="prompt-card">
+    <div class="prompt-card-header">
+      <div class="prompt-card-top">
+        <span class="prompt-num pn-2">02</span>
+        <div class="prompt-meta">
+          <div class="prompt-title">Búsqueda de fuentes sobre IA en América Latina</div>
+          <div class="prompt-subtitle">Reportes técnicos y libros blancos de organismos de alta autoridad — LATAM 2025–2026</div>
+        </div>
+      </div>
+      <span class="where-badge wb-2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Usar en: Discover Sources
+      </span>
+    </div>
+
+    <div class="tabs" id="tabs-2">
+      <div class="tab active" onclick="setTab(2,'contexto',this)">Contexto</div>
+      <div class="tab" onclick="setTab(2,'copiar',this)">Copiar prompt</div>
+    </div>
+
+    <div class="tab-content active" id="tc-2-contexto">
+      <div class="context-section">
+        <div class="context-what">
+          Este prompt actúa como <b>brújula de búsqueda especializada en LATAM</b>. Activa el agente de Deep Research para navegar más de 100 sitios simultáneamente usando embeddings vectoriales, superando la simple coincidencia de palabras clave. Diseñado para investigadores, instructores y profesionales que necesitan datos duros y metodología estadística sobre transformación digital e IA en la región.
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-blue">Qué hace</span>
+          <span class="context-val">Filtra el ruido comercial y las noticias cortas para recolectar un <b>corpus documental denso y estadístico</b>: PDFs, white papers y reportes técnicos de organismos de alta credibilidad académica e institucional.</span>
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-teal">Fuentes que busca</span>
+          <span class="context-val">Documentos del <b>BID, CEPAL, OECD, McKinsey, Deloitte, IDC y Atlantico VC</b>, con foco en México, Brasil, Chile, Colombia y Argentina. Prioriza metodología estadística, datos de inversión en infraestructura y casos de uso de IA Generativa.</span>
+        </div>
+        <div class="context-row" style="margin-bottom:0">
+          <span class="context-tag ct-amber">Resultado</span>
+          <span class="context-val">Hallazgos organizados con el <b>valor técnico de cada fuente identificado</b> y enlaces directos para importación inmediata al cuaderno. Ideal como base para investigación, clases o presentaciones ejecutivas sobre el ecosistema IA en LATAM.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tc-2-copiar">
+      <div class="copy-trigger" onclick="selectPrompt(2)">
+        <div class="copy-trigger-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Seleccionar prompt para copiar
+        </div>
+        <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+      </div>
+      <div class="copy-box" id="box-2">
+        <textarea id="ta-2" rows="6" readonly>Actúa como un analista senior de estrategia digital para localizar fuentes de alta autoridad sobre la Transformación Digital e Inteligencia Artificial en América Latina. Realiza un Deep Research enfocado exclusivamente en documentos técnicos, reportes de industria y libros blancos publicados entre 2023 y 2026 por el BID, CEPAL, OECD, McKinsey, Deloitte, IDC y Atlantico VC. Prioriza archivos con metodología estadística, datos de inversión en infraestructura y casos de uso de IA Generativa en México, Brasil, Chile, Colombia y Argentina. Ignora artículos de opinión, noticias cortas o blogs comerciales. Organiza los hallazgos identificando claramente el valor técnico de cada fuente y proporciona los enlaces directos para su importación inmediata a este cuaderno.</textarea>
+        <div class="copy-box-footer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+function setTab(id, tab, el) {
+  document.getElementById('tabs-' + id).querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['contexto','copiar'].forEach(t => {
+    document.getElementById('tc-' + id + '-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab !== 'copiar') document.getElementById('box-' + id).classList.remove('open');
+}
+
+function selectPrompt(id) {
+  const box = document.getElementById('box-' + id);
+  const ta = document.getElementById('ta-' + id);
+  box.classList.add('open');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+  ta.select();
+}
+</script>
+</body>
+</html>
