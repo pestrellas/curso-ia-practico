@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformación Energética — LATAM 2024</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0d1117;
+    --bg2:      #161b22;
+    --bg3:      #21262d;
+    --border:   rgba(255,255,255,0.08);
+    --border2:  rgba(255,255,255,0.14);
+    --text:     #e6edf3;
+    --muted:    #8b949e;
+    --dim:      #484f58;
+    --green:    #1D9E75;
+    --green2:   #3ecf8e;
+    --blue:     #378ADD;
+    --blue2:    #58a6ff;
+    --amber:    #EF9F27;
+    --amber2:   #f0c040;
+    --red:      #E24B4A;
+    --purple:   #9F7FDB;
+    --r:        10px;
+    --r2:       14px;
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 24px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .hdr { margin-bottom: 36px; position: relative; }
+  .hdr-eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green2);
+    margin-bottom: 8px;
+  }
+  .hdr h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px,4vw,44px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .hdr h1 em { color: var(--green2); font-style: italic; }
+  .hdr-sub { font-size: 14px; color: var(--muted); max-width: 620px; line-height: 1.6; }
+  .hdr-bar {
+    margin-top: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green) 0%, var(--blue) 40%, transparent 100%);
+    border-radius: 2px;
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--dim);
+    margin: 28px 0 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* ── KPI strip ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+  .kpi {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .kpi:hover { border-color: var(--border2); }
+  .kpi::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background: var(--accent, var(--green));
+    border-radius: 2px 2px 0 0;
+  }
+  .kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .kpi-val { font-size: 26px; font-weight: 600; line-height: 1; color: var(--text); margin-bottom: 4px; }
+  .kpi-sub { font-size: 11px; color: var(--dim); margin-bottom: 6px; }
+  .kpi-badge {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    padding: 2px 7px; border-radius: 20px;
+  }
+  .b-green { background: rgba(62,207,142,.15); color: var(--green2); }
+  .b-blue  { background: rgba(88,166,255,.15); color: var(--blue2); }
+  .b-amber { background: rgba(240,192,64,.15);  color: var(--amber2); }
+  .b-red   { background: rgba(226,75,74,.15);   color: #ff7b7b; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r2);
+    padding: 18px;
+    transition: border-color .2s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .card-sub   { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+
+  /* ── Grids ── */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .g12 { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; }
+
+  /* ── Legend ── */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+  .leg-sq { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* ── Chart wrapper ── */
+  .cw { position: relative; width: 100%; }
+
+  /* ── Progress bars ── */
+  .prog { margin-bottom: 10px; }
+  .prog-hdr { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .prog-hdr strong { color: var(--text); }
+  .prog-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; position: relative; }
+  .prog-fill  { height: 100%; border-radius: 3px; transition: width .6s ease; }
+  .prog-target { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--dim); }
+
+  /* ── Gap bars ── */
+  .gap-item { margin-bottom: 12px; }
+  .gap-hdr { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .gap-hdr strong { color: var(--text); }
+  .gap-track { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; position: relative; }
+  .gap-fill  { height: 100%; border-radius: 4px; transition: width .6s; }
+  .gap-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; }
+
+  /* ── Mini stat grid ── */
+  .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .mini-stat {
+    background: var(--bg3); border-radius: 8px; padding: 10px 12px;
+  }
+  .mini-label { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+  .mini-val   { font-size: 17px; font-weight: 600; color: var(--text); }
+
+  /* ── Reco cards ── */
+  .reco {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r2);
+    padding: 20px;
+    transition: border-color .2s, transform .2s;
+  }
+  .reco:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .reco-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px; line-height: 1;
+    margin-bottom: 8px;
+  }
+  .reco-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .reco-body { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .reco-tag {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    padding: 3px 8px; border-radius: 20px; margin-top: 10px;
+  }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .pill {
+    font-size: 10px; padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 20px; color: var(--dim);
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 48px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--dim);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .kpi       { animation: fadeUp .4s ease both; }
+  .kpi:nth-child(1) { animation-delay: .05s; }
+  .kpi:nth-child(2) { animation-delay: .10s; }
+  .kpi:nth-child(3) { animation-delay: .15s; }
+  .kpi:nth-child(4) { animation-delay: .20s; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .g2, .g3, .g12 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="hdr">
+  <div class="hdr-eyebrow">Informe estratégico · OLADE / IEA / BloombergNEF · Actualizado 2024</div>
+  <h1>Transformación Energética<br><em>Latinoamérica</em></h1>
+  <p class="hdr-sub">Análisis de la brecha entre generación convencional y fuentes renovables no convencionales (solar y eólico), con datos de Ecuador y benchmarks regionales.</p>
+  <div class="hdr-bar"></div>
+</header>
+
+<!-- ── KPIs ── -->
+<div class="section-label">Indicadores regionales clave — LATAM 2024</div>
+<div class="kpi-grid">
+  <div class="kpi" style="--accent:var(--green)">
+    <div class="kpi-label">Participación renovable</div>
+    <div class="kpi-val">69%</div>
+    <div class="kpi-sub">del total generado LATAM</div>
+    <span class="kpi-badge b-green">+5 pp vs 2023</span>
+  </div>
+  <div class="kpi" style="--accent:var(--amber)">
+    <div class="kpi-label">Crecimiento NCRE 2024</div>
+    <div class="kpi-val">30%</div>
+    <div class="kpi-sub">Solar +37% · Eólico +15%</div>
+    <span class="kpi-badge b-amber">OLADE 2024</span>
+  </div>
+  <div class="kpi" style="--accent:var(--blue)">
+    <div class="kpi-label">Nueva capacidad renovable</div>
+    <div class="kpi-val">79%</div>
+    <div class="kpi-sub">del total instalado en 2024</div>
+    <span class="kpi-badge b-blue">Meta 2050: 85%</span>
+  </div>
+  <div class="kpi" style="--accent:var(--purple)">
+    <div class="kpi-label">Proyectos en cartera</div>
+    <div class="kpi-val">319 GW</div>
+    <div class="kpi-sub">solar + eólico planificados</div>
+    <span class="kpi-badge b-red">+460% vs hoy</span>
+  </div>
+</div>
+
+<!-- ── CHARTS ROW 1 ── -->
+<div class="section-label">Crecimiento histórico y proyectado por segmento</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-title">Tasas de crecimiento NCRE</div>
+    <div class="card-sub">Solar PV vs Eólico vs Total NCRE — 2022–2030 (%)</div>
+    <div class="legend">
+      <span class="leg"><span class="leg-sq" style="background:var(--amber)"></span>Solar PV</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--blue)"></span>Eólico</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--green)"></span>Total NCRE</span>
+    </div>
+    <div class="cw" style="height:220px"><canvas id="c1"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Evolución de la matriz eléctrica regional</div>
+    <div class="card-sub">Participación por fuente (%) — 2015 a 2050 proyectado</div>
+    <div class="legend">
+      <span class="leg"><span class="leg-sq" style="background:var(--blue)"></span>Hidro</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--amber)"></span>Solar</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--green)"></span>Eólico</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--red)"></span>Fósiles</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--purple)"></span>Otros</span>
+    </div>
+    <div class="cw" style="height:220px"><canvas id="c2"></canvas></div>
+  </div>
+</div>
+
+<!-- ── CHARTS ROW 2 ── -->
+<div class="g2" style="margin-top:12px">
+  <div class="card">
+    <div class="card-title">Adopción por país — solar + eólico (GW)</div>
+    <div class="card-sub">Capacidad NCRE operativa instalada — 2024 estimado</div>
+    <div class="legend">
+      <span class="leg"><span class="leg-sq" style="background:var(--amber)"></span>Solar</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--blue)"></span>Eólico</span>
+    </div>
+    <div class="cw" style="height:260px"><canvas id="c3"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Gap renovable — estado actual vs meta 2030</div>
+    <div class="card-sub">Brecha entre capacidad actual y compromiso declarado por país</div>
+    <div id="gap-chart" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- ── ECUADOR DATA ── -->
+<div class="section-label">Ecuador — datos propios vs benchmark sectorial</div>
+<div class="g3">
+  <div class="card">
+    <div class="card-title">Cobertura eléctrica nacional</div>
+    <div class="card-sub">Penetración del servicio eléctrico</div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Ecuador nacional</span><strong>97.78%</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:97.78%;background:var(--green)"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Galápagos (líder)</span><strong>99.83%</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:99.83%;background:var(--green2);opacity:.7"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Benchmark LATAM</span><strong>~93%</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:93%;background:var(--blue);opacity:.6"></div></div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(226,75,74,.1);border-radius:8px;border:1px solid rgba(226,75,74,.2)">
+      <div style="font-size:10px;color:var(--muted)">Hogares sin servicio</div>
+      <div style="font-size:20px;font-weight:600;color:#ff7b7b">84.037</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">KPIs de gestión propuestos</div>
+    <div class="card-sub">Indicadores de desempeño sectorial</div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Eficiencia operativa</span><strong style="color:var(--amber2)">Meta ≥ 95%</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:95%;background:var(--amber)"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Reciclaje materiales (5 años)</span><strong style="color:var(--green2)">90%</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:90%;background:var(--green)"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Satisfacción cliente</span><strong style="color:var(--purple)">4.5 / 5</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:90%;background:var(--purple)"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-hdr"><span>Reducción GEI anual</span><strong style="color:#ff7b7b">Meta 4%</strong></div>
+      <div class="prog-track"><div class="prog-fill" style="width:40%;background:var(--red)"></div></div>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--dim)">
+      La reducción de GEI requiere mayor velocidad de implementación para alcanzar la meta.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Panel 580W — ciclo de vida (30 años)</div>
+    <div class="card-sub">Módulo n-Tipo TOPCon · Eficiencia 22.45%</div>
+    <div class="mini-grid">
+      <div class="mini-stat">
+        <div class="mini-label">CO₂ fabricación</div>
+        <div class="mini-val" style="color:var(--red)">348 kg</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-label">CO₂ evitado (vida útil)</div>
+        <div class="mini-val" style="color:var(--green2)">17 t</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-label">Energía total generada</div>
+        <div class="mini-val" style="color:var(--blue2)">29 k kWh</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-label">Ratio beneficio neto</div>
+        <div class="mini-val" style="color:var(--amber2)">49×</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;background:var(--bg3);border-radius:8px;padding:10px">
+      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Composición de materiales</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:10px;color:var(--dim)">
+        <span>Vidrio: 25.8 kg (rec. 80%)</span>
+        <span>Al: 2.5 kg (rec. 90%)</span>
+        <span>Silicio: 2.7 kg</span>
+        <span>Cobre: 0.40 kg</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── AUTOMATION ── -->
+<div class="section-label">Tendencias de automatización — sector energía LATAM</div>
+<div class="g2">
+  <div class="card">
+    <div class="card-title">Adopción tecnológica por área operativa</div>
+    <div class="card-sub">% de empresas con implementación activa vs meta esperada (2024)</div>
+    <div class="legend">
+      <span class="leg"><span class="leg-sq" style="background:var(--green);opacity:.8"></span>Adopción actual</span>
+      <span class="leg"><span class="leg-sq" style="background:var(--blue);opacity:.3"></span>Meta sectorial</span>
+    </div>
+    <div class="cw" style="height:240px"><canvas id="c4"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Dependencia hídrica — riesgo de concentración</div>
+    <div class="card-sub">Matriz eléctrica Ecuador 2024 — exposición al riesgo hídrico</div>
+    <div class="cw" style="height:200px"><canvas id="c5"></canvas></div>
+    <div style="margin-top:12px;padding:10px;background:rgba(226,75,74,.08);border-radius:8px;border:1px solid rgba(226,75,74,.15)">
+      <div style="font-size:11px;color:#ff7b7b;font-weight:500;margin-bottom:3px">Alerta: concentración hídrica</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5">Coca Codo Sinclair reporta ~7.000 fisuras (2022). La dependencia del 71% en una sola fuente representa riesgo sistémico.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RECOMMENDATIONS ── -->
+<div class="section-label">Recomendaciones estratégicas — para empresas en etapa inicial</div>
+<div class="g3">
+  <div class="reco">
+    <div class="reco-num" style="color:var(--green2)">01</div>
+    <div class="reco-title">Diagnóstico energético con IA antes de invertir</div>
+    <div class="reco-body">Antes de adquirir infraestructura renovable, realiza un análisis de carga real con herramientas de IA para identificar ineficiencias ocultas. Las empresas que digitalizan primero reducen hasta 25% el sobredimensionamiento de plantas y optimizan el retorno de inversión desde el primer año.</div>
+    <span class="reco-tag b-green">Prioridad alta · 0–6 meses</span>
+    <div class="pill-row">
+      <span class="pill">Smart metering</span>
+      <span class="pill">Digital twin</span>
+      <span class="pill">Baseline energético</span>
+    </div>
+  </div>
+  <div class="reco">
+    <div class="reco-num" style="color:var(--blue2)">02</div>
+    <div class="reco-title">Economía circular desde el diseño del proyecto</div>
+    <div class="reco-body">Ecuador emitirá 348 kg de CO₂ por cada panel fabricado. Integrar desde el inicio protocolos de fin de vida útil (80% vidrio, 90% aluminio recuperable) convierte el costo ambiental en ventaja competitiva. La meta regional al 2050 de residuos FV 300× superior exige actuar ahora.</div>
+    <span class="reco-tag b-blue">Prioridad media · 6–18 meses</span>
+    <div class="pill-row">
+      <span class="pill">Reciclaje FV</span>
+      <span class="pill">LCA ciclo de vida</span>
+      <span class="pill">ESG reporting</span>
+    </div>
+  </div>
+  <div class="reco">
+    <div class="reco-num" style="color:var(--amber2)">03</div>
+    <div class="reco-title">Diversificación de la matriz como gestión de riesgo</div>
+    <div class="reco-body">La dependencia hídrica del 70–72% en Ecuador representa un riesgo sistémico. El modelo Brasil —que tras su crisis hídrica del 2002 diversificó agresivamente— demuestra que solar + eólico no es solo transición verde: es resiliencia operativa.</div>
+    <span class="reco-tag b-amber">Estratégica · 12–36 meses</span>
+    <div class="pill-row">
+      <span class="pill">Solar distribuido</span>
+      <span class="pill">Eólico pequeña escala</span>
+      <span class="pill">Almacenamiento BESS</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <span>Fuentes: OLADE 2024 · IEA Latin America Energy Outlook 2023 · BloombergNEF 2024 · DNV Energy Transition Outlook 2025</span>
+  <span>Opendireito · Análisis estratégico energético Ecuador–LATAM · 2024</span>
+</footer>
+
+<script>
+const gridC  = 'rgba(255,255,255,0.06)';
+const tickC  = '#8b949e';
+const base = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { display: false } },
+  scales: {
+    x: { grid: { color: gridC }, ticks: { color: tickC, font: { size: 10 } } },
+    y: { grid: { color: gridC }, ticks: { color: tickC, font: { size: 10 } } }
+  }
+};
+
+// C1 — Growth rates line
+new Chart(document.getElementById('c1'), {
+  type: 'line',
+  data: {
+    labels: ['2022','2023','2024','2025p','2026p','2027p','2028p','2029p','2030p'],
+    datasets: [
+      { label:'Solar PV', data:[28,37,33,31,28,26,24,22,20],
+        borderColor:'#EF9F27', backgroundColor:'rgba(239,159,39,0.08)', tension:0.4, pointRadius:3, fill:true },
+      { label:'Eólico', data:[12,15,34,28,24,22,20,18,17],
+        borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.07)', tension:0.4, pointRadius:3, fill:true },
+      { label:'Total NCRE', data:[18,22,30,27,24,22,20,19,18],
+        borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.05)', tension:0.4, pointRadius:3, borderDash:[5,3], fill:true }
+    ]
+  },
+  options: { ...base, scales: { ...base.scales, y: { ...base.scales.y, ticks: { color:tickC, font:{size:10}, callback: v => v+'%' } } } }
+});
+
+// C2 — Energy mix lines
+new Chart(document.getElementById('c2'), {
+  type: 'line',
+  data: {
+    labels: ['2015','2018','2021','2024','2027p','2030p','2035p','2050p'],
+    datasets: [
+      { label:'Hidro',  data:[58,54,50,44,38,33,28,20], borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.15)', fill:true, tension:0.3, pointRadius:2 },
+      { label:'Solar',  data:[1,3,6,10,15,20,28,35],   borderColor:'#EF9F27', backgroundColor:'rgba(239,159,39,0.12)',  fill:true, tension:0.3, pointRadius:2 },
+      { label:'Eólico', data:[2,4,7,11,15,20,24,25],   borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,0.12)', fill:true, tension:0.3, pointRadius:2 },
+      { label:'Fósiles',data:[32,31,28,25,22,18,12,6], borderColor:'#E24B4A', backgroundColor:'rgba(226,75,74,0.1)',    fill:true, tension:0.3, pointRadius:2 },
+      { label:'Otros',  data:[7,8,9,10,10,9,8,14],     borderColor:'#9F7FDB', backgroundColor:'rgba(159,127,219,0.08)',fill:true, tension:0.3, pointRadius:2 }
+    ]
+  },
+  options: { ...base, scales: { ...base.scales, y: { ...base.scales.y, ticks: { color:tickC, font:{size:10}, callback: v => v+'%' } } } }
+});
+
+// C3 — Country adoption horizontal bar
+new Chart(document.getElementById('c3'), {
+  type: 'bar',
+  data: {
+    labels: ['Brasil','Chile','México','Colombia','Argentina','Perú','Ecuador','Uruguay'],
+    datasets: [
+      { label:'Solar', data:[27,8,9,3,2,1.5,0.3,0.2], backgroundColor:'rgba(239,159,39,0.75)', borderRadius:3 },
+      { label:'Eólico', data:[26,5,8,1.5,4.5,0.5,0.05,0.8], backgroundColor:'rgba(55,138,221,0.75)', borderRadius:3 }
+    ]
+  },
+  options: {
+    ...base, indexAxis:'y',
+    scales: {
+      x: { grid:{ color:gridC }, ticks:{ color:tickC, font:{size:10}, callback: v => v+' GW' } },
+      y: { grid:{ color:'transparent' }, ticks:{ color:tickC, font:{size:10} } }
+    }
+  }
+});
+
+// C4 — Automation adoption horizontal
+new Chart(document.getElementById('c4'), {
+  type: 'bar',
+  data: {
+    labels: ['SCADA / telegestión','Medición inteligente','GIS digital','Mantenimiento predictivo','Gemelo digital','IA en operaciones','BESS + almacenamiento'],
+    datasets: [
+      { label:'Adopción LATAM', data:[62,48,41,34,22,18,15], backgroundColor:'rgba(29,158,117,0.75)', borderRadius:4 },
+      { label:'Meta sector',    data:[90,80,75,70,60,55,50],  backgroundColor:'rgba(55,138,221,0.2)',  borderRadius:4 }
+    ]
+  },
+  options: {
+    ...base, indexAxis:'y',
+    scales: {
+      x: { max:100, grid:{ color:gridC }, ticks:{ color:tickC, font:{size:10}, callback: v => v+'%' } },
+      y: { grid:{ color:'transparent' }, ticks:{ color:tickC, font:{size:10} } }
+    }
+  }
+});
+
+// C5 — Donut hydro risk
+new Chart(document.getElementById('c5'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Hidroeléctrica', 'Solar', 'Eólico', 'Fósiles + otros'],
+    datasets: [{
+      data: [71, 0.8, 0.2, 28],
+      backgroundColor: ['#378ADD','#EF9F27','#1D9E75','#E24B4A'],
+      hoverOffset: 8, borderWidth: 0,
+      borderColor: 'transparent'
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins: {
+      legend: {
+        display:true, position:'bottom',
+        labels:{ color:tickC, font:{size:10}, boxWidth:10, padding:10 }
+      }
+    },
+    cutout:'65%'
+  }
+});
+
+// Gap bars
+const gaps = [
+  { country:'Brasil',    current:80, target:85, color:'#1D9E75' },
+  { country:'Chile',     current:40, target:75, color:'#378ADD' },
+  { country:'México',    current:22, target:45, color:'#EF9F27' },
+  { country:'Colombia',  current:20, target:50, color:'#9F7FDB' },
+  { country:'Ecuador',   current:5,  target:15, color:'#E24B4A' },
+  { country:'Argentina', current:14, target:30, color:'#EF9F27' },
+];
+document.getElementById('gap-chart').innerHTML = gaps.map(g => `
+  <div class="gap-item">
+    <div class="gap-hdr">
+      <strong>${g.country}</strong>
+      <span>${g.current}% <span style="color:var(--dim)">→ meta ${g.target}%</span></span>
+    </div>
+    <div class="gap-track">
+      <div class="gap-fill" style="width:${g.current}%;background:${g.color}"></div>
+      <div class="gap-marker" style="left:${g.target}%;background:rgba(255,255,255,0.3)"></div>
+    </div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>
