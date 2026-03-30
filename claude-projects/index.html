@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyectos en Claude — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --blue-bg: #e6f1fb; --blue-text: #185fa5; --blue-border: #85b7eb;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--purple-bg); color: var(--purple-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* INTRO CARD */
+  .intro-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; }
+  .intro-top { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .intro-logo { width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--purple-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .intro-logo svg { width: 20px; height: 20px; color: var(--purple-text); }
+  .intro-name { font-size: 16px; font-weight: 500; color: var(--text); }
+  .intro-maker { font-size: 12px; color: var(--text-faint); }
+  .intro-desc { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1rem; }
+  .intro-desc b { font-weight: 500; color: var(--text); }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+  .feature-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
+  .feature-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
+  .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .ft-blue .feature-tag { color: var(--blue-text); }
+  .ft-teal .feature-tag { color: var(--teal-text); }
+  .ft-purple .feature-tag { color: var(--purple-text); }
+  .ft-amber .feature-tag { color: var(--amber-text); }
+  .ft-coral .feature-tag { color: var(--coral-text); }
+  .ft-green .feature-tag { color: var(--green-text); }
+
+  /* STEPS ROW */
+  .steps-row { display: flex; gap: 0; margin-bottom: 1.75rem; overflow-x: auto; padding-bottom: 4px; }
+  .step-box { flex: 1; min-width: 130px; background: var(--surface); border: 1px solid var(--border); border-radius: 0; padding: 12px 14px; border-right: none; }
+  .step-box:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .step-box:last-child { border-right: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; }
+  .step-n { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-faint); margin-bottom: 4px; }
+  .step-t { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.4; }
+  .step-d { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+  /* CONCEPT CARDS */
+  .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
+  .concept-card-header { padding: 16px 18px 14px; border-bottom: 1px solid var(--border); }
+  .concept-card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .concept-num { font-family: 'DM Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: var(--radius-sm); flex-shrink: 0; margin-top: 2px; font-weight: 500; }
+  .cn-1 { background: var(--purple-bg); color: var(--purple-text); }
+  .cn-2 { background: var(--teal-bg); color: var(--teal-text); }
+  .cn-3 { background: var(--amber-bg); color: var(--amber-text); }
+  .cn-4 { background: var(--blue-bg); color: var(--blue-text); }
+  .concept-meta { flex: 1; }
+  .concept-title { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .concept-subtitle { font-size: 12px; color: var(--text-faint); }
+  .plan-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 999px; }
+  .pb-pro { background: var(--purple-bg); color: var(--purple-text); }
+  .pb-all { background: var(--green-bg); color: var(--green-text); }
+  .pb-team { background: var(--blue-bg); color: var(--blue-text); }
+  .pb-pay { background: var(--amber-bg); color: var(--amber-text); }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab { font-size: 12px; font-weight: 500; padding: 10px 16px; cursor: pointer; color: var(--text-faint); border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  .tab:hover { color: var(--text-muted); }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* CONTEXT TAB */
+  .context-section { padding: 14px 18px; }
+  .context-what { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; }
+  .context-what b { font-weight: 500; color: var(--text); }
+  .context-row { display: flex; gap: 10px; margin-bottom: 8px; }
+  .context-tag { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; min-width: 80px; flex-shrink: 0; padding-top: 1px; }
+  .ct-blue { color: var(--blue-text); }
+  .ct-teal { color: var(--teal-text); }
+  .ct-amber { color: var(--amber-text); }
+  .ct-purple { color: var(--purple-text); }
+  .ct-coral { color: var(--coral-text); }
+  .context-val { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .context-val b { font-weight: 500; color: var(--text); }
+
+  /* INSTRUCTIONS TAB */
+  .instructions-section { padding: 14px 18px; }
+  .instruction-step { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+  .instruction-step:last-child { margin-bottom: 0; }
+  .inst-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; width: 22px; height: 22px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--text-muted); margin-top: 1px; }
+  .inst-body { flex: 1; }
+  .inst-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .inst-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .inst-desc b { font-weight: 500; color: var(--text); }
+  .inst-code { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; margin-top: 6px; color: var(--text-muted); line-height: 1.6; }
+
+  /* COMPARISON TABLE */
+  .compare-section { padding: 14px 18px; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .compare-table th { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-faint); text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; line-height: 1.5; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { font-weight: 500; color: var(--text); width: 38%; }
+  .check { color: var(--teal-text); font-weight: 500; }
+  .cross { color: var(--coral-text); }
+
+  /* TIP */
+  .tip-global { background: var(--purple-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--purple-text); line-height: 1.65; margin-bottom: 1.75rem; border: 1px solid var(--purple-border); }
+  .tip-global b { font-weight: 500; }
+  .tip-amber { background: var(--amber-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--amber-text); line-height: 1.65; margin-bottom: 1.75rem; border: 1px solid var(--amber-border); }
+  .tip-amber b { font-weight: 500; }
+
+  /* PLAN GRID */
+  .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 1.75rem; }
+  .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .plan-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .plan-price { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-faint); margin-bottom: 8px; }
+  .plan-feature { font-size: 11px; color: var(--text-muted); line-height: 1.6; display: flex; align-items: baseline; gap: 5px; margin-bottom: 3px; }
+  .plan-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border-strong); flex-shrink: 0; margin-top: 5px; }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 22px; }
+    .feature-grid { grid-template-columns: 1fr 1fr; }
+    .steps-row { flex-direction: column; }
+    .step-box { border-right: 1px solid var(--border); border-bottom: none; border-radius: 0; }
+    .step-box:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .step-box:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); }
+    .plan-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — Claude</div>
+    <h1>Proyectos en Claude</h1>
+    <p class="subtitle">Cómo usar Proyectos para crear espacios de trabajo especializados con memoria, base de conocimiento e instrucciones persistentes dentro de Claude.ai.</p>
+  </header>
+
+  <!-- QUÉ SON LOS PROYECTOS -->
+  <div class="section-label">¿Qué son los Proyectos?</div>
+  <div class="intro-card">
+    <div class="intro-top">
+      <div class="intro-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </div>
+      <div>
+        <div class="intro-name">Proyectos</div>
+        <div class="intro-maker">Claude.ai — Anthropic</div>
+      </div>
+    </div>
+    <div class="intro-desc">
+      Los Proyectos son <b>espacios de trabajo especializados y persistentes</b> dentro de Claude.ai. A diferencia de un chat normal —que empieza desde cero cada vez— un Proyecto mantiene siempre disponibles tres elementos clave: una base de conocimiento con tus documentos, instrucciones personalizadas para Claude y un historial de conversaciones organizado por tema.<br><br>
+      El resultado práctico es que <b>no tienes que re-explicar el contexto</b> en cada sesión. Configuras el proyecto una vez y Claude trabaja desde ahí en todas las conversaciones, como un colaborador que ya conoce tu proyecto a fondo.
+    </div>
+    <div class="feature-grid">
+      <div class="feature-item ft-purple">
+        <div class="feature-tag">Base de conocimiento</div>
+        <div class="feature-desc">Sube documentos una vez. Claude los consulta en todos los chats del proyecto.</div>
+      </div>
+      <div class="feature-item ft-teal">
+        <div class="feature-tag">Instrucciones fijas</div>
+        <div class="feature-desc">Define el rol, tono y reglas de Claude para ese proyecto específico.</div>
+      </div>
+      <div class="feature-item ft-blue">
+        <div class="feature-tag">Memoria</div>
+        <div class="feature-desc">Claude sintetiza lo aprendido en el proyecto y lo recuerda entre sesiones.</div>
+      </div>
+      <div class="feature-item ft-amber">
+        <div class="feature-tag">200K tokens</div>
+        <div class="feature-desc">Ventana de contexto base de ~500 páginas, ampliable a 2M con RAG automático.</div>
+      </div>
+      <div class="feature-item ft-coral">
+        <div class="feature-tag">RAG automático</div>
+        <div class="feature-desc">Cuando la base de conocimiento crece, Claude activa búsqueda inteligente sin configuración.</div>
+      </div>
+      <div class="feature-item ft-green">
+        <div class="feature-tag">Colaboración</div>
+        <div class="feature-desc">En planes Team y Enterprise, se puede compartir con permisos por persona.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CÓMO SE CREA -->
+  <div class="section-label">Cómo crear y configurar un proyecto</div>
+  <div class="steps-row">
+    <div class="step-box">
+      <div class="step-n">01</div>
+      <div class="step-t">Abre Proyectos</div>
+      <div class="step-d">En claude.ai, haz clic en "Projects" en el panel lateral o ve a claude.ai/projects.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">02</div>
+      <div class="step-t">Crea el proyecto</div>
+      <div class="step-d">Haz clic en "+ New Project". Ponle un nombre y descripción (solo te los verás tú).</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">03</div>
+      <div class="step-t">Escribe las instrucciones</div>
+      <div class="step-d">En el panel derecho, haz clic en "Set project instructions" y define el rol y reglas de Claude.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">04</div>
+      <div class="step-t">Sube documentos</div>
+      <div class="step-d">Haz clic en "+" en la base de conocimiento. Puedes subir PDFs, DOCX, TXT, CSV y más.</div>
+    </div>
+    <div class="step-box">
+      <div class="step-n">05</div>
+      <div class="step-t">Inicia un chat</div>
+      <div class="step-d">Abre una conversación dentro del proyecto. Claude ya tiene todo el contexto disponible.</div>
+    </div>
+  </div>
+
+  <div class="tip-global">
+    <b>Dato clave:</b> Claude <b>no tiene acceso al nombre ni a la descripción</b> del proyecto — esos campos son solo para tu organización personal. Toda información que necesite Claude debe estar en las <b>instrucciones del proyecto</b> o en la base de conocimiento.
+  </div>
+
+  <!-- LOS 4 COMPONENTES DETALLADOS -->
+  <div class="section-label">Los cuatro componentes clave</div>
+
+  <!-- COMPONENTE 1: BASE DE CONOCIMIENTO -->
+  <div class="concept-card">
+    <div class="concept-card-header">
+      <div class="concept-card-top">
+        <span class="concept-num cn-1">01</span>
+        <div class="concept-meta">
+          <div class="concept-title">Base de conocimiento</div>
+          <div class="concept-subtitle">Los documentos que Claude consulta en cada conversación del proyecto</div>
+        </div>
+      </div>
+      <span class="plan-badge pb-all">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        Todos los planes
+      </span>
+    </div>
+
+    <div class="tabs" id="tabs-1">
+      <div class="tab active" onclick="setTab(1,'contexto',this)">Qué es</div>
+      <div class="tab" onclick="setTab(1,'como',this)">Cómo usarla</div>
+    </div>
+
+    <div class="tab-content active" id="tc-1-contexto">
+      <div class="context-section">
+        <div class="context-what">
+          La base de conocimiento es el <b>repositorio permanente de información del proyecto</b>. Todo lo que subas aquí queda disponible para Claude en cualquier conversación, sin necesidad de adjuntar archivos manualmente cada vez.
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-purple">Formatos</span>
+          <span class="context-val">PDF, DOCX, TXT, CSV, HTML, ODT, RTF, EPUB, JSON, XLSX. Imágenes: JPEG, PNG, GIF, WebP.</span>
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-teal">Límites</span>
+          <span class="context-val"><b>30 MB</b> por archivo. Hasta <b>20 archivos por chat individual</b>. La base de conocimiento del proyecto no tiene límite fijo de archivos (sujeto a la ventana de contexto de 200K tokens).</span>
+        </div>
+        <div class="context-row" style="margin-bottom:0">
+          <span class="context-tag ct-amber">RAG auto</span>
+          <span class="context-val">Cuando el volumen supera la ventana de contexto, Claude activa <b>RAG automático</b> sin configuración. Un indicador visual confirma que está activo. El contenido en caché <b>no consume límites de uso</b>.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tc-1-como">
+      <div class="instructions-section">
+        <div class="instruction-step">
+          <div class="inst-num">1</div>
+          <div class="inst-body">
+            <div class="inst-title">Usa nombres de archivo descriptivos</div>
+            <div class="inst-desc">Claude identifica los documentos por nombre, especialmente en modo RAG. Nombra los archivos de forma que el contenido sea evidente: <b>politica-precios-2025.pdf</b> es mucho mejor que <b>doc_final_v3.pdf</b>.</div>
+          </div>
+        </div>
+        <div class="instruction-step">
+          <div class="inst-num">2</div>
+          <div class="inst-body">
+            <div class="inst-title">Agrupa documentos relacionados en el mismo proyecto</div>
+            <div class="inst-desc">Claude puede establecer conexiones entre fuentes. Un proyecto de análisis financiero, por ejemplo, se beneficia de tener juntos los reportes trimestrales, los benchmarks del sector y las proyecciones internas.</div>
+          </div>
+        </div>
+        <div class="instruction-step">
+          <div class="inst-num">3</div>
+          <div class="inst-body">
+            <div class="inst-title">Referencia documentos por nombre en tus preguntas</div>
+            <div class="inst-desc">En tus mensajes puedes indicar de qué fuente quieres que responda Claude.</div>
+            <div class="inst-code">Basándote en el documento "reglamento-interno-2025.pdf", ¿cuál es el procedimiento para…?</div>
+          </div>
+        </div>
+        <div class="instruction-step">
+          <div class="inst-num">4</div>
+          <div class="inst-body">
+            <div class="inst-title">Prueba antes de usar en producción</div>
+            <div class="inst-desc">Carga 3–5 documentos representativos y compara las respuestas de Claude con los resultados que esperas. Diez minutos de calibración evitan errores repetitivos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTE 2: INSTRUCCIONES -->
+  <div class="concept-card">
+    <div class="concept-card-header">
+      <div class="concept-card-top">
+        <span class="concept-num cn-2">02</span>
+        <div class="concept-meta">
+          <div class="concept-title">Instrucciones del proyecto</div>
+          <div class="concept-subtitle">El system prompt permanente que define cómo se comporta Claude en este proyecto</div>
+        </div>
+      </div>
+      <span class="plan-badge pb-all">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Todos los planes
+      </span>
+    </div>
+
+    <div class="tabs" id="tabs-2">
+      <div class="tab active" onclick="setTab(2,'contexto',this)">Qué es</div>
+      <div class="tab" onclick="setTab(2,'como',this)">Cómo escribirlas</div>
+    </div>
+
+    <div class="tab-content active" id="tc-2-contexto">
+      <div class="context-section">
+        <div class="context-what">
+          Las instrucciones del proyecto funcionan como un <b>system prompt permanente con alcance limitado a ese proyecto</b>. Se activan automáticamente en cada conversación y no afectan otros proyectos ni chats fuera del proyecto.
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-purple">Puedes definir</span>
+          <span class="context-val">El rol de Claude (<b>"Actúa como analista de contratos legales"</b>), el idioma y tono de respuesta, el formato de salida preferido (tablas, listas, prosa), y restricciones específicas (<b>"No asumas datos no verificados"</b>).</span>
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-teal">Jerarquía</span>
+          <span class="context-val">Las instrucciones de proyecto tienen <b>prioridad sobre las preferencias globales de perfil</b>, pero pueden complementarse con los estilos seleccionables por conversación.</span>
+        </div>
+        <div class="context-row" style="margin-bottom:0">
+          <span class="context-tag ct-amber">Límite práctico</span>
+          <span class="context-val">Mantén las instrucciones <b>concisas y enfocadas</b> en contexto esencial y el rol de Claude. Las instrucciones específicas de cada tarea van mejor en el chat individual, no en las instrucciones del proyecto.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tc-2-como">
+      <div class="instructions-section">
+        <div class="instruction-step">
+          <div class="inst-num">1</div>
+          <div class="inst-body">
+            <div class="inst-title">Define el rol con claridad</div>
+            <div class="inst-desc">Empieza con una descripción del papel que cumple Claude en este proyecto.</div>
+            <div class="inst-code">Eres un asistente especializado en análisis de contratos B2B para empresas de tecnología en Ecuador. Tu objetivo es identificar cláusulas de riesgo, inconsistencias y oportunidades de mejora.</div>
+          </div>
+        </div>
+        <div class="instruction-step">
+          <div class="inst-num">2</div>
+          <div class="inst-body">
+            <div class="inst-title">Establece el tono y formato</div>
+            <div class="inst-desc">Indica el idioma, nivel de formalidad y cómo deben estructurarse las respuestas.</div>
+            <div class="inst-code">Responde siempre en español formal. Usa tablas comparativas cuando analices más de dos opciones. Evita tecnicismos sin definición.</div>
+          </div>
+        </div>
+        <div class="instruction-step">
+          <div class="inst-num">3</div>
+          <div class="inst-body">
+            <div class="inst-title">Agrega restricciones o comportamientos clave</div>
+            <div class="inst-desc">Define qué debe o no debe hacer Claude en situaciones específicas del proyecto.</div>
+            <div class="inst-code">Cuando falte información para responder con certeza, pide aclaración antes de proceder. No hagas suposiciones sobre datos numéricos que no estén en los documentos cargados.</div>
+          </div>
+        </div>
+        <div class="instruction-step">
+          <div class="inst-num">4</div>
+          <div class="inst-body">
+            <div class="inst-title">Referencia la base de conocimiento (patrón avanzado)</div>
+            <div class="inst-desc">Pide a Claude que genere una "Guía de Estándares" a partir de los documentos cargados, súbela a la base de conocimiento y luego instrúyelo a consultarla siempre.</div>
+            <div class="inst-code">Antes de responder, consulta siempre la "Guía de Estándares del Proyecto" disponible en los documentos del proyecto para asegurar consistencia con los criterios definidos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTE 3: MEMORIA -->
+  <div class="concept-card">
+    <div class="concept-card-header">
+      <div class="concept-card-top">
+        <span class="concept-num cn-3">03</span>
+        <div class="concept-meta">
+          <div class="concept-title">Memoria del proyecto</div>
+          <div class="concept-subtitle">Cómo Claude retiene y comparte contexto entre conversaciones</div>
+        </div>
+      </div>
+      <span class="plan-badge pb-pay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Pro, Max, Team, Enterprise
+      </span>
+    </div>
+
+    <div class="tabs" id="tabs-3">
+      <div class="tab active" onclick="setTab(3,'contexto',this)">Cómo funciona</div>
+      <div class="tab" onclick="setTab(3,'como',this)">Lo que se comparte (y lo que no)</div>
+    </div>
+
+    <div class="tab-content active" id="tc-3-contexto">
+      <div class="context-section">
+        <div class="context-what">
+          La memoria de proyecto es un <b>resumen dedicado que Claude construye y actualiza</b> a partir de las conversaciones del proyecto. Es independiente de la memoria general de tu cuenta y se actualiza automáticamente.
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-purple">Actualización</span>
+          <span class="context-val">Claude actualiza el resumen del proyecto <b>cada 24 horas</b>, sintetizando las conversaciones más recientes. Si le dices explícitamente "recuerda esto", la memoria se actualiza de inmediato.</span>
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-teal">Búsqueda</span>
+          <span class="context-val">Claude puede <b>buscar en el historial de chats previos</b> del proyecto usando RAG, respondiendo preguntas como "¿qué decidimos sobre X la semana pasada?"</span>
+        </div>
+        <div class="context-row" style="margin-bottom:0">
+          <span class="context-tag ct-amber">Control</span>
+          <span class="context-val">Puedes ver y editar las memorias generadas desde la configuración de tu cuenta. Puedes pedir a Claude que <b>olvide</b> información específica o que corrija un dato.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tc-3-como">
+      <div class="compare-section">
+        <table class="compare-table">
+          <tr>
+            <th>Elemento</th>
+            <th>¿Se comparte entre chats del mismo proyecto?</th>
+          </tr>
+          <tr>
+            <td>Base de conocimiento (archivos)</td>
+            <td><span class="check">✓ Sí</span> — disponible en todos los chats</td>
+          </tr>
+          <tr>
+            <td>Instrucciones del proyecto</td>
+            <td><span class="check">✓ Sí</span> — aplican automáticamente a cada conversación</td>
+          </tr>
+          <tr>
+            <td>Resumen de memoria del proyecto</td>
+            <td><span class="check">✓ Sí</span> — se actualiza cada 24h y es transversal</td>
+          </tr>
+          <tr>
+            <td>Contenido de un chat individual</td>
+            <td><span class="cross">✗ No</span> — cada chat tiene su propio contexto aislado</td>
+          </tr>
+          <tr>
+            <td>Archivos adjuntos en un chat</td>
+            <td><span class="cross">✗ No</span> — solo visibles en esa conversación específica</td>
+          </tr>
+        </table>
+        <div style="margin-top:12px; font-size:12px; color:var(--text-muted); line-height:1.65; padding: 0 2px;">
+          <b style="color:var(--text);">La implicación práctica:</b> si en un chat llegas a una conclusión importante que Claude debe saber en futuros chats, tienes tres opciones: decirle "recuerda esto" en ese momento, añadir la información a la base de conocimiento, o esperar al próximo ciclo de memoria de 24 horas.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPONENTE 4: COLABORACIÓN -->
+  <div class="concept-card">
+    <div class="concept-card-header">
+      <div class="concept-card-top">
+        <span class="concept-num cn-4">04</span>
+        <div class="concept-meta">
+          <div class="concept-title">Colaboración en equipo</div>
+          <div class="concept-subtitle">Proyectos compartidos con permisos y control de acceso</div>
+        </div>
+      </div>
+      <span class="plan-badge pb-team">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Team y Enterprise
+      </span>
+    </div>
+
+    <div class="tabs" id="tabs-4">
+      <div class="tab active" onclick="setTab(4,'contexto',this)">Qué incluye</div>
+      <div class="tab" onclick="setTab(4,'como',this)">Permisos disponibles</div>
+    </div>
+
+    <div class="tab-content active" id="tc-4-contexto">
+      <div class="context-section">
+        <div class="context-what">
+          En planes Team y Enterprise, los Proyectos dejan de ser espacios individuales para convertirse en <b>infraestructura de trabajo colaborativo</b>. El mismo proyecto con sus instrucciones, base de conocimiento y configuración puede ser usado por todo un equipo.
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-blue">Funciones</span>
+          <span class="context-val">Directorio de proyectos compartidos, notificaciones por correo, feed de actividad del proyecto, y control de permisos por persona o grupo.</span>
+        </div>
+        <div class="context-row">
+          <span class="context-tag ct-teal">Enterprise</span>
+          <span class="context-val">Agrega ventanas de contexto de <b>500K tokens</b>, logs de auditoría, SSO, retención de datos personalizada y conectores con Google Drive, Gmail, Slack, GitHub y Jira.</span>
+        </div>
+        <div class="context-row" style="margin-bottom:0">
+          <span class="context-tag ct-amber">Seguridad</span>
+          <span class="context-val">Anthropic garantiza que el contenido de los Proyectos <b>no se usa para entrenar modelos</b> sin consentimiento explícito del usuario o la organización.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tc-4-como">
+      <div class="compare-section">
+        <table class="compare-table">
+          <tr>
+            <th>Nivel de permiso</th>
+            <th>Qué puede hacer</th>
+          </tr>
+          <tr>
+            <td>Can use</td>
+            <td>Iniciar chats y consultar la base de conocimiento. No puede modificar instrucciones ni documentos.</td>
+          </tr>
+          <tr>
+            <td>Can edit</td>
+            <td>Todo lo anterior más editar instrucciones del proyecto, agregar o eliminar documentos de la base de conocimiento.</td>
+          </tr>
+          <tr>
+            <td>Owner / Admin</td>
+            <td>Control total: permisos, archivado, eliminación del proyecto y configuración avanzada (Enterprise).</td>
+          </tr>
+        </table>
+        <div style="margin-top:12px; font-size:12px; color:var(--text-muted); line-height:1.65; padding: 0 2px;">
+          Al <b>archivar</b> un proyecto compartido, los permisos se resetean automáticamente a privado. Los proyectos archivados pueden eliminarse posteriormente desde el panel de administración.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANES -->
+  <div class="section-label">Acceso por plan</div>
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0 / mes</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Máximo 5 proyectos</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Base de conocimiento</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Instrucciones</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Sin RAG automático</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Sin colaboración</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$20 / mes</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Proyectos ilimitados</div>
+      <div class="plan-feature"><span class="plan-dot"></span>RAG automático</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Memoria de proyecto</div>
+      <div class="plan-feature"><span class="plan-dot"></span>200K tokens base</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Sin colaboración</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Max</div>
+      <div class="plan-price">Niveles 5× / 20×</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Todo lo de Pro</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Mayor límite de uso</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Acceso prioritario</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Modelos más recientes</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Team</div>
+      <div class="plan-price">$22–25 / asiento</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Todo lo de Pro</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Proyectos compartidos</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Permisos por persona</div>
+      <div class="plan-feature"><span class="plan-dot"></span>Feed de actividad</div>
+    </div>
+  </div>
+
+  <!-- PROYECTOS VS CHAT NORMAL -->
+  <div class="section-label">Proyectos vs. chat normal</div>
+  <div class="concept-card" style="margin-bottom:1.75rem;">
+    <div class="compare-section" style="padding:16px 18px;">
+      <table class="compare-table">
+        <tr>
+          <th>Característica</th>
+          <th>Chat normal</th>
+          <th>Proyecto</th>
+        </tr>
+        <tr>
+          <td>Contexto al iniciar</td>
+          <td>Cero — empieza en blanco</td>
+          <td><span class="check">Persistente</span> — instrucciones + docs</td>
+        </tr>
+        <tr>
+          <td>Documentos</td>
+          <td>Se adjuntan por chat</td>
+          <td><span class="check">Base de conocimiento permanente</span></td>
+        </tr>
+        <tr>
+          <td>Instrucciones personalizadas</td>
+          <td>Solo las globales del perfil</td>
+          <td><span class="check">System prompt por proyecto</span></td>
+        </tr>
+        <tr>
+          <td>Memoria entre sesiones</td>
+          <td>Memoria general de la cuenta</td>
+          <td><span class="check">Resumen dedicado por proyecto</span></td>
+        </tr>
+        <tr>
+          <td>RAG automático</td>
+          <td><span class="cross">No disponible</span></td>
+          <td><span class="check">Sí (planes de pago)</span></td>
+        </tr>
+        <tr>
+          <td>Consumo de límites</td>
+          <td>Cada adjunto cuenta</td>
+          <td><span class="check">Contenido en caché no consume</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- COMPARACIÓN CON OTRAS PLATAFORMAS -->
+  <div class="section-label">Comparación con otras plataformas de IA</div>
+
+  <!-- TARJETA 1: GPTs y Gems vs Proyectos Claude -->
+  <div class="concept-card" style="margin-bottom:16px;">
+    <div class="concept-card-header" style="border-bottom:none; padding-bottom:0;">
+      <div class="concept-card-top" style="margin-bottom:6px;">
+        <div class="concept-meta">
+          <div class="concept-title">GPTs (ChatGPT) y Gems (Gemini) vs. Proyectos de Claude</div>
+          <div class="concept-subtitle">Misma idea de base — propósitos distintos</div>
+        </div>
+      </div>
+      <div style="font-size:13px; color:var(--text-muted); line-height:1.75; padding-bottom:14px;">
+        GPTs y Gems nacen con una lógica de <b>producto distribuible</b>: se configuran una vez y se publican para que otras personas los usen, como si fueran una aplicación especializada. Los Proyectos de Claude están diseñados como <b>espacios de trabajo personales o de equipo</b>, orientados al flujo de trabajo, no a la distribución pública.
+      </div>
+    </div>
+    <div class="compare-section" style="padding-top:0;">
+      <table class="compare-table">
+        <tr>
+          <th>Característica</th>
+          <th>GPTs / Gems</th>
+          <th>Proyectos Claude</th>
+        </tr>
+        <tr>
+          <td>System prompt personalizado</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí</span></td>
+        </tr>
+        <tr>
+          <td>Base de conocimiento con archivos</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí</span></td>
+        </tr>
+        <tr>
+          <td>RAG automático</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí (pago)</span></td>
+        </tr>
+        <tr>
+          <td>Historial de chats agrupado</td>
+          <td><span class="cross">✗ No — cada chat empieza nuevo</span></td>
+          <td><span class="check">✓ Sí</span></td>
+        </tr>
+        <tr>
+          <td>Memoria entre sesiones</td>
+          <td><span class="cross">✗ No</span></td>
+          <td><span class="check">✓ Sí (pago)</span></td>
+        </tr>
+        <tr>
+          <td>Publicable como "app" para terceros</td>
+          <td><span class="check">✓ Sí — GPT Store / galería</span></td>
+          <td><span class="cross">✗ No disponible</span></td>
+        </tr>
+        <tr>
+          <td>Colaboración en equipo</td>
+          <td><span class="cross">✗ No nativo</span></td>
+          <td><span class="check">✓ Sí (Team / Enterprise)</span></td>
+        </tr>
+        <tr>
+          <td>Orientación principal</td>
+          <td>Producto — distribución a usuarios</td>
+          <td>Flujo de trabajo — uso personal o en equipo</td>
+        </tr>
+      </table>
+      <div style="margin-top:12px; background:var(--coral-bg); border:1px solid var(--coral-border); border-radius:var(--radius-sm); padding:10px 12px; font-size:12px; color:var(--coral-text); line-height:1.65;">
+        <b>Lo que Claude no tiene (aún):</b> No existe un equivalente al GPT Store ni a la galería de Gems. Si el objetivo es crear un asistente empaquetado y publicarlo para que terceros lo descubran y usen, la vía en el ecosistema Anthropic es usar la <b>API de Claude</b> con un system prompt propio y una interfaz desarrollada a medida.
+      </div>
+    </div>
+  </div>
+
+  <!-- TARJETA 2: Proyectos ChatGPT vs Proyectos Claude -->
+  <div class="concept-card" style="margin-bottom:1.75rem;">
+    <div class="concept-card-header" style="border-bottom:none; padding-bottom:0;">
+      <div class="concept-card-top" style="margin-bottom:6px;">
+        <div class="concept-meta">
+          <div class="concept-title">Proyectos de ChatGPT vs. Proyectos de Claude</div>
+          <div class="concept-subtitle">La comparación más directa — misma filosofía, diferencias técnicas</div>
+        </div>
+      </div>
+      <div style="font-size:13px; color:var(--text-muted); line-height:1.75; padding-bottom:14px;">
+        Los Proyectos de Claude y los Proyectos de ChatGPT son <b>funcionalmente casi idénticos en concepto</b>: ambos agrupan conversaciones por tema, mantienen instrucciones persistentes y comparten una base de conocimiento entre chats. Si ya usabas Proyectos en ChatGPT, la curva de aprendizaje en Claude es mínima — la lógica es la misma.
+      </div>
+    </div>
+    <div class="compare-section" style="padding-top:0;">
+      <table class="compare-table">
+        <tr>
+          <th>Característica</th>
+          <th>Proyectos ChatGPT</th>
+          <th>Proyectos Claude</th>
+        </tr>
+        <tr>
+          <td>Agrupa conversaciones por tema</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí</span></td>
+        </tr>
+        <tr>
+          <td>Instrucciones personalizadas</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí</span></td>
+        </tr>
+        <tr>
+          <td>Base de conocimiento compartida</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí</span></td>
+        </tr>
+        <tr>
+          <td>Memoria entre conversaciones</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí (Pro, Max, Team, Enterprise)</span></td>
+        </tr>
+        <tr>
+          <td>RAG automático</td>
+          <td><span class="check">✓ Sí</span></td>
+          <td><span class="check">✓ Sí (planes de pago)</span></td>
+        </tr>
+        <tr>
+          <td>Colaboración en equipo</td>
+          <td><span class="check">✓ Sí (Team / Enterprise)</span></td>
+          <td><span class="check">✓ Sí (Team / Enterprise)</span></td>
+        </tr>
+        <tr>
+          <td>Ventana de contexto base</td>
+          <td>~128K tokens</td>
+          <td><span class="check">200K tokens (~56% más)</span></td>
+        </tr>
+        <tr>
+          <td>Ventana con RAG</td>
+          <td>Variable</td>
+          <td><span class="check">Hasta 2M tokens</span></td>
+        </tr>
+        <tr>
+          <td>Caché de contenido</td>
+          <td>No explícito</td>
+          <td><span class="check">✓ El contenido reutilizado no consume límites</span></td>
+        </tr>
+        <tr>
+          <td>Tamaño máximo por archivo</td>
+          <td>Variable por plan</td>
+          <td>30 MB por archivo</td>
+        </tr>
+      </table>
+      <div style="margin-top:12px; background:var(--teal-bg); border:1px solid var(--teal-border); border-radius:var(--radius-sm); padding:10px 12px; font-size:12px; color:var(--teal-text); line-height:1.65;">
+        <b>Conclusión práctica:</b> Proyectos de Claude ≈ Proyectos de ChatGPT en concepto y estructura. La ventaja técnica de Claude está en la <b>ventana de contexto más amplia</b> y el <b>caché de contenido</b> que no descuenta del límite de uso. La ventaja de ChatGPT está en el ecosistema más maduro y la integración con más herramientas externas en planes de pago.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip-amber">
+    <b>Buenas prácticas:</b> Crea un proyecto diferente por cada área de trabajo bien delimitada (cliente, producto, área funcional). Evita proyectos "cajón de sastre" con temas mezclados — el valor de los Proyectos está en que Claude siempre tiene el contexto correcto para la tarea correcta. Todo material que consultarás repetidamente debería vivir en la <b>base de conocimiento del proyecto</b>, no adjuntarse manualmente en cada chat.
+  </div>
+
+</div>
+<script>
+function setTab(id, tab, el) {
+  document.getElementById('tabs-' + id).querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['contexto','como'].forEach(t => {
+    const el2 = document.getElementById('tc-' + id + '-' + t);
+    if (el2) el2.classList.toggle('active', t === tab);
+  });
+}
+</script>
+</body>
+</html>
