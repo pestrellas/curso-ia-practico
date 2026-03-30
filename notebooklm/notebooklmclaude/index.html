@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agente de Inteligencia Energética LATAM — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--amber-bg); color: var(--amber-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* OVERVIEW PILLS */
+  .overview { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  .pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 999px; }
+  .pill svg { width: 12px; height: 12px; }
+  .p-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .p-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .p-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .p-green { background: var(--green-bg); color: var(--green-text); }
+
+  /* FLOW PIPELINE */
+  .pipeline { display: flex; align-items: stretch; gap: 0; margin-bottom: 1.75rem; overflow-x: auto; padding-bottom: 4px; }
+  .pipe-step { flex: 1; min-width: 140px; background: var(--surface); border: 1px solid var(--border); padding: 14px 14px 12px; border-right: none; cursor: pointer; transition: background 0.15s; position: relative; }
+  .pipe-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .pipe-step:last-child { border-right: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; }
+  .pipe-step:hover { background: var(--bg); }
+  .pipe-step.active { background: var(--amber-bg); border-color: var(--amber-border); }
+  .pipe-step.active + .pipe-step { border-left-color: var(--amber-border); }
+  .pipe-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-faint); margin-bottom: 4px; }
+  .pipe-tool { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px; display: inline-block; }
+  .pt-nb { background: var(--teal-bg); color: var(--teal-text); }
+  .pt-cl { background: var(--purple-bg); color: var(--purple-text); }
+  .pt-dash { background: var(--green-bg); color: var(--green-text); }
+  .pt-pub { background: var(--amber-bg); color: var(--amber-text); }
+  .pipe-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
+  .pipe-arrow { display: flex; align-items: center; padding: 0 2px; color: var(--text-faint); font-size: 14px; flex-shrink: 0; margin-bottom: 0; }
+
+  /* STEP DETAIL CARDS */
+  .step-detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; display: none; }
+  .step-detail.active { display: block; }
+  .step-detail-header { padding: 16px 18px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .sdh-left { flex: 1; }
+  .sdh-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-faint); margin-bottom: 4px; }
+  .sdh-title { font-size: 17px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .sdh-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .sdh-desc b { font-weight: 500; color: var(--text); }
+  .tool-badge { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .tb-nb { background: var(--teal-bg); color: var(--teal-text); }
+  .tb-cl { background: var(--purple-bg); color: var(--purple-text); }
+  .tb-dash { background: var(--green-bg); color: var(--green-text); }
+  .tb-pub { background: var(--amber-bg); color: var(--amber-text); }
+
+  /* ACTION ROWS */
+  .action-row { display: flex; gap: 10px; padding: 12px 18px; border-bottom: 0.5px solid var(--border); align-items: flex-start; }
+  .action-row:last-child { border-bottom: none; }
+  .action-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .action-icon svg { width: 13px; height: 13px; }
+  .ai-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .ai-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .ai-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .ai-green { background: var(--green-bg); color: var(--green-text); }
+  .ai-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .action-content { flex: 1; }
+  .action-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .action-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .action-desc b { font-weight: 500; color: var(--text); }
+
+  /* COPY AREA */
+  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
+  .copy-trigger:hover { background: var(--accent-border); }
+  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
+  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
+  .copy-hint b { font-weight: 500; opacity: 1; }
+  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
+  .copy-box.open { display: block; }
+  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 18px; resize: none; line-height: 1.75; cursor: text; outline: none; }
+  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 18px 10px; font-size: 12px; color: var(--accent-text); }
+  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .copy-box-footer strong { font-weight: 500; }
+
+  /* RESULT PREVIEW */
+  .result-box { margin: 12px 18px 16px; background: var(--bg); border-radius: var(--radius-sm); padding: 14px; }
+  .result-label { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
+  .result-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .result-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
+  .ri-tag { font-size: 10px; font-weight: 500; margin-bottom: 3px; }
+  .ri-val { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .tag-amber { color: var(--amber-text); }
+  .tag-teal { color: var(--teal-text); }
+  .tag-purple { color: var(--purple-text); }
+  .tag-green { color: var(--green-text); }
+
+  .tip-box { border-radius: var(--radius); padding: 11px 14px; font-size: 12px; line-height: 1.65; margin: 0 18px 14px; }
+  .tip-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .tip-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .tip-green { background: var(--green-bg); color: var(--green-text); }
+  .tip-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .tip-box b { font-weight: 500; }
+
+  .nav-btns { display: flex; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--border); }
+  .nav-btn { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .nav-btn:hover { background: var(--bg); color: var(--text); }
+  .nav-btn.primary { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
+  .nav-btn.primary:hover { background: var(--amber-border); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 22px; }
+    .pipeline { flex-direction: column; }
+    .pipe-step { border-right: 1px solid var(--border); border-bottom: none; border-radius: 0; min-width: unset; }
+    .pipe-step:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .pipe-step:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); }
+    .result-items { grid-template-columns: 1fr; }
+    .copy-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — Flujo Avanzado</div>
+    <h1>Agente de Inteligencia Energética LATAM</h1>
+    <p class="subtitle">Un flujo de trabajo de 4 pasos que combina NotebookLM y Claude para construir un dashboard interactivo sobre energía en América Latina a partir de fuentes técnicas verificadas.</p>
+  </header>
+
+  <div class="overview">
+    <span class="pill p-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>NotebookLM</span>
+    <span class="pill p-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Claude</span>
+    <span class="pill p-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Dashboard interactivo</span>
+    <span class="pill p-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Publicable</span>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="section-label">Selecciona un paso para ver el detalle</div>
+  <div class="pipeline" id="pipeline">
+    <div class="pipe-step active" onclick="showStep(0)">
+      <div class="pipe-num">01</div>
+      <div class="pipe-tool pt-nb">NotebookLM</div>
+      <div class="pipe-title">Recolectar fuentes energéticas</div>
+    </div>
+    <div class="pipe-step" onclick="showStep(1)">
+      <div class="pipe-num">02</div>
+      <div class="pipe-tool pt-nb">NotebookLM</div>
+      <div class="pipe-title">Extraer datos cuantitativos</div>
+    </div>
+    <div class="pipe-step" onclick="showStep(2)">
+      <div class="pipe-num">03</div>
+      <div class="pipe-tool pt-cl">Claude</div>
+      <div class="pipe-title">Generar el dashboard</div>
+    </div>
+    <div class="pipe-step" onclick="showStep(3)">
+      <div class="pipe-num">04</div>
+      <div class="pipe-tool pt-pub">Publicar</div>
+      <div class="pipe-title">Compartir e incrustar</div>
+    </div>
+  </div>
+
+  <!-- STEP DETAILS -->
+
+  <!-- STEP 0 -->
+  <div class="step-detail active" id="detail-0">
+    <div class="step-detail-header">
+      <div class="sdh-left">
+        <div class="sdh-num">Paso 01 — NotebookLM / Discover Sources</div>
+        <div class="sdh-title">Recolectar fuentes técnicas sobre energía en LATAM</div>
+        <div class="sdh-desc">Usas la función <b>Discover Sources</b> de NotebookLM para enviar al agente a navegar más de 100 sitios simultáneamente y traer reportes técnicos del BID, CEPAL, FMI, PwC, KPMG y otros organismos de alta autoridad.</div>
+      </div>
+      <span class="tool-badge tb-nb">NotebookLM</span>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Abre NotebookLM y crea un cuaderno nuevo</div>
+        <div class="action-desc">Ve a <b>notebooklm.google.com</b>, inicia sesión con tu cuenta de Google y haz clic en "Nuevo cuaderno". Dale un nombre como "Inteligencia Energética LATAM".</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Activa "Discover Sources"</div>
+        <div class="action-desc">En el panel de fuentes (lado izquierdo), busca el botón <b>Discover Sources</b> o el ícono de búsqueda web. Este es el modo agéntico que navega la web.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Copia y pega el prompt de recolección</div>
+        <div class="action-desc">Usa el botón de abajo para seleccionar el prompt, cópialo con <b>Ctrl+C</b> y pégalo en el campo de Discover Sources. El agente buscará 15 fuentes técnicas verificadas.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Importa las fuentes al cuaderno</div>
+        <div class="action-desc">Cuando el agente termine, verás una lista de fuentes con justificación técnica. Selecciona las más relevantes y haz clic en <b>Agregar al cuaderno</b>. Espera que se procesen.</div>
+      </div>
+    </div>
+    <div class="tip-box tip-amber" style="margin-top:0">
+      <b>Criterio de selección:</b> Prioriza fuentes con más de 15 páginas, metodología estadística y tablas de datos. Descarta artículos de opinión o noticias cortas — el prompt ya le indica esto al agente, pero conviene verificarlo.
+    </div>
+    <div class="copy-trigger" onclick="selectPrompt('p0')">
+      <div class="copy-trigger-left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Seleccionar prompt de recolección para copiar
+      </div>
+      <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+    </div>
+    <div class="copy-box" id="box-p0">
+      <textarea id="ta-p0" rows="9" readonly>Actúa como un Analista de Infraestructura y Energía Senior para realizar un Deep Research sobre las alternativas y desafíos energéticos en América Latina ante el incremento de la demanda digital e industrial.
+
+Estrategia de Rastreo y Fuentes:
+Localiza y prepara para importación documentos técnicos, reportes de sostenibilidad y proyecciones económicas publicados entre 2020 y 2026. Prioriza el anclaje de fuentes en organismos de alta autoridad como el BID, FMI, ONU (CEPAL), UNESCO, PwC, KPMG, Statista y el reporte anual de Atlantico VC. Incluye también tesis y estudios de observatorios energéticos y universidades líderes en la región.
+
+Dimensiones del Análisis (Vectores de Búsqueda):
+
+Histórico y Proyección: Identifica datos duros de los últimos 5 años (2020-2025) y recaba análisis de proyecciones para el periodo 2025-2030.
+
+Factores Críticos: Busca información específica sobre accesibilidad, costos de generación, y áreas geográficas con mayor potencial de desarrollo.
+
+Disruptores Tecnológicos: Investiga el impacto positivo y negativo de la IA (centros de datos), la movilidad eléctrica (EVs) y la generación solar en la estabilidad del sector.
+
+Criterios de Calidad:
+Filtra exclusivamente fuentes con rigor metodológico (mínimo 15 páginas) y evita artículos de opinión o noticias de prensa general. El agente debe navegar por la web utilizando embeddings vectoriales para asegurar que los hallazgos sean técnicamente densos y contengan tablas de datos o proyecciones financieras.
+
+Resultado: Identifica las 15 fuentes más relevantes y presenta una breve justificación técnica de su valor antes de integrarlas al cuaderno.</textarea>
+      <div class="copy-box-footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac)
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" disabled>← Anterior</button>
+      <button class="nav-btn primary" onclick="showStep(1)">Siguiente → Extraer datos</button>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step-detail" id="detail-1">
+    <div class="step-detail-header">
+      <div class="sdh-left">
+        <div class="sdh-num">Paso 02 — NotebookLM / Chat del cuaderno</div>
+        <div class="sdh-title">Extraer los datos cuantitativos de las fuentes</div>
+        <div class="sdh-desc">Con las fuentes ya importadas en tu cuaderno, cambias al <b>chat de NotebookLM</b> para pedirle que organice todos los datos numéricos relevantes. Este resultado es la materia prima que llevarás a Claude en el paso siguiente.</div>
+      </div>
+      <span class="tool-badge tb-nb">NotebookLM</span>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Cambia al chat del cuaderno</div>
+        <div class="action-desc">Una vez que todas las fuentes estén procesadas (verás una palomita verde junto a cada una), haz clic en el área de chat a la derecha del cuaderno para comenzar una conversación.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Copia y pega el prompt de extracción</div>
+        <div class="action-desc">Pega el prompt de abajo en el chat. NotebookLM analizará todas las fuentes importadas y organizará los datos cuantitativos en bloques temáticos.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Copia el resultado completo</div>
+        <div class="action-desc">Cuando NotebookLM entregue la respuesta con los datos organizados por bloques, <b>selecciona todo el texto y cópialo</b>. Este contenido lo pegarás en el prompt de Claude en el paso 3.</div>
+      </div>
+    </div>
+    <div class="tip-box tip-teal" style="margin-top:0">
+      <b>Consejo:</b> Si el resultado es muy extenso, pide a NotebookLM que lo divida: "Organiza los datos en bloques de: generación convencional, renovables, demanda digital y proyecciones 2030". Eso facilita el trabajo de Claude después.
+    </div>
+    <div class="copy-trigger" onclick="selectPrompt('p1')">
+      <div class="copy-trigger-left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Seleccionar prompt de extracción para copiar
+      </div>
+      <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+    </div>
+    <div class="copy-box" id="box-p1">
+      <textarea id="ta-p1" rows="3" readonly>Recopila todos los puntos cuantitativos más relevantes organizados por bloques que nos ayude posteriormente a crear un panel con todos esos datos.</textarea>
+      <div class="copy-box-footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac)
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="showStep(0)">← Recolectar fuentes</button>
+      <button class="nav-btn primary" onclick="showStep(2)">Siguiente → Generar dashboard</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-detail" id="detail-2">
+    <div class="step-detail-header">
+      <div class="sdh-left">
+        <div class="sdh-num">Paso 03 — Claude</div>
+        <div class="sdh-title">Generar el dashboard interactivo</div>
+        <div class="sdh-desc">Abres Claude y pegas el prompt de dashboard <b>junto con el resultado que copiaste de NotebookLM</b>. Claude generará un artefacto interactivo con gráficos, KPIs y recomendaciones estratégicas basadas en los datos reales de las fuentes.</div>
+      </div>
+      <span class="tool-badge tb-cl">Claude</span>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Abre Claude en claude.ai</div>
+        <div class="action-desc">Ve a <b>claude.ai</b> e inicia una nueva conversación. No necesitas ninguna configuración especial — el prompt ya lleva toda la instrucción.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Copia el prompt de dashboard</div>
+        <div class="action-desc">Selecciona el prompt con el botón de abajo. Al pegarlo en Claude, <b>reemplaza el marcador</b> <code style="font-size:11px;background:var(--bg);padding:1px 5px;border-radius:4px">:: Coloca aquí el resultado ::</code> con el texto que copiaste de NotebookLM en el paso anterior.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Claude genera el artefacto automáticamente</div>
+        <div class="action-desc">Claude producirá un dashboard con gráficos interactivos de crecimiento, visualización de renovables vs. convencionales, niveles de adopción y KPIs. Revisa que los datos coincidan con tus fuentes.</div>
+      </div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">El dashboard incluirá</div>
+      <div class="result-items">
+        <div class="result-item"><div class="ri-tag tag-amber">Gráficos interactivos</div><div class="ri-val">Tasas de crecimiento proyectadas por segmento energético</div></div>
+        <div class="result-item"><div class="ri-tag tag-teal">Tendencias</div><div class="ri-val">Automatización y transición hacia renovables en la región</div></div>
+        <div class="result-item"><div class="ri-tag tag-purple">Niveles de adopción</div><div class="ri-val">Solar, eólica y convencional por país en LATAM</div></div>
+        <div class="result-item"><div class="ri-tag tag-green">3 recomendaciones</div><div class="ri-val">Estrategias para empresas con transformación digital pendiente</div></div>
+      </div>
+    </div>
+    <div class="copy-trigger" onclick="selectPrompt('p2')">
+      <div class="copy-trigger-left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Seleccionar prompt de dashboard para copiar
+      </div>
+      <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+    </div>
+    <div class="copy-box" id="box-p2">
+      <textarea id="ta-p2" rows="10" readonly>Crear un panel interactivo que muestre los insights principales de los informes de outlook del sector de energía, específicamente transformación de la generación convencional hacia nuevas fuentes en Latinoamérica, y el gap existente con energías renovables como la energía solar y la energía eólica.
+
+El Dashboard debe incluir:
+1. Gráficos interactivos con tasas de crecimiento proyectadas por segmento
+2. Visualización de las tendencias de automatización de procesos
+3. Niveles de adopción en la región
+4. Métricas clave de rendimiento (KPIs)
+
+Adjuntaré nuestros datos para compararlos con los benchmark del sector. Propón 3 recomendaciones estratégicas importantes para quienes aún tienen pendiente iniciar transformación digital en su empresa.
+
+:: Coloca aquí el resultado de la consulta en NotebookLM ::</textarea>
+      <div class="copy-box-footer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Texto seleccionado — reemplaza <strong>:: Coloca aquí el resultado ::</strong> con los datos de NotebookLM antes de enviar
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="showStep(1)">← Extraer datos</button>
+      <button class="nav-btn primary" onclick="showStep(3)">Siguiente → Publicar</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-detail" id="detail-3">
+    <div class="step-detail-header">
+      <div class="sdh-left">
+        <div class="sdh-num">Paso 04 — Publicar y compartir</div>
+        <div class="sdh-title">Convertir el dashboard en un recurso público</div>
+        <div class="sdh-desc">Una vez que Claude entrega el dashboard, lo conviertes en un <b>artefacto publicable</b> con una URL propia. Puedes compartirlo como enlace o incrustarlo en Moodle, una presentación o cualquier página web.</div>
+      </div>
+      <span class="tool-badge tb-pub">Publicar</span>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Pide a Claude que genere el artefacto</div>
+        <div class="action-desc">En la misma conversación de Claude, envía el siguiente mensaje exacto: <b>"Genera un artefacto con este resultado"</b>. Claude empaquetará el dashboard como un componente interactivo independiente.</div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Publica el artefacto</div>
+        <div class="action-desc">En el panel del artefacto (lado derecho de Claude), haz clic en el botón <b>Publicar</b> o el ícono de compartir. Claude generará una URL pública con el formato <code style="font-size:11px;background:var(--bg);padding:1px 5px;border-radius:4px">claude.ai/public/artifacts/...</code></div>
+      </div>
+    </div>
+    <div class="action-row">
+      <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+      <div class="action-content">
+        <div class="action-title">Comparte el enlace o incrústalo</div>
+        <div class="action-desc">Copia la URL para compartirla directamente. Para incrustar en Moodle o una web, usa el código iframe que Claude también provee al publicar.</div>
+      </div>
+    </div>
+    <div class="tip-box tip-purple">
+      <b>Prompt exacto para este paso:</b> Una vez que Claude entregue el dashboard, envía en la misma conversación: <br><br>"Genera un artefacto con este resultado" <br><br>Luego usa el botón de publicar en el panel del artefacto para obtener la URL y el código de incrustación.
+    </div>
+    <div class="tip-box tip-green">
+      <b>Resultado final:</b> Un dashboard interactivo con URL propia, incrustable en cualquier plataforma, basado en fuentes técnicas verificadas del BID, CEPAL, McKinsey y otros organismos de autoridad sobre el sector energético en América Latina.
+    </div>
+    <div class="nav-btns">
+      <button class="nav-btn" onclick="showStep(2)">← Generar dashboard</button>
+      <button class="nav-btn primary" onclick="showStep(0)">Reiniciar flujo</button>
+    </div>
+  </div>
+
+</div>
+<script>
+function showStep(n) {
+  document.querySelectorAll('.pipe-step').forEach((s, i) => s.classList.toggle('active', i === n));
+  document.querySelectorAll('.step-detail').forEach((d, i) => d.classList.toggle('active', i === n));
+  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
+}
+
+function selectPrompt(id) {
+  const box = document.getElementById('box-' + id);
+  const ta = document.getElementById('ta-' + id);
+  box.classList.add('open');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+  ta.select();
+}
+</script>
+</body>
+</html>
