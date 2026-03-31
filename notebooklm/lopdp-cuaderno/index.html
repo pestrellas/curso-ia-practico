@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEM + NotebookLM — Conexión nativa LOPDP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --navy-bg: #e8eef8; --navy-text: #1e3a6e; --navy-border: #a8bfe0;
+    --coral-bg: #faeae5; --coral-text: #8c3318;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+  .badge-navy { background: var(--navy-bg); color: var(--navy-text); }
+  .badge-teal { background: var(--teal-bg); color: var(--teal-text); }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* INTRO BOX */
+  .intro-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+  .intro-box b { font-weight: 500; color: var(--text); }
+  .intro-box-accent { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent-text); }
+  .intro-box-accent b { color: var(--accent-text); }
+
+  /* ROLES */
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.75rem; }
+  .role-card { border-radius: var(--radius); padding: 14px 16px; border: 1px solid; }
+  .rc-gem { background: var(--accent-bg); border-color: var(--accent-border); }
+  .rc-nb { background: var(--teal-bg); border-color: var(--teal-border); }
+  .role-tool { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .rc-gem .role-tool { color: var(--accent-text); }
+  .rc-nb .role-tool { color: var(--teal-text); }
+  .role-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .rc-gem .role-name { color: var(--accent-text); }
+  .rc-nb .role-name { color: var(--teal-text); }
+  .role-desc { font-size: 12px; line-height: 1.6; }
+  .rc-gem .role-desc { color: var(--accent-text); opacity: 0.85; }
+  .rc-nb .role-desc { color: var(--teal-text); opacity: 0.85; }
+  .role-items { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+  .role-item { font-size: 11px; }
+  .rc-gem .role-item { color: var(--accent-text); }
+  .rc-nb .role-item { color: var(--teal-text); }
+
+  /* PREREQUISITE */
+  .prereq-card { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 1.75rem; display: flex; gap: 12px; align-items: flex-start; }
+  .prereq-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--amber-text); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .prereq-icon svg { width: 14px; height: 14px; color: #fff; }
+  .prereq-text { font-size: 13px; color: var(--amber-text); line-height: 1.7; }
+  .prereq-text b { font-weight: 500; }
+
+  /* CONNECTION STEPS — featured */
+  .connect-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 1.75rem; }
+  .connect-step { background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 0; overflow: hidden; }
+  .connect-step:first-child { border-top: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+  .connect-step:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+  .cs-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; user-select: none; }
+  .cs-header:hover { background: var(--bg); }
+  .cs-num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-bg); color: var(--accent-text); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .cs-num.highlight { background: var(--accent-text); color: #fff; }
+  .cs-meta { flex: 1; }
+  .cs-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .cs-where { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+  .cs-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px; }
+  .cs-body.open { display: block; }
+  .cs-actions { display: flex; flex-direction: column; gap: 9px; }
+  .cs-action { display: flex; gap: 10px; align-items: flex-start; }
+  .cs-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-text); flex-shrink: 0; margin-top: 7px; }
+  .cs-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; flex: 1; }
+  .cs-text b { font-weight: 500; color: var(--text); }
+  .cs-text code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--bg); padding: 1px 6px; border-radius: 4px; color: var(--text); }
+
+  /* OPTIONS MENU MOCK */
+  .options-mock { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin: 10px 0; max-width: 260px; }
+  .opt-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 0.5px solid var(--border); font-size: 12px; color: var(--text-muted); }
+  .opt-item:last-child { border-bottom: none; }
+  .opt-item.selected { background: var(--accent-bg); color: var(--accent-text); font-weight: 500; }
+  .opt-icon { width: 16px; height: 16px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .opt-icon svg { width: 10px; height: 10px; }
+  .oi-gray { background: var(--border); color: var(--text-faint); }
+  .oi-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .oi-teal { background: var(--teal-bg); color: var(--teal-text); }
+
+  .cs-tip { border-radius: var(--radius-sm); padding: 9px 12px; margin-top: 10px; font-size: 12px; line-height: 1.6; }
+  .ct-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .ct-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .ct-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .ct-green { background: var(--green-bg); color: var(--green-text); }
+  .cs-tip b { font-weight: 500; }
+
+  /* FLOW DIAGRAM */
+  .flow-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; }
+  .flow-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1rem; }
+  .flow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .flow-node { font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: var(--radius-sm); white-space: nowrap; }
+  .fn-gem { background: var(--accent-bg); color: var(--accent-text); }
+  .fn-nb { background: var(--teal-bg); color: var(--teal-text); }
+  .fn-doc { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+  .fn-out { background: var(--green-bg); color: var(--green-text); }
+  .flow-arrow { font-size: 14px; color: var(--text-faint); }
+  .flow-label { font-size: 11px; color: var(--text-faint); padding-left: 4px; margin-bottom: 12px; }
+
+  /* HOW TO USE */
+  .use-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+  .use-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; user-select: none; }
+  .use-header:hover { background: var(--bg); }
+  .use-circle { width: 28px; height: 28px; border-radius: 50%; background: var(--teal-bg); color: var(--teal-text); font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .use-meta { flex: 1; }
+  .use-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .use-sub { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+  .use-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+  .use-body.open { display: block; }
+  .use-body b { font-weight: 500; color: var(--text); }
+  .use-body code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--bg); padding: 2px 7px; border-radius: 4px; color: var(--text); display: block; margin: 6px 0; line-height: 1.6; }
+
+  /* GROWTH */
+  .growth-list { display: flex; flex-direction: column; gap: 8px; }
+  .growth-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .growth-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .growth-icon svg { width: 13px; height: 13px; }
+  .gi-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .gi-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .gi-navy { background: var(--navy-bg); color: var(--navy-text); }
+  .gi-green { background: var(--green-bg); color: var(--green-text); }
+  .growth-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .growth-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .growth-desc b { font-weight: 500; color: var(--text); }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 22px; }
+    .roles { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badges">
+      <span class="badge badge-navy">IA Práctico — Flujo avanzado</span>
+      <span class="badge badge-teal">LOPDP Ecuador</span>
+    </div>
+    <h1>Conectar el GEM de LOPDP con NotebookLM</h1>
+    <p class="subtitle">Cómo vincular el cuaderno de NotebookLM directamente al GEM como base de conocimiento dinámica, usando la integración nativa de Gemini.</p>
+  </header>
+
+  <div class="intro-box">
+    El <b>GEM es el protagonista</b>: tiene el prompt especializado, la lógica de auditoría y la base legal. NotebookLM es el <b>corpus dinámico</b> que le alimenta: resoluciones recientes, noticias, jurisprudencia y notas propias que puedes seguir añadiendo con el tiempo. Gemini permite conectar un cuaderno de NotebookLM <b>directamente como Knowledge del GEM</b> — sin copiar ni pegar nada. El GEM lo consulta en tiempo real cada vez que lo necesita.
+  </div>
+
+  <!-- ROL DE CADA HERRAMIENTA -->
+  <div class="section-label">El rol de cada herramienta</div>
+  <div class="roles">
+    <div class="role-card rc-gem">
+      <div class="role-tool">Gemini GEM — protagonista</div>
+      <div class="role-name">El analista especializado</div>
+      <div class="role-desc">Tiene el prompt y accede al cuaderno como Knowledge en tiempo real.</div>
+      <div class="role-items">
+        <div class="role-item">→ LOPDP + Reglamento (base fija)</div>
+        <div class="role-item">→ Protocolo de auditoría estructurado</div>
+        <div class="role-item">→ Cuaderno NotebookLM conectado</div>
+        <div class="role-item">→ Detecta brechas y cita artículos</div>
+      </div>
+    </div>
+    <div class="role-card rc-nb">
+      <div class="role-tool">NotebookLM — base contextual dinámica</div>
+      <div class="role-name">El corpus que crece</div>
+      <div class="role-desc">Se conecta al GEM como Knowledge. El GEM lo consulta directamente.</div>
+      <div class="role-items">
+        <div class="role-item">→ Resoluciones y criterios recientes</div>
+        <div class="role-item">→ Noticias y casos regulatorios</div>
+        <div class="role-item">→ Notas y análisis propios</div>
+        <div class="role-item">→ Fuentes añadidas progresivamente</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREREQUISITO -->
+  <div class="prereq-card">
+    <div class="prereq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+    <div class="prereq-text"><b>Antes de empezar:</b> el cuaderno de NotebookLM debe estar creado y con las fuentes cargadas. Ve a <b>notebooklm.google.com</b>, crea un cuaderno nuevo y agrega como fuentes la LOPDP, el Reglamento, las resoluciones de la Autoridad de Datos y cualquier otro documento relevante. Solo entonces puedes vincularlo al GEM.</div>
+  </div>
+
+  <!-- PASOS DE CONEXIÓN -->
+  <div class="section-label">Cómo conectar el cuaderno al GEM — paso a paso</div>
+  <div class="connect-steps" id="connect-steps"></div>
+
+  <!-- DIAGRAMA -->
+  <div class="section-label">Cómo trabaja el sistema una vez conectado</div>
+  <div class="flow-diagram">
+    <div class="flow-title">El GEM consulta simultáneamente su Knowledge fijo y el cuaderno dinámico</div>
+    <div class="flow-row">
+      <span class="flow-node fn-doc">Documento a auditar</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node fn-gem">GEM LOPDP</span>
+    </div>
+    <div class="flow-label">El usuario sube el contrato o política al GEM</div>
+    <div class="flow-row">
+      <span class="flow-node fn-gem">GEM LOPDP</span>
+      <span class="flow-arrow">↕</span>
+      <span class="flow-node fn-doc" style="border-color:var(--accent-border)">LOPDP + Reglamento</span>
+      <span class="flow-arrow">+</span>
+      <span class="flow-node fn-nb">Cuaderno NotebookLM</span>
+    </div>
+    <div class="flow-label">El GEM cruza el documento con la base legal fija y el corpus dinámico del cuaderno</div>
+    <div class="flow-row">
+      <span class="flow-node fn-gem">GEM LOPDP</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-node fn-out">Análisis jurídico enriquecido</span>
+    </div>
+    <div class="flow-label">El resultado combina rigor jurídico con el contexto regulatorio más actualizado del cuaderno</div>
+  </div>
+
+  <!-- CÓMO USARLO -->
+  <div class="section-label">Cómo sacarle el máximo al sistema conectado</div>
+  <div id="use-cases"></div>
+
+  <!-- CRECIMIENTO DEL CORPUS -->
+  <div class="section-label">Cómo mantener el cuaderno creciendo</div>
+  <div class="growth-list">
+    <div class="growth-item">
+      <div class="growth-icon gi-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div>
+        <div class="growth-title">Añade resoluciones cuando se publican</div>
+        <div class="growth-desc">Cada vez que la DINARDAP emita una resolución o guía nueva, súbela al cuaderno. El GEM la incorporará en el próximo análisis <b>sin necesidad de reconfigurar nada</b>.</div>
+      </div>
+    </div>
+    <div class="growth-item">
+      <div class="growth-icon gi-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div>
+        <div class="growth-title">Guarda noticias y análisis especializados</div>
+        <div class="growth-desc">Artículos de medios legales, análisis de firmas especializadas o casos relevantes en Ecuador. Pégalos como texto o sube el PDF directamente al cuaderno.</div>
+      </div>
+    </div>
+    <div class="growth-item">
+      <div class="growth-icon gi-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div>
+        <div class="growth-title">Archiva notas de casos reales</div>
+        <div class="growth-desc">Tras atender una consultoría real, escribe una nota con el contexto y el criterio aplicado. Pégala como fuente de texto en el cuaderno — es el conocimiento tácito más valioso del sistema.</div>
+      </div>
+    </div>
+    <div class="growth-item">
+      <div class="growth-icon gi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+      <div>
+        <div class="growth-title">Vincula carpetas de Drive con fuentes recurrentes</div>
+        <div class="growth-desc">Si tienes una carpeta en Google Drive donde guardas los PDFs regulatorios, puedes vincularla directamente como fuente del cuaderno desde NotebookLM. Se actualiza sola cuando añades archivos a la carpeta.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const connectSteps = [
+  {
+    num: 1,
+    title: "Abre el GEM en modo edición",
+    where: "gemini.google.com → Mis Gems",
+    highlight: false,
+    actions: [
+      { text: "Ve a <b>gemini.google.com</b> y en el menú lateral busca <b>Mis Gems</b>." },
+      { text: "Localiza el <b>Experto LOPDP Ecuador</b> y haz clic en el ícono de lápiz o en <b>Editar</b> para abrir el panel de configuración del GEM." }
+    ],
+    tip: null
+  },
+  {
+    num: 2,
+    title: "Ve a la sección Conocimiento",
+    where: "Panel de edición del GEM",
+    highlight: false,
+    actions: [
+      { text: "Dentro del panel de edición, desplázate hasta la sección <b>Conocimiento</b>. Verás el texto: <b>\"Agrega archivos para que tu Gem los use como referencia\"</b>." },
+      { text: "Haz clic en el signo <b>+</b> que aparece junto a esa sección." }
+    ],
+    tip: null
+  },
+  {
+    num: 3,
+    title: "Selecciona NotebookLM entre las opciones",
+    where: "Menú desplegable de la sección Conocimiento",
+    highlight: true,
+    actions: [
+      { text: "Al hacer clic en <b>+</b> aparecerá un menú con 4 opciones:" }
+    ],
+    menu: true,
+    tip: { text: "Selecciona <b>NotebookLM</b> — la cuarta opción del menú.", clase: "ct-blue" }
+  },
+  {
+    num: 4,
+    title: "Elige el cuaderno a conectar",
+    where: "Ventana emergente de NotebookLM",
+    highlight: true,
+    actions: [
+      { text: "Se abrirá una ventana emergente mostrando los cuadernos que tienes creados en tu cuenta de NotebookLM." },
+      { text: "Selecciona el cuaderno de LOPDP que preparaste previamente — el que tiene cargadas la ley, el reglamento, las resoluciones y tus fuentes adicionales." },
+      { text: "Si aún no tienes el cuaderno creado, cierra esta ventana, ve a <b>notebooklm.google.com</b>, créalo con las fuentes y vuelve a este paso." }
+    ],
+    tip: { text: "Solo puedes ver los cuadernos asociados a la misma cuenta de Google con la que estás usando Gemini.", clase: "ct-amber" }
+  },
+  {
+    num: 5,
+    title: "Haz clic en Actualizar",
+    where: "Panel de edición del GEM",
+    highlight: true,
+    actions: [
+      { text: "Después de seleccionar el cuaderno, haz clic en <b>Actualizar</b> en el panel de edición del GEM." },
+      { text: "El cuaderno de NotebookLM aparecerá listado en la sección Conocimiento junto a los demás archivos del GEM." },
+      { text: "A partir de ahora, el GEM tiene acceso al cuaderno como base contextual dinámica. <b>Cada vez que hagas una consulta, el GEM podrá consultar las fuentes del cuaderno automáticamente.</b>" }
+    ],
+    tip: { text: "No necesitas repetir este proceso. Si añades fuentes nuevas al cuaderno en NotebookLM, el GEM las tendrá disponibles en la próxima conversación sin que tengas que reconfigurar nada.", clase: "ct-green" }
+  }
+];
+
+const useCases = [
+  {
+    num: 1,
+    title: "Auditar un contrato con contexto regulatorio actualizado",
+    sub: "Uso principal del sistema conectado",
+    body: `Abre el GEM y sube el contrato o política que quieres auditar. Escribe:<br><br>
+<code>Realiza un análisis de cumplimiento según el protocolo estructurado sobre el documento adjunto. Utiliza también el contexto disponible en el cuaderno de NotebookLM conectado para complementar el análisis con resoluciones y criterios regulatorios recientes.</code>
+El GEM cruzará el documento con la LOPDP de su Knowledge y con las fuentes más recientes del cuaderno simultáneamente.`
+  },
+  {
+    num: 2,
+    title: "Consultar el estado de una normativa específica",
+    sub: "El cuaderno como fuente de actualización regulatoria",
+    body: `Si quieres saber si hay criterios recientes sobre un tema concreto antes de auditar un documento, pregunta directamente:<br><br>
+<code>¿Qué criterios recientes existen sobre transferencias internacionales de datos según las fuentes de mi cuaderno de NotebookLM?</code>
+El GEM consultará el cuaderno y presentará los puntos relevantes con referencia a las fuentes específicas donde los encontró.`
+  },
+  {
+    num: 3,
+    title: "Comparar un documento con auditorías anteriores",
+    sub: "Si guardaste análisis previos en el cuaderno",
+    body: `Si has ido guardando análisis anteriores del GEM como fuentes del cuaderno, puedes pedir comparaciones:<br><br>
+<code>Compara el nivel de cumplimiento de este contrato con los contratos de encargado que hemos auditado previamente y que están en el cuaderno.</code>
+El GEM usará el historial acumulado como referencia comparativa.`
+  }
+];
+
+document.getElementById('connect-steps').innerHTML = connectSteps.map(s => `
+  <div class="connect-step">
+    <div class="cs-header" onclick="toggleCS(${s.num})">
+      <div class="cs-num${s.highlight ? ' highlight' : ''}">${s.num}</div>
+      <div class="cs-meta">
+        <div class="cs-title">${s.title}</div>
+        <div class="cs-where">${s.where}</div>
+      </div>
+      <svg class="chevron" id="cs-chev-${s.num}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="cs-body" id="cs-body-${s.num}">
+      <div class="cs-actions">
+        ${s.actions.map(a => `
+          <div class="cs-action">
+            <div class="cs-dot"></div>
+            <div class="cs-text">${a.text}</div>
+          </div>
+        `).join('')}
+      </div>
+      ${s.menu ? `
+        <div class="options-mock">
+          <div class="opt-item"><div class="opt-icon oi-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>Subir archivos</div>
+          <div class="opt-item"><div class="opt-icon oi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>Agregar desde Drive</div>
+          <div class="opt-item"><div class="opt-icon oi-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>Importar código</div>
+          <div class="opt-item selected"><div class="opt-icon oi-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>NotebookLM ← este</div>
+        </div>
+      ` : ''}
+      ${s.tip ? `<div class="cs-tip ${s.tip.clase}">${s.tip.text}</div>` : ''}
+    </div>
+  </div>
+`).join('');
+
+document.getElementById('use-cases').innerHTML = useCases.map(u => `
+  <div class="use-card">
+    <div class="use-header" onclick="toggleUC(${u.num})">
+      <div class="use-circle">${u.num}</div>
+      <div class="use-meta">
+        <div class="use-title">${u.title}</div>
+        <div class="use-sub">${u.sub}</div>
+      </div>
+      <svg class="chevron" id="uc-chev-${u.num}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="use-body" id="uc-body-${u.num}">${u.body}</div>
+  </div>
+`).join('');
+
+function toggleCS(n) {
+  const body = document.getElementById('cs-body-' + n);
+  const chev = document.getElementById('cs-chev-' + n);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.cs-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.cs-header .chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+function toggleUC(n) {
+  const body = document.getElementById('uc-body-' + n);
+  const chev = document.getElementById('uc-chev-' + n);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.use-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.use-header .chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+</script>
+</body>
+</html>
