@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyectos en ChatGPT — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --pink-bg: #faeaf1; --pink-text: #7a2050;
+    --gray-bg: #f1efe8; --gray-text: #444441;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
+
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--green-bg); color: var(--green-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* NAV TABS */
+  .nav-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 2rem; }
+  .nav-tab { flex: 1; font-size: 13px; font-weight: 500; padding: 11px 8px; text-align: center; cursor: pointer; color: var(--text-muted); background: var(--surface); border-right: 1px solid var(--border); transition: all 0.15s; }
+  .nav-tab:last-child { border-right: none; }
+  .nav-tab:hover { background: var(--bg); color: var(--text); }
+  .nav-tab.active { background: var(--green-bg); color: var(--green-text); }
+  .nav-section { display: none; }
+  .nav-section.active { display: block; }
+
+  /* CONCEPT CARDS */
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+  .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .concept-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .concept-icon svg { width: 15px; height: 15px; }
+  .ci-green { background: var(--green-bg); color: var(--green-text); }
+  .ci-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .ci-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .ci-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .ci-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .concept-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .concept-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .concept-desc b { font-weight: 500; color: var(--text); }
+
+  /* ANALOGY BOX */
+  .analogy-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .analogy-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+  .analogy-title svg { width: 15px; height: 15px; color: var(--amber-text); }
+  .analogy-row { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+  .analogy-row:last-child { border-bottom: none; }
+  .analogy-label { font-size: 11px; font-weight: 500; min-width: 110px; flex-shrink: 0; padding-top: 1px; }
+  .al-amber { color: var(--amber-text); }
+  .al-teal { color: var(--teal-text); }
+  .al-purple { color: var(--purple-text); }
+  .al-blue { color: var(--accent-text); }
+  .analogy-val { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .analogy-val b { font-weight: 500; color: var(--text); }
+
+  /* COMPARISON TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 1rem; }
+  .comp-table th { background: var(--bg); font-weight: 500; font-size: 11px; padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text-faint); letter-spacing: 0.04em; text-transform: uppercase; }
+  .comp-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--border); color: var(--text-muted); vertical-align: top; line-height: 1.5; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table td:first-child { font-weight: 500; color: var(--text); }
+  .tag-yes { display: inline-block; font-size: 10px; font-weight: 500; padding: 1px 7px; border-radius: 999px; background: var(--green-bg); color: var(--green-text); }
+  .tag-no { display: inline-block; font-size: 10px; font-weight: 500; padding: 1px 7px; border-radius: 999px; background: var(--gray-bg); color: var(--gray-text); }
+  .tag-partial { display: inline-block; font-size: 10px; font-weight: 500; padding: 1px 7px; border-radius: 999px; background: var(--amber-bg); color: var(--amber-text); }
+
+  /* LIMITS TABLE */
+  .limits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 1rem; }
+  .limit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+  .limit-plan { font-size: 11px; font-weight: 500; margin-bottom: 6px; }
+  .lp-free { color: var(--gray-text); }
+  .lp-plus { color: var(--accent-text); }
+  .lp-pro { color: var(--purple-text); }
+  .lp-biz { color: var(--teal-text); }
+  .limit-val { font-size: 20px; font-weight: 500; color: var(--text); line-height: 1; margin-bottom: 4px; }
+  .limit-label { font-size: 11px; color: var(--text-faint); }
+
+  /* GUIDE STEPS */
+  .guide-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+  .guide-step-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; user-select: none; }
+  .guide-step-header:hover { background: var(--bg); }
+  .step-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--green-bg); color: var(--green-text); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-meta { flex: 1; }
+  .step-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .step-where { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+  .guide-step-body { display: none; border-top: 1px solid var(--border); padding: 14px 16px; }
+  .guide-step-body.open { display: block; }
+  .step-actions { display: flex; flex-direction: column; gap: 8px; }
+  .step-action { display: flex; gap: 10px; align-items: flex-start; }
+  .action-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-text); flex-shrink: 0; margin-top: 7px; }
+  .action-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .action-text b { font-weight: 500; color: var(--text); }
+  .step-tip { background: var(--green-bg); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 12px; color: var(--green-text); line-height: 1.6; margin-top: 10px; }
+  .step-tip b { font-weight: 500; }
+  .step-warn { background: var(--amber-bg); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 12px; color: var(--amber-text); line-height: 1.6; margin-top: 10px; }
+  .step-warn b { font-weight: 500; }
+
+  /* BEST PRACTICES */
+  .bp-list { display: flex; flex-direction: column; gap: 8px; }
+  .bp-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .bp-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .bp-icon svg { width: 13px; height: 13px; }
+  .bpi-green { background: var(--green-bg); color: var(--green-text); }
+  .bpi-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .bpi-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .bpi-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .bpi-coral { background: var(--coral-bg); color: var(--coral-text); }
+  .bp-content { flex: 1; }
+  .bp-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .bp-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .bp-desc b { font-weight: 500; color: var(--text); }
+
+  /* FAQ */
+  .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+  .faq-q { display: flex; align-items: flex-start; justify-content: space-between; padding: 13px 16px; cursor: pointer; gap: 12px; user-select: none; }
+  .faq-q:hover { background: var(--bg); }
+  .faq-question { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
+  .faq-a { display: none; border-top: 1px solid var(--border); padding: 12px 16px; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+  .faq-a.open { display: block; }
+  .faq-a b { font-weight: 500; color: var(--text); }
+
+  .tip-global { background: var(--green-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--green-text); line-height: 1.65; margin-bottom: 1.75rem; }
+  .tip-global b { font-weight: 500; }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 22px; }
+    .nav-tab { font-size: 11px; padding: 10px 4px; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .limits-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — ChatGPT</div>
+    <h1>Proyectos en ChatGPT</h1>
+    <p class="subtitle">Guía completa para principiantes: qué son, cómo configurarlos, límites por plan y buenas prácticas para sacarles el máximo provecho.</p>
+  </header>
+
+  <div class="tip-global">
+    <b>Idea clave:</b> Un Proyecto no te hace más inteligente — te quita fricción. En lugar de reexplicar el contexto cada vez que abres ChatGPT, el Proyecto lo recuerda por ti: tus instrucciones, tus archivos y el historial de trabajo, todo en un solo lugar.
+  </div>
+
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" onclick="showSection('concepto', this)">¿Qué son?</div>
+    <div class="nav-tab" onclick="showSection('guia', this)">Cómo crearlos</div>
+    <div class="nav-tab" onclick="showSection('limites', this)">Límites y planes</div>
+    <div class="nav-tab" onclick="showSection('practicas', this)">Buenas prácticas</div>
+    <div class="nav-tab" onclick="showSection('faq', this)">Preguntas frecuentes</div>
+  </div>
+
+  <!-- ===== SECCIÓN 1: CONCEPTO ===== -->
+  <div class="nav-section active" id="sec-concepto">
+
+    <div class="section-label">¿Qué es un Proyecto?</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-icon ci-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="concept-title">Espacio de trabajo inteligente</div>
+        <div class="concept-desc">Un contenedor que agrupa <b>chats, archivos e instrucciones</b> relacionados a un mismo esfuerzo continuo — sin tener que reexplicar el contexto en cada conversación.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon ci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="concept-title">Memoria y coherencia</div>
+        <div class="concept-desc">Recuerda chats y archivos del proyecto entre sesiones. Las <b>instrucciones del proyecto</b> se aplican a todas las conversaciones y reemplazan las instrucciones globales.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon ci-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="concept-title">Colaboración por roles</div>
+        <div class="concept-desc">Puedes invitar personas con nivel <b>Chat</b> (solo conversan) o <b>Editar</b> (modifican instrucciones y archivos). Disponible desde el plan Free.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon ci-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div class="concept-title">Herramientas integradas</div>
+        <div class="concept-desc">Dentro de un Proyecto puedes usar búsqueda web, canvas, generación de imágenes, modo de estudio y —según plan— <b>agente e investigación profunda</b>.</div>
+      </div>
+    </div>
+
+    <div class="section-label">La analogía que lo explica todo</div>
+    <div class="analogy-box">
+      <div class="analogy-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Piénsalo como una carpeta de trabajo con cerebro propio
+      </div>
+      <div class="analogy-row">
+        <span class="analogy-label al-amber">Instrucciones</span>
+        <span class="analogy-val">El <b>"contrato" con ChatGPT</b>: cómo debe responder, qué tono usar, qué formato entregar. Se aplican automáticamente a todos los chats del proyecto.</span>
+      </div>
+      <div class="analogy-row">
+        <span class="analogy-label al-teal">Fuentes</span>
+        <span class="analogy-val">Los <b>archivos, textos y enlaces</b> que definen la base de conocimiento del proyecto. PDFs, hojas de cálculo, documentos, canales de Slack, carpetas de Drive.</span>
+      </div>
+      <div class="analogy-row">
+        <span class="analogy-label al-purple">Chats</span>
+        <span class="analogy-val">Las <b>conversaciones dentro del proyecto</b>. Todas heredan las instrucciones y fuentes. Puedes ramificarlas para explorar variantes sin perder el hilo original.</span>
+      </div>
+      <div class="analogy-row" style="border-bottom:none">
+        <span class="analogy-label al-blue">Memoria</span>
+        <span class="analogy-val">El proyecto recuerda lo que ocurrió en sesiones anteriores. Puedes guardar una respuesta útil como <b>fuente del proyecto</b> para reutilizarla después.</span>
+      </div>
+    </div>
+
+    <div class="section-label">Proyecto vs Chat suelto vs GPT personalizado</div>
+    <div style="overflow-x:auto;margin-bottom:1rem">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th>Chat suelto</th>
+            <th>Proyecto</th>
+            <th>GPT personalizado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Contexto persistente</td><td>Solo el chat</td><td>Chats + fuentes + instrucciones</td><td>Instrucciones + knowledge</td></tr>
+          <tr><td>Instrucciones propias</td><td><span class="tag-no">No</span></td><td><span class="tag-yes">Sí</span></td><td><span class="tag-yes">Sí</span></td></tr>
+          <tr><td>Archivos reutilizables</td><td><span class="tag-no">No</span></td><td><span class="tag-yes">Hasta 40</span></td><td><span class="tag-yes">Hasta 20</span></td></tr>
+          <tr><td>Colaboración con equipo</td><td><span class="tag-partial">Solo link</span></td><td><span class="tag-yes">Roles Chat/Editar</span></td><td><span class="tag-partial">Según plan</span></td></tr>
+          <tr><td>Versionado</td><td><span class="tag-no">No</span></td><td><span class="tag-no">No documentado</span></td><td><span class="tag-yes">Sí</span></td></tr>
+          <tr><td>Ideal para</td><td>Consultas puntuales</td><td>Trabajo continuo y en equipo</td><td>Asistente especializado reutilizable</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Tres problemas que resuelve</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="concept-icon ci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="concept-title">Continuidad</div>
+        <div class="concept-desc">En lugar de que cada chat sea una isla, el Proyecto mantiene un <b>núcleo de contexto</b> que reduce el re-trabajo en cada sesión.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon ci-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="concept-title">Consistencia</div>
+        <div class="concept-desc">Las instrucciones del proyecto <b>prevalecen sobre las instrucciones globales</b>, asegurando el mismo tono y formato en todas las conversaciones.</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon ci-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+        <div class="concept-title">Reusabilidad</div>
+        <div class="concept-desc">Puedes guardar respuestas útiles como <b>fuentes del proyecto</b>: resúmenes, decisiones, análisis — disponibles en futuras sesiones sin buscar en chats pasados.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== SECCIÓN 2: GUÍA ===== -->
+  <div class="nav-section" id="sec-guia">
+
+    <div class="section-label">Guía paso a paso</div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.25rem;line-height:1.65">Haz clic en cada paso para ver el detalle. El flujo completo toma menos de 10 minutos la primera vez.</p>
+
+    <div id="guide-steps"></div>
+
+  </div>
+
+  <!-- ===== SECCIÓN 3: LÍMITES ===== -->
+  <div class="nav-section" id="sec-limites">
+
+    <div class="section-label">Archivos por proyecto según plan</div>
+    <div class="limits-grid">
+      <div class="limit-card"><div class="limit-plan lp-free">Free</div><div class="limit-val">5</div><div class="limit-label">archivos por proyecto</div></div>
+      <div class="limit-card"><div class="limit-plan lp-plus">Go / Plus</div><div class="limit-val">25</div><div class="limit-label">archivos por proyecto</div></div>
+      <div class="limit-card"><div class="limit-plan lp-pro">Pro</div><div class="limit-val">40</div><div class="limit-label">archivos por proyecto</div></div>
+      <div class="limit-card"><div class="limit-plan lp-biz">Business / Enterprise</div><div class="limit-val">40</div><div class="limit-label">+ 100 por workspace</div></div>
+    </div>
+
+    <div class="section-label">Colaboradores por plan</div>
+    <div class="limits-grid">
+      <div class="limit-card"><div class="limit-plan lp-free">Free</div><div class="limit-val">5</div><div class="limit-label">colaboradores</div></div>
+      <div class="limit-card"><div class="limit-plan lp-plus">Plus / Go</div><div class="limit-val">10</div><div class="limit-label">colaboradores</div></div>
+      <div class="limit-card"><div class="limit-plan lp-pro">Pro</div><div class="limit-val">100</div><div class="limit-label">colaboradores</div></div>
+      <div class="limit-card"><div class="limit-plan lp-biz">Business / Enterprise</div><div class="limit-val">RBAC</div><div class="limit-label">control por roles</div></div>
+    </div>
+
+    <div class="section-label">Límites técnicos de archivos</div>
+    <div style="overflow-x:auto;margin-bottom:1rem">
+      <table class="comp-table">
+        <thead>
+          <tr><th>Límite</th><th>Valor</th><th>Aplica a</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tamaño máximo por archivo</td><td>512 MB</td><td>Cualquier archivo subido</td></tr>
+          <tr><td>Tokens máximos por archivo</td><td>2 millones</td><td>Archivos de texto y documentos</td></tr>
+          <tr><td>Archivos por carga simultánea</td><td>10</td><td>Todos los planes</td></tr>
+          <tr><td>Proyectos simultáneos</td><td>Sin límite</td><td>Todos los planes</td></tr>
+          <tr><td>Retención de archivos</td><td>Hasta borrar el proyecto</td><td>Luego se purgan en ~30 días</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Privacidad y entrenamiento de modelos</div>
+    <div style="overflow-x:auto;margin-bottom:1rem">
+      <table class="comp-table">
+        <thead>
+          <tr><th>Plan</th><th>¿Se usa para entrenar modelos?</th><th>Cómo controlarlo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Free / Plus / Pro</td><td><span class="tag-partial">Depende del toggle</span></td><td>Desactiva "Mejorar el modelo para todos" en Data Controls → Settings</td></tr>
+          <tr><td>Business / Enterprise / Edu</td><td><span class="tag-no">No por defecto</span></td><td>Política de privacidad del workspace</td></tr>
+          <tr><td>API Platform</td><td><span class="tag-no">No por defecto</span></td><td>Términos de la plataforma API</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ===== SECCIÓN 4: BUENAS PRÁCTICAS ===== -->
+  <div class="nav-section" id="sec-practicas">
+    <div class="section-label">5 prácticas que dan más resultado</div>
+    <div class="bp-list" id="bp-list"></div>
+  </div>
+
+  <!-- ===== SECCIÓN 5: FAQ ===== -->
+  <div class="nav-section" id="sec-faq">
+    <div class="section-label">Preguntas frecuentes</div>
+    <div id="faq-list"></div>
+  </div>
+
+</div>
+
+<script>
+const guideSteps = [
+  {
+    num: 1,
+    title: "Crear el proyecto",
+    where: "Barra lateral de ChatGPT",
+    actions: [
+      { text: "En la barra lateral izquierda, busca y haz clic en <b>\"Nuevo proyecto\"</b>." },
+      { text: "Ponle un nombre descriptivo. Ejemplo: <b>\"Contenido LinkedIn – Empresa\"</b> o <b>\"Investigación Q3 2025\"</b>." },
+      { text: "Elige un ícono y color para identificarlo visualmente entre tus proyectos." }
+    ],
+    tip: "Crea proyectos con nombres específicos, no genéricos. \"Proyecto 1\" no te dirá nada en 3 semanas.",
+    warn: null
+  },
+  {
+    num: 2,
+    title: "Escribir las instrucciones del proyecto",
+    where: "Menú ••• → Configuración del proyecto",
+    actions: [
+      { text: "Haz clic en el menú de tres puntos <b>(•••)</b> del proyecto y selecciona <b>\"Configuración del proyecto\"</b>." },
+      { text: "En el campo de instrucciones, define el <b>\"contrato\"</b> con ChatGPT: tono, formato de salida, qué hacer si falta información, qué fuentes son autoridad." },
+      { text: "Ejemplo de instrucción: <b>\"Actúa como editor de contenido. Responde siempre en español formal. Estructura las respuestas con: resumen ejecutivo → desarrollo → próximos pasos. Sin emojis.\"</b>" }
+    ],
+    tip: "Las instrucciones del proyecto reemplazan tus instrucciones globales dentro de ese proyecto. Sé explícito: cuanto más claro el contrato, mejores los resultados.",
+    warn: null
+  },
+  {
+    num: 3,
+    title: "Agregar fuentes (archivos y enlaces)",
+    where: "Panel de fuentes del proyecto",
+    actions: [
+      { text: "En el panel izquierdo del proyecto, haz clic en <b>\"Agregar fuentes\"</b> o arrastra archivos directamente." },
+      { text: "Puedes subir <b>PDFs, hojas de cálculo, documentos, imágenes</b>. También pegar texto directamente o agregar enlaces de apps compatibles (Slack, Google Drive)." },
+      { text: "Las fuentes quedan disponibles para <b>todos los chats del proyecto</b>. No necesitas volver a subir los archivos en cada conversación." }
+    ],
+    tip: "Menos archivos bien curados son mejor que muchos archivos sin organización. Mantén un índice como una nota-fuente dentro del proyecto.",
+    warn: null
+  },
+  {
+    num: 4,
+    title: "Iniciar conversaciones dentro del proyecto",
+    where: "Área de chat del proyecto",
+    actions: [
+      { text: "Haz clic en <b>\"Nuevo chat\"</b> dentro del proyecto. La conversación heredará automáticamente las instrucciones y fuentes que configuraste." },
+      { text: "También puedes <b>mover chats existentes</b> al proyecto: arrastra el chat desde la lista lateral o usa el menú del chat → <b>\"Mover al proyecto\"</b>." },
+      { text: "Para explorar una variante sin perder el hilo, usa la función de <b>\"ramificar chat\"</b> — crea una bifurcación que queda listada junto al original." }
+    ],
+    tip: null,
+    warn: null
+  },
+  {
+    num: 5,
+    title: "Guardar respuestas útiles como fuente",
+    where: "Menú del mensaje en el chat",
+    actions: [
+      { text: "Cuando ChatGPT entregue un análisis, resumen o decisión importante, abre el <b>menú del mensaje</b> (ícono de tres puntos junto a la respuesta)." },
+      { text: "Selecciona <b>\"Guardar en el proyecto\"</b> o <b>\"Agregar a las fuentes del proyecto\"</b>." },
+      { text: "Ese contenido queda disponible en futuras conversaciones del proyecto, sin depender de que recuerdes en qué chat estaba." }
+    ],
+    tip: "Guarda como fuente: decisiones acordadas, resúmenes de reunión, criterios de calidad definidos, plantillas que funcionaron bien.",
+    warn: null
+  },
+  {
+    num: 6,
+    title: "Compartir el proyecto con colaboradores",
+    where: "Botón Compartir del proyecto",
+    actions: [
+      { text: "Haz clic en el botón <b>\"Compartir\"</b> del proyecto e invita por email, grupo o enlace." },
+      { text: "Asigna el nivel <b>Chat</b> a quienes solo necesitan conversar, y <b>Editar</b> a quienes mantendrán instrucciones y archivos." },
+      { text: "Disponible en todos los planes (Free, Plus, Pro, Business, Enterprise)." }
+    ],
+    tip: null,
+    warn: "Al compartir un proyecto, se activa automáticamente el modo 'memoria solo del proyecto' y no se puede revertir. Esto aísla el contexto del proyecto de otras conversaciones — una ventaja de privacidad, pero conviene saberlo antes."
+  },
+  {
+    num: 7,
+    title: "(Avanzado) Activar memoria solo del proyecto",
+    where: "Al crear el proyecto — solo una vez",
+    actions: [
+      { text: "La opción <b>\"memoria solo del proyecto\"</b> solo puede activarse al <b>crear un proyecto nuevo</b>, no en proyectos ya existentes." },
+      { text: "Con esta opción activa, el proyecto <b>no usa memorias guardadas externamente</b> y no referencia conversaciones fuera del proyecto. Aislamiento total." },
+      { text: "Útil para proyectos confidenciales, clientes distintos o estilos editoriales separados que no deben contaminarse entre sí." }
+    ],
+    tip: "Si necesitas esta opción en un proyecto ya existente, deberás crear uno nuevo y mover las conversaciones.",
+    warn: null
+  }
+];
+
+const bpItems = [
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+    iconClass: "bpi-green",
+    title: "Diseña las instrucciones como un contrato",
+    desc: "Define explícitamente: <b>formato de salida</b> (tabla, lista, texto), <b>tono</b> (formal, técnico, cercano), <b>qué hacer si falta información</b> y qué fuentes son autoridad. Las instrucciones vagas producen resultados variables."
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+    iconClass: "bpi-teal",
+    title: "Menos fuentes, mejor curadas",
+    desc: "40 archivos sin estructura no es una base de conocimiento — es un cajón desastre. <b>Mantén un índice</b> como nota-fuente dentro del proyecto y elimina archivos obsoletos cuando llegues al límite del plan."
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    iconClass: "bpi-purple",
+    title: "Usa memoria solo del proyecto para trabajo sensible",
+    desc: "Si manejas <b>varios clientes</b>, investigaciones confidenciales o estilos editoriales distintos, activa esta opción al crear el proyecto. Evita que el contexto de un proyecto contamine a otro."
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+    iconClass: "bpi-amber",
+    title: "Gestiona bien los roles al compartir",
+    desc: "Reserva el nivel <b>Editar</b> solo para quienes mantienen instrucciones y archivos. El resto del equipo en <b>Chat</b>. Editar permite cambiar instrucciones, subir o quitar archivos e invitar a otras personas."
+  },
+  {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`,
+    iconClass: "bpi-coral",
+    title: "Guarda las decisiones importantes como fuente",
+    desc: "Cada vez que en un chat se tome una decisión relevante, se defina un criterio o se genere una plantilla útil, <b>guárdala como fuente del proyecto</b>. Así el proyecto 'recuerda' el criterio acordado en la próxima sesión."
+  }
+];
+
+const faqItems = [
+  { q: "¿Los Proyectos están disponibles en el plan gratuito?", a: "Sí. Los Proyectos están disponibles en todos los planes de ChatGPT, incluyendo el gratuito. Lo que varía según el plan son los límites de archivos por proyecto (Free: 5, Plus: 25, Pro: 40) y el número de colaboradores." },
+  { q: "¿Cuál es la diferencia entre Proyectos en ChatGPT y los GPTs personalizados?", a: "Son herramientas distintas para propósitos distintos. Los <b>Proyectos</b> están pensados para trabajo continuo y evolutivo con chats, fuentes y colaboración. Los <b>GPTs</b> son un asistente especializado y reutilizable, más parecido a un 'producto' configurado de antemano. Los GPTs tienen versionado; los Proyectos no." },
+  { q: "¿Las conversaciones dentro de un Proyecto se usan para entrenar los modelos de OpenAI?", a: "Depende del plan. En planes personales (Free, Plus, Pro), OpenAI puede usar el contenido para mejorar modelos si tienes activado el toggle 'Mejorar el modelo para todos'. Puedes desactivarlo en Configuración → Data Controls. En planes Business, Enterprise y Edu, por defecto no se usa el contenido para entrenar modelos." },
+  { q: "¿Puedo activar 'memoria solo del proyecto' en un proyecto ya creado?", a: "No. Esta opción solo puede configurarse al crear un proyecto nuevo. Si necesitas activarla en un proyecto existente, deberás crear uno nuevo y mover las conversaciones manualmente." },
+  { q: "¿Qué pasa con los archivos si elimino un proyecto?", a: "Al eliminar un proyecto se eliminan sus chats, archivos e instrucciones. Los datos se purgan de los sistemas dentro de aproximadamente 30 días, salvo obligaciones legales o de seguridad." },
+  { q: "¿Puedo ver qué 'recuerda' la memoria del proyecto como una lista?", a: "No. A diferencia de la memoria personal de ChatGPT, la memoria del proyecto no expone una lista visible de lo que recuerda. Si quieres controlar qué se recuerda, la mejor práctica es gestionar manualmente qué chats y fuentes están dentro del proyecto." },
+  { q: "¿Proyectos en ChatGPT y Projects en la API Platform son lo mismo?", a: "No son lo mismo. <b>Proyectos en ChatGPT</b> es una función de la app de ChatGPT para organizar trabajo: chats, fuentes, instrucciones y colaboración. <b>Projects en la API Platform</b> es una herramienta para desarrolladores que permite aislar recursos, gestionar llaves de acceso y controlar límites y presupuestos por proyecto técnico. Son conceptos independientes." },
+  { q: "¿Cuántos proyectos puedo crear?", a: "No hay un límite documentado en el número de proyectos que puedes crear. Los límites se aplican por proyecto (archivos, colaboradores) y no al número total de proyectos." }
+];
+
+document.getElementById('guide-steps').innerHTML = guideSteps.map(s => `
+  <div class="guide-step">
+    <div class="guide-step-header" onclick="toggleStep(${s.num})">
+      <div class="step-circle">${s.num}</div>
+      <div class="step-meta">
+        <div class="step-title">${s.title}</div>
+        <div class="step-where">${s.where}</div>
+      </div>
+      <svg class="chevron" id="gs-chev-${s.num}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="guide-step-body" id="gs-body-${s.num}">
+      <div class="step-actions">
+        ${s.actions.map(a => `<div class="step-action"><div class="action-dot"></div><div class="action-text">${a.text}</div></div>`).join('')}
+      </div>
+      ${s.tip ? `<div class="step-tip"><b>Consejo:</b> ${s.tip}</div>` : ''}
+      ${s.warn ? `<div class="step-warn"><b>Importante:</b> ${s.warn}</div>` : ''}
+    </div>
+  </div>
+`).join('');
+
+document.getElementById('bp-list').innerHTML = bpItems.map(bp => `
+  <div class="bp-item">
+    <div class="bp-icon ${bp.iconClass}">${bp.icon}</div>
+    <div class="bp-content">
+      <div class="bp-title">${bp.title}</div>
+      <div class="bp-desc">${bp.desc}</div>
+    </div>
+  </div>
+`).join('');
+
+document.getElementById('faq-list').innerHTML = faqItems.map((f, i) => `
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(${i})">
+      <span class="faq-question">${f.q}</span>
+      <svg class="chevron" id="faq-chev-${i}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="faq-a" id="faq-a-${i}">${f.a}</div>
+  </div>
+`).join('');
+
+function showSection(id, el) {
+  document.querySelectorAll('.nav-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+function toggleStep(n) {
+  const body = document.getElementById('gs-body-' + n);
+  const chev = document.getElementById('gs-chev-' + n);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.guide-step-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.guide-step-header .chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+function toggleFaq(i) {
+  const ans = document.getElementById('faq-a-' + i);
+  const chev = document.getElementById('faq-chev-' + i);
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-item .chevron').forEach(c => c.classList.remove('open'));
+  if (!isOpen) { ans.classList.add('open'); chev.classList.add('open'); }
+}
+</script>
+</body>
+</html>
