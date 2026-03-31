@@ -12,18 +12,70 @@
     --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
     --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
     --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --coral-bg: #faeae5; --coral-text: #8c3318;
     --radius: 10px; --radius-sm: 6px;
   }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
   .page { max-width: 780px; margin: 0 auto; }
+
   header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
   .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--teal-bg); color: var(--teal-text); margin-bottom: 0.75rem; }
   h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
   .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+
   .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
   .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
   .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
-  .stat-value { font-size: 20px; font-weight: 500; }
+  .stat-value { font-size: 18px; font-weight: 500; line-height: 1.3; }
+
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+
+  /* PLATFORM TABS */
+  .plat-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .ptab { font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .ptab:hover { border-color: var(--border-strong); color: var(--text); }
+  .ptab-chatgpt.active { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
+  .ptab-gemini.active { background: var(--accent-bg); color: var(--accent-text); border-color: var(--accent-border); }
+  .ptab-claude.active { background: var(--coral-bg); color: var(--coral-text); border-color: #f0a08a; }
+
+  .plat-content { display: none; }
+  .plat-content.active { display: block; }
+
+  .plat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
+  .plat-card-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .plat-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .plat-icon svg { width: 15px; height: 15px; }
+  .pi-green { background: var(--green-bg); color: var(--green-text); }
+  .pi-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .pi-coral { background: var(--coral-bg); color: var(--coral-text); }
+  .plat-card-title { font-size: 15px; font-weight: 500; color: var(--text); }
+  .plat-card-sub { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+
+  .plat-steps { padding: 0; }
+  .plat-step { display: flex; gap: 0; border-bottom: 0.5px solid var(--border); }
+  .plat-step:last-child { border-bottom: none; }
+  .step-num-col { width: 48px; flex-shrink: 0; display: flex; align-items: flex-start; justify-content: center; padding: 14px 0 14px; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+  .sn-green { background: var(--green-bg); color: var(--green-text); }
+  .sn-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .sn-coral { background: var(--coral-bg); color: var(--coral-text); }
+  .step-content { flex: 1; padding: 13px 16px 13px 0; }
+  .step-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .step-desc b { font-weight: 500; color: var(--text); }
+  .step-ui { background: var(--bg); border-radius: var(--radius-sm); padding: 8px 10px; margin-top: 7px; font-size: 11px; color: var(--text-faint); line-height: 1.6; }
+  .step-ui b { font-weight: 500; color: var(--text-muted); }
+
+  .plat-note { padding: 10px 16px 14px; font-size: 12px; line-height: 1.6; }
+  .pn-green { color: var(--green-text); background: var(--green-bg); border-top: 1px solid var(--green-border); }
+  .pn-blue { color: var(--accent-text); background: var(--accent-bg); border-top: 1px solid var(--accent-border); }
+  .pn-coral { color: var(--coral-text); background: var(--coral-bg); border-top: 1px solid #f0a08a; }
+  .plat-note b { font-weight: 500; }
+
+  /* PROMPTS */
   .tip { background: var(--teal-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--teal-text); line-height: 1.65; margin-bottom: 1.75rem; }
   .tip b { font-weight: 500; }
   .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
@@ -36,30 +88,16 @@
   .chevron.open { transform: rotate(180deg); }
   .prompt-body { display: none; border-top: 1px solid var(--border); }
   .prompt-body.open { display: block; }
-
-  .copy-trigger {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 16px; background: var(--accent-bg);
-    border-bottom: 1px solid var(--accent-border);
-    cursor: pointer; gap: 10px;
-  }
+  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-bottom: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
   .copy-trigger:hover { background: var(--accent-border); }
   .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
   .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
   .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
   .copy-hint b { font-weight: 500; opacity: 1; }
-
   .copy-box { display: none; background: #f0f7ff; border-bottom: 1px solid var(--accent-border); }
   .copy-box.open { display: block; }
-  .copy-box textarea {
-    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px;
-    color: var(--text-muted); background: transparent; border: none;
-    padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none;
-  }
-  .copy-box-footer {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text);
-  }
+  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
+  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
   .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
   .copy-box-footer strong { font-weight: 500; }
 
@@ -72,16 +110,188 @@
   <header>
     <div class="badge">IA Práctico — Deep Research</div>
     <h1>Prompts para Investigación Profunda</h1>
-    <p class="subtitle">Prompts listos para usar en cualquier LLM. Diseñados para generar investigaciones completas sobre conceptos clave de inteligencia artificial.</p>
+    <p class="subtitle">Prompts listos para usar en cualquier LLM con modo de investigación profunda. Incluye instrucciones para activar el modo correcto en cada plataforma antes de enviar el prompt.</p>
   </header>
 
   <div class="stats">
     <div class="stat"><div class="stat-label">Prompts disponibles</div><div class="stat-value">8</div></div>
-    <div class="stat"><div class="stat-label">Compatibles con</div><div class="stat-value">Todos los LLMs</div></div>
+    <div class="stat"><div class="stat-label">Compatibles con</div><div class="stat-value">ChatGPT, Gemini, Claude</div></div>
+    <div class="stat"><div class="stat-label">Paso previo</div><div class="stat-value">Activar modo Deep Research</div></div>
   </div>
 
+  <!-- CÓMO ACTIVAR -->
+  <div class="section-label">Paso 1 — Activa el modo de investigación profunda en tu plataforma</div>
+  <p style="font-size:13px;color:var(--text-muted);line-height:1.65;margin-bottom:1rem">Antes de pegar cualquier prompt, debes activar la herramienta de investigación profunda dentro del chat. El proceso varía según la plataforma. Selecciona la tuya:</p>
+
+  <div class="plat-tabs">
+    <button class="ptab ptab-chatgpt active" onclick="showPlat('chatgpt', this)">ChatGPT</button>
+    <button class="ptab ptab-gemini" onclick="showPlat('gemini', this)">Gemini</button>
+    <button class="ptab ptab-claude" onclick="showPlat('claude', this)">Claude</button>
+  </div>
+
+  <!-- CHATGPT -->
+  <div class="plat-content active" id="plat-chatgpt">
+    <div class="plat-card">
+      <div class="plat-card-header">
+        <div class="plat-icon pi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <div>
+          <div class="plat-card-title">ChatGPT — Deep Research</div>
+          <div class="plat-card-sub">Requiere plan Plus, Pro o Team · chatgpt.com</div>
+        </div>
+      </div>
+      <div class="plat-steps">
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-green">1</div></div>
+          <div class="step-content">
+            <div class="step-title">Abre una conversación nueva</div>
+            <div class="step-desc">Ve a <b>chatgpt.com</b> e inicia un chat nuevo. Asegúrate de que estás en la ventana principal de conversación, no dentro de un GPT personalizado.</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-green">2</div></div>
+          <div class="step-content">
+            <div class="step-title">Busca el ícono de herramientas en el campo de texto</div>
+            <div class="step-desc">En la barra inferior del chat, junto al campo donde escribes, verás una fila de íconos. Busca el ícono que parece una lupa con ondas o el botón de <b>herramientas adicionales</b> (generalmente representado por un ícono de rayo ⚡ o un cuadrado con puntos).</div>
+            <div class="step-ui"><b>Ubicación:</b> barra inferior del chat → ícono de herramientas o el menú "+" junto al campo de texto</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-green">3</div></div>
+          <div class="step-content">
+            <div class="step-title">Selecciona "Deep Research" o "Investigación profunda"</div>
+            <div class="step-desc">En el menú desplegable de herramientas, selecciona <b>Deep Research</b>. Verás que el chat cambia de modo — generalmente aparece un indicador visual que confirma que el modo está activo.</div>
+            <div class="step-ui"><b>Indicador de activación:</b> aparece un badge o texto junto al campo que dice "Deep Research activado" o cambia el color del botón de envío</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-green">4</div></div>
+          <div class="step-content">
+            <div class="step-title">Pega el prompt y envía</div>
+            <div class="step-desc">Copia el prompt que elijas de la sección siguiente, pégalo en el campo de texto y presiona Enter. ChatGPT te hará preguntas de refinamiento antes de ejecutar la investigación — <b>respóndelas con detalle</b>, no las omitas.</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-green">5</div></div>
+          <div class="step-content">
+            <div class="step-title">Espera entre 5 y 15 minutos</div>
+            <div class="step-desc">Verás una barra de progreso o indicador de actividad mientras el agente navega la web. <b>No cierres la ventana.</b> Al terminar recibirás un informe con citas y fuentes verificables.</div>
+          </div>
+        </div>
+      </div>
+      <div class="plat-note pn-green"><b>Nota:</b> Deep Research en ChatGPT tiene un límite de consultas por mes según el plan. Si el modo no aparece, verifica que tu plan incluya esta función o espera a que se renueve tu cuota.</div>
+    </div>
+  </div>
+
+  <!-- GEMINI -->
+  <div class="plat-content" id="plat-gemini">
+    <div class="plat-card">
+      <div class="plat-card-header">
+        <div class="plat-icon pi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div>
+          <div class="plat-card-title">Gemini — Investigación profunda</div>
+          <div class="plat-card-sub">Disponible en Gemini Advanced · gemini.google.com</div>
+        </div>
+      </div>
+      <div class="plat-steps">
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-blue">1</div></div>
+          <div class="step-content">
+            <div class="step-title">Abre Gemini en tu navegador</div>
+            <div class="step-desc">Ve a <b>gemini.google.com</b> e inicia una conversación nueva. Asegúrate de estar con tu cuenta de Google que tiene Gemini Advanced activo.</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-blue">2</div></div>
+          <div class="step-content">
+            <div class="step-title">Localiza el selector de herramientas en la barra inferior</div>
+            <div class="step-desc">Debajo del campo de texto, verás una fila de opciones o íconos. Busca el botón que dice <b>"Investigación profunda"</b> o el ícono de lupa con el texto "Deep Research". En versiones recientes aparece como una opción destacada en la barra de herramientas.</div>
+            <div class="step-ui"><b>Ubicación:</b> barra de herramientas debajo del campo de texto → botón "Investigación profunda" o ícono de documento con lupa</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-blue">3</div></div>
+          <div class="step-content">
+            <div class="step-title">Haz clic en "Investigación profunda" para activarlo</div>
+            <div class="step-desc">Al seleccionarlo, el modo cambia y aparece un indicador en el campo de texto confirmando que la investigación profunda está activa. La interfaz puede mostrar un cambio visual en el botón de envío o un texto de confirmación.</div>
+            <div class="step-ui"><b>Confirmación:</b> el botón de envío cambia o aparece el texto "Investigación profunda activada" junto al campo</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-blue">4</div></div>
+          <div class="step-content">
+            <div class="step-title">Pega el prompt y envía</div>
+            <div class="step-desc">Copia el prompt de la sección siguiente, pégalo y presiona Enter. Gemini generará primero un <b>plan de investigación</b> que puedes revisar y ajustar antes de que comience la ejecución.</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-blue">5</div></div>
+          <div class="step-content">
+            <div class="step-title">Aprueba el plan y espera el informe</div>
+            <div class="step-desc">Revisa las dimensiones de análisis que Gemini propone y apruébalas o ajústalas. La investigación puede tomar entre 5 y 20 minutos. El resultado incluirá fuentes con enlaces directos.</div>
+          </div>
+        </div>
+      </div>
+      <div class="plat-note pn-blue"><b>Ventaja de Gemini:</b> muestra el plan de investigación antes de ejecutar, lo que permite ajustar el alcance sin reescribir el prompt. Si ves subtemas que no son relevantes, elimínalos antes de confirmar.</div>
+    </div>
+  </div>
+
+  <!-- CLAUDE -->
+  <div class="plat-content" id="plat-claude">
+    <div class="plat-card">
+      <div class="plat-card-header">
+        <div class="plat-icon pi-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div>
+          <div class="plat-card-title">Claude — Investigación profunda</div>
+          <div class="plat-card-sub">Disponible en planes Pro y Team · claude.ai</div>
+        </div>
+      </div>
+      <div class="plat-steps">
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-coral">1</div></div>
+          <div class="step-content">
+            <div class="step-title">Abre Claude en tu navegador</div>
+            <div class="step-desc">Ve a <b>claude.ai</b> e inicia una conversación nueva. La investigación profunda está disponible directamente desde el chat principal.</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-coral">2</div></div>
+          <div class="step-content">
+            <div class="step-title">Localiza el selector de herramientas en la barra del chat</div>
+            <div class="step-desc">En la barra inferior del campo de texto, verás íconos de herramientas disponibles. Busca el ícono o botón que corresponde a <b>"Investigación profunda"</b> o <b>"Deep Research"</b> — generalmente representado por un ícono de documento con lupa o de búsqueda web.</div>
+            <div class="step-ui"><b>Ubicación:</b> barra inferior del chat → fila de íconos de herramientas → ícono de investigación o búsqueda web avanzada</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-coral">3</div></div>
+          <div class="step-content">
+            <div class="step-title">Activa el modo de investigación profunda</div>
+            <div class="step-desc">Haz clic en el ícono correspondiente. El campo de texto o el botón de envío cambiarán visualmente para indicar que el modo está activo. En algunas versiones aparece un texto de confirmación junto al campo.</div>
+            <div class="step-ui"><b>Confirmación:</b> cambio visual en la barra del chat o badge que indica "Investigación profunda" activa</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-coral">4</div></div>
+          <div class="step-content">
+            <div class="step-title">Pega el prompt y envía</div>
+            <div class="step-desc">Copia el prompt de la sección siguiente, pégalo en el campo y presiona Enter. Claude puede hacer preguntas de clarificación antes de comenzar — <b>respóndelas para obtener un resultado más preciso</b>.</div>
+          </div>
+        </div>
+        <div class="plat-step">
+          <div class="step-num-col"><div class="step-num sn-coral">5</div></div>
+          <div class="step-content">
+            <div class="step-title">Espera el informe con fuentes citadas</div>
+            <div class="step-desc">Claude entregará un informe estructurado con citas de fuentes. Su fortaleza es la <b>precisión factual y el tono académico</b> — ideal para investigaciones que requieren redacción profesional sin alucinaciones.</div>
+          </div>
+        </div>
+      </div>
+      <div class="plat-note pn-coral"><b>Nota sobre Claude:</b> la función de investigación profunda con búsqueda web puede tener disponibilidad variable según la región y el plan. Si no aparece el modo, verifica en la configuración de tu cuenta que la búsqueda web esté habilitada.</div>
+    </div>
+  </div>
+
+  <!-- PROMPTS -->
+  <div class="section-label">Paso 2 — Elige un prompt y cópialo</div>
   <div class="tip">
-    <b>¿Cómo usar estos prompts?</b> Abre cualquier tarjeta y haz clic en <b>Seleccionar prompt</b> — el texto se resaltará automáticamente. Solo presiona <b>Ctrl+C</b> en Windows o <b>Cmd+C</b> en Mac para copiarlo, y pégalo en el LLM de tu preferencia.
+    <b>¿Cómo usarlo?</b> Con el modo de investigación profunda ya activo en tu plataforma, abre cualquier tarjeta y haz clic en <b>Seleccionar prompt</b> — el texto se resaltará automáticamente. Presiona <b>Ctrl+C</b> (Windows) o <b>Cmd+C</b> (Mac) para copiarlo y pégalo en el campo de chat.
   </div>
 
   <div id="prompts-list"></div>
@@ -147,6 +357,13 @@ function selectPrompt(id) {
   ta.style.height = ta.scrollHeight + 'px';
   ta.focus();
   ta.select();
+}
+
+function showPlat(id, el) {
+  document.querySelectorAll('.plat-content').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  document.getElementById('plat-' + id).classList.add('active');
+  el.classList.add('active');
 }
 
 render();
