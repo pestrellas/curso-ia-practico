@@ -37,6 +37,7 @@
   .fw-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
   .fw-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
   .fw-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .fw-tarea .fw-tag { color: var(--coral-text); }
   .fw-contexto .fw-tag { color: var(--teal-text); }
   .fw-referencia .fw-tag { color: var(--accent-text); }
   .fw-evaluacion .fw-tag { color: var(--amber-text); }
@@ -77,11 +78,11 @@
   .struct-row:last-child { border-bottom: none; }
   .struct-label { font-size: 11px; font-weight: 500; min-width: 80px; flex-shrink: 0; padding-top: 1px; }
   .struct-val { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .label-tarea { color: var(--coral-text); }
   .label-contexto { color: var(--teal-text); }
   .label-referencia { color: var(--accent-text); }
   .label-evaluacion { color: var(--amber-text); }
   .label-iteracion { color: var(--purple-text); }
-  .label-prompt { color: var(--coral-text); }
 
   .tips-grid { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
   .tip-item { display: flex; gap: 10px; align-items: flex-start; }
@@ -130,9 +131,10 @@
   <div class="framework-box">
     <div class="framework-title">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Estructura de cada prompt — framework C.R.E.I.
+      Estructura de cada prompt — framework T.C.R.E.I.
     </div>
     <div class="framework-grid">
+      <div class="fw-item fw-tarea"><div class="fw-tag">Tarea</div><div class="fw-desc">El núcleo del prompt. Define qué quieres que haga la IA de forma clara y directa, usando verbos de acción.</div></div>
       <div class="fw-item fw-contexto"><div class="fw-tag">Contexto</div><div class="fw-desc">Define la situación, empresa o audiencia. Cuanto más específico, mejor resultado.</div></div>
       <div class="fw-item fw-referencia"><div class="fw-tag">Referencia</div><div class="fw-desc">El tono, estilo o formato que debe tener la respuesta.</div></div>
       <div class="fw-item fw-evaluacion"><div class="fw-tag">Evaluación</div><div class="fw-desc">Los criterios mínimos que debe cumplir una buena respuesta.</div></div>
@@ -164,7 +166,7 @@ const prompts = [
     title:"Reactivación de cliente inactivo",
     prompt:"Redacta un correo para reactivar un cliente que dejó de comprar hace 6 meses.\nContexto: empresa SaaS B2B de CRM.\nReferencia: tono consultivo, no agresivo.\nEvaluación: debe incluir propuesta de valor clara y call to action.\nIteración: genera una segunda versión más directa y corta.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Redacta un correo para reactivar un cliente que dejó de comprar hace 6 meses."},
+      {label:"Tarea",clase:"label-tarea",val:"Redacta un correo para reactivar un cliente que dejó de comprar hace 6 meses."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa SaaS B2B de CRM."},
       {label:"Referencia",clase:"label-referencia",val:"Tono consultivo, no agresivo."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir propuesta de valor clara y call to action."},
@@ -182,7 +184,7 @@ const prompts = [
     title:"Funcionalidad de producto en formato PRD",
     prompt:"Describe una nueva funcionalidad para un CRM que automatiza seguimiento de leads.\nContexto: equipo técnico y comercial.\nReferencia: estilo tipo Product Requirement Document (PRD).\nEvaluación: debe incluir problema, solución y beneficios.\nIteración: simplifica la explicación para un usuario no técnico.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Describe una nueva funcionalidad para un CRM que automatiza seguimiento de leads."},
+      {label:"Tarea",clase:"label-tarea",val:"Describe una nueva funcionalidad para un CRM que automatiza seguimiento de leads."},
       {label:"Contexto",clase:"label-contexto",val:"Equipo técnico y comercial."},
       {label:"Referencia",clase:"label-referencia",val:"Estilo tipo Product Requirement Document (PRD)."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir problema, solución y beneficios."},
@@ -200,7 +202,7 @@ const prompts = [
     title:"Post sobre IA y transformación del empleo",
     prompt:"Escribe un post sobre por qué la IA no reemplaza empleos, sino los transforma.\nContexto: público profesional LATAM.\nReferencia: estilo cercano pero con autoridad.\nEvaluación: debe incluir un ejemplo concreto.\nIteración: añade una pregunta para generar interacción.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Escribe un post sobre por qué la IA no reemplaza empleos, sino los transforma."},
+      {label:"Tarea",clase:"label-tarea",val:"Escribe un post sobre por qué la IA no reemplaza empleos, sino los transforma."},
       {label:"Contexto",clase:"label-contexto",val:"Público profesional LATAM."},
       {label:"Referencia",clase:"label-referencia",val:"Estilo cercano pero con autoridad."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir un ejemplo concreto."},
@@ -218,7 +220,7 @@ const prompts = [
     title:"Feedback constructivo en evaluación de desempeño",
     prompt:"Redacta feedback para un analista con buen desempeño técnico pero baja comunicación.\nContexto: evaluación semestral.\nReferencia: estilo constructivo.\nEvaluación: debe incluir acciones concretas de mejora.\nIteración: convierte el mensaje en puntos clave para reunión.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Redacta feedback para un analista con buen desempeño técnico pero baja comunicación."},
+      {label:"Tarea",clase:"label-tarea",val:"Redacta feedback para un analista con buen desempeño técnico pero baja comunicación."},
       {label:"Contexto",clase:"label-contexto",val:"Evaluación semestral."},
       {label:"Referencia",clase:"label-referencia",val:"Estilo constructivo."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir acciones concretas de mejora."},
@@ -236,7 +238,7 @@ const prompts = [
     title:"Resumen ejecutivo de propuesta de transformación digital",
     prompt:"Resume una propuesta de transformación digital para una pyme.\nContexto: cliente sin conocimiento técnico.\nReferencia: lenguaje simple, orientado a negocio.\nEvaluación: máximo 5 líneas, enfoque en beneficios.\nIteración: agrega una versión con enfoque en ROI.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Resume una propuesta de transformación digital para una pyme."},
+      {label:"Tarea",clase:"label-tarea",val:"Resume una propuesta de transformación digital para una pyme."},
       {label:"Contexto",clase:"label-contexto",val:"Cliente sin conocimiento técnico."},
       {label:"Referencia",clase:"label-referencia",val:"Lenguaje simple, orientado a negocio."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Máximo 5 líneas, enfoque en beneficios."},
@@ -254,7 +256,7 @@ const prompts = [
     title:"Respuesta a cliente molesto por caída del sistema",
     prompt:"Responde a un cliente molesto por una caída del sistema.\nContexto: servicio crítico con impacto operativo.\nReferencia: tono empático pero firme.\nEvaluación: debe reconocer el problema sin admitir culpa legal.\nIteración: genera una versión más corta para WhatsApp.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Responde a un cliente molesto por una caída del sistema."},
+      {label:"Tarea",clase:"label-tarea",val:"Responde a un cliente molesto por una caída del sistema."},
       {label:"Contexto",clase:"label-contexto",val:"Servicio crítico con impacto operativo."},
       {label:"Referencia",clase:"label-referencia",val:"Tono empático pero firme."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe reconocer el problema sin admitir culpa legal."},
@@ -272,7 +274,7 @@ const prompts = [
     title:"Análisis de variación presupuestaria mensual",
     prompt:"Analiza las variaciones entre el presupuesto y el gasto real del mes de marzo.\nContexto: empresa de servicios con 3 unidades de negocio.\nReferencia: tono ejecutivo, lenguaje financiero sin exceso de tecnicismos.\nEvaluación: debe identificar las 3 variaciones más significativas y posibles causas.\nIteración: genera un resumen de 3 líneas para presentar al directorio.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Analiza las variaciones entre el presupuesto y el gasto real del mes de marzo."},
+      {label:"Tarea",clase:"label-tarea",val:"Analiza las variaciones entre el presupuesto y el gasto real del mes de marzo."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa de servicios con 3 unidades de negocio."},
       {label:"Referencia",clase:"label-referencia",val:"Tono ejecutivo, lenguaje financiero sin exceso de tecnicismos."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe identificar las 3 variaciones más significativas y posibles causas."},
@@ -290,7 +292,7 @@ const prompts = [
     title:"Proyección de flujo de caja para decisión de inversión",
     prompt:"Genera un análisis de flujo de caja proyectado para evaluar la viabilidad de abrir una nueva sucursal.\nContexto: empresa retail con operaciones en 2 ciudades, ticket promedio de $80.\nReferencia: enfoque conservador, con escenarios optimista y pesimista.\nEvaluación: debe incluir punto de equilibrio y tiempo de recuperación de inversión.\nIteración: simplifica el análisis para presentarlo a un socio no financiero.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Genera un análisis de flujo de caja proyectado para evaluar la viabilidad de abrir una nueva sucursal."},
+      {label:"Tarea",clase:"label-tarea",val:"Genera un análisis de flujo de caja proyectado para evaluar la viabilidad de abrir una nueva sucursal."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa retail con operaciones en 2 ciudades, ticket promedio de $80."},
       {label:"Referencia",clase:"label-referencia",val:"Enfoque conservador, con escenarios optimista y pesimista."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir punto de equilibrio y tiempo de recuperación de inversión."},
@@ -308,7 +310,7 @@ const prompts = [
     title:"Informe ejecutivo de KPIs financieros del trimestre",
     prompt:"Redacta un informe ejecutivo con los principales KPIs financieros del primer trimestre.\nContexto: empresa de manufactura mediana, audiencia: gerentes de área sin perfil financiero.\nReferencia: lenguaje simple, con contexto comparativo respecto al trimestre anterior.\nEvaluación: debe incluir mínimo 5 KPIs, tendencia y un semáforo de estado (verde/amarillo/rojo).\nIteración: convierte el informe en una presentación de 5 diapositivas en texto.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Redacta un informe ejecutivo con los principales KPIs financieros del primer trimestre."},
+      {label:"Tarea",clase:"label-tarea",val:"Redacta un informe ejecutivo con los principales KPIs financieros del primer trimestre."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa de manufactura mediana, audiencia: gerentes de área sin perfil financiero."},
       {label:"Referencia",clase:"label-referencia",val:"Lenguaje simple, con contexto comparativo respecto al trimestre anterior."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir mínimo 5 KPIs, tendencia y semáforo de estado (verde/amarillo/rojo)."},
@@ -326,7 +328,7 @@ const prompts = [
     title:"Documentación de proceso operativo estándar (SOP)",
     prompt:"Documenta el proceso de incorporación de un nuevo empleado en una empresa de 50 personas.\nContexto: empresa de tecnología, proceso actual es informal y sin documentar.\nReferencia: formato SOP (Standard Operating Procedure), claro y paso a paso.\nEvaluación: debe cubrir desde la aceptación de la oferta hasta el fin del primer mes.\nIteración: convierte el SOP en un checklist para el área de RRHH.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Documenta el proceso de incorporación de un nuevo empleado en una empresa de 50 personas."},
+      {label:"Tarea",clase:"label-tarea",val:"Documenta el proceso de incorporación de un nuevo empleado en una empresa de 50 personas."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa de tecnología, proceso actual es informal y sin documentar."},
       {label:"Referencia",clase:"label-referencia",val:"Formato SOP (Standard Operating Procedure), claro y paso a paso."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe cubrir desde la aceptación de la oferta hasta el fin del primer mes."},
@@ -344,7 +346,7 @@ const prompts = [
     title:"Identificación de cuellos de botella en proceso logístico",
     prompt:"Analiza el proceso de despacho de pedidos e identifica los principales cuellos de botella.\nContexto: empresa de e-commerce con 200 pedidos diarios, tiempo de despacho actual: 3 días.\nReferencia: enfoque práctico orientado a soluciones, no solo diagnóstico.\nEvaluación: debe proponer mínimo 3 mejoras concretas y su impacto estimado.\nIteración: prioriza las mejoras según facilidad de implementación vs impacto.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Analiza el proceso de despacho de pedidos e identifica los principales cuellos de botella."},
+      {label:"Tarea",clase:"label-tarea",val:"Analiza el proceso de despacho de pedidos e identifica los principales cuellos de botella."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa de e-commerce con 200 pedidos diarios, tiempo de despacho actual: 3 días."},
       {label:"Referencia",clase:"label-referencia",val:"Enfoque práctico orientado a soluciones, no solo diagnóstico."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe proponer mínimo 3 mejoras concretas y su impacto estimado."},
@@ -362,7 +364,7 @@ const prompts = [
     title:"Plan de mejora continua para reducción de errores",
     prompt:"Diseña un plan de mejora continua para reducir los errores de facturación en un 50%.\nContexto: empresa de servicios profesionales con 300 facturas mensuales, tasa de error actual: 8%.\nReferencia: metodología simple, sin jerga de calidad, aplicable por un equipo pequeño.\nEvaluación: debe incluir causas raíz probables, acciones y métricas de seguimiento.\nIteración: resume el plan en una página ejecutiva para presentar a la gerencia.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Diseña un plan de mejora continua para reducir los errores de facturación en un 50%."},
+      {label:"Tarea",clase:"label-tarea",val:"Diseña un plan de mejora continua para reducir los errores de facturación en un 50%."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa de servicios profesionales con 300 facturas mensuales, tasa de error actual: 8%."},
       {label:"Referencia",clase:"label-referencia",val:"Metodología simple, sin jerga de calidad, aplicable por un equipo pequeño."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir causas raíz probables, acciones y métricas de seguimiento."},
@@ -380,7 +382,7 @@ const prompts = [
     title:"Estrategia de contenido mensual para redes sociales",
     prompt:"Crea un plan de contenido para redes sociales del mes de mayo.\nContexto: marca de productos de bienestar, audiencia: mujeres de 30-45 años, presencia en Instagram y LinkedIn.\nReferencia: mezcla de contenido educativo (60%), inspiracional (30%) y comercial (10%).\nEvaluación: debe incluir al menos 12 publicaciones con tema, formato y red sugerida.\nIteración: selecciona las 3 publicaciones de mayor potencial y desarrolla el copy completo.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Crea un plan de contenido para redes sociales del mes de mayo."},
+      {label:"Tarea",clase:"label-tarea",val:"Crea un plan de contenido para redes sociales del mes de mayo."},
       {label:"Contexto",clase:"label-contexto",val:"Marca de productos de bienestar, audiencia: mujeres de 30-45 años, presencia en Instagram y LinkedIn."},
       {label:"Referencia",clase:"label-referencia",val:"Mezcla de contenido educativo (60%), inspiracional (30%) y comercial (10%)."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir al menos 12 publicaciones con tema, formato y red sugerida."},
@@ -398,7 +400,7 @@ const prompts = [
     title:"Email de bienvenida para nuevo suscriptor",
     prompt:"Redacta un email de bienvenida para alguien que acaba de suscribirse al newsletter de una consultora de negocios.\nContexto: consultora especializada en pymes latinoamericanas, suscriptor proviene de un lead magnet sobre productividad.\nReferencia: tono cálido, personal, como si lo escribiera el fundador directamente.\nEvaluación: debe presentar qué recibirá el suscriptor, con qué frecuencia y un primer valor inmediato.\nIteración: genera una versión más corta y directa para móvil.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Redacta un email de bienvenida para alguien que acaba de suscribirse al newsletter de una consultora de negocios."},
+      {label:"Tarea",clase:"label-tarea",val:"Redacta un email de bienvenida para alguien que acaba de suscribirse al newsletter de una consultora de negocios."},
       {label:"Contexto",clase:"label-contexto",val:"Consultora especializada en pymes latinoamericanas, suscriptor proviene de un lead magnet sobre productividad."},
       {label:"Referencia",clase:"label-referencia",val:"Tono cálido, personal, como si lo escribiera el fundador directamente."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe presentar qué recibirá el suscriptor, con qué frecuencia y un primer valor inmediato."},
@@ -416,7 +418,7 @@ const prompts = [
     title:"Plan de desarrollo profesional para retención de talento",
     prompt:"Diseña un plan de desarrollo profesional para un colaborador de alto potencial que ha expresado interés en crecer.\nContexto: empresa de 80 personas, sector tecnológico, el colaborador lleva 2 años y lidera proyectos pequeños.\nReferencia: plan realista, con hitos trimestrales, sin prometer ascensos que no están garantizados.\nEvaluación: debe incluir habilidades a desarrollar, recursos sugeridos y métricas de progreso.\nIteración: convierte el plan en una conversación guiada para la reunión 1:1 con el colaborador.",
     estructura:[
-      {label:"Prompt",clase:"label-prompt",val:"Diseña un plan de desarrollo profesional para un colaborador de alto potencial que ha expresado interés en crecer."},
+      {label:"Tarea",clase:"label-tarea",val:"Diseña un plan de desarrollo profesional para un colaborador de alto potencial que ha expresado interés en crecer."},
       {label:"Contexto",clase:"label-contexto",val:"Empresa de 80 personas, sector tecnológico, el colaborador lleva 2 años y lidera proyectos pequeños."},
       {label:"Referencia",clase:"label-referencia",val:"Plan realista, con hitos trimestrales, sin prometer ascensos que no están garantizados."},
       {label:"Evaluación",clase:"label-evaluacion",val:"Debe incluir habilidades a desarrollar, recursos sugeridos y métricas de progreso."},
