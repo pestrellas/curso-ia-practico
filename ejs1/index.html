@@ -1,1 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts en Vivo — IA Práctico</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
+    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
+    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
+    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
+    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
+    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
+    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
+    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
+    --pink-bg: #faeaf1; --pink-text: #7a2050;
+    --radius: 10px; --radius-sm: 6px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
+  .page { max-width: 780px; margin: 0 auto; }
 
+  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--amber-bg); color: var(--amber-text); margin-bottom: 0.75rem; }
+  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
+  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+
+  /* SECTION DIVIDERS */
+  .section-block { margin-bottom: 2.5rem; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+  .section-icon { width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-icon svg { width: 16px; height: 16px; }
+  .si-instructor { background: var(--amber-bg); color: var(--amber-text); }
+  .si-student { background: var(--teal-bg); color: var(--teal-text); }
+  .section-info { flex: 1; }
+  .section-title { font-size: 17px; font-weight: 500; color: var(--text); }
+  .section-desc { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+
+  /* TCREI BADGE */
+  .tcrei-highlight { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 999px; margin-bottom: 12px; }
+  .th-tarea { background: var(--coral-bg); color: var(--coral-text); }
+  .th-contexto { background: var(--teal-bg); color: var(--teal-text); }
+  .th-referencia { background: var(--accent-bg); color: var(--accent-text); }
+  .th-evaluacion { background: var(--amber-bg); color: var(--amber-text); }
+  .th-iteracion { background: var(--purple-bg); color: var(--purple-text); }
+  .tcrei-highlight svg { width: 11px; height: 11px; }
+
+  /* PROMPT CARDS */
+  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
+  .prompt-card:hover { border-color: var(--border-strong); }
+  .prompt-card-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 16px 12px; cursor: pointer; user-select: none; gap: 12px; }
+  .prompt-card-header:hover { background: var(--bg); }
+  .pcl { display: flex; align-items: flex-start; gap: 10px; flex: 1; }
+  .pc-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: var(--radius-sm); flex-shrink: 0; margin-top: 2px; }
+  .pn-instructor { background: var(--amber-bg); color: var(--amber-text); }
+  .pn-student { background: var(--teal-bg); color: var(--teal-text); }
+  .pc-meta { flex: 1; }
+  .pc-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+  .pc-tag { font-size: 11px; color: var(--text-faint); }
+  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; margin-top: 2px; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .prompt-card-body { display: none; border-top: 1px solid var(--border); }
+  .prompt-card-body.open { display: block; }
+
+  /* TABS */
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab { font-size: 12px; font-weight: 500; padding: 10px 16px; cursor: pointer; color: var(--text-faint); border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
+  .tab:hover { color: var(--text-muted); }
+  .tab.active { color: var(--text); border-bottom-color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* STRUCTURE TAB */
+  .struct-section { padding: 14px 16px; }
+  .struct-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); align-items: flex-start; }
+  .struct-row:last-child { border-bottom: none; }
+  .struct-label { font-size: 11px; font-weight: 500; min-width: 80px; flex-shrink: 0; padding-top: 1px; }
+  .sl-tarea { color: var(--coral-text); }
+  .sl-contexto { color: var(--teal-text); }
+  .sl-referencia { color: var(--accent-text); }
+  .sl-evaluacion { color: var(--amber-text); }
+  .sl-iteracion { color: var(--purple-text); }
+  .struct-val { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* WHY IT WORKS TAB */
+  .why-section { padding: 14px 16px; }
+  .why-key { margin-bottom: 10px; }
+  .why-key-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin-bottom: 6px; }
+  .why-key-content { display: flex; gap: 10px; align-items: flex-start; }
+  .why-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 999px; flex-shrink: 0; white-space: nowrap; }
+  .wb-evaluacion { background: var(--amber-bg); color: var(--amber-text); }
+  .wb-iteracion { background: var(--purple-bg); color: var(--purple-text); }
+  .wb-tarea { background: var(--coral-bg); color: var(--coral-text); }
+  .wb-contexto { background: var(--teal-bg); color: var(--teal-text); }
+  .wb-referencia { background: var(--accent-bg); color: var(--accent-text); }
+  .why-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+  .why-text b { font-weight: 500; color: var(--text); }
+  .why-divider { height: 0.5px; background: var(--border); margin: 10px 0; }
+  .why-tip { background: var(--bg); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: 10px; }
+  .why-tip b { font-weight: 500; color: var(--text); }
+
+  /* ITERATIONS */
+  .iter-section { padding: 12px 16px 14px; }
+  .iter-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin-bottom: 8px; }
+  .iter-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .iter-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--purple-text); flex-shrink: 0; margin-top: 6px; }
+  .iter-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .iter-text b { font-weight: 500; color: var(--text); }
+
+  /* COPY */
+  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
+  .copy-trigger:hover { background: var(--accent-border); }
+  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
+  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
+  .copy-hint b { font-weight: 500; opacity: 1; }
+  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
+  .copy-box.open { display: block; }
+  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
+  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
+  .copy-box-footer svg { width: 13px; height: 13px; }
+  .copy-box-footer strong { font-weight: 500; }
+
+  /* STUDENT NOTE */
+  .student-note { background: var(--teal-bg); border-radius: var(--radius-sm); padding: 9px 12px; margin: 0 16px 14px; font-size: 12px; color: var(--teal-text); line-height: 1.6; }
+  .student-note b { font-weight: 500; }
+
+  .tip-global { background: var(--amber-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--amber-text); line-height: 1.65; margin-bottom: 2rem; }
+  .tip-global b { font-weight: 500; }
+
+  @media (max-width: 480px) { h1 { font-size: 22px; } .copy-hint { display: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="badge">IA Práctico — Clase en vivo</div>
+    <h1>Prompts en Vivo</h1>
+    <p class="subtitle">Ejemplos demostrados por el instructor y ejercicios prácticos para los alumnos. Cada prompt incluye su estructura T.C.R.E.I. y el elemento clave que lo hace efectivo.</p>
+  </header>
+
+  <div class="tip-global">
+    <b>Cómo usar esta página:</b> Revisa la pestaña <b>Estructura</b> para ver el desglose T.C.R.E.I., luego <b>Por qué funciona</b> para identificar el elemento clave. Cuando estés listo, usa <b>Copiar prompt</b> para pegarlo en tu LLM.
+  </div>
+
+  <!-- ===== DEMOS DEL INSTRUCTOR ===== -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-icon si-instructor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="section-info">
+        <div class="section-title">Demos del instructor</div>
+        <div class="section-desc">Ejemplos ejecutados en vivo durante la clase — observa cómo se construye cada prompt</div>
+      </div>
+    </div>
+    <div id="demos-list"></div>
+  </div>
+
+  <!-- ===== PRÁCTICAS DE ALUMNOS ===== -->
+  <div class="section-block">
+    <div class="section-header">
+      <div class="section-icon si-student">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="section-info">
+        <div class="section-title">Prácticas de los alumnos</div>
+        <div class="section-desc">Ejercicios para ejecutar durante la clase — tu turno de practicar</div>
+      </div>
+    </div>
+    <div id="students-list"></div>
+  </div>
+
+</div>
+<script>
+const demos = [
+  {
+    id: 1,
+    title: "Comunicado interno de cambio de horario",
+    tag: "Comunicación corporativa",
+    numClass: "pn-instructor",
+    keyElement: "evaluacion",
+    keyLabel: "Evaluación",
+    keyBadge: "wb-evaluacion",
+    keyExplain: "El éxito de este prompt está en la <b>Evaluación</b>. Imponer 'máximo 200 palabras' y 'sin tecnicismos' es un control de calidad estricto que obliga a la IA a entregar algo realmente usable, no un texto corporativo inflado.",
+    tip: "Sin restricciones de longitud y estilo, la IA tiende a generar textos más largos y genéricos. La Evaluación es el filtro de calidad.",
+    structure: [
+      { label: "Tarea", clase: "sl-tarea", val: "Redacta un comunicado interno para anunciar a 200 empleados el cambio de horario." },
+      { label: "Contexto", clase: "sl-contexto", val: "El horario cambiará de 9 a 6 a 8 a 5, a partir del 1 de abril." },
+      { label: "Referencia", clase: "sl-referencia", val: "Actúa como director de comunicaciones corporativas con 15 años de experiencia. Tono positivo, empático y claro. Estructura: contexto, razón del cambio, impacto práctico, próximos pasos." },
+      { label: "Evaluación", clase: "sl-evaluacion", val: "Máximo 200 palabras. Sin tecnicismos." },
+      { label: "Iteración", clase: "sl-iteracion", val: "1) Genera un correo usando este output. 2) Genera el mensaje para WhatsApp." }
+    ],
+    prompt: "Redacta un comunicado interno para anunciar a doscientos empleados que el horario cambiará de nueve a seis a ocho a cinco a partir del primero de abril. Tono positivo, empático y claro. Estructura: contexto, razón del cambio, impacto práctico, próximos pasos. Máximo doscientas palabras. Sin tecnicismos. Actúa como director de comunicaciones corporativas con quince años de experiencia.",
+    iterations: [
+      { text: "Genera un <b>correo formal</b> utilizando este output" },
+      { text: "Genera el <b>mensaje para WhatsApp</b> (más corto y directo)" }
+    ]
+  },
+  {
+    id: 2,
+    title: "Hilo de Twitter para lanzamiento de curso",
+    tag: "Marketing / Copywriting",
+    numClass: "pn-instructor",
+    keyElement: "iteracion",
+    keyLabel: "Iteración",
+    keyBadge: "wb-iteracion",
+    keyExplain: "El éxito está en la <b>Iteración</b>. Pedir 3 hooks alternativos y pausar antes de escribir el hilo <b>evita perder tiempo</b> si el enfoque inicial no convence. La IA espera tu aprobación antes de trabajar.",
+    tip: "Obligar a la IA a que se detenga y pida feedback antes de ejecutar es una técnica avanzada de control del output. Úsala cuando el primer enfoque importa mucho.",
+    structure: [
+      { label: "Tarea", clase: "sl-tarea", val: "Redacta un hilo de 5 publicaciones para X (Twitter) para promocionar el lanzamiento de un curso de cocina saludable." },
+      { label: "Contexto", clase: "sl-contexto", val: "El público son profesionales que trabajan desde casa y no tienen tiempo para cocinar. Tono sarcástico pero motivador." },
+      { label: "Referencia", clase: "sl-referencia", val: "Actúa como Copywriter Senior especializado en respuesta directa. Usa el modelo AIDA (Atención, Interés, Deseo, Acción) para la estructura del hilo." },
+      { label: "Evaluación", clase: "sl-evaluacion", val: "Cada publicación debe tener menos de 280 caracteres. No uses emojis de comida genéricos. Prioriza verbos de acción." },
+      { label: "Iteración", clase: "sl-iteracion", val: "Antes de redactar el hilo, proponme 3 ganchos (hooks) diferentes para el primer post y espera a que elija uno." }
+    ],
+    prompt: "Actúa como un Copywriter Senior especializado en respuesta directa. Tarea: Redacta un hilo de 5 publicaciones para X (Twitter) con el fin de promocionar el lanzamiento de un curso de cocina saludable.\nContexto: El público son profesionales que trabajan desde casa y no tienen tiempo para cocinar. El tono debe ser sarcástico pero motivador.\nReferencia: Usa el modelo AIDA (Atención, Interés, Deseo, Acción) para la estructura del hilo.\nEvaluación: Cada publicación debe tener menos de 280 caracteres. No uses emojis de comida genéricos, prioriza verbos de acción.\nIteración: Antes de redactar el hilo, proponme 3 ganchos (hooks) diferentes para el primer post y espera a que elija uno.",
+    iterations: [
+      { text: "Después de elegir un hook: <b>Ahora redacta el hilo completo usando el gancho #[número]</b>" },
+      { text: "<b>Genera una versión alternativa del hilo con tono más directo y menos sarcástico</b>" }
+    ]
+  },
+  {
+    id: 3,
+    title: "Análisis UX de quejas de usuarios",
+    tag: "Análisis / Producto",
+    numClass: "pn-instructor",
+    keyElement: "evaluacion",
+    keyLabel: "Evaluación",
+    keyBadge: "wb-evaluacion",
+    keyExplain: "La <b>Evaluación</b> convierte el caos en estructura. Sin ella, la IA devolvería un resumen narrativo del listado. Con la instrucción de usar una tabla comparativa, transforma 10 quejas dispersas en un reporte profesional listo para presentar al equipo de producto.",
+    tip: "Pedir un formato de salida específico (tabla, ranking, categorías) es parte de la Evaluación. Define cómo quieres recibir la información, no solo qué información quieres.",
+    structure: [
+      { label: "Tarea", clase: "sl-tarea", val: "Analiza este listado de quejas de usuarios de una app de delivery y genera un reporte de hallazgos UX." },
+      { label: "Contexto", clase: "sl-contexto", val: "10 quejas reales de usuarios sobre la aplicación de delivery (botón de pago, GPS, alergias, interfaz, cupones, etc.)." },
+      { label: "Referencia", clase: "sl-referencia", val: "Actúa como analista UX senior. Clasifica los problemas por tipo: usabilidad, rendimiento técnico, logística, seguridad." },
+      { label: "Evaluación", clase: "sl-evaluacion", val: "Presenta los hallazgos en una tabla comparativa con columnas: Categoría, Problema, Frecuencia estimada, Impacto (Alto/Medio/Bajo), Acción sugerida." },
+      { label: "Iteración", clase: "sl-iteracion", val: "Luego prioriza los 3 problemas más críticos y justifica por qué deben resolverse primero." }
+    ],
+    prompt: `Actúa como analista UX senior. Analiza el siguiente listado de quejas de usuarios de una aplicación de delivery y genera un reporte de hallazgos UX estructurado.
+
+Clasifica los problemas por tipo: usabilidad, rendimiento técnico, logística y seguridad.
+
+Presenta los hallazgos en una tabla comparativa con columnas: Categoría | Problema | Frecuencia estimada | Impacto (Alto/Medio/Bajo) | Acción sugerida.
+
+Luego prioriza los 3 problemas más críticos y justifica por qué deben resolverse primero.
+
+QUEJAS:
+1. "Desde la última actualización, el botón de 'Pagar' se queda dando vueltas infinitamente y tengo que cerrar la app para saber si se hizo el cargo."
+2. "No encuentro dónde se cambian los cubiertos desechables. Antes estaba claro, ahora la pantalla de confirmación es un lío de colores y textos amontonados."
+3. "El repartidor marcó el pedido como entregado hace 20 minutos, pero sigo esperando en la puerta. Es la tercera vez que me pasa esta semana."
+4. "Quise agregar una nota para mi alergia al maní y el campo de texto solo me deja escribir 10 caracteres. ¡Es peligroso!"
+5. "La nueva interfaz es bonita, pero los iconos son tan pequeños que siempre termino haciendo clic en el restaurante de al lado por error."
+6. "Pedí una pizza familiar y llegó fría porque el repartidor decidió hacer tres paradas antes de venir a mi casa. El mapa mostraba una ruta absurda."
+7. "Cada vez que intento aplicar un cupón de descuento, la aplicación se cierra inesperadamente y pierdo todo lo que ya tenía en el carrito."
+8. "Antes podía ver el menú completo en una sola pantalla; ahora tengo que entrar y salir de cinco menús diferentes para encontrar una bebida."
+9. "El repartidor no encontraba mi dirección porque el GPS de la app lo mandó a la calle de atrás, a pesar de que puse las indicaciones correctas."
+10. "Recibí una notificación de que mi comida estaba en camino, pero cuando abrí la app para rastrearla, me pedía volver a iniciar sesión y no recordaba mi clave."`,
+    iterations: [
+      { text: "<b>Genera un resumen ejecutivo de 5 líneas</b> para presentar estos hallazgos al director de producto" },
+      { text: "<b>Convierte los 3 problemas prioritarios en user stories</b> para el equipo de desarrollo" }
+    ]
+  }
+];
+
+const students = [
+  {
+    id: 4,
+    title: "Publicación de LinkedIn para nuevo servicio",
+    tag: "Generación de contenido de negocios",
+    numClass: "pn-student",
+    keyElement: "tarea",
+    keyLabel: "Tarea",
+    keyBadge: "wb-tarea",
+    keyExplain: "En este ejercicio la <b>Tarea</b> es el núcleo: 'escribe una publicación de LinkedIn' con verbo de acción claro. El resto del framework (rol de gerente de marketing, empresa de consultoría financiera, tono profesional y cercano) potencia ese núcleo — pero si la Tarea es vaga, nada más funciona.",
+    tip: "Observa cómo el rol está integrado dentro del prompt ('Eres gerente de marketing...'). Esto es la T del framework: la IA recibe el contexto de quién eres tú, no solo quién debe ser ella.",
+    structure: [
+      { label: "Tarea", clase: "sl-tarea", val: "Escribe una publicación de LinkedIn que anuncie un nuevo servicio de planificación fiscal." },
+      { label: "Contexto", clase: "sl-contexto", val: "Empresa de consultoría financiera para PYMES. El lector es un empresario o gerente que busca optimizar sus impuestos." },
+      { label: "Referencia", clase: "sl-referencia", val: "Actúa como especialista en marketing financiero. Tono profesional y cercano, no técnico." },
+      { label: "Evaluación", clase: "sl-evaluacion", val: "3 párrafos, máximo 200 palabras, termina con un CTA claro." },
+      { label: "Iteración", clase: "sl-iteracion", val: "Genera una versión alternativa con un tono más urgente, enfocada en el ahorro fiscal antes del cierre del año." }
+    ],
+    prompt: "Eres gerente de marketing de una PYME de consultoría financiera. Necesitas una publicación para LinkedIn que anuncie un nuevo servicio de planificación fiscal.\n\nTarea: Escribe una publicación de LinkedIn para anunciar este servicio.\nContexto: Empresa de consultoría financiera para PYMES. Servicio: planificación fiscal para reducir carga tributaria legal.\nRol: Actúa como especialista en marketing financiero.\nInstrucción: 3 párrafos, tono profesional y cercano, termina con CTA claro, máximo 200 palabras.",
+    studentNote: "Después de obtener el resultado, practica la iteración: pide una versión con tono más urgente enfocada en el ahorro fiscal antes del cierre del año.",
+    iterations: [
+      { text: "<b>Versión urgente:</b> reescribe con foco en 'antes del cierre fiscal de este año' y tono de alerta amigable" },
+      { text: "<b>Versión para Instagram:</b> adapta el mismo mensaje con párrafos más cortos y un gancho visual al inicio" }
+    ]
+  },
+  {
+    id: 5,
+    title: "Resumen ejecutivo de informe de IA en negocios",
+    tag: "Extracción y análisis de documentos",
+    numClass: "pn-student",
+    keyElement: "contexto",
+    keyLabel: "Contexto",
+    keyBadge: "wb-contexto",
+    keyExplain: "Aquí el <b>Contexto</b> es decisivo: 'tu jefe necesita esto en 10 minutos para presentar a la directiva' cambia completamente lo que la IA produce. Sin ese contexto, el resumen sería académico. Con él, la IA prioriza impacto ejecutivo y lenguaje de negocio.",
+    tip: "Para este ejercicio necesitas adjuntar un archivo PDF al chat antes de enviar el prompt. La IA analizará el documento que cargues — el prompt le dice cómo procesarlo, no qué documento usar.",
+    structure: [
+      { label: "Tarea", clase: "sl-tarea", val: "Analiza este documento y extrae los puntos clave sobre adopción de IA en empresas." },
+      { label: "Contexto", clase: "sl-contexto", val: "Informe estratégico de 26 páginas. Tu jefe necesita un resumen ejecutivo en 10 minutos para presentar a la directiva." },
+      { label: "Referencia", clase: "sl-referencia", val: "Enfoque en impacto empresarial, no técnico. Lenguaje ejecutivo." },
+      { label: "Evaluación", clase: "sl-evaluacion", val: "5 puntos clave, máximo 2 líneas cada uno. Incluye solo datos concretos. Si algo no está claro en el documento, indícalo explícitamente." },
+      { label: "Iteración", clase: "sl-iteracion", val: "Genera una slide ejecutiva de texto con el punto más impactante para abrir la presentación." }
+    ],
+    prompt: "Analiza este documento y extrae los puntos clave.\n\nContexto: Informe estratégico sobre adopción de IA generativa en empresas. Tu jefe necesita un resumen ejecutivo en 10 minutos para presentar a la directiva. Debe destacar: qué está pasando realmente con la IA en empresas, qué está funcionando vs qué no, qué implicaciones tiene para el negocio.\n\nFormato: 5 puntos clave, máximo 2 líneas cada uno, enfocados en impacto empresarial, no técnico.\n\nRestricción: Incluye solo datos concretos del documento. Si algo no está claro, indícalo explícitamente.",
+    studentNote: "Adjunta el archivo PDF al chat antes de enviar este prompt. La IA analizará el documento que cargues.",
+    iterations: [
+      { text: "<b>Genera una diapositiva de apertura</b> en texto con el hallazgo más impactante del informe" },
+      { text: "<b>¿Qué debería hacer nuestra empresa en los próximos 90 días</b> basado en este informe? Máximo 3 acciones concretas." }
+    ]
+  },
+  {
+    id: 6,
+    title: "Roleplay: práctica con cliente insatisfecho",
+    tag: "Simulación / Habilidades directivas",
+    numClass: "pn-student",
+    keyElement: "referencia",
+    keyLabel: "Referencia",
+    keyBadge: "wb-referencia",
+    keyExplain: "La <b>Referencia</b> es lo que convierte esto en un ejercicio útil: 'realista pero profesional'. Sin esa instrucción, la IA podría simular un cliente agresivo o completamente pasivo. El nivel de dificultad y el tipo de personalidad son parte de la Referencia — puedes ajustarlos para practicar distintos escenarios.",
+    tip: "Pide distintos niveles de dificultad: 'hazlo más difícil', 'ahora simula un cliente que amenaza con irse a la competencia', 'prueba con una personalidad pasivo-agresiva'. El roleplay mejora con iteración.",
+    structure: [
+      { label: "Tarea", clase: "sl-tarea", val: "Simula un cliente enojado para que yo pueda practicar el manejo de objeciones como gerente de atención al cliente." },
+      { label: "Contexto", clase: "sl-contexto", val: "El cliente compró software con errores. El soporte tardó 3 días en responder." },
+      { label: "Referencia", clase: "sl-referencia", val: "Expresa la frustración de forma realista pero profesional. Espera mi respuesta antes de continuar." },
+      { label: "Evaluación", clase: "sl-evaluacion", val: "Mantén el personaje durante toda la conversación. No rompas el roleplay para dar feedback." },
+      { label: "Iteración", clase: "sl-iteracion", val: "Después del ejercicio: evalúa cómo manejé cada objeción y qué podría mejorar." }
+    ],
+    prompt: "Actúa como un cliente enojado de una empresa de software. El software que compraste tiene errores y el soporte tardó 3 días en responder. Yo practicaré cómo responder a tus quejas como gerente de atención al cliente. Empieza expresando tu frustración de forma realista pero profesional. Mantén el personaje durante toda la conversación sin romper el roleplay. Cuando yo indique que terminamos, evalúa cómo manejé cada objeción y qué podría mejorar.",
+    studentNote: "Después del ejercicio escribe 'terminamos' para que la IA salga del roleplay y te dé feedback sobre cómo manejaste cada objeción.",
+    iterations: [
+      { text: "<b>Sube el nivel:</b> 'ahora simula un cliente que amenaza con irse a la competencia y publicar una reseña negativa'" },
+      { text: "<b>Cambia la personalidad:</b> 'prueba con un cliente pasivo-agresivo que dice que todo está bien pero es obvio que no'" }
+    ]
+  }
+];
+
+function renderCard(item, isStudent) {
+  return `
+  <div class="prompt-card">
+    <div class="prompt-card-header" onclick="toggleCard(${item.id})">
+      <div class="pcl">
+        <span class="pc-num ${item.numClass}">${String(isStudent ? item.id - 3 : item.id).padStart(2,'0')}</span>
+        <div class="pc-meta">
+          <div class="pc-title">${item.title}</div>
+          <div class="pc-tag">${item.tag}</div>
+        </div>
+      </div>
+      <svg class="chevron" id="chev-${item.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="prompt-card-body" id="body-${item.id}">
+      <div class="tabs" id="tabs-${item.id}">
+        <div class="tab active" onclick="setTab(${item.id},'estructura',this)">Estructura</div>
+        <div class="tab" onclick="setTab(${item.id},'porque',this)">Por qué funciona</div>
+        <div class="tab" onclick="setTab(${item.id},'copiar',this)">Copiar prompt</div>
+      </div>
+
+      <div class="tab-content active" id="tc-${item.id}-estructura">
+        <div class="struct-section">
+          ${item.structure.map(s => `
+            <div class="struct-row">
+              <span class="struct-label ${s.clase}">${s.label}</span>
+              <span class="struct-val">${s.val}</span>
+            </div>
+          `).join('')}
+        </div>
+        ${item.iterations ? `
+          <div class="iter-section" style="border-top:0.5px solid var(--border)">
+            <div class="iter-label">Iteraciones sugeridas</div>
+            ${item.iterations.map(it => `
+              <div class="iter-item"><div class="iter-dot"></div><div class="iter-text">${it.text}</div></div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="tab-content" id="tc-${item.id}-porque">
+        <div class="why-section">
+          <div class="why-key">
+            <div class="why-key-label">Elemento clave del framework T.C.R.E.I.</div>
+            <div class="why-key-content">
+              <span class="why-badge ${item.keyBadge}">${item.keyLabel}</span>
+              <span class="why-text">${item.keyExplain}</span>
+            </div>
+          </div>
+          ${item.tip ? `<div class="why-tip"><b>Para recordar:</b> ${item.tip}</div>` : ''}
+        </div>
+      </div>
+
+      <div class="tab-content" id="tc-${item.id}-copiar">
+        ${item.studentNote ? `<div class="student-note"><b>Nota para el ejercicio:</b> ${item.studentNote}</div>` : ''}
+        <div class="copy-trigger" onclick="selectPrompt(${item.id})">
+          <div class="copy-trigger-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Seleccionar prompt para copiar
+          </div>
+          <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
+        </div>
+        <div class="copy-box" id="box-${item.id}">
+          <textarea id="ta-${item.id}" rows="7" readonly>${item.prompt}</textarea>
+          <div class="copy-box-footer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac)
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+document.getElementById('demos-list').innerHTML = demos.map(d => renderCard(d, false)).join('');
+document.getElementById('students-list').innerHTML = students.map(s => renderCard(s, true)).join('');
+
+function toggleCard(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.prompt-card-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+}
+
+function setTab(id, tab, el) {
+  document.getElementById('tabs-' + id).querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['estructura','porque','copiar'].forEach(t => {
+    document.getElementById('tc-' + id + '-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab !== 'copiar') document.getElementById('box-' + id).classList.remove('open');
+}
+
+function selectPrompt(id) {
+  const box = document.getElementById('box-' + id);
+  const ta = document.getElementById('ta-' + id);
+  box.classList.add('open');
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+  ta.select();
+}
+</script>
+</body>
+</html>
