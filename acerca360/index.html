@@ -1,1 +1,1038 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 360 — Aplicación Práctica de Inteligencia Artificial en el Negocio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#f6f4ef;
+      --surface:#ffffff;
+      --surface-2:#fbfaf7;
+      --text:#171614;
+      --muted:#68645c;
+      --faint:#9a9388;
+      --border:#e7e1d7;
+      --border-strong:#cfc6b8;
+      --purple-bg:#efecfb;
+      --purple:#43348d;
+      --purple-br:#cfc7f3;
+      --blue-bg:#e8f2fb;
+      --blue:#185b9d;
+      --blue-br:#bad5ef;
+      --green-bg:#eaf4e5;
+      --green:#2d5a12;
+      --green-br:#c6deba;
+      --amber-bg:#fdf1db;
+      --amber:#855111;
+      --amber-br:#efcf95;
+      --coral-bg:#faece7;
+      --coral:#8f3a20;
+      --coral-br:#eeb39f;
+      --dark:#171614;
+      --radius:18px;
+      --shadow:0 12px 34px rgba(20,18,15,.045);
+      --max:1120px;
+    }
+
+    body{
+      font-family:"DM Sans",sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(67,52,141,.08), transparent 32%),
+        radial-gradient(circle at 80% 0%, rgba(24,91,157,.08), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      padding:28px 18px 60px;
+    }
+
+    .page{max-width:var(--max);margin:0 auto}
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:var(--purple-bg);
+      color:var(--purple);
+      border:1px solid var(--purple-br);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .hero{
+      background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%);
+      border:1px solid var(--border);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-bottom:28px;
+    }
+
+    .hero-inner{
+      display:grid;
+      grid-template-columns:1.35fr .9fr;
+      gap:28px;
+      padding:38px 34px 26px;
+      align-items:start;
+    }
+
+    .hero h1{
+      margin-top:16px;
+      font-size:46px;
+      line-height:1.05;
+      letter-spacing:-.04em;
+      max-width:780px;
+    }
+
+    .hero .lead{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:18px;
+      max-width:790px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:22px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 13px;
+      border-radius:999px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .mini{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:15px;
+      min-height:106px;
+    }
+
+    .mini .k{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-weight:800;
+      color:var(--faint);
+      margin-bottom:6px;
+    }
+
+    .mini .v{
+      font-size:22px;
+      font-weight:800;
+      line-height:1.1;
+      letter-spacing:-.02em;
+      color:var(--text);
+    }
+
+    .mini .s{
+      margin-top:5px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .top-note{
+      border-top:1px solid var(--border);
+      background:var(--surface-2);
+      padding:18px 34px 22px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .top-note strong{color:var(--text)}
+
+    .section{
+      margin-top:32px;
+    }
+
+    .section-label{
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--faint);
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .section-title{
+      font-size:31px;
+      line-height:1.15;
+      letter-spacing:-.025em;
+      margin-bottom:10px;
+    }
+
+    .section-sub{
+      color:var(--muted);
+      max-width:820px;
+      font-size:15px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+      margin-top:16px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:15px;
+      margin-top:16px;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:15px;
+      margin-top:16px;
+    }
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .card-body{padding:19px}
+
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.055em;
+      border:1px solid transparent;
+      margin-bottom:11px;
+    }
+
+    .purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br)}
+    .blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br)}
+    .green{background:var(--green-bg);color:var(--green);border-color:var(--green-br)}
+    .amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+    .coral{background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br)}
+
+    .card h3{
+      font-size:19px;
+      line-height:1.2;
+      margin-bottom:8px;
+      letter-spacing:-.015em;
+    }
+
+    .card p{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .list{
+      margin-top:13px;
+      display:grid;
+      gap:8px;
+    }
+
+    .list div{
+      position:relative;
+      padding-left:17px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .list div:before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:9px;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--border-strong);
+    }
+
+    .flow{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:13px;
+      margin-top:17px;
+    }
+
+    .step{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      min-height:220px;
+      box-shadow:var(--shadow);
+    }
+
+    .step .n{
+      font-family:"DM Mono",monospace;
+      color:var(--faint);
+      font-size:12px;
+      margin-bottom:9px;
+    }
+
+    .step h4{
+      font-size:18px;
+      line-height:1.18;
+      margin-bottom:8px;
+      letter-spacing:-.015em;
+    }
+
+    .step p{
+      color:var(--muted);
+      font-size:13.5px;
+    }
+
+    .step ul{
+      margin-top:11px;
+      padding-left:17px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .panel{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:19px 21px 14px;
+      border-bottom:1px solid var(--border);
+      background:var(--surface-2);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .panel-head h3{
+      font-size:22px;
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+
+    .panel-head p{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:5px;
+      max-width:720px;
+    }
+
+    .panel-content{
+      padding:19px 21px 21px;
+    }
+
+    details.item{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:var(--surface-2);
+      padding:0 16px;
+    }
+
+    details.item + details.item{margin-top:10px}
+    details.item[open]{background:#fff}
+
+    details.item summary{
+      list-style:none;
+      cursor:pointer;
+      padding:15px 0;
+      font-weight:800;
+      font-size:15px;
+    }
+
+    details.item summary::-webkit-details-marker{display:none}
+
+    details.item p{
+      padding-bottom:16px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .callout{
+      border:1px solid;
+      border-radius:18px;
+      padding:18px 20px;
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .callout strong{color:var(--text)}
+    .callout + .callout{margin-top:12px}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+      background:var(--surface);
+    }
+
+    th{
+      text-align:left;
+      padding:13px 14px;
+      border-bottom:1px solid var(--border);
+      background:var(--surface-2);
+      color:var(--faint);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+    }
+
+    td{
+      padding:14px;
+      border-bottom:1px solid var(--border);
+      color:var(--muted);
+      vertical-align:top;
+    }
+
+    tr:last-child td{border-bottom:none}
+    td:first-child{font-weight:800;color:var(--text);width:24%}
+
+    .timeline{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+
+    .timeline-row{
+      display:grid;
+      grid-template-columns:150px 1fr;
+      gap:14px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .timeline-row .time{
+      font-family:"DM Mono",monospace;
+      color:var(--purple);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .timeline-row h3{
+      font-size:17px;
+      margin-bottom:4px;
+    }
+
+    .timeline-row p{
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .instructor{
+      display:grid;
+      grid-template-columns:.85fr 1.15fr;
+      gap:16px;
+      margin-top:16px;
+    }
+
+    .profile{
+      background:linear-gradient(180deg,var(--dark),#2a2520);
+      color:#f5efe6;
+      border-radius:22px;
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .profile .avatar{
+      width:58px;
+      height:58px;
+      display:grid;
+      place-items:center;
+      border-radius:18px;
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.16);
+      font-weight:800;
+      margin-bottom:15px;
+    }
+
+    .profile h3{
+      font-size:26px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+
+    .profile p{
+      color:#d8d1c6;
+      font-size:14px;
+      margin-top:9px;
+    }
+
+    .profile .handle{
+      display:inline-flex;
+      margin-top:16px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.1);
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .footer{
+      margin-top:30px;
+      padding:25px 26px;
+      border-radius:24px;
+      background:var(--dark);
+      color:#ece7de;
+      box-shadow:var(--shadow);
+    }
+
+    .footer h2{
+      font-size:28px;
+      line-height:1.12;
+      margin-bottom:10px;
+      letter-spacing:-.02em;
+    }
+
+    .footer p{
+      color:#d8d1c6;
+      font-size:15px;
+      max-width:860px;
+    }
+
+    .footer .list div{color:#ddd7cd}
+    .footer .list div:before{background:#776f64}
+
+    @media (max-width:980px){
+      .hero-inner,.split,.instructor{grid-template-columns:1fr}
+      .grid-4,.flow{grid-template-columns:1fr 1fr}
+      .hero h1{font-size:37px}
+    }
+
+    @media (max-width:700px){
+      body{padding:16px 12px 42px}
+      .hero-inner,.top-note,.panel-head,.panel-content,.card-body{padding-left:17px;padding-right:17px}
+      .hero-grid,.grid-2,.grid-3,.grid-4,.flow{grid-template-columns:1fr}
+      .hero h1{font-size:31px}
+      .section-title{font-size:25px}
+      .timeline-row{grid-template-columns:1fr}
+      .hero-actions{display:grid}
+      .pill{justify-content:center}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">TechXpert Gurú · Opendireito · Eclipsoft</div>
+          <h1>AI 360: Inteligencia Artificial aplicada al negocio, sin quedarse en la teoría</h1>
+          <p class="lead">
+            Un programa práctico para pasar del uso casual de IA a una adopción profesional:
+            prompts bien diseñados, agentes personalizados, IA visual, manejo responsable de información
+            y casos reales aplicados al trabajo diario.
+          </p>
+          <div class="hero-actions">
+            <span class="pill">🧠 ChatGPT · Gemini · Claude · NotebookLM</span>
+            <span class="pill">💼 Enfoque empresarial</span>
+            <span class="pill">🛠️ Aprender haciendo</span>
+          </div>
+        </div>
+
+        <div class="hero-grid">
+          <div class="mini">
+            <div class="k">Duración</div>
+            <div class="v">8 horas</div>
+            <div class="s">4 sesiones en vivo</div>
+          </div>
+          <div class="mini">
+            <div class="k">Modalidad</div>
+            <div class="v">Zoom</div>
+            <div class="s">Online, en vivo y práctico</div>
+          </div>
+          <div class="mini">
+            <div class="k">Seguimiento</div>
+            <div class="v">+2 horas</div>
+            <div class="s">A las 3 semanas</div>
+          </div>
+          <div class="mini">
+            <div class="k">Certificación</div>
+            <div class="v">Open Badge</div>
+            <div class="s">AI Applied Practitioner</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-note">
+        <div>⚡</div>
+        <div>
+          <strong>Idea central:</strong> AI 360 no está diseñado para “hablar de IA”.
+          Está diseñado para que cada participante salga con activos reutilizables:
+          una biblioteca de prompts, un agente funcional, casos documentados y una guía de buenas prácticas.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Qué resuelve</div>
+      <h2 class="section-title">De probar herramientas a integrarlas en el trabajo real</h2>
+      <p class="section-sub">
+        El curso cierra la brecha entre usar IA de forma ocasional y convertirla en una herramienta
+        de productividad, análisis, documentación y comunicación dentro de la organización.
+      </p>
+
+      <div class="grid-3">
+        <article class="card">
+          <div class="card-body">
+            <div class="tag purple">Productividad</div>
+            <h3>Mejorar entregables sin aumentar carga operativa</h3>
+            <p>El programa enseña a usar IA para acelerar análisis, redacción, documentación y comunicación corporativa.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag blue">Precisión</div>
+            <h3>De resultados genéricos a respuestas útiles</h3>
+            <p>Los participantes aprenden a estructurar prompts con rol, tarea, formato, restricciones y audiencia.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag green">Adopción</div>
+            <h3>IA aplicada por área y con seguimiento</h3>
+            <p>El cierre incluye ejercicios personalizados y una sesión posterior para revisar adopción real y ajustar agentes.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Para quién es</div>
+      <h2 class="section-title">Diseñado para equipos que necesitan usar IA con método</h2>
+      <div class="grid-4">
+        <article class="card">
+          <div class="card-body">
+            <div class="tag blue">Ejecutivos</div>
+            <h3>Optimizar tiempo</h3>
+            <p>Para profesionales que necesitan producir mejores entregables en menos tiempo.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag green">Equipos</div>
+            <h3>Integrar IA en procesos</h3>
+            <p>Para áreas que quieren incorporar IA sin complicar su operación diaria.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag amber">Exploradores</div>
+            <h3>Pasar de curiosidad a dominio</h3>
+            <p>Para personas que ya probaron IA, pero todavía obtienen respuestas vagas o poco accionables.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag purple">Líderes</div>
+            <h3>Adopción ética y segura</h3>
+            <p>Para responsables de área que necesitan una metodología clara y buenas prácticas de uso.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Ruta de aprendizaje</div>
+      <h2 class="section-title">Cuatro bloques para construir capacidad real</h2>
+      <p class="section-sub">
+        Cada sesión combina explicación conceptual, demostración en vivo y práctica aplicada.
+        La progresión va desde fundamentos hasta casos reales por área.
+      </p>
+
+      <div class="flow">
+        <div class="step">
+          <div class="n">Sesión 01 · 2 horas</div>
+          <h4>Fundamentos y prompting aplicado</h4>
+          <p>Cómo funcionan los LLMs, diferencias entre modelos, tokens, ventana de contexto y estructura de prompts profesionales.</p>
+          <ul>
+            <li>Zero-shot y Few-shot</li>
+            <li>Validación de resultados</li>
+            <li>Uso responsable de IA</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <div class="n">Sesión 02 · 2 horas</div>
+          <h4>Agentes personalizados por rol</h4>
+          <p>Creación de GPTs, Gems y asistentes adaptados a necesidades de cada área, usando documentos propios como base.</p>
+          <ul>
+            <li>RAG y búsqueda semántica</li>
+            <li>NotebookLM</li>
+            <li>Meta-prompting</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <div class="n">Sesión 03 · 2 horas</div>
+          <h4>IA visual para comunicación corporativa</h4>
+          <p>Generación de imágenes con IA, prompts visuales efectivos y adaptación a lineamientos corporativos.</p>
+          <ul>
+            <li>Contenido interno</li>
+            <li>Contenido comercial</li>
+            <li>Introducción a video</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <div class="n">Sesión 04 · 2 horas</div>
+          <h4>Aplicación por área y cierre</h4>
+          <p>Casos prácticos para finanzas, comercial, talento humano y otras áreas, con presentación de resultados.</p>
+          <ul>
+            <li>Ejercicios personalizados</li>
+            <li>Buenas prácticas</li>
+            <li>Aprendizajes finales</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Lo que aprenderás</div>
+      <h2 class="section-title">Competencias que quedan instaladas</h2>
+
+      <div class="split">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Objetivos de aprendizaje</h3>
+              <p>Al finalizar, los participantes no solo entenderán IA: podrán aplicarla con criterio en escenarios reales.</p>
+            </div>
+            <div class="tag green">Resultado</div>
+          </div>
+
+          <div class="panel-content">
+            <details class="item" open>
+              <summary>Comprender herramientas y modelos</summary>
+              <p>Diferenciar usos prácticos de ChatGPT, Gemini y Claude, entendiendo cuándo conviene usar cada uno.</p>
+            </details>
+
+            <details class="item">
+              <summary>Diseñar prompts profesionales</summary>
+              <p>Crear instrucciones precisas, reutilizables y adaptadas a tareas reales del negocio.</p>
+            </details>
+
+            <details class="item">
+              <summary>Crear agentes personalizados</summary>
+              <p>Configurar GPTs, Gems y espacios en NotebookLM orientados a roles, procesos o áreas específicas.</p>
+            </details>
+
+            <details class="item">
+              <summary>Aplicar IA en tareas reales</summary>
+              <p>Usar IA para análisis, redacción, documentación, comunicación corporativa y apoyo operativo.</p>
+            </details>
+
+            <details class="item">
+              <summary>Trabajar con IA visual</summary>
+              <p>Generar imágenes y materiales visuales alineados a necesidades de comunicación interna o comercial.</p>
+            </details>
+
+            <details class="item">
+              <summary>Manejar información sensible</summary>
+              <p>Aplicar buenas prácticas para usar IA de forma profesional, responsable y segura.</p>
+            </details>
+          </div>
+        </div>
+
+        <div>
+          <div class="callout" style="background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br);">
+            <strong>Enfoque del programa:</strong> aprender haciendo. Cada bloque está pensado para producir activos y no solo para consumir contenido.
+          </div>
+          <div class="callout" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br);">
+            <strong>Herramientas reales:</strong> ChatGPT, Gemini, Claude y NotebookLM son parte del trabajo práctico del curso.
+          </div>
+          <div class="callout" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br);">
+            <strong>Sin programación:</strong> el trabajo se realiza en lenguaje natural. No se requieren conocimientos técnicos previos.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Metodología</div>
+      <h2 class="section-title">Una experiencia corta, intensa y aplicable</h2>
+
+      <div class="panel">
+        <div class="panel-content" style="padding-top:0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Elemento</th>
+                <th>Cómo funciona</th>
+                <th>Valor para el participante</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Modalidad</td>
+                <td>Sesiones en línea y en vivo a través de Zoom.</td>
+                <td>Interacción directa, práctica guiada y resolución de dudas en tiempo real.</td>
+              </tr>
+              <tr>
+                <td>Duración</td>
+                <td>4 sesiones de 2 horas cada una, para un total de 8 horas.</td>
+                <td>Formato compacto que permite avanzar sin saturar al equipo.</td>
+              </tr>
+              <tr>
+                <td>Grabaciones</td>
+                <td>Las sesiones se graban y quedan disponibles en la plataforma académica hasta 6 meses después.</td>
+                <td>Permite repasar, recuperar prácticas y reforzar lo aprendido.</td>
+              </tr>
+              <tr>
+                <td>Plataforma</td>
+                <td>Curso privado en TechXpert Gurú con materiales, recursos y prácticas guiadas.</td>
+                <td>Todo el material queda centralizado para consulta durante el proceso.</td>
+              </tr>
+              <tr>
+                <td>Seguimiento</td>
+                <td>Sesión adicional de 2 horas a las 3 semanas del curso.</td>
+                <td>Permite revisar adopción real, ajustar agentes e identificar nuevas oportunidades.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Antes, durante y después</div>
+      <h2 class="section-title">Cómo se vive el programa</h2>
+
+      <div class="timeline">
+        <div class="timeline-row">
+          <div class="time">Antes</div>
+          <div>
+            <h3>Preparación de accesos</h3>
+            <p>Registro en Zoom, instalación de la aplicación de escritorio y creación de cuentas en ChatGPT, Google/Gemini/NotebookLM y Claude.</p>
+          </div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="time">Durante</div>
+          <div>
+            <h3>Laboratorios en vivo</h3>
+            <p>Cada sesión combina conceptos, demostraciones y ejercicios prácticos aplicados al contexto de negocio.</p>
+          </div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="time">Al cierre</div>
+          <div>
+            <h3>Activos reutilizables</h3>
+            <p>Cada participante termina con prompts, agentes, casos documentados y una guía de uso profesional y responsable.</p>
+          </div>
+        </div>
+
+        <div class="timeline-row">
+          <div class="time">3 semanas después</div>
+          <div>
+            <h3>Seguimiento de adopción</h3>
+            <p>Se revisa cómo se está aplicando la IA en el trabajo real, se ajustan agentes y se detectan nuevas oportunidades de uso.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Requisitos</div>
+      <h2 class="section-title">Lo necesario para participar sin fricción</h2>
+
+      <div class="grid-3">
+        <article class="card">
+          <div class="card-body">
+            <div class="tag blue">Equipo</div>
+            <h3>Computadora e internet estable</h3>
+            <p>Se recomienda trabajar desde una portátil o escritorio con conexión confiable para participar en laboratorios y compartir pantalla.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag purple">Cuentas</div>
+            <h3>Acceso a herramientas de IA</h3>
+            <p>ChatGPT, Gemini, NotebookLM y Claude. Las versiones gratuitas permiten replicar la mayor parte de las prácticas.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag green">Conocimientos</div>
+            <h3>No se requiere programar</h3>
+            <p>El curso está diseñado para trabajar en lenguaje natural, con instrucciones, casos, documentos y tareas reales.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Entregables</div>
+      <h2 class="section-title">Qué se lleva cada participante</h2>
+
+      <div class="grid-4">
+        <article class="card">
+          <div class="card-body">
+            <div class="tag green">Agente</div>
+            <h3>Asistente funcional</h3>
+            <p>Un agente personalizado configurado para su área de trabajo.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag purple">Prompts</div>
+            <h3>Biblioteca reutilizable</h3>
+            <p>Prompts adaptados al contexto de la organización para acelerar tareas repetibles.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag blue">Casos</div>
+            <h3>Prácticas documentadas</h3>
+            <p>Ejercicios trabajados durante las sesiones y listos para servir como referencia interna.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-body">
+            <div class="tag amber">Guía</div>
+            <h3>Buenas prácticas</h3>
+            <p>Criterios para usar IA de forma profesional, responsable y segura.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Instructor</div>
+      <h2 class="section-title">Facilitado por Paul Estrella</h2>
+
+      <div class="instructor">
+        <div class="profile">
+          <div class="avatar">PE</div>
+          <h3>Paul Estrella</h3>
+          <p>Director Académico de TechXpert Gurú y COO en Opendireito. Diseñador y facilitador del programa AI 360 para Eclipsoft.</p>
+          <span class="handle">@polestrella</span>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="tag blue">Experiencia</div>
+            <h3>Perfil técnico y empresarial</h3>
+            <p>
+              Ingeniero Industrial vinculado a proyectos de comunicaciones y VoIP.
+              Fue Chairman de ElastixWorld, coordinador del proyecto Asiri.ec y parte del equipo Elastix.
+              También ha participado en proyectos de petróleo, construcción y tecnología.
+            </p>
+            <div class="list">
+              <div>Experiencia en comunicaciones, VoIP y proyectos tecnológicos.</div>
+              <div>Diseño académico orientado a aplicación práctica.</div>
+              <div>Otros cursos en TechXpert Gurú: Asterisk Básico y CRM para Principiantes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-label">Certificación</div>
+      <h2 class="section-title">Validación opcional de competencias</h2>
+
+      <div class="split">
+        <div class="card">
+          <div class="card-body">
+            <div class="tag green">Open Badge</div>
+            <h3>AI Applied Practitioner – Eclipsoft</h3>
+            <p>
+              Al finalizar el curso, los participantes pueden rendir una evaluación opcional.
+              Quienes aprueben reciben una insignia digital verificable bajo estándar Open Badge.
+            </p>
+            <div class="list">
+              <div>Comprensión de conceptos clave de IA aplicada.</div>
+              <div>Diseño de prompts efectivos.</div>
+              <div>Uso adecuado de herramientas multimodelo.</div>
+              <div>Aplicación práctica en escenarios de negocio.</div>
+              <div>Buenas prácticas de seguridad y uso responsable.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="background:var(--green-bg);color:var(--green);border-color:var(--green-br);">
+          <strong>Uso de la insignia:</strong> puede incorporarse en LinkedIn, hojas de vida,
+          portafolios digitales y comunicaciones corporativas.
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <h2>AI 360 convierte la IA en una capacidad de trabajo</h2>
+      <p>
+        El valor del curso no está solo en conocer herramientas. Está en aprender a usarlas con estructura,
+        criterio y seguridad para producir mejores resultados dentro del negocio.
+      </p>
+      <div class="list" style="margin-top:16px;">
+        <div>Prompts profesionales para tareas reales.</div>
+        <div>Agentes personalizados por rol o área.</div>
+        <div>IA visual aplicada a comunicación corporativa.</div>
+        <div>Buenas prácticas para información sensible y adopción responsable.</div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
