@@ -1,1 +1,1627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zero-Shot & Few-Shot Prompting — Guía Educativa</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-base: #0B1622;
+    --bg-card: #12202F;
+    --bg-card-hover: #172535;
+    --bg-elevated: #1A2D40;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.14);
+
+    --zero-primary: #3B9EFF;
+    --zero-light: rgba(59,158,255,0.12);
+    --zero-glow: rgba(59,158,255,0.25);
+
+    --few-primary: #1FCFB4;
+    --few-light: rgba(31,207,180,0.12);
+    --few-glow: rgba(31,207,180,0.25);
+
+    --combo-primary: #F5A623;
+    --combo-light: rgba(245,166,35,0.12);
+    --combo-glow: rgba(245,166,35,0.25);
+
+    --text-primary: #E8EDF4;
+    --text-secondary: #8B9AB0;
+    --text-muted: #556070;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11,22,34,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 54px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--text-primary); background: var(--border); }
+  nav .nav-dot { color: var(--text-muted); font-size: 0.5rem; flex-shrink: 0; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 5rem 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 6rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 20% 30%, rgba(59,158,255,0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 70%, rgba(31,207,180,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--few-primary);
+    background: var(--few-light);
+    border: 1px solid var(--few-primary);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.08em;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 .highlight-zero { color: var(--zero-primary); }
+  .hero h1 .highlight-few { color: var(--few-primary); }
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 620px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+  .hero-pills {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .pill-zero { background: var(--zero-light); color: var(--zero-primary); border: 1px solid var(--zero-primary); }
+  .pill-few  { background: var(--few-light);  color: var(--few-primary);  border: 1px solid var(--few-primary); }
+  .pill-combo { background: var(--combo-light); color: var(--combo-primary); border: 1px solid var(--combo-primary); }
+
+  /* ── COMPARISON HERO CARDS ── */
+  .dual-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .method-intro-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .method-intro-card:hover {
+    transform: translateY(-3px);
+  }
+  .method-intro-card.zero { border-top: 3px solid var(--zero-primary); }
+  .method-intro-card.zero:hover { box-shadow: 0 8px 40px var(--zero-glow); }
+  .method-intro-card.few  { border-top: 3px solid var(--few-primary); }
+  .method-intro-card.few:hover  { box-shadow: 0 8px 40px var(--few-glow); }
+
+  .card-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 0.9rem;
+  }
+  .card-badge.zero { background: var(--zero-light); color: var(--zero-primary); }
+  .card-badge.few  { background: var(--few-light);  color: var(--few-primary);  }
+
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  .card-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+  .card-meta {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .section-eyebrow.zero { color: var(--zero-primary); }
+  .section-eyebrow.few  { color: var(--few-primary); }
+  .section-eyebrow.combo { color: var(--combo-primary); }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .section-sub {
+    font-size: 0.97rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  /* ── ANATOMY BLOCK ── */
+  .anatomy-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .anatomy-header {
+    padding: 0.75rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .anatomy-header.zero { background: var(--zero-light); color: var(--zero-primary); }
+  .anatomy-header.few  { background: var(--few-light);  color: var(--few-primary); }
+  .anatomy-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .anatomy-dot.zero { background: var(--zero-primary); }
+  .anatomy-dot.few  { background: var(--few-primary); }
+
+  .anatomy-body { padding: 1.5rem 1.25rem; }
+  .prompt-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .prompt-label {
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-top: 2px;
+  }
+  .label-role    { background: rgba(168,85,247,0.15); color: #c084fc; }
+  .label-task    { background: rgba(59,158,255,0.15); color: var(--zero-primary); }
+  .label-format  { background: rgba(245,166,35,0.15); color: var(--combo-primary); }
+  .label-ejemplo { background: rgba(31,207,180,0.15); color: var(--few-primary); }
+  .label-input   { background: rgba(252,211,77,0.15); color: #fcd34d; }
+  .label-output  { background: rgba(134,239,172,0.15); color: #86efac; }
+  .label-query   { background: rgba(249,115,22,0.15); color: #fb923c; }
+
+  .prompt-text { color: var(--text-primary); }
+  .prompt-text .comment { color: var(--text-muted); font-style: italic; }
+
+  /* ── CONTENT GRID ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .content-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+  }
+  .content-card h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+  }
+  .content-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .content-card ul li {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .content-card ul li::before {
+    content: '›';
+    flex-shrink: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  .li-zero::before { color: var(--zero-primary); }
+  .li-few::before  { color: var(--few-primary); }
+  .li-neutral::before { color: var(--combo-primary); }
+
+  /* ── EXAMPLE PANELS ── */
+  .examples-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .example-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .example-header {
+    padding: 0.7rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .example-header .domain-icon {
+    font-size: 1rem;
+  }
+  .example-header .domain-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .example-body {
+    padding: 1rem 1.25rem;
+  }
+  .example-body pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .code-role    { color: #c084fc; }
+  .code-task    { color: var(--zero-primary); }
+  .code-format  { color: var(--combo-primary); }
+  .code-shot    { color: var(--few-primary); }
+  .code-query   { color: #fb923c; }
+  .code-comment { color: var(--text-muted); font-style: italic; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-value.zero { color: var(--zero-primary); }
+  .stat-value.few  { color: var(--few-primary); }
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  .stat-source {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin-bottom: 1.5rem;
+  }
+  .comp-table th {
+    padding: 0.9rem 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    border-bottom: 1px solid var(--border-strong);
+    color: var(--text-secondary);
+  }
+  .comp-table th.zero { color: var(--zero-primary); }
+  .comp-table th.few  { color: var(--few-primary); }
+  .comp-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .comp-table td:first-child {
+    color: var(--text-primary);
+    font-weight: 500;
+    width: 22%;
+  }
+  .comp-table tr:hover td { background: var(--bg-card); }
+  .comp-table tr:last-child td { border-bottom: none; }
+
+  .badge-good  { color: #4ade80; font-size: 0.75rem; font-weight: 600; }
+  .badge-ok    { color: var(--combo-primary); font-size: 0.75rem; font-weight: 600; }
+  .badge-limit { color: #f87171; font-size: 0.75rem; font-weight: 600; }
+
+  /* ── DECISION FLOW ── */
+  .decision-flow {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .flow-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--combo-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1rem;
+  }
+  .flow-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .flow-node {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .flow-node.start  { background: var(--zero-light); color: var(--zero-primary); border: 2px solid var(--zero-primary); }
+  .flow-node.branch { background: var(--combo-light); color: var(--combo-primary); border: 2px solid var(--combo-primary); }
+  .flow-node.end-zero { background: var(--zero-light); color: var(--zero-primary); border: 2px solid var(--zero-primary); }
+  .flow-node.end-few  { background: var(--few-light);  color: var(--few-primary);  border: 2px solid var(--few-primary); }
+
+  .flow-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    background: var(--border-strong);
+    margin: 3px 0;
+  }
+
+  .flow-content {
+    padding: 4px 0 16px;
+  }
+  .flow-question {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .flow-desc {
+    font-size: 0.83rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .flow-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .flow-tag {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .flow-tag.zero  { background: var(--zero-light); color: var(--zero-primary); }
+  .flow-tag.few   { background: var(--few-light);  color: var(--few-primary); }
+  .flow-tag.combo { background: var(--combo-light); color: var(--combo-primary); }
+
+  /* ── COMBO WORKFLOW ── */
+  .workflow-strip {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .wf-step {
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .wf-step .wf-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .wf-step .wf-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .wf-step .wf-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .wf-step.step-zero { background: var(--zero-light); }
+  .wf-step.step-few  { background: var(--few-light); }
+  .wf-step.step-check { background: var(--combo-light); }
+  .wf-arrow {
+    padding: 1rem;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    border-left: 4px solid;
+  }
+  .callout.tip  { background: rgba(31,207,180,0.06); border-color: var(--few-primary); }
+  .callout.warn { background: rgba(248,113,113,0.06); border-color: #f87171; }
+  .callout.info { background: rgba(59,158,255,0.06); border-color: var(--zero-primary); }
+  .callout.rule { background: rgba(245,166,35,0.06); border-color: var(--combo-primary); }
+
+  .callout-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .callout-body p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+  .callout-body strong { color: var(--text-primary); }
+
+  /* ── CHEAT SHEET ── */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+  .cheat-card {
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    border: 1px solid;
+  }
+  .cheat-card.zero { background: var(--zero-light); border-color: var(--zero-primary); }
+  .cheat-card.few  { background: var(--few-light);  border-color: var(--few-primary); }
+  .cheat-card.combo { background: var(--combo-light); border-color: var(--combo-primary); }
+
+  .cheat-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .cheat-card.zero h3 { color: var(--zero-primary); }
+  .cheat-card.few  h3 { color: var(--few-primary); }
+  .cheat-card.combo h3 { color: var(--combo-primary); }
+
+  .cheat-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+    line-height: 1.5;
+  }
+  .cheat-item::before { content: '✓'; flex-shrink: 0; color: inherit; }
+  .cheat-card.zero .cheat-item::before { color: var(--zero-primary); }
+  .cheat-card.few  .cheat-item::before { color: var(--few-primary); }
+  .cheat-card.combo .cheat-item::before { color: var(--combo-primary); }
+
+  /* ── INTERACTIVE SIMULATOR ── */
+  .simulator {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .sim-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+  }
+  .sim-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--combo-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sim-tabs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .sim-tab {
+    padding: 5px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sim-tab.active.zero { background: var(--zero-light); color: var(--zero-primary); border-color: var(--zero-primary); }
+  .sim-tab.active.few  { background: var(--few-light);  color: var(--few-primary);  border-color: var(--few-primary); }
+  .sim-tab:hover:not(.active) { background: var(--bg-elevated); color: var(--text-primary); }
+  .sim-body { padding: 1.5rem; }
+  .sim-panel { display: none; }
+  .sim-panel.active { display: block; }
+  .sim-task {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.03em;
+  }
+  .sim-prompt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .sim-insight {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 0.9rem 1.1rem;
+    border-radius: var(--radius-sm);
+    line-height: 1.6;
+  }
+  .sim-insight.zero { background: var(--zero-light); border-left: 3px solid var(--zero-primary); }
+  .sim-insight.few  { background: var(--few-light);  border-left: 3px solid var(--few-primary); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  footer p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+  footer a { color: var(--text-secondary); text-decoration: none; }
+  footer a:hover { color: var(--text-primary); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .dual-cards, .examples-row, .content-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .cheat-grid { grid-template-columns: 1fr; }
+    .workflow-strip { grid-template-columns: 1fr; }
+    .wf-arrow { display: none; }
+    nav { gap: 0; }
+  }
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#zero-shot">Zero-Shot</a>
+  <span class="nav-dot">●</span>
+  <a href="#few-shot">Few-Shot</a>
+  <span class="nav-dot">●</span>
+  <a href="#comparacion">Comparación</a>
+  <span class="nav-dot">●</span>
+  <a href="#simulador">Simulador</a>
+  <span class="nav-dot">●</span>
+  <a href="#uso-conjunto">Uso Conjunto</a>
+  <span class="nav-dot">●</span>
+  <a href="#referencia">Referencia</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="inicio">
+  <div class="container">
+    <div class="hero-tag">📘 Ingeniería de Prompts · Módulo Fundacional</div>
+    <h1>
+      <span class="highlight-zero">Zero-Shot</span><br>
+      &amp; <span class="highlight-few">Few-Shot</span><br>
+      Prompting
+    </h1>
+    <p class="hero-sub">
+      Las dos técnicas de base de la ingeniería de prompts. Dominarlas es el
+      prerequisito para cualquier otra estrategia avanzada con LLMs.
+    </p>
+    <div class="hero-pills">
+      <span class="pill pill-zero">Sin ejemplos</span>
+      <span class="pill pill-few">Con ejemplos (2–5)</span>
+      <span class="pill pill-combo">Usables en conjunto</span>
+    </div>
+
+    <!-- Quick-reference duo cards -->
+    <div class="dual-cards">
+      <div class="method-intro-card zero">
+        <span class="card-badge zero">Técnica 01</span>
+        <div class="card-title">Zero-Shot</div>
+        <p class="card-desc">
+          El modelo recibe solo la instrucción. No hay ejemplos previos. Depende enteramente
+          del conocimiento adquirido en preentrenamiento para generalizar la tarea.
+        </p>
+        <div class="card-meta">
+          <span class="meta-chip">🟢 Bajo costo</span>
+          <span class="meta-chip">⚡ Despliegue rápido</span>
+          <span class="meta-chip">📦 Sin ejemplos</span>
+        </div>
+      </div>
+      <div class="method-intro-card few">
+        <span class="card-badge few">Técnica 02</span>
+        <div class="card-title">Few-Shot</div>
+        <p class="card-desc">
+          El modelo recibe entre 2 y 5 pares de entrada-salida como demostración.
+          Aprende el patrón en contexto (in-context learning) sin actualizar sus pesos.
+        </p>
+        <div class="card-meta">
+          <span class="meta-chip">🟡 Costo medio</span>
+          <span class="meta-chip">🎯 Mayor precisión</span>
+          <span class="meta-chip">📚 Con ejemplos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     ZERO-SHOT
+════════════════════════════════════ -->
+<section id="zero-shot">
+  <div class="container">
+    <div class="section-eyebrow zero">Técnica 01 — Zero-Shot Prompting</div>
+    <h2 class="section-title">Sin ejemplos: aprovecha el preentrenamiento</h2>
+    <p class="section-sub">
+      Se pide al modelo ejecutar una tarea sin demostración previa. La instrucción por sí sola
+      —con rol, tarea y formato bien definidos— debe ser suficiente para que infiera la respuesta correcta.
+    </p>
+
+    <!-- Anatomy -->
+    <div class="anatomy-block">
+      <div class="anatomy-header zero">
+        <span class="anatomy-dot zero"></span>
+        ANATOMÍA DE UN PROMPT ZERO-SHOT ROBUSTO
+      </div>
+      <div class="anatomy-body">
+        <div class="prompt-line">
+          <span class="prompt-label label-role">ROL</span>
+          <span class="prompt-text">Eres un sistema de triaje de soporte técnico.</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-task">TAREA</span>
+          <span class="prompt-text">Asigna una PRIORIDAD (Alta / Media / Baja) y una CATEGORÍA (Acceso / Red / Software / Otro) al siguiente ticket.</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-task">REGLAS</span>
+          <span class="prompt-text">Alta = impacto en producción o pérdida de datos. Media = afecta a un departamento. Baja = consultas o mejoras.</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-format">FORMATO</span>
+          <span class="prompt-text">Responde SOLO en JSON: {"ticket_id": "...", "prioridad": "...", "categoria": "...", "razonamiento": "..."}</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-input">INPUT</span>
+          <span class="prompt-text">Ticket #2047: "El equipo de contabilidad en Guayaquil no puede acceder al ERP desde esta mañana."</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value zero">&gt;85%</div>
+        <div class="stat-label">Precisión en clasificación de sentimiento (GPT-4o)</div>
+        <div class="stat-source">K2view, 2024</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value zero">64.3%</div>
+        <div class="stat-label">Línea base en TriviaQA (GPT-3 zero-shot)</div>
+        <div class="stat-source">Brown et al., 2020</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value zero">~0</div>
+        <div class="stat-label">Ejemplos necesarios para implementar</div>
+        <div class="stat-source">Por definición</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value zero">59%</div>
+        <div class="stat-label">Exactitud máxima con temperatura T=0.4–0.7</div>
+        <div class="stat-source">AMO-Bench, Grok-4.1</div>
+      </div>
+    </div>
+
+    <!-- Examples in two domains -->
+    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; margin-bottom:1rem; color:var(--text-secondary);">EJEMPLOS POR DOMINIO</h3>
+    <div class="examples-row">
+      <div class="example-card">
+        <div class="example-header">
+          <span class="domain-icon">🏢</span>
+          <span class="domain-name">Recursos Humanos</span>
+        </div>
+        <div class="example-body">
+          <pre><code><span class="code-role">Eres un asistente de RRHH.</span>
+<span class="code-task">Clasifica la siguiente queja laboral
+en una de estas categorías:
+[Ambiente / Salario / Discriminación / 
+Carga de Trabajo / Otro].</span>
+<span class="code-format">Devuelve: { "categoria": "...",
+"urgencia": "alta|media|baja" }</span>
+
+<span class="code-query">Mensaje: "Trabajo más horas que mis
+colegas pero recibo el mismo sueldo."</span></code></pre>
+        </div>
+      </div>
+      <div class="example-card">
+        <div class="example-header">
+          <span class="domain-icon">⚖️</span>
+          <span class="domain-name">Legal / Documental</span>
+        </div>
+        <div class="example-body">
+          <pre><code><span class="code-role">Eres un asistente legal liviano.</span>
+<span class="code-task">Extrae del contrato entre triples
+comillas los campos: partes, vigencia,
+objeto y cláusulas de penalización.</span>
+<span class="code-format">Si un campo no existe, escribe
+"no_disponible". Formato: JSON.</span>
+
+<span class="code-query">"""El presente acuerdo entre
+Alpha Corp. y Beta S.A., vigente
+del 1/01/2025 al 31/12/2025...
+"""</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content grid: pros / cons / use cases / best practices -->
+    <div class="content-grid">
+      <div class="content-card">
+        <h4>✅ Mejores casos de uso</h4>
+        <ul>
+          <li class="li-zero">Clasificación de texto con categorías estándar</li>
+          <li class="li-zero">Resumen y extracción estructurada</li>
+          <li class="li-zero">Reformulación y traducción</li>
+          <li class="li-zero">Moderación de contenido</li>
+          <li class="li-zero">Prototipado y borradores iniciales</li>
+          <li class="li-zero">Generación de código genérico</li>
+        </ul>
+      </div>
+      <div class="content-card">
+        <h4>🚫 Cuándo evitarlo</h4>
+        <ul>
+          <li class="li-zero">Tareas con formato de salida muy específico o propietario</li>
+          <li class="li-zero">Dominio especializado o jerga interna</li>
+          <li class="li-zero">Cuando la salida es inconsistente entre llamadas</li>
+          <li class="li-zero">Razonamiento multi-paso no trivial</li>
+          <li class="li-zero">Categorías de clasificación no estándar</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="content-card">
+        <h4>🔧 Mejores prácticas</h4>
+        <ul>
+          <li class="li-zero">Define el <strong>rol</strong> del modelo antes de la tarea</li>
+          <li class="li-zero">Usa verbos de acción precisos: <em>clasifica, extrae, resume</em></li>
+          <li class="li-zero">Especifica el <strong>formato exacto</strong> de salida (JSON, tabla, lista)</li>
+          <li class="li-zero">Incluye restricciones observables (longitud, tono, idioma)</li>
+          <li class="li-zero">Añade una respuesta de escape: <code>dato_no_disponible</code></li>
+          <li class="li-zero">Evalúa primero zero-shot antes de agregar complejidad</li>
+        </ul>
+      </div>
+      <div class="content-card">
+        <h4>📏 Señales para escalar a Few-Shot</h4>
+        <ul>
+          <li class="li-zero">El formato de salida es inconsistente entre ejecuciones</li>
+          <li class="li-zero">El modelo acierta el fondo pero falla en el estilo o tono</li>
+          <li class="li-zero">Hay categorías propietarias difíciles de describir</li>
+          <li class="li-zero">3–5 ejemplos bien elegidos corregirían el problema</li>
+          <li class="li-zero">La tarea tiene reglas tácitas que no se verbalizan bien</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">ℹ️</span>
+      <div class="callout-body">
+        <p><strong>Plantilla robusta Zero-Shot:</strong> "Eres <em>[rol]</em>. Tu tarea es <em>[descripción]</em>. Usa solo el contexto entre triple comilla. Si falta evidencia, responde <code>dato_no_disponible</code>. Devuelve JSON con este esquema: <em>[esquema]</em>."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FEW-SHOT
+════════════════════════════════════ -->
+<section id="few-shot">
+  <div class="container">
+    <div class="section-eyebrow few">Técnica 02 — Few-Shot Prompting</div>
+    <h2 class="section-title">Con ejemplos: in-context learning sin fine-tuning</h2>
+    <p class="section-sub">
+      Se incluyen 2–5 pares de entrada-salida en el prompt. El modelo aprende el patrón, el formato y 
+      los criterios de decisión desde el contexto, sin actualizar sus pesos ni requerir re-entrenamiento.
+    </p>
+
+    <!-- Anatomy -->
+    <div class="anatomy-block">
+      <div class="anatomy-header few">
+        <span class="anatomy-dot few"></span>
+        ANATOMÍA DE UN PROMPT FEW-SHOT BIEN CURADO
+      </div>
+      <div class="anatomy-body">
+        <div class="prompt-line">
+          <span class="prompt-label label-role">ROL</span>
+          <span class="prompt-text">Eres un sistema de análisis de sentimiento para reseñas de clientes.</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-task">TAREA</span>
+          <span class="prompt-text">Clasifica el sentimiento de la reseña como: positivo | neutro | negativo. Responde SOLO la etiqueta.</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-ejemplo">EJEMPLO 1</span>
+          <span class="prompt-text">Reseña: "El servicio fue excelente, muy recomendado." → positivo</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-ejemplo">EJEMPLO 2</span>
+          <span class="prompt-text">Reseña: "El producto llegó tarde y dañado." → negativo</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-ejemplo">EJEMPLO 3</span>
+          <span class="prompt-text">Reseña: "El artículo es como se describe, ni más ni menos." → neutro</span>
+        </div>
+        <div class="prompt-line">
+          <span class="prompt-label label-query">CONSULTA</span>
+          <span class="prompt-text">Reseña: "Me esperaba más del producto por el precio que tiene." → ?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value few">+5–20 pp</div>
+        <div class="stat-label">Mejora sobre Zero-Shot en clasificación y razonamiento</div>
+        <div class="stat-source">DeepSeek Research, 2024</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value few">100%</div>
+        <div class="stat-label">Precisión en suma de 2 dígitos GPT-3 (vs 76.9% zero)</div>
+        <div class="stat-source">Brown et al., 2020</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value few">11→75%</div>
+        <div class="stat-label">Mejora de Claude 3 Haiku con 9 ejemplos few-shot</div>
+        <div class="stat-source">LangChain Research</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value few">3–5</div>
+        <div class="stat-label">Número óptimo de ejemplos recomendado por Anthropic</div>
+        <div class="stat-source">Anthropic Docs, 2024</div>
+      </div>
+    </div>
+
+    <!-- Examples in two domains -->
+    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; margin-bottom:1rem; color:var(--text-secondary);">EJEMPLOS POR DOMINIO</h3>
+    <div class="examples-row">
+      <div class="example-card">
+        <div class="example-header">
+          <span class="domain-icon">🏥</span>
+          <span class="domain-name">Transcripción Médica</span>
+        </div>
+        <div class="example-body">
+          <pre><code><span class="code-role">Extrae entidades médicas clave.</span>
+
+<span class="code-shot">### Ejemplo 1
+Texto: "Px c/ HTA y DM2 en ctrl."
+JSON: {"condicion": ["HTA","DM2"],
+       "tipo": "control rutinario"}
+
+### Ejemplo 2
+Texto: "Ingreso por dolor torácico,
+        descarta IAM."
+JSON: {"condicion": ["dolor torácico"],
+       "tipo": "urgencias",
+       "descarte": "IAM"}</span>
+
+<span class="code-query">### Consulta
+Texto: "Pcte c/ IRC estadio 3, nefrólogo
+derivó para diálisis peritoneal."
+JSON: ?</span></code></pre>
+        </div>
+      </div>
+      <div class="example-card">
+        <div class="example-header">
+          <span class="domain-icon">📦</span>
+          <span class="domain-name">Conversión de Formatos (Log → Tabla)</span>
+        </div>
+        <div class="example-body">
+          <pre><code><span class="code-role">Convierte logs del servidor a JSON
+estructurado.</span>
+
+<span class="code-shot">### Ejemplo 1
+Log: "2024-01-15 10:23:01 ERROR
+     DB timeout user=admin"
+JSON: {"fecha":"2024-01-15",
+       "hora":"10:23:01","nivel":"ERROR",
+       "mensaje":"DB timeout",
+       "usuario":"admin"}
+
+### Ejemplo 2
+Log: "2024-01-15 10:25:44 INFO
+     Login success user=maria"
+JSON: {"fecha":"2024-01-15",
+       "hora":"10:25:44","nivel":"INFO",
+       "mensaje":"Login success",
+       "usuario":"maria"}</span>
+
+<span class="code-query">### Consulta
+Log: "2024-01-15 11:02:18 WARN
+     High memory usage user=sys"
+JSON: ?</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="content-grid">
+      <div class="content-card">
+        <h4>✅ Mejores casos de uso</h4>
+        <ul>
+          <li class="li-few">Clasificación con categorías propietarias</li>
+          <li class="li-few">Extracción de entidades en formato estándar</li>
+          <li class="li-few">Generación de salidas JSON / YAML consistentes</li>
+          <li class="li-few">Traducción de jerga especializada</li>
+          <li class="li-few">Análisis de sentimiento con etiquetas propias</li>
+          <li class="li-few">Transcripción médica o legal con estilo uniforme</li>
+        </ul>
+      </div>
+      <div class="content-card">
+        <h4>⚠️ Riesgos documentados</h4>
+        <ul>
+          <li class="li-few"><strong>Sesgo de recencia</strong>: tiende a repetir la última etiqueta del prompt (Zhao et al., 2021)</li>
+          <li class="li-few"><strong>Sesgo de etiqueta mayoritaria</strong>: sesga hacia la clase más frecuente entre los ejemplos</li>
+          <li class="li-few"><strong>Sesgo de token común</strong>: prefiere respuestas frecuentes en preentrenamiento</li>
+          <li class="li-few"><strong>Orden importa</strong>: permutaciones pueden llevar de 90% a rendimiento aleatorio</li>
+          <li class="li-few"><strong>Modelos de razonamiento</strong>: few-shot puede degradar (o1, DeepSeek-R1)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="content-card">
+        <h4>🔧 Mejores prácticas</h4>
+        <ul>
+          <li class="li-few">Selecciona ejemplos <strong>diversos y representativos</strong> del dominio</li>
+          <li class="li-few">Mantén formato <strong>idéntico</strong> entre todos los ejemplos y la consulta</li>
+          <li class="li-few">Incluye casos límite o errores corregidos para mayor robustez</li>
+          <li class="li-few">Ordena los ejemplos de forma aleatoria o por similitud con el input</li>
+          <li class="li-few">Empieza con zero-shot; añade ejemplos solo si hay inconsistencia</li>
+          <li class="li-few">Prioriza calidad sobre cantidad; nunca excedas la ventana de contexto</li>
+        </ul>
+      </div>
+      <div class="content-card">
+        <h4>📐 Cuántos ejemplos usar</h4>
+        <ul>
+          <li class="li-few"><strong>1 ejemplo</strong> (One-Shot): cuando el patrón es muy simple y uniforme</li>
+          <li class="li-few"><strong>2–3 ejemplos</strong>: balance óptimo costo/beneficio en la mayoría de casos</li>
+          <li class="li-few"><strong>3–5 ejemplos</strong>: recomendación explícita de Anthropic para mayor consistencia</li>
+          <li class="li-few"><strong>5–9 ejemplos</strong>: tareas complejas; vigilar sesgos y costo de tokens</li>
+          <li class="li-few"><strong>+10 ejemplos</strong>: rendimientos marginales decrecientes; considerar fine-tuning</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <p><strong>Few-shot mal curado es una ruleta elegante.</strong> La literatura muestra que ejemplos semánticamente cercanos al input objetivo superan a la selección aleatoria, y que algunas permutaciones del prompt pueden marcar la diferencia entre el estado del arte y un rendimiento casi aleatorio. Curar ejemplos requiere la misma disciplina que diseñar los prompts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     COMPARACIÓN
+════════════════════════════════════ -->
+<section id="comparacion">
+  <div class="container">
+    <div class="section-eyebrow combo">Análisis Comparativo</div>
+    <h2 class="section-title">Zero-Shot vs. Few-Shot: matriz de decisión</h2>
+    <p class="section-sub">
+      No existe una técnica superior en términos absolutos. La elección depende
+      del tipo de tarea, el modelo, el costo de tokens y la consistencia requerida.
+    </p>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Dimensión</th>
+          <th class="zero">Zero-Shot</th>
+          <th class="few">Few-Shot</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Complejidad del prompt</td>
+          <td><span class="badge-good">Muy baja</span> — solo instrucción</td>
+          <td><span class="badge-ok">Baja-Media</span> — crece con ejemplos</td>
+        </tr>
+        <tr>
+          <td>Costo en tokens</td>
+          <td><span class="badge-good">Muy bajo</span> — mínimo necesario</td>
+          <td><span class="badge-ok">Medio</span> — aumenta por cada ejemplo</td>
+        </tr>
+        <tr>
+          <td>Tiempo de preparación</td>
+          <td><span class="badge-good">Mínimo</span> — redactar instrucción</td>
+          <td><span class="badge-ok">Mayor</span> — curar y validar ejemplos</td>
+        </tr>
+        <tr>
+          <td>Consistencia de formato</td>
+          <td><span class="badge-limit">Variable</span> — puede desviarse</td>
+          <td><span class="badge-good">Alta</span> — los ejemplos anclan el formato</td>
+        </tr>
+        <tr>
+          <td>Transferencia de estilo</td>
+          <td><span class="badge-limit">Limitada</span> — depende del entrenamiento</td>
+          <td><span class="badge-good">Alta</span> — los ejemplos transmiten el tono</td>
+        </tr>
+        <tr>
+          <td>Categorías propietarias</td>
+          <td><span class="badge-limit">Difícil</span> — difícil describir sin ejemplos</td>
+          <td><span class="badge-good">Natural</span> — los ejemplos ilustran la categoría</td>
+        </tr>
+        <tr>
+          <td>Riesgo de sesgo</td>
+          <td><span class="badge-ok">Bajo</span> — no hay ejemplos que sesgar</td>
+          <td><span class="badge-limit">Medio-Alto</span> — recencia, mayoría, orden</td>
+        </tr>
+        <tr>
+          <td>Modelos de razonamiento (o1, R1)</td>
+          <td><span class="badge-good">Recomendado</span> — empezar siempre aquí</td>
+          <td><span class="badge-limit">Cuidado</span> — puede degradar el rendimiento</td>
+        </tr>
+        <tr>
+          <td>Tarea de clasificación simple</td>
+          <td><span class="badge-good">Ideal</span></td>
+          <td><span class="badge-ok">Válido si falla zero-shot</span></td>
+        </tr>
+        <tr>
+          <td>Generación de salidas JSON</td>
+          <td><span class="badge-ok">Posible con instrucción detallada</span></td>
+          <td><span class="badge-good">Superior</span> — ejemplos anclan el esquema</td>
+        </tr>
+        <tr>
+          <td>Velocidad de prototipado</td>
+          <td><span class="badge-good">Alta</span></td>
+          <td><span class="badge-ok">Moderada</span></td>
+        </tr>
+        <tr>
+          <td>Escalabilidad en producción</td>
+          <td><span class="badge-good">Excelente</span> — bajo costo por llamada</td>
+          <td><span class="badge-ok">Buena</span> — vigilar ventana de contexto</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout rule">
+      <span class="callout-icon">📌</span>
+      <div class="callout-body">
+        <p><strong>Regla operativa:</strong> Si la tarea es sencilla y el formato está claro, empieza con zero-shot. Si el modelo entiende la tarea pero "contesta bien la forma y mal el fondo", o produce salidas inconsistentes, agrega few-shot. <em>Zero-shot es la línea base obligatoria</em> antes de agregar cualquier complejidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SIMULADOR INTERACTIVO
+════════════════════════════════════ -->
+<section id="simulador">
+  <div class="container">
+    <div class="section-eyebrow combo">Herramienta Interactiva</div>
+    <h2 class="section-title">Simulador: la misma tarea, dos enfoques</h2>
+    <p class="section-sub">
+      Observa cómo se estructura el mismo problema como Zero-Shot vs. Few-Shot.
+      El simulador muestra la diferencia arquitectónica y el razonamiento detrás de cada elección.
+    </p>
+
+    <div class="simulator">
+      <div class="sim-header">
+        <div class="sim-title">⚙️ TAREA: Clasificación de emails de soporte</div>
+        <div class="sim-tabs">
+          <button class="sim-tab active zero" onclick="switchTab('zero')">Zero-Shot</button>
+          <button class="sim-tab few" onclick="switchTab('few')">Few-Shot</button>
+        </div>
+      </div>
+      <div class="sim-body">
+        <!-- ZERO PANEL -->
+        <div class="sim-panel active" id="panel-zero">
+          <div class="sim-task">📧 CONTEXTO: Necesitas clasificar emails entrantes en categorías de prioridad para un equipo de soporte.</div>
+          <div class="sim-prompt"><span class="code-role">Eres un clasificador de soporte al cliente.</span>
+
+<span class="code-task">Clasifica el siguiente email según su PRIORIDAD y TIPO:
+- PRIORIDAD: Crítica | Alta | Media | Baja
+- TIPO: Fallo técnico | Consulta | Facturación | Reclamo | Otro</span>
+
+<span class="code-format">Criterios:
+  Crítica = servicio caído, pérdida de datos, bloqueo total
+  Alta    = degradación de servicio, múltiples usuarios afectados
+  Media   = usuario individual afectado, solución disponible
+  Baja    = pregunta informativa, sugerencia
+
+Responde en JSON: {"prioridad": "...", "tipo": "...", "accion": "..."}</span>
+
+<span class="code-query">Email: "Buenos días, llevo 3 horas sin poder
+iniciar sesión en la plataforma. Mi equipo
+de 15 personas está parado."</span>
+
+<span class="code-comment">// Sin ejemplos — el modelo infiere desde la instrucción y su preentrenamiento</span></div>
+          <div class="sim-insight zero">
+            <strong>¿Por qué funciona aquí?</strong> La tarea es clasificación estándar con criterios explicitables en texto. Los conceptos "Crítica", "Alta", etc., están bien definidos en la instrucción. No hay jerga propietaria que requiera demostración. El formato JSON ancla la salida. Zero-shot es suficiente y más eficiente.
+          </div>
+        </div>
+
+        <!-- FEW PANEL -->
+        <div class="sim-panel" id="panel-few">
+          <div class="sim-task">📧 CONTEXTO: Ahora las categorías son internas y el tono de respuesta debe ser muy específico (estilo de marca).</div>
+          <div class="sim-prompt"><span class="code-role">Eres un clasificador de soporte con estilo de marca ACME.</span>
+
+<span class="code-task">Clasifica emails y genera un primer párrafo de respuesta
+con el tono cálido y profesional de ACME.</span>
+
+<span class="code-shot">--- EJEMPLO 1 ---
+Email: "El módulo de pagos no carga desde ayer."
+{"nivel": "P1", "tipo": "Técnico-Crítico",
+ "respuesta_inicio": "Hola, lamentamos los inconvenientes. 
+Nuestro equipo técnico ya fue notificado y está trabajando 
+en este momento para resolver tu caso con máxima prioridad."}
+
+--- EJEMPLO 2 ---
+Email: "¿Cuánto cuesta actualizar a Enterprise?"
+{"nivel": "P3", "tipo": "Comercial-Consulta",
+ "respuesta_inicio": "¡Hola! Gracias por tu interés en 
+crecer con ACME. Me complace compartirte nuestras opciones 
+de Enterprise, diseñadas para equipos como el tuyo."}
+
+--- EJEMPLO 3 ---
+Email: "Me cobraron dos veces el mismo mes."
+{"nivel": "P2", "tipo": "Facturación-Reclamo",
+ "respuesta_inicio": "Hola, entendemos la preocupación y 
+pedimos disculpas por el inconveniente. Revisamos tu cuenta 
+de inmediato y te confirmamos el proceso de reembolso."}</span>
+
+<span class="code-query">--- CONSULTA ---
+Email: "Llevo 3 horas sin poder iniciar sesión. 
+Mi equipo de 15 personas está parado."</span>
+
+<span class="code-comment">// Los ejemplos transmiten: categorías internas (P1/P2/P3), tono de marca ACME, formato exacto</span></div>
+          <div class="sim-insight few">
+            <strong>¿Por qué few-shot aquí?</strong> Las categorías son propietarias (P1/P2/P3 no son estándares universales). El tono "cálido y profesional de ACME" es imposible de describir solo con palabras — los ejemplos lo demuestran. El formato del campo <code>respuesta_inicio</code> también requiere mostrar el estilo. Zero-shot aquí sería inconsistente.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     USO CONJUNTO
+════════════════════════════════════ -->
+<section id="uso-conjunto">
+  <div class="container">
+    <div class="section-eyebrow combo">Uso en Conjunto</div>
+    <h2 class="section-title">Zero-Shot + Few-Shot: el flujo iterativo</h2>
+    <p class="section-sub">
+      En la práctica, los equipos no eligen una técnica y la mantienen para siempre. 
+      Usan zero-shot como punto de partida y añaden ejemplos solo cuando la evidencia
+      los justifica. Este flujo iterativo optimiza calidad y costo simultáneamente.
+    </p>
+
+    <!-- Workflow strip -->
+    <div class="workflow-strip">
+      <div class="wf-step step-zero">
+        <div class="wf-num" style="color:var(--zero-primary)">Paso 01</div>
+        <div class="wf-title" style="color:var(--zero-primary)">Zero-Shot base</div>
+        <div class="wf-desc">Escribe la instrucción con rol, tarea, formato y restricciones. Sin ejemplos.</div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step step-check">
+        <div class="wf-num" style="color:var(--combo-primary)">Paso 02</div>
+        <div class="wf-title" style="color:var(--combo-primary)">Evaluar salida</div>
+        <div class="wf-desc">¿Es consistente el formato? ¿El tono es correcto? ¿Falla en casos límite?</div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step step-few">
+        <div class="wf-num" style="color:var(--few-primary)">Paso 03</div>
+        <div class="wf-title" style="color:var(--few-primary)">Añadir Few-Shot</div>
+        <div class="wf-desc">Solo si zero-shot falla: agrega 2–3 ejemplos que corrijan el error observado.</div>
+      </div>
+    </div>
+
+    <!-- Decision flow -->
+    <div class="decision-flow">
+      <div class="flow-title">🔀 Árbol de Decisión: ¿Qué técnica usar?</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-connector">
+            <div class="flow-node start">Q1</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-question">¿Es un modelo de razonamiento? (o1, DeepSeek-R1, Gemini Thinking)</div>
+            <p class="flow-desc">Los modelos de razonamiento ya incorporan CoT interno. Few-shot puede degradar su rendimiento al interferir con su proceso de "pensar".</p>
+            <div class="flow-tags">
+              <span class="flow-tag zero">SÍ → Zero-Shot siempre primero</span>
+              <span class="flow-tag combo">NO → Continúa al Q2</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-connector">
+            <div class="flow-node branch">Q2</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-question">¿Puedes describir la tarea completa en instrucciones de texto?</div>
+            <p class="flow-desc">Criterios, categorías, restricciones y formato pueden verbalizarse sin ambigüedad. El modelo generaliza desde preentrenamiento.</p>
+            <div class="flow-tags">
+              <span class="flow-tag zero">SÍ → Usa Zero-Shot</span>
+              <span class="flow-tag combo">NO → Continúa al Q3</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-connector">
+            <div class="flow-node branch">Q3</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-question">¿Ya probaste Zero-Shot y la salida es inconsistente o con formato incorrecto?</div>
+            <p class="flow-desc">La regla es: medir primero, luego complejizar. Si zero-shot ya funciona, no agregues complejidad innecesaria.</p>
+            <div class="flow-tags">
+              <span class="flow-tag few">SÍ → Añade Few-Shot (2–5 ejemplos)</span>
+              <span class="flow-tag zero">NO → Ajusta la instrucción zero-shot</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-connector">
+            <div class="flow-node branch">Q4</div>
+            <div class="flow-line"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-question">¿Las categorías son propietarias o el estilo es muy específico?</div>
+            <p class="flow-desc">Categorías internas, tono de marca, terminología especializada: situaciones donde los ejemplos transmiten lo que las palabras no pueden.</p>
+            <div class="flow-tags">
+              <span class="flow-tag few">SÍ → Few-Shot directo (sin pasar por zero-shot)</span>
+              <span class="flow-tag zero">NO → Zero-Shot con instrucción refinada</span>
+            </div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-connector">
+            <div class="flow-node end-few">Q5</div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-question">¿3–5 ejemplos no mejoran la precisión o introducen sesgo de recencia?</div>
+            <p class="flow-desc">Si few-shot no resuelve el problema, el camino se bifurca hacia Chain-of-Thought (para razonamiento) o hacia fine-tuning (para dominio muy especializado).</p>
+            <div class="flow-tags">
+              <span class="flow-tag combo">SÍ → Evalúa Chain-of-Thought o fine-tuning</span>
+              <span class="flow-tag few">NO → Few-Shot resuelto ✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Use cases for combo -->
+    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; margin-bottom:1.25rem; color:var(--text-secondary);">CASOS DE USO PARA EL USO CONJUNTO</h3>
+    <div class="examples-row">
+      <div class="example-card">
+        <div class="example-header">
+          <span class="domain-icon">🤖</span>
+          <span class="domain-name">Pipeline Automático (Producción)</span>
+        </div>
+        <div class="example-body">
+          <pre><code><span class="code-comment">// FASE 1 — Zero-Shot: detección rápida</span>
+<span class="code-role">Clasifica si este email requiere
+respuesta urgente (sí/no).</span>
+<span class="code-task">Urgente = producción caída, bloqueo total.
+Devuelve: {"urgente": true|false}</span>
+<span class="code-query">Email: "[texto del email]"</span>
+
+<span class="code-comment">// FASE 2 — Few-Shot: solo si urgente=true
+// Genera respuesta con estilo de marca</span>
+<span class="code-shot">Ejemplo1 → respuesta P1 de marca
+Ejemplo2 → respuesta P1 de marca</span>
+<span class="code-query">Email urgente: "[texto]" → Respuesta:</span></code></pre>
+        </div>
+      </div>
+      <div class="example-card">
+        <div class="example-header">
+          <span class="domain-icon">📝</span>
+          <span class="domain-name">Generación de Contenido Multietapa</span>
+        </div>
+        <div class="example-body">
+          <pre><code><span class="code-comment">// FASE 1 — Zero-Shot: estructuración</span>
+<span class="code-role">Eres un editor de contenido.</span>
+<span class="code-task">Genera el esquema de un artículo
+sobre: "IA en banca minorista".
+Devuelve 5 secciones con título y
+descripción de 1 línea cada una.</span>
+
+<span class="code-comment">// FASE 2 — Few-Shot: redacción por sección
+// Usa el tono y estilo del medio</span>
+<span class="code-shot">Sección_anterior_del_medio → Nuevo párrafo
+Sección_anterior_del_medio → Nuevo párrafo</span>
+<span class="code-query">Sección a redactar: "[título]" →</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body">
+        <p><strong>Patrón de producción más frecuente:</strong> En entornos reales, los equipos combinan Zero-Shot y Few-Shot más que otras técnicas. Zero-shot para el primer paso (detección, clasificación rápida, extracción) y few-shot para pasos que requieren estilo o formato propietario (generación de respuestas, transformaciones con esquema fijo). La evidencia muestra que <strong>la mayoría de equipos usan combinaciones (Zero/Few-Shot + Chaining)</strong> más que técnicas aisladas en producción.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     REFERENCIA RÁPIDA
+════════════════════════════════════ -->
+<section id="referencia">
+  <div class="container">
+    <div class="section-eyebrow combo">Referencia Rápida</div>
+    <h2 class="section-title">Cheat sheet para instructores y profesionales</h2>
+    <p class="section-sub">
+      Síntesis accionable de ambas técnicas y su uso combinado.
+    </p>
+
+    <div class="cheat-grid">
+      <div class="cheat-card zero">
+        <h3>Zero-Shot</h3>
+        <div class="cheat-item">Línea base obligatoria — evalúa siempre aquí primero</div>
+        <div class="cheat-item">Verbos precisos: clasifica, extrae, resume, traduce</div>
+        <div class="cheat-item">Especifica formato (JSON, lista, tabla) explícitamente</div>
+        <div class="cheat-item">Define un rol claro antes de la tarea</div>
+        <div class="cheat-item">Incluye escape: si falta evidencia → dato_no_disponible</div>
+        <div class="cheat-item">Ideal para modelos de razonamiento (o1, R1)</div>
+        <div class="cheat-item">Métricas: exact match, schema-valid rate, ROUGE/BLEU</div>
+      </div>
+      <div class="cheat-card few">
+        <h3>Few-Shot</h3>
+        <div class="cheat-item">Agrega solo si zero-shot falla en formato o consistencia</div>
+        <div class="cheat-item">3–5 ejemplos es el rango óptimo (Anthropic)</div>
+        <div class="cheat-item">Diversidad > cantidad: cubre casos límite</div>
+        <div class="cheat-item">Formato idéntico entre todos los ejemplos y la consulta</div>
+        <div class="cheat-item">Vigila sesgo de recencia (último ejemplo → sesgo de salida)</div>
+        <div class="cheat-item">Ejemplos cercanos al input superan a los aleatorios</div>
+        <div class="cheat-item">No usar con o1/R1 sin probar zero-shot primero</div>
+      </div>
+      <div class="cheat-card combo">
+        <h3>Uso Conjunto</h3>
+        <div class="cheat-item">Zero-shot primero, few-shot solo si falla: no al revés</div>
+        <div class="cheat-item">Zero para detección rápida; few para estilo y formato propietario</div>
+        <div class="cheat-item">Combínalos en pipelines: etapa 1 ZS → etapa 2 FS</div>
+        <div class="cheat-item">Mide cada técnica por separado antes de combinar</div>
+        <div class="cheat-item">Si few-shot no mejora: replantea orden de ejemplos</div>
+        <div class="cheat-item">Si aún falla: considera Chain-of-Thought o fine-tuning</div>
+        <div class="cheat-item">En producción: monitorea costo por token vs ganancia de precisión</div>
+      </div>
+    </div>
+
+    <!-- Sources -->
+    <div style="margin-top: 2.5rem; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md);">
+      <div class="section-eyebrow combo" style="margin-bottom:0.8rem;">Fuentes documentales</div>
+      <p style="font-size:0.83rem; color: var(--text-muted); line-height:1.8;">
+        Los contenidos de esta guía están respaldados por los siguientes documentos de la base de conocimientos:
+        <strong style="color:var(--text-secondary);">Cinco Métodos de Prompting para LLMs (Claude, 2024)</strong> ·
+        <strong style="color:var(--text-secondary);">Investigación sobre Métodos de Prompting (DeepSeek, 2024)</strong> ·
+        <strong style="color:var(--text-secondary);">Análisis Métodos de Prompting (Gemini, 2024)</strong> ·
+        <strong style="color:var(--text-secondary);">Métodos de Prompting para LLMs</strong> ·
+        <strong style="color:var(--text-secondary);">Investigación Métodos Avanzados de Prompting</strong> ·
+        <strong style="color:var(--text-secondary);">Metodologías Prompting LLM</strong> ·
+        <strong style="color:var(--text-secondary);">Más Allá del Prompting Básico</strong>.
+        Referencias académicas externas: Brown et al. (2020), Zhao et al. (2021), Wei et al. (2022), LangChain Research, K2view (2024).
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <p>
+      <strong style="color:var(--text-secondary);">Zero-Shot &amp; Few-Shot Prompting</strong> · Guía Educativa<br>
+      Elaborado a partir de la base de conocimientos documental del programa <strong style="color:var(--text-secondary);">IA 360</strong> · TechXpert Guru / Opendireito<br>
+      <span style="color:var(--text-muted); font-size:0.75rem;">Material educativo de uso interno · No especula más allá de la evidencia documentada</span>
+    </p>
+  </div>
+</footer>
+
+<script>
+  function switchTab(method) {
+    // Tabs
+    document.querySelectorAll('.sim-tab').forEach(t => t.classList.remove('active'));
+    const activeTab = document.querySelector(`.sim-tab.${method}`);
+    if (activeTab) activeTab.classList.add('active');
+
+    // Panels
+    document.querySelectorAll('.sim-panel').forEach(p => p.classList.remove('active'));
+    const activePanel = document.getElementById(`panel-${method}`);
+    if (activePanel) activePanel.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
 
