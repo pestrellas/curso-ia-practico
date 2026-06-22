@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compendio de Métodos de Prompting — Guía Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f6f4ef;--surface:#fff;--surface-2:#fbfaf7;--border:#e6e1d7;--border-strong:#cbc3b4;
+--text:#171614;--muted:#68645c;--faint:#98938a;
+--purple-bg:#efecfb;--purple:#43348d;--purple-br:#cfc7f3;
+--blue-bg:#e9f2fb;--blue:#195d9d;--blue-br:#b8d2ef;
+--green-bg:#eaf4e5;--green:#2d5a12;--green-br:#c7deba;
+--amber-bg:#fdf1db;--amber:#855111;--amber-br:#f0cf95;
+--coral-bg:#faece7;--coral:#8f3a20;--coral-br:#eeb39f;
+--teal-bg:#e6f4f1;--teal:#0f6b5f;--teal-br:#b8ddd6;
+--radius:16px;--shadow:0 10px 30px rgba(15,15,15,.04);--max:1120px}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:28px 18px 60px}
+.page{max-width:var(--max);margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--purple-bg);color:var(--purple);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--purple-br)}
+.hero{margin-bottom:26px;background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.hero-inner{padding:34px 30px 24px;display:grid;grid-template-columns:1.3fr .9fr;gap:24px}
+.hero h1{margin-top:14px;font-size:42px;line-height:1.1;letter-spacing:-.03em}
+.hero p.lead{margin-top:16px;font-size:17px;color:var(--muted);max-width:780px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+.mini{border:1px solid var(--border);background:var(--surface-2);border-radius:14px;padding:14px}
+.mini .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--faint);margin-bottom:5px}
+.mini .v{font-size:14px;color:var(--text)}
+.top-note{border-top:1px solid var(--border);padding:16px 30px 20px;display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:14px;background:var(--surface-2)}
+.top-note strong{color:var(--text)}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 26px}
+.nav a{text-decoration:none;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px}
+.nav a:hover{color:var(--text);border-color:var(--border-strong)}
+.section{margin-top:28px}
+.section-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:10px}
+.section-title{font-size:30px;line-height:1.15;letter-spacing:-.02em;margin-bottom:10px}
+.section-sub{color:var(--muted);max-width:840px;font-size:15px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.card-body{padding:18px}
+.card h3{font-size:19px;line-height:1.2;margin-bottom:8px}
+.card p{color:var(--muted);font-size:14px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent;margin-bottom:10px}
+.purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br)}
+.blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br)}
+.green{background:var(--green-bg);color:var(--green);border-color:var(--green-br)}
+.amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+.coral{background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br)}
+.teal{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-br)}
+.list{margin-top:12px;display:grid;gap:8px}
+.list div{font-size:14px;color:var(--muted);padding-left:16px;position:relative}
+.list div:before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:999px;background:var(--border-strong)}
+.flow{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;min-height:160px}
+.step .n{font-family:"DM Mono",monospace;font-size:12px;color:var(--faint);margin-bottom:8px}
+.step h4{font-size:16px;margin-bottom:6px;line-height:1.2}
+.step p{font-size:13px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;margin-top:16px}
+.panel-head{padding:18px 20px 12px;border-bottom:1px solid var(--border)}
+.panel-head h3{font-size:22px;line-height:1.15}
+.panel-head p{color:var(--muted);font-size:14px;max-width:760px}
+.panel-content{padding:18px 20px 20px}
+.callout{border-radius:18px;padding:18px 20px;border:1px solid;font-size:14px;line-height:1.65;margin-top:16px}
+.callout strong{color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+td{padding:13px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td:first-child{color:var(--text);font-weight:700;width:20%}
+.ok{color:var(--green);font-weight:700}
+.warn{color:var(--amber);font-weight:700}
+.no{color:var(--coral);font-weight:700}
+.matrix{overflow-x:auto;margin-top:16px}
+.matrix table{min-width:820px}
+.matrix td,.matrix th{text-align:center}
+.matrix td:first-child,.matrix th:first-child{text-align:left}
+.cell{display:inline-block;border-radius:12px;padding:8px 10px;font-size:12px;font-weight:700;line-height:1.35}
+.cell-strong{background:var(--green-bg);color:var(--green);border:1px solid var(--green-br)}
+.cell-good{background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-br)}
+.cell-caution{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-br)}
+.cell-self{background:var(--surface-2);color:var(--faint);border:1px solid var(--border)}
+.combo{border-left:4px solid var(--border-strong)}
+.combo.good{border-left-color:var(--teal)}
+.combo.top{border-left-color:var(--green)}
+.formula{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 10px}
+.formula span{font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;border:1px solid var(--border)}
+.metric{font-family:"DM Mono",monospace;font-size:13px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;color:var(--muted);margin-top:10px}
+.accordion{display:grid;gap:12px;margin-top:16px}
+details.item{border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:0 16px}
+details.item[open]{background:#fff}
+details.item summary{list-style:none;cursor:pointer;padding:16px 0;font-weight:700;font-size:16px}
+details.item summary::-webkit-details-marker{display:none}
+.item p{color:var(--muted);font-size:14px;padding-bottom:16px}
+.footer{margin-top:26px;padding:22px 24px;border-radius:20px;background:#171614;color:#ece7de}
+.footer h3{font-size:22px;margin-bottom:8px}
+.footer p{color:#d8d1c6;font-size:14px;max-width:900px}
+.footer .list div{color:#ddd7cd}
+.footer .list div:before{background:#776f64}
+@media (max-width:1020px){.hero-inner{grid-template-columns:1fr}.grid-5{grid-template-columns:repeat(2,1fr)}.grid-4,.flow{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:720px){body{padding:16px 12px 40px}.hero-inner,.top-note,.panel-head,.panel-content,.card-body{padding-left:16px;padding-right:16px}.grid-2,.grid-3,.grid-4,.grid-5,.flow,.hero-grid{grid-template-columns:1fr}.hero h1{font-size:30px}.section-title{font-size:24px}.step{min-height:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Guía maestra · Prompt Engineering</div>
+      <h1>Los cinco métodos de prompting no compiten: se complementan</h1>
+      <p class="lead">Zero-Shot, Few-Shot, Chain of Thought, Meta Prompting y Encadenamiento forman una escalera de complejidad. La habilidad clave no es memorizar técnicas, sino diagnosticar qué necesita la tarea y escalar solo cuando hace falta.</p>
+    </div>
+    <div class="hero-grid">
+      <div class="mini"><div class="k">Base</div><div class="v">Zero-Shot como línea de partida.</div></div>
+      <div class="mini"><div class="k">Consistencia</div><div class="v">Few-Shot para enseñar formato, tono o criterio.</div></div>
+      <div class="mini"><div class="k">Razonamiento</div><div class="v">CoT cuando hay pasos verificables.</div></div>
+      <div class="mini"><div class="k">Sistema</div><div class="v">Meta + Chaining para flujos auditables.</div></div>
+    </div>
+  </div>
+  <div class="top-note">
+    <div>⚡</div>
+    <div><strong>Regla central:</strong> no escales por sofisticación. Escala por necesidad: más ejemplos, más razonamiento, más diseño o más etapas solo cuando el nivel anterior no alcanza.</div>
+  </div>
+</section>
+
+<nav class="nav">
+  <a href="#metodos">Métodos</a>
+  <a href="#escalera">Escalera</a>
+  <a href="#tabla">Tabla maestra</a>
+  <a href="#matriz">Matriz</a>
+  <a href="#combinaciones">Combinaciones</a>
+  <a href="#decision">Decisión</a>
+  <a href="#pipelines">Pipelines</a>
+  <a href="#diagnostico">Diagnóstico</a>
+  <a href="#referencia">Referencia</a>
+</nav>
+
+<section class="section" id="metodos">
+  <div class="section-label">Referencia rápida</div>
+  <h2 class="section-title">Los cinco métodos en un vistazo</h2>
+  <p class="section-sub">Cada técnica resuelve una fricción distinta. El valor aparece cuando eliges el método por tipo de tarea, no por moda.</p>
+
+  <div class="grid-5">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">01 · Zero-Shot</div>
+        <h3>Sin ejemplos</h3>
+        <p>Solo instrucción, rol y formato. Ideal para empezar rápido y medir una línea base.</p>
+        <div class="list">
+          <div>Costo mínimo.</div>
+          <div>Clasificación simple.</div>
+          <div>Resumen y reformulación.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag teal">02 · Few-Shot</div>
+        <h3>Con ejemplos</h3>
+        <p>Ejemplos entrada/salida enseñan formato, estilo o criterio que la instrucción sola no fija.</p>
+        <div class="list">
+          <div>Formato consistente.</div>
+          <div>Categorías propietarias.</div>
+          <div>Tono de marca.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">03 · CoT</div>
+        <h3>Razonamiento visible</h3>
+        <p>Induce pasos intermedios antes de la respuesta. Útil si el error puede esconderse en la lógica.</p>
+        <div class="list">
+          <div>Matemáticas y lógica.</div>
+          <div>Diagnóstico técnico.</div>
+          <div>Decisiones multi-paso.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">04 · Meta Prompting</div>
+        <h3>Prompts sobre prompts</h3>
+        <p>Usa el modelo para diseñar, refinar u orquestar prompts y plantillas reutilizables.</p>
+        <div class="list">
+          <div>Prompt Ops.</div>
+          <div>Plantillas escalables.</div>
+          <div>Arquitectura conductor.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag green">05 · Encadenamiento</div>
+        <h3>Pipeline multi-etapa</h3>
+        <p>Divide una tarea compleja en eslabones. Cada salida alimenta el siguiente paso.</p>
+        <div class="list">
+          <div>Producción.</div>
+          <div>Agentes.</div>
+          <div>Trazabilidad por etapa.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="escalera">
+  <div class="section-label">Progresión natural</div>
+  <h2 class="section-title">La escalera de complejidad creciente</h2>
+  <p class="section-sub">Cada peldaño agrega control, pero también costo, latencia y mantenimiento. La adopción correcta suele ir de simple a complejo.</p>
+
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>Zero-Shot</h4><p>Línea base obligatoria. Primero comprueba si una instrucción clara resuelve.</p></div>
+    <div class="step"><div class="n">02</div><h4>Few-Shot</h4><p>Agrega ejemplos si falla el formato, el tono o las categorías internas.</p></div>
+    <div class="step"><div class="n">03</div><h4>CoT</h4><p>Agrega razonamiento si hay inferencia multi-paso o auditoría lógica.</p></div>
+    <div class="step"><div class="n">04</div><h4>Meta Prompting</h4><p>Diseña prompts reutilizables o coordina subtareas con un conductor.</p></div>
+    <div class="step"><div class="n">05</div><h4>Chaining</h4><p>Escala a pipeline si necesitas etapas, validación y observabilidad.</p></div>
+  </div>
+
+  <div class="callout" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br);">
+    <strong>No escalar sin medir:</strong> si Zero-Shot cumple con calidad suficiente, no agregues Few-Shot. Si Few-Shot resuelve, no agregues CoT. Si una llamada funciona, no construyas un pipeline.
+  </div>
+</section>
+
+<section class="section" id="tabla">
+  <div class="section-label">Comparativa dimensional</div>
+  <h2 class="section-title">Tabla maestra de selección</h2>
+  <p class="section-sub">Una vista única para comparar costo, control, trazabilidad y uso recomendado.</p>
+
+  <div class="panel">
+    <div class="panel-content" style="padding-top:0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Dimensión</th>
+            <th>Zero-Shot</th>
+            <th>Few-Shot</th>
+            <th>CoT</th>
+            <th>Meta Prompting</th>
+            <th>Encadenamiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Complejidad</td>
+            <td>Mínima</td>
+            <td>Baja</td>
+            <td>Media</td>
+            <td>Alta</td>
+            <td>Muy alta</td>
+          </tr>
+          <tr>
+            <td>Costo</td>
+            <td>Muy bajo</td>
+            <td>Medio por ejemplos</td>
+            <td>Alto por razonamiento</td>
+            <td>Variable</td>
+            <td>Máximo por múltiples llamadas</td>
+          </tr>
+          <tr>
+            <td>Latencia</td>
+            <td>Muy baja</td>
+            <td>Baja</td>
+            <td>Alta</td>
+            <td>Alta</td>
+            <td>Muy alta si es secuencial</td>
+          </tr>
+          <tr>
+            <td>Control</td>
+            <td>Bajo</td>
+            <td>Medio</td>
+            <td>Medio-alto</td>
+            <td>Alto</td>
+            <td>Muy alto</td>
+          </tr>
+          <tr>
+            <td>Consistencia</td>
+            <td>Variable</td>
+            <td>Alta</td>
+            <td>Media</td>
+            <td>Alta por plantilla</td>
+            <td>Muy alta por eslabón</td>
+          </tr>
+          <tr>
+            <td>Trazabilidad</td>
+            <td>Nula</td>
+            <td>Nula</td>
+            <td>Visible en respuesta</td>
+            <td>Parcial</td>
+            <td>Total por etapa</td>
+          </tr>
+          <tr>
+            <td>Mejor uso</td>
+            <td>Clasificar, resumir, reformular</td>
+            <td>Formato, tono, categorías propietarias</td>
+            <td>Razonamiento multi-paso</td>
+            <td>Diseño de prompts y plantillas</td>
+            <td>Producción, agentes y workflows largos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="matriz">
+  <div class="section-label">Compatibilidad documentada</div>
+  <h2 class="section-title">Matriz de complementariedad</h2>
+  <p class="section-sub">Algunas combinaciones son naturales. Otras solo tienen sentido si se aplican en el orden correcto.</p>
+
+  <div class="matrix">
+    <table>
+      <thead>
+        <tr>
+          <th>Técnica A / B</th>
+          <th>Zero-Shot</th>
+          <th>Few-Shot</th>
+          <th>CoT</th>
+          <th>Meta Prompting</th>
+          <th>Encadenamiento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Zero-Shot</td>
+          <td><span class="cell cell-self">Línea base</span></td>
+          <td><span class="cell cell-caution">Probar ZS primero</span></td>
+          <td><span class="cell cell-strong">Zero-Shot CoT</span></td>
+          <td><span class="cell cell-strong">Meta diseña ZS</span></td>
+          <td><span class="cell cell-good">ZS como primer eslabón</span></td>
+        </tr>
+        <tr>
+          <td>Few-Shot</td>
+          <td><span class="cell cell-caution">Escalar si ZS falla</span></td>
+          <td><span class="cell cell-self">Curar ejemplos</span></td>
+          <td><span class="cell cell-strong">Few-Shot CoT</span></td>
+          <td><span class="cell cell-strong">Meta genera ejemplos</span></td>
+          <td><span class="cell cell-good">FS por eslabón</span></td>
+        </tr>
+        <tr>
+          <td>CoT</td>
+          <td><span class="cell cell-strong">Trigger paso a paso</span></td>
+          <td><span class="cell cell-strong">Estándar de oro</span></td>
+          <td><span class="cell cell-self">Self-Consistency</span></td>
+          <td><span class="cell cell-good">Meta diseña CoT</span></td>
+          <td><span class="cell cell-good">CoT en eslabones críticos</span></td>
+        </tr>
+        <tr>
+          <td>Meta Prompting</td>
+          <td><span class="cell cell-strong">Prompt ZS óptimo</span></td>
+          <td><span class="cell cell-strong">Ejemplos generados</span></td>
+          <td><span class="cell cell-good">Cadena CoT óptima</span></td>
+          <td><span class="cell cell-self">Recursivo</span></td>
+          <td><span class="cell cell-strong">Base de agentes</span></td>
+        </tr>
+        <tr>
+          <td>Encadenamiento</td>
+          <td><span class="cell cell-good">Clasificación inicial</span></td>
+          <td><span class="cell cell-good">Formato por etapa</span></td>
+          <td><span class="cell cell-good">Razonamiento por etapa</span></td>
+          <td><span class="cell cell-strong">Meta + Chain</span></td>
+          <td><span class="cell cell-self">Routing / paralelo</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="combinaciones">
+  <div class="section-label">Sinergias clave</div>
+  <h2 class="section-title">Ocho combinaciones que sí vale la pena conocer</h2>
+  <p class="section-sub">Estas combinaciones resuelven necesidades distintas: razonamiento, precisión, producción, consistencia o arquitectura agéntica.</p>
+
+  <div class="grid-2">
+    <article class="card combo top">
+      <div class="card-body">
+        <div class="tag green">Razonamiento fuerte</div>
+        <h3>Few-Shot + CoT</h3>
+        <div class="formula"><span>Few-Shot</span><strong>+</strong><span>Chain of Thought</span></div>
+        <p>Ejemplos que enseñan tanto el formato como la estructura deductiva. Útil para modelos estándar grandes y problemas complejos.</p>
+        <div class="metric">Uso típico: problemas matemáticos, lógica, diagnóstico estructurado.</div>
+      </div>
+    </article>
+
+    <article class="card combo top">
+      <div class="card-body">
+        <div class="tag purple">Máxima precisión</div>
+        <h3>CoT + Self-Consistency</h3>
+        <div class="formula"><span>CoT</span><strong>+</strong><span>Votación por mayoría</span></div>
+        <p>Genera varias cadenas de razonamiento y selecciona la respuesta más frecuente. Reserva esta combinación para decisiones de alto valor.</p>
+        <div class="metric">Uso típico: respuestas críticas donde el error cuesta caro.</div>
+      </div>
+    </article>
+
+    <article class="card combo good">
+      <div class="card-body">
+        <div class="tag teal">Producción frecuente</div>
+        <h3>Zero-Shot + Encadenamiento</h3>
+        <div class="formula"><span>Zero-Shot</span><strong>+</strong><span>Pipeline</span></div>
+        <p>Usa Zero-Shot para eslabones baratos como triaje, clasificación o normalización. Escala solo en las ramas que lo necesitan.</p>
+        <div class="metric">Uso típico: soporte, legal, content ops, workflows internos.</div>
+      </div>
+    </article>
+
+    <article class="card combo good">
+      <div class="card-body">
+        <div class="tag amber">Arquitectura agéntica</div>
+        <h3>Meta Prompting + Encadenamiento</h3>
+        <div class="formula"><span>Meta</span><strong>+</strong><span>Chain</span></div>
+        <p>Meta Prompting diseña el pipeline; Encadenamiento lo ejecuta con trazabilidad por etapa. Es la base de muchos sistemas agénticos.</p>
+        <div class="metric">Uso típico: agentes, investigación profunda, análisis multi-dominio.</div>
+      </div>
+    </article>
+
+    <article class="card combo good">
+      <div class="card-body">
+        <div class="tag purple">Control granular</div>
+        <h3>Chaining + CoT por eslabón</h3>
+        <p>Cada etapa usa CoT solo cuando necesita razonamiento. Un eslabón puede ser simple y otro profundo.</p>
+        <div class="metric">Uso típico: pipelines con diagnóstico, evaluación de riesgo o auditoría.</div>
+      </div>
+    </article>
+
+    <article class="card combo good">
+      <div class="card-body">
+        <div class="tag amber">Prompt Ops</div>
+        <h3>Meta Prompting + Few-Shot</h3>
+        <p>El meta-modelo genera ejemplos few-shot adecuados para cada subtarea o dominio, reduciendo curación manual.</p>
+        <div class="metric">Uso típico: mantenimiento de prompts en equipos grandes.</div>
+      </div>
+    </article>
+
+    <article class="card combo good">
+      <div class="card-body">
+        <div class="tag teal">Formato estable</div>
+        <h3>Chaining + Few-Shot por eslabón</h3>
+        <p>Agrega ejemplos en etapas donde el esquema JSON, el tono o las categorías deben mantenerse constantes.</p>
+        <div class="metric">Uso típico: extracción legal, médica o financiera.</div>
+      </div>
+    </article>
+
+    <article class="card combo good">
+      <div class="card-body">
+        <div class="tag blue">Eficiencia</div>
+        <h3>Zero-Shot + Trigger CoT</h3>
+        <p>“Piensa paso a paso” activa razonamiento sin preparar ejemplos. Es el primer escalón razonable cuando la tarea necesita lógica.</p>
+        <div class="metric">Uso típico: razonamiento rápido sin pipeline ni ejemplos.</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="decision">
+  <div class="section-label">Marco de decisión</div>
+  <h2 class="section-title">Qué técnica usar según la tarea</h2>
+  <p class="section-sub">En lugar de un árbol interactivo, aquí tienes una versión ejecutiva: pregunta, síntoma y técnica recomendada.</p>
+
+  <div class="accordion">
+    <details class="item" open>
+      <summary>1. ¿La tarea es simple y el formato se puede describir?</summary>
+      <p>Empieza con <strong>Zero-Shot</strong>. Sirve para clasificar, resumir, reformular, extraer campos simples o producir una primera versión rápida.</p>
+    </details>
+    <details class="item">
+      <summary>2. ¿La salida falla por tono, formato o categorías internas?</summary>
+      <p>Escala a <strong>Few-Shot</strong>. Usa 2–5 ejemplos buenos, variados y representativos del patrón esperado.</p>
+    </details>
+    <details class="item">
+      <summary>3. ¿El problema tiene pasos de inferencia que deben revisarse?</summary>
+      <p>Usa <strong>Chain of Thought</strong> o Zero-Shot CoT. Conviene en matemáticas, lógica, diagnóstico, decisiones financieras o depuración.</p>
+    </details>
+    <details class="item">
+      <summary>4. ¿Necesitas diseñar prompts reutilizables para un equipo?</summary>
+      <p>Usa <strong>Meta Prompting</strong>. Pide al modelo que proponga rol, criterios, formato, riesgos y prompt final.</p>
+    </details>
+    <details class="item">
+      <summary>5. ¿La tarea requiere varias etapas auditables?</summary>
+      <p>Usa <strong>Encadenamiento</strong>. Divide el proceso en eslabones con entradas, salidas y validaciones claras.</p>
+    </details>
+  </div>
+</section>
+
+<section class="section" id="pipelines">
+  <div class="section-label">Aplicación sectorial</div>
+  <h2 class="section-title">Pipelines reales por sector</h2>
+  <p class="section-sub">La combinación correcta cambia según el contexto. Estos flujos muestran cómo mezclar técnicas sin sobrecargar todo el sistema.</p>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">Legal</div>
+        <h3>Análisis de contrato</h3>
+        <div class="list">
+          <div>Zero-Shot: clasificar tipo de contrato.</div>
+          <div>Few-Shot: extraer cláusulas según esquema interno.</div>
+          <div>Zero-Shot: normalizar fechas, partes y montos.</div>
+          <div>CoT: evaluar riesgo cláusula por cláusula.</div>
+          <div>Zero-Shot: generar memo ejecutivo.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Finanzas</div>
+        <h3>Análisis regulatorio</h3>
+        <div class="list">
+          <div>Meta Prompting: diseñar plantilla reusable.</div>
+          <div>CoT: calcular impacto paso a paso.</div>
+          <div>Few-Shot: clasificar riesgo con umbrales internos.</div>
+          <div>Zero-Shot: redactar reporte ejecutivo.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Software</div>
+        <h3>Code review + fix</h3>
+        <div class="list">
+          <div>Zero-Shot: clasificar tipo de error.</div>
+          <div>CoT: diagnosticar causa raíz.</div>
+          <div>Few-Shot: proponer fix según estilo del equipo.</div>
+          <div>Zero-Shot: generar tests.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag green">Soporte</div>
+        <h3>Ticket complejo</h3>
+        <div class="list">
+          <div>Zero-Shot: triaje de urgencia.</div>
+          <div>Few-Shot: prioridad y categoría interna.</div>
+          <div>CoT: diagnóstico en tickets P1/P2.</div>
+          <div>Few-Shot: respuesta con tono de marca.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="diagnostico">
+  <div class="section-label">Diagnóstico rápido</div>
+  <h2 class="section-title">Síntomas comunes y solución adecuada</h2>
+
+  <div class="grid-3">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">Síntoma</div>
+        <h3>La respuesta es correcta, pero inconsistente</h3>
+        <p>Probablemente falta patrón.</p>
+        <div class="metric">Solución: Few-Shot.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Síntoma</div>
+        <h3>El modelo salta a conclusiones</h3>
+        <p>Probablemente falta descomposición.</p>
+        <div class="metric">Solución: CoT.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Síntoma</div>
+        <h3>Cada equipo escribe prompts distintos</h3>
+        <p>Probablemente falta sistema de diseño.</p>
+        <div class="metric">Solución: Meta Prompting.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag teal">Síntoma</div>
+        <h3>Una sola llamada mezcla demasiadas tareas</h3>
+        <p>Probablemente falta arquitectura por etapas.</p>
+        <div class="metric">Solución: Encadenamiento.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag coral">Síntoma</div>
+        <h3>El pipeline falla y no sabes dónde</h3>
+        <p>Probablemente falta observabilidad.</p>
+        <div class="metric">Solución: logs y validación por eslabón.</div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag green">Síntoma</div>
+        <h3>Todo funciona con un prompt simple</h3>
+        <p>No agregues complejidad.</p>
+        <div class="metric">Solución: mantener Zero-Shot.</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="referencia">
+  <div class="section-label">Cheat sheet</div>
+  <h2 class="section-title">Referencia final</h2>
+  <p class="section-sub">La decisión correcta suele salir de una pregunta: ¿qué está fallando exactamente?</p>
+
+  <div class="grid-5">
+    <article class="card"><div class="card-body"><div class="tag blue">Zero-Shot</div><h3>Empieza aquí</h3><p>Úsalo cuando la tarea sea clara, común y de bajo riesgo.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag teal">Few-Shot</div><h3>Fija patrón</h3><p>Úsalo cuando importen ejemplos, tono, categorías o formato.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag purple">CoT</div><h3>Expone pasos</h3><p>Úsalo cuando el problema requiera razonamiento verificable.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag amber">Meta</div><h3>Diseña prompts</h3><p>Úsalo cuando necesites prompts reutilizables o arquitectura de expertos.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag green">Chaining</div><h3>Construye flujos</h3><p>Úsalo cuando el trabajo requiera etapas, validación y trazabilidad.</p></div></article>
+  </div>
+
+  <div class="callout" style="background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br);">
+    <strong>Principio maestro:</strong> la mejor técnica es la más simple que resuelve la tarea con calidad suficiente. Todo lo demás debe justificarse por consistencia, razonamiento, reutilización o control.
+  </div>
+</section>
+
+<section class="footer">
+  <h3>Conclusión</h3>
+  <p>Los cinco métodos forman un sistema progresivo. Zero-Shot da velocidad; Few-Shot da consistencia; CoT da razonamiento; Meta Prompting da diseño; Encadenamiento da arquitectura. La madurez está en combinarlos con criterio, no en usarlos todos a la vez.</p>
+  <div class="list" style="margin-top:14px;">
+    <div>Mide primero con Zero-Shot.</div>
+    <div>Escala solo si aparece una fricción clara.</div>
+    <div>Usa pipelines cuando necesites trazabilidad real, no solo una respuesta más larga.</div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
