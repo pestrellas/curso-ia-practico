@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta Prompting & Encadenamiento — Guía Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f6f4ef;--surface:#fff;--surface-2:#fbfaf7;--border:#e6e1d7;--border-strong:#cbc3b4;
+--text:#171614;--muted:#68645c;--faint:#98938a;
+--purple-bg:#efecfb;--purple:#43348d;--purple-br:#cfc7f3;
+--blue-bg:#e9f2fb;--blue:#195d9d;--blue-br:#b8d2ef;
+--green-bg:#eaf4e5;--green:#2d5a12;--green-br:#c7deba;
+--amber-bg:#fdf1db;--amber:#855111;--amber-br:#f0cf95;
+--coral-bg:#faece7;--coral:#8f3a20;--coral-br:#eeb39f;
+--teal-bg:#e6f4f1;--teal:#0f6b5f;--teal-br:#b8ddd6;
+--radius:16px;--shadow:0 10px 30px rgba(15,15,15,.04);--max:1120px}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:28px 18px 60px}
+.page{max-width:var(--max);margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--purple-bg);color:var(--purple);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--purple-br)}
+.hero{margin-bottom:26px;background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.hero-inner{padding:34px 30px 24px;display:grid;grid-template-columns:1.35fr .9fr;gap:24px}
+.hero h1{margin-top:14px;font-size:42px;line-height:1.1;letter-spacing:-.03em}
+.hero p.lead{margin-top:16px;font-size:17px;color:var(--muted);max-width:760px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+.mini{border:1px solid var(--border);background:var(--surface-2);border-radius:14px;padding:14px}
+.mini .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--faint);margin-bottom:5px}
+.mini .v{font-size:14px;color:var(--text)}
+.top-note{border-top:1px solid var(--border);padding:16px 30px 20px;display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:14px;background:var(--surface-2)}
+.top-note strong{color:var(--text)}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 26px}
+.nav a{text-decoration:none;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px}
+.nav a:hover{color:var(--text);border-color:var(--border-strong)}
+.section{margin-top:28px}
+.section-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:10px}
+.section-title{font-size:30px;line-height:1.15;letter-spacing:-.02em;margin-bottom:10px}
+.section-sub{color:var(--muted);max-width:820px;font-size:15px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.card-body{padding:18px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent;margin-bottom:10px}
+.purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br)}
+.blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br)}
+.green{background:var(--green-bg);color:var(--green);border-color:var(--green-br)}
+.amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+.coral{background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br)}
+.teal{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-br)}
+.card h3{font-size:19px;line-height:1.2;margin-bottom:8px}
+.card p{color:var(--muted);font-size:14px}
+.list{margin-top:12px;display:grid;gap:8px}
+.list div{font-size:14px;color:var(--muted);padding-left:16px;position:relative}
+.list div:before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:999px;background:var(--border-strong)}
+.flow{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;min-height:150px}
+.step .n{font-family:"DM Mono",monospace;font-size:12px;color:var(--faint);margin-bottom:8px}
+.step h4{font-size:16px;margin-bottom:6px;line-height:1.2}
+.step p{font-size:13px;color:var(--muted)}
+.split{margin-top:16px;display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.panel-head{padding:18px 20px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.panel-head h3{font-size:22px;line-height:1.15}
+.panel-head p{color:var(--muted);font-size:14px;max-width:720px}
+.panel-content{padding:18px 20px 20px}
+.callout{border-radius:18px;padding:18px 20px;border:1px solid;font-size:14px;line-height:1.65}
+.callout strong{color:var(--text)}
+.callout + .callout{margin-top:12px}
+.prompt{background:#171614;color:#ece7de;border-radius:18px;padding:16px 18px;font-family:"DM Mono",monospace;font-size:13px;line-height:1.65;white-space:pre-wrap;overflow:auto}
+.prompt .dim{color:#aaa297}
+.prompt .blue-t{color:#9ecbff}
+.prompt .green-t{color:#b8e994}
+.prompt .amber-t{color:#ffd18b}
+.prompt .purple-t{color:#c9bcff}
+.prompt .coral-t{color:#ffb29c}
+.prompt .teal-t{color:#9be7dc}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+td{padding:13px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td:first-child{color:var(--text);font-weight:700;width:24%}
+.ok{color:var(--green);font-weight:700}
+.warn{color:var(--amber);font-weight:700}
+.no{color:var(--coral);font-weight:700}
+.metric{font-family:"DM Mono",monospace;font-size:13px;font-weight:500;color:var(--text)}
+.bars{display:grid;gap:14px;margin-top:16px}
+.bar-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
+.bar-label{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:8px}
+.bar-label span:first-child{color:var(--muted)}
+.track{height:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px}
+.fill.gray{background:var(--border-strong)}
+.fill.purple{background:var(--purple)}
+.fill.teal{background:var(--teal)}
+.fill.amber{background:#c48522}
+.example{border-top:1px solid var(--border);margin-top:12px;padding-top:12px;font-size:13px;color:var(--muted)}
+.example code{display:block;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;color:var(--text);font-family:"DM Mono",monospace;font-size:12px;white-space:pre-wrap}
+.accordion{display:grid;gap:12px}
+details.item{border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:0 16px}
+details.item[open]{background:#fff}
+details.item summary{list-style:none;cursor:pointer;padding:16px 0;font-weight:700;font-size:16px}
+details.item summary::-webkit-details-marker{display:none}
+.item p{color:var(--muted);font-size:14px;padding-bottom:16px}
+.footer{margin-top:26px;padding:22px 24px;border-radius:20px;background:#171614;color:#ece7de}
+.footer h3{font-size:22px;margin-bottom:8px}
+.footer p{color:#d8d1c6;font-size:14px;max-width:900px}
+.footer .list div{color:#ddd7cd}
+.footer .list div:before{background:#776f64}
+@media (max-width:980px){.hero-inner,.split{grid-template-columns:1fr}.grid-3,.grid-4,.flow{grid-template-columns:1fr 1fr}.hero h1{font-size:34px}}
+@media (max-width:640px){body{padding:16px 12px 40px}.hero-inner,.top-note,.panel-head,.panel-content,.card-body{padding-left:16px;padding-right:16px}.grid-2,.grid-3,.grid-4,.flow,.hero-grid{grid-template-columns:1fr}.hero h1{font-size:30px}.section-title{font-size:24px}.step{min-height:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Guía premium · Técnicas avanzadas</div>
+      <h1>Meta Prompting & Encadenamiento: de prompts sueltos a sistemas</h1>
+      <p class="lead">Dos técnicas para pasar de “pregunta y respuesta” a arquitectura de trabajo. Meta Prompting mejora o diseña prompts; el encadenamiento divide tareas complejas en etapas observables, evaluables y reutilizables.</p>
+    </div>
+    <div class="hero-grid">
+      <div class="mini"><div class="k">Meta Prompting</div><div class="v">Usa el modelo para diseñar, mejorar u orquestar prompts.</div></div>
+      <div class="mini"><div class="k">Encadenamiento</div><div class="v">Convierte una tarea compleja en un pipeline de pasos.</div></div>
+      <div class="mini"><div class="k">Uso ideal</div><div class="v">Trabajo multi-etapa, agentes, análisis largos y validación.</div></div>
+      <div class="mini"><div class="k">Riesgo</div><div class="v">Más complejidad, más costo y mayor necesidad de observabilidad.</div></div>
+    </div>
+  </div>
+  <div class="top-note">
+    <div>⚡</div>
+    <div><strong>Idea central:</strong> estas técnicas no sirven para “hacer prompts más largos”. Sirven para diseñar sistemas donde cada parte tiene una función clara: planear, ejecutar, revisar, corregir y sintetizar.</div>
+  </div>
+</section>
+
+<nav class="nav">
+  <a href="#resumen">Resumen</a>
+  <a href="#meta">Meta Prompting</a>
+  <a href="#conductor">Conductor</a>
+  <a href="#chaining">Encadenamiento</a>
+  <a href="#patrones">Patrones</a>
+  <a href="#evidencia">Evidencia</a>
+  <a href="#simulador">Simulador</a>
+  <a href="#juntos">Uso conjunto</a>
+  <a href="#referencia">Referencia</a>
+</nav>
+
+<section class="section" id="resumen">
+  <div class="section-label">Resumen claro</div>
+  <h2 class="section-title">Dos técnicas, dos niveles de arquitectura</h2>
+  <p class="section-sub">Meta Prompting trabaja sobre el diseño de instrucciones. El encadenamiento trabaja sobre el flujo de ejecución. Juntas forman la base de muchos sistemas agénticos y pipelines LLM modernos.</p>
+
+  <div class="grid-3">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Meta Prompting</div>
+        <h3>Diseña el prompt</h3>
+        <p>El modelo ayuda a crear, evaluar o mejorar el prompt que luego será usado por otro proceso o por el propio usuario.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag teal">Encadenamiento</div>
+        <h3>Diseña el flujo</h3>
+        <p>Una tarea se divide en subtareas. Cada salida alimenta el siguiente paso, con más control y trazabilidad.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Uso conjunto</div>
+        <h3>Diseña el sistema</h3>
+        <p>Meta Prompting puede generar los prompts de cada eslabón, y el chaining ejecuta la secuencia con validación por etapa.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="meta">
+  <div class="section-label">Técnica 04</div>
+  <h2 class="section-title">Meta Prompting: prompting sobre prompts</h2>
+  <p class="section-sub">El término tiene dos acepciones útiles: generar o mejorar prompts, y orquestar subtareas como un modelo conductor.</p>
+
+  <div class="grid-2">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="tag amber">Acepción 1</div>
+          <h3>Generar o mejorar prompts</h3>
+        </div>
+      </div>
+      <div class="panel-content">
+<pre class="prompt"><span class="purple-t">Rol:</span> Eres un ingeniero de prompts experto.
+
+<span class="amber-t">Objetivo:</span> Diseña un prompt de sistema para un asistente que revise contratos de arrendamiento en español.
+
+<span class="green-t">Antes de escribirlo, analiza:</span>
+1. Qué rol debe asumir el modelo.
+2. Qué formato de salida conviene.
+3. Qué riesgos o casos límite debe cubrir.
+4. Qué debe hacer si falta información.
+
+<span class="blue-t">Entrega:</span>
+- análisis breve
+- prompt final listo para usar</pre>
+        <div class="list">
+          <div>Útil para crear plantillas reutilizables.</div>
+          <div>Mejora prompts antes de ponerlos en producción.</div>
+          <div>Conviene cuando hay repetición, escala o múltiples dominios.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="tag purple">Acepción 2</div>
+          <h3>Orquestación tipo conductor</h3>
+        </div>
+      </div>
+      <div class="panel-content">
+<pre class="prompt"><span class="purple-t">Rol:</span> Eres el director de un equipo de análisis.
+
+<span class="amber-t">Paso 1 — Descomposición:</span>
+Divide el problema en 3 subtareas independientes.
+
+<span class="teal-t">Paso 2 — Delegación:</span>
+Asigna cada subtarea a un experto virtual con instrucciones específicas.
+
+<span class="green-t">Paso 3 — Síntesis:</span>
+Integra respuestas, detecta contradicciones y entrega una conclusión validada.
+
+<span class="blue-t">Problema:</span>
+Evaluar la compra de una startup fintech en Ecuador.</pre>
+        <div class="list">
+          <div>Útil para problemas complejos.</div>
+          <div>Permite separar análisis estratégico, financiero y legal.</div>
+          <div>Requiere más control y evaluación.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="callout" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br);">
+    <strong>Nota terminológica:</strong> Meta Prompting no siempre significa lo mismo. Puede ser una técnica práctica para mejorar prompts o una arquitectura avanzada para orquestar expertos. Define cuál estás usando antes de enseñar o implementar.
+  </div>
+</section>
+
+<section class="section" id="conductor">
+  <div class="section-label">Arquitectura conductor</div>
+  <h2 class="section-title">Cómo opera un modelo como director de orquesta</h2>
+  <p class="section-sub">El modelo conductor no intenta resolver todo de golpe. Primero divide, luego delega, después compara y finalmente sintetiza.</p>
+
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>Tarea compleja</h4><p>Problema amplio que mezcla varias disciplinas o decisiones.</p></div>
+    <div class="step"><div class="n">02</div><h4>Conductor</h4><p>Descompone la tarea y diseña instrucciones para cada experto.</p></div>
+    <div class="step"><div class="n">03</div><h4>Expertos</h4><p>Cada instancia analiza una parte específica del problema.</p></div>
+    <div class="step"><div class="n">04</div><h4>Contraste</h4><p>Se revisan contradicciones, huecos y riesgos entre salidas.</p></div>
+    <div class="step"><div class="n">05</div><h4>Síntesis</h4><p>La respuesta final integra criterios y recomendaciones.</p></div>
+  </div>
+
+  <div class="grid-3">
+    <article class="card"><div class="card-body"><div class="tag amber">Arquitectura A</div><h3>Usuario-proporcionado</h3><p>Un experto crea una plantilla de razonamiento y el modelo la sigue. Es más predecible y de menor costo.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag purple">Arquitectura B</div><h3>Recursiva</h3><p>El modelo genera una plantilla antes de resolver. Útil en escenarios zero-shot sin ejemplos previos.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag teal">Arquitectura C</div><h3>Modelo conductor</h3><p>El modelo descompone, delega, coordina y sintetiza. Es potente, pero más costoso y complejo.</p></div></article>
+  </div>
+</section>
+
+<section class="section" id="chaining">
+  <div class="section-label">Técnica 05</div>
+  <h2 class="section-title">Encadenamiento: de la pregunta al pipeline</h2>
+  <p class="section-sub">El encadenamiento divide una tarea compleja en pasos separados. A diferencia de CoT, no ocurre dentro de una sola respuesta: cada eslabón es una llamada o etapa independiente.</p>
+
+  <div class="callout" style="background:var(--teal-bg);color:var(--teal);border-color:var(--teal-br);">
+    <strong>Diferencia clave:</strong> CoT estructura el razonamiento dentro de una llamada. Chaining estructura el trabajo completo en varias etapas, con salidas intermedias que pueden validarse antes de avanzar.
+  </div>
+
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>Investigación</h4><p>Recolectar datos y normalizarlos en JSON.</p></div>
+    <div class="step"><div class="n">02</div><h4>Análisis</h4><p>Comparar competidores, riesgos o variables clave.</p></div>
+    <div class="step"><div class="n">03</div><h4>Priorización</h4><p>Ordenar hallazgos según impacto, urgencia o evidencia.</p></div>
+    <div class="step"><div class="n">04</div><h4>Redacción</h4><p>Convertir resultados en memo, informe o recomendación.</p></div>
+    <div class="step"><div class="n">05</div><h4>Revisión</h4><p>Validar calidad, coherencia y condiciones de salida.</p></div>
+  </div>
+</section>
+
+<section class="section" id="patrones">
+  <div class="section-label">Patrones de implementación</div>
+  <h2 class="section-title">Cuatro formas de encadenar prompts</h2>
+  <p class="section-sub">No todos los pipelines son lineales. Según la tarea, puedes secuenciar, ramificar, paralelizar o iterar.</p>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag teal">Patrón 01</div>
+        <h3>Pipeline secuencial</h3>
+        <p>Un paso alimenta al siguiente. Ideal cuando la salida previa es necesaria para continuar.</p>
+        <div class="example"><code>Investigar → Analizar → Redactar → Revisar</code></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">Patrón 02</div>
+        <h3>Routing condicional</h3>
+        <p>Un clasificador decide qué cadena especializada debe procesar el caso.</p>
+        <div class="example"><code>Clasificar → Ruta legal / Ruta técnica / Ruta comercial</code></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Patrón 03</div>
+        <h3>Paralelización + merge</h3>
+        <p>Varias ramas analizan aspectos distintos y luego se fusionan en una síntesis final.</p>
+        <div class="example"><code>Entrada → Riesgo + Mercado + Finanzas → Síntesis</code></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Patrón 04</div>
+        <h3>Auto-corrección</h3>
+        <p>La salida se evalúa contra criterios. Si no cumple, vuelve a refinarse.</p>
+        <div class="example"><code>Generar → Evaluar → Refinar → Validar</code></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">Casos de uso</div>
+  <h2 class="section-title">Dónde estas técnicas pagan la complejidad</h2>
+
+  <div class="grid-3">
+    <article class="card"><div class="card-body"><div class="tag blue">Legal</div><h3>Expedientes y contratos</h3><p>Ingesta documental, extracción de hechos, chequeo normativo y memo final.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag green">Software</div><h3>Desarrollo y QA</h3><p>Generación de código, revisión, corrección de errores y pruebas automatizadas.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag amber">Content Ops</div><h3>Producción editorial</h3><p>Investigación, borrador, edición, revisión de estilo y publicación.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag purple">Agentes IA</div><h3>Planificación y herramientas</h3><p>Planear acciones, ejecutar herramientas, interpretar resultados y reportar.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag teal">Banca y seguros</div><h3>Riesgo documental</h3><p>Revisión de documentos, validación regulatoria y resumen ejecutivo.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag coral">Salud administrativa</div><h3>Normalización de casos</h3><p>Clasificación, limpieza de datos, verificación y generación de informe.</p></div></article>
+  </div>
+</section>
+
+<section class="section" id="evidencia">
+  <div class="section-label">Evidencia y métricas</div>
+  <h2 class="section-title">Resultados destacados del material original</h2>
+  <p class="section-sub">Las cifras deben leerse como referencia documentada, no como garantía universal. La mejora aparece cuando la tarea realmente exige varios pasos o una arquitectura más controlada.</p>
+
+  <div class="grid-4">
+    <article class="card"><div class="card-body"><div class="tag amber">Meta</div><h3>+17,1%</h3><p>Mejora frente a prompting estándar en el benchmark citado.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag amber">Meta</div><h3>83,5%</h3><p>GSM8K con Qwen-72B base + meta-prompt zero-shot, según la guía fuente.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag teal">Chaining</div><h3>62→78%</h3><p>HotpotQA: pipeline de 4 pasos frente a prompt único.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag teal">Chaining</div><h3>−67%</h3><p>Reducción de error en tareas con más de 10 pasos de razonamiento.</p></div></article>
+  </div>
+
+  <div class="bars">
+    <div class="bar-row">
+      <div class="bar-label"><span>Prompting estándar — referencia base</span><strong class="metric">~30%</strong></div>
+      <div class="track"><div class="fill gray" style="width:30%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Few-Shot CoT — razonamiento</span><strong class="metric">~65%</strong></div>
+      <div class="track"><div class="fill purple" style="width:65%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Meta Prompting + intérprete — tareas complejas</span><strong class="metric">~68%</strong></div>
+      <div class="track"><div class="fill amber" style="width:68%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Pipeline chaining — HotpotQA</span><strong class="metric">78%</strong></div>
+      <div class="track"><div class="fill teal" style="width:78%"></div></div>
+    </div>
+  </div>
+
+  <div class="callout" style="background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br);">
+    <strong>Lectura crítica:</strong> más arquitectura no siempre significa mejor resultado. La complejidad solo se justifica cuando un prompt único mezcla demasiadas operaciones cognitivas o cuando necesitas validación por etapa.
+  </div>
+</section>
+
+<section class="section" id="simulador">
+  <div class="section-label">Comparación aplicada</div>
+  <h2 class="section-title">El mismo problema en dos arquitecturas</h2>
+  <p class="section-sub">Meta Prompting diseña la estrategia. El encadenamiento ejecuta la estrategia en pasos observables.</p>
+
+  <div class="grid-2">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="tag amber">Meta Prompting</div>
+          <h3>Diseñar el prompt maestro</h3>
+        </div>
+      </div>
+      <div class="panel-content">
+<pre class="prompt"><span class="purple-t">Rol:</span> Eres arquitecto de prompts.
+
+<span class="amber-t">Objetivo:</span>
+Crear un prompt para analizar un contrato comercial complejo.
+
+<span class="green-t">Antes de escribirlo, define:</span>
+1. Rol del analista.
+2. Criterios de revisión.
+3. Formato de salida.
+4. Riesgos a marcar.
+5. Qué hacer si falta evidencia.
+
+<span class="blue-t">Entrega:</span>
+Prompt final listo para usar.</pre>
+        <p style="color:var(--muted);font-size:14px;margin-top:12px;">Resultado esperado: una instrucción reutilizable para analizar contratos con un criterio consistente.</p>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="tag teal">Encadenamiento</div>
+          <h3>Ejecutar el análisis por etapas</h3>
+        </div>
+      </div>
+      <div class="panel-content">
+<pre class="prompt"><span class="teal-t">Paso 1:</span> Extraer cláusulas relevantes.
+<span class="teal-t">Paso 2:</span> Clasificar obligaciones, riesgos y penalidades.
+<span class="teal-t">Paso 3:</span> Revisar inconsistencias o vacíos.
+<span class="teal-t">Paso 4:</span> Generar memo ejecutivo.
+<span class="teal-t">Paso 5:</span> Validar contra checklist de calidad.</pre>
+        <p style="color:var(--muted);font-size:14px;margin-top:12px;">Resultado esperado: un pipeline trazable donde cada salida puede revisarse antes de avanzar.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="juntos">
+  <div class="section-label">Uso conjunto</div>
+  <h2 class="section-title">Meta + Chaining: cuándo escalar</h2>
+  <p class="section-sub">La combinación tiene sentido cuando necesitas reutilización, adaptación y control. No la uses para tareas simples: sería como armar una fábrica para preparar un café.</p>
+
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>Meta diseña</h4><p>Genera prompts por rol, criterios y formato.</p></div>
+    <div class="step"><div class="n">02</div><h4>Chaining ejecuta</h4><p>Cada prompt corre como eslabón separado.</p></div>
+    <div class="step"><div class="n">03</div><h4>Validación</h4><p>Se revisa cada salida antes de avanzar.</p></div>
+    <div class="step"><div class="n">04</div><h4>Síntesis</h4><p>Las salidas se consolidan en una respuesta final.</p></div>
+    <div class="step"><div class="n">05</div><h4>Mejora</h4><p>El sistema aprende qué eslabones necesitan ajuste.</p></div>
+  </div>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag green">Escala si</div>
+        <h3>El prompt único ya no alcanza</h3>
+        <div class="list">
+          <div>La tarea requiere validación entre etapas.</div>
+          <div>El equipo reutiliza el mismo patrón en varios dominios.</div>
+          <div>La auditoría del proceso importa tanto como el resultado.</div>
+          <div>Hay documentos largos o múltiples fuentes.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag coral">No escales si</div>
+        <h3>La tarea es directa</h3>
+        <div class="list">
+          <div>Un prompt simple ya produce una salida confiable.</div>
+          <div>No necesitas trazabilidad por etapa.</div>
+          <div>El costo y la latencia son más importantes que el control.</div>
+          <div>No tienes forma de evaluar las salidas intermedias.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="callout" style="background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br);">
+    <strong>Regla operativa:</strong> sin observabilidad, el encadenamiento solo encadena problemas. Añade logs, validaciones y criterios de aceptación por paso.
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">Buenas prácticas</div>
+  <h2 class="section-title">Lo que más retorno da</h2>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-content">
+        <div class="accordion">
+          <details class="item" open>
+            <summary>Un objetivo por eslabón</summary>
+            <p>Cada prompt del pipeline debe hacer una cosa bien: extraer, clasificar, revisar, sintetizar o validar. Si hace tres cosas a la vez, no es un eslabón; es un mini-caos.</p>
+          </details>
+          <details class="item">
+            <summary>Usa formatos intermedios estables</summary>
+            <p>JSON, tablas o etiquetas claras reducen errores al pasar información entre pasos.</p>
+          </details>
+          <details class="item">
+            <summary>Valida antes de conectar todo</summary>
+            <p>Prueba cada etapa de forma aislada. Un pipeline completo oculta fallos si no conoces la calidad de cada parte.</p>
+          </details>
+          <details class="item">
+            <summary>Mide transferibilidad</summary>
+            <p>En Meta Prompting, no basta con que el prompt funcione una vez. Debe funcionar en variaciones reales del mismo problema.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="callout" style="background:var(--green-bg);color:var(--green);border-color:var(--green-br);">
+        <strong>Buena señal:</strong> puedes explicar cada etapa del sistema en una frase.
+      </div>
+      <div class="callout" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br);">
+        <strong>Señal de alerta:</strong> el pipeline tiene más pasos de los que puedes evaluar.
+      </div>
+      <div class="callout" style="background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br);">
+        <strong>Error común:</strong> optimizar el prompt para un benchmark o demo, no para el caso real.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="referencia">
+  <div class="section-label">Cheat sheet</div>
+  <h2 class="section-title">Referencia rápida</h2>
+  <p class="section-sub">Lo esencial para aplicar ambas técnicas con criterio y evitar sus trampas.</p>
+
+  <div class="grid-3">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Meta Prompting</div>
+        <h3>Úsalo para diseñar prompts</h3>
+        <div class="list">
+          <div>Genera o mejora instrucciones reutilizables.</div>
+          <div>Define rol, formato, criterios y casos límite.</div>
+          <div>Valida el prompt generado antes de confiar en él.</div>
+          <div>Funciona mejor con escala, repetición o múltiples dominios.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag teal">Encadenamiento</div>
+        <h3>Úsalo para ejecutar flujos</h3>
+        <div class="list">
+          <div>Un objetivo claro por eslabón.</div>
+          <div>Salidas intermedias en JSON, tabla o etiquetas.</div>
+          <div>Guard-rails entre pasos críticos.</div>
+          <div>Evaluación end-to-end y por componente.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Uso conjunto</div>
+        <h3>Úsalo para sistemas</h3>
+        <div class="list">
+          <div>Meta diseña los prompts de cada etapa.</div>
+          <div>Chaining ejecuta, registra y valida.</div>
+          <div>CoT puede vivir dentro de eslabones complejos.</div>
+          <div>Reserva esta arquitectura para tareas multi-etapa.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="footer">
+  <h3>Conclusión</h3>
+  <p>Meta Prompting y Encadenamiento son técnicas de arquitectura, no adornos de prompt. La primera mejora el diseño de instrucciones; la segunda convierte tareas complejas en procesos controlables. Juntas permiten construir sistemas más robustos, siempre que exista una razón real para asumir el costo y la complejidad.</p>
+  <div class="list" style="margin-top:14px;">
+    <div>Empieza con un prompt único y mide si falla.</div>
+    <div>Escala a Meta Prompting si necesitas reutilización o diseño sistemático.</div>
+    <div>Escala a Chaining si necesitas etapas observables, validación y control.</div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
