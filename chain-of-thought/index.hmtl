@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chain of Thought Prompting — Guía Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f6f4ef;--surface:#fff;--surface-2:#fbfaf7;--border:#e6e1d7;--border-strong:#cbc3b4;
+--text:#171614;--muted:#68645c;--faint:#98938a;
+--purple-bg:#efecfb;--purple:#43348d;--purple-br:#cfc7f3;
+--blue-bg:#e9f2fb;--blue:#195d9d;--blue-br:#b8d2ef;
+--green-bg:#eaf4e5;--green:#2d5a12;--green-br:#c7deba;
+--amber-bg:#fdf1db;--amber:#855111;--amber-br:#f0cf95;
+--coral-bg:#faece7;--coral:#8f3a20;--coral-br:#eeb39f;
+--radius:16px;--shadow:0 10px 30px rgba(15,15,15,.04);--max:1120px}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:28px 18px 60px}
+.page{max-width:var(--max);margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--purple-bg);color:var(--purple);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--purple-br)}
+.hero{margin-bottom:26px;background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.hero-inner{padding:34px 30px 24px;display:grid;grid-template-columns:1.35fr .9fr;gap:24px}
+.hero h1{margin-top:14px;font-size:42px;line-height:1.1;letter-spacing:-.03em}
+.hero p.lead{margin-top:16px;font-size:17px;color:var(--muted);max-width:760px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+.mini{border:1px solid var(--border);background:var(--surface-2);border-radius:14px;padding:14px}
+.mini .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--faint);margin-bottom:5px}
+.mini .v{font-size:14px;color:var(--text)}
+.top-note{border-top:1px solid var(--border);padding:16px 30px 20px;display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:14px;background:var(--surface-2)}
+.top-note strong{color:var(--text)}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 26px}
+.nav a{text-decoration:none;font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:7px 11px}
+.nav a:hover{color:var(--text);border-color:var(--border-strong)}
+.section{margin-top:28px}
+.section-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:10px}
+.section-title{font-size:30px;line-height:1.15;letter-spacing:-.02em;margin-bottom:10px}
+.section-sub{color:var(--muted);max-width:820px;font-size:15px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.card-body{padding:18px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1px solid transparent;margin-bottom:10px}
+.purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br)}
+.blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br)}
+.green{background:var(--green-bg);color:var(--green);border-color:var(--green-br)}
+.amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+.coral{background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br)}
+.card h3{font-size:19px;line-height:1.2;margin-bottom:8px}
+.card p{color:var(--muted);font-size:14px}
+.list{margin-top:12px;display:grid;gap:8px}
+.list div{font-size:14px;color:var(--muted);padding-left:16px;position:relative}
+.list div:before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:999px;background:var(--border-strong)}
+.flow{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;min-height:150px}
+.step .n{font-family:"DM Mono",monospace;font-size:12px;color:var(--faint);margin-bottom:8px}
+.step h4{font-size:16px;margin-bottom:6px;line-height:1.2}
+.step p{font-size:13px;color:var(--muted)}
+.split{margin-top:16px;display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.panel-head{padding:18px 20px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.panel-head h3{font-size:22px;line-height:1.15}
+.panel-head p{color:var(--muted);font-size:14px;max-width:720px}
+.panel-content{padding:18px 20px 20px}
+.callout{border-radius:18px;padding:18px 20px;border:1px solid;font-size:14px;line-height:1.65}
+.callout strong{color:var(--text)}
+.callout + .callout{margin-top:12px}
+.prompt{background:#171614;color:#ece7de;border-radius:18px;padding:16px 18px;font-family:"DM Mono",monospace;font-size:13px;line-height:1.65;white-space:pre-wrap;overflow:auto}
+.prompt .dim{color:#aaa297}
+.prompt .blue-t{color:#9ecbff}
+.prompt .green-t{color:#b8e994}
+.prompt .amber-t{color:#ffd18b}
+.prompt .purple-t{color:#c9bcff}
+.prompt .coral-t{color:#ffb29c}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface)}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+td{padding:13px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td:first-child{color:var(--text);font-weight:700;width:24%}
+.ok{color:var(--green);font-weight:700}
+.warn{color:var(--amber);font-weight:700}
+.no{color:var(--coral);font-weight:700}
+.metric{font-family:"DM Mono",monospace;font-size:13px;font-weight:500;color:var(--text)}
+.bars{display:grid;gap:14px;margin-top:16px}
+.bar-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
+.bar-label{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:8px}
+.bar-label span:first-child{color:var(--muted)}
+.track{height:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;overflow:hidden}
+.fill{height:100%;border-radius:999px}
+.fill.gray{background:var(--border-strong)}
+.fill.purple{background:var(--purple)}
+.fill.blue{background:var(--blue)}
+.fill.amber{background:#c48522}
+.examples{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.example{border-top:1px solid var(--border);margin-top:12px;padding-top:12px;font-size:13px;color:var(--muted)}
+.example code{display:block;margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;color:var(--text);font-family:"DM Mono",monospace;font-size:12px;white-space:pre-wrap}
+.accordion{display:grid;gap:12px}
+details.item{border:1px solid var(--border);border-radius:16px;background:var(--surface-2);padding:0 16px}
+details.item[open]{background:#fff}
+details.item summary{list-style:none;cursor:pointer;padding:16px 0;font-weight:700;font-size:16px}
+details.item summary::-webkit-details-marker{display:none}
+.item p{color:var(--muted);font-size:14px;padding-bottom:16px}
+.footer{margin-top:26px;padding:22px 24px;border-radius:20px;background:#171614;color:#ece7de}
+.footer h3{font-size:22px;margin-bottom:8px}
+.footer p{color:#d8d1c6;font-size:14px;max-width:900px}
+.footer .list div{color:#ddd7cd}
+.footer .list div:before{background:#776f64}
+@media (max-width:980px){.hero-inner,.split{grid-template-columns:1fr}.grid-3,.grid-4,.examples,.flow{grid-template-columns:1fr 1fr}.hero h1{font-size:34px}}
+@media (max-width:640px){body{padding:16px 12px 40px}.hero-inner,.top-note,.panel-head,.panel-content,.card-body{padding-left:16px;padding-right:16px}.grid-2,.grid-3,.grid-4,.examples,.flow,.hero-grid{grid-template-columns:1fr}.hero h1{font-size:30px}.section-title{font-size:24px}.step{min-height:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Guía premium · Prompt Engineering</div>
+      <h1>Chain of Thought Prompting: razonamiento estructurado para tareas complejas</h1>
+      <p class="lead">Chain of Thought —CoT— consiste en pedir al modelo que descomponga una tarea antes de responder. Su valor aparece cuando hay múltiples pasos de inferencia, cálculos, restricciones o decisiones que conviene revisar.</p>
+    </div>
+    <div class="hero-grid">
+      <div class="mini"><div class="k">Qué cambia</div><div class="v">Pregunta → análisis estructurado → respuesta final.</div></div>
+      <div class="mini"><div class="k">Variantes</div><div class="v">Zero-Shot CoT, Few-Shot CoT y Self-Consistency.</div></div>
+      <div class="mini"><div class="k">Útil para</div><div class="v">Matemáticas, lógica, diagnóstico, código y decisiones.</div></div>
+      <div class="mini"><div class="k">Cuidado con</div><div class="v">Más latencia, más tokens y falsa sensación de explicabilidad.</div></div>
+    </div>
+  </div>
+  <div class="top-note">
+    <div>🧠</div>
+    <div><strong>Punto fino:</strong> CoT no debe entenderse como acceso garantizado al “pensamiento interno” del modelo. Es una técnica para obtener razonamiento estructurado, revisar pasos y mejorar consistencia en tareas donde la respuesta directa puede ser frágil.</div>
+  </div>
+</section>
+
+<nav class="nav">
+  <a href="#concepto">Concepto</a>
+  <a href="#variantes">Variantes</a>
+  <a href="#triggers">Triggers</a>
+  <a href="#uso">Cuándo usar</a>
+  <a href="#self-consistency">Self-Consistency</a>
+  <a href="#evidencia">Evidencia</a>
+  <a href="#limitaciones">Limitaciones</a>
+  <a href="#referencia">Referencia</a>
+</nav>
+
+<section class="section" id="concepto">
+  <div class="section-label">Resumen claro</div>
+  <h2 class="section-title">Qué es CoT y por qué importa</h2>
+  <p class="section-sub">El prompting estándar pide una respuesta. CoT pide que el modelo organice la ruta hacia esa respuesta. Eso ayuda cuando el problema exige varios pasos verificables.</p>
+
+  <div class="grid-3">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Idea base</div>
+        <h3>Razonar antes de cerrar</h3>
+        <p>El modelo separa datos, reglas, pasos intermedios y conclusión. La salida deja de ser una caja negra de una sola línea.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">Aplicación</div>
+        <h3>Descomponer problemas</h3>
+        <p>Sirve para cálculos encadenados, lógica, planificación, diagnóstico, análisis legal o depuración de código.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Advertencia</div>
+        <h3>No todo lo necesita</h3>
+        <p>En tareas simples, CoT puede agregar costo, ruido y errores. La técnica tiene sentido cuando los pasos importan.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>Entrada</h4><p>El usuario entrega la pregunta, datos o caso a resolver.</p></div>
+    <div class="step"><div class="n">02</div><h4>Descomposición</h4><p>El modelo identifica variables, condiciones y restricciones relevantes.</p></div>
+    <div class="step"><div class="n">03</div><h4>Proceso</h4><p>Se aplican reglas, cálculos, comparaciones o inferencias.</p></div>
+    <div class="step"><div class="n">04</div><h4>Verificación</h4><p>Se revisa coherencia antes de emitir la conclusión.</p></div>
+    <div class="step"><div class="n">05</div><h4>Respuesta</h4><p>La salida final queda fundamentada y más fácil de auditar.</p></div>
+  </div>
+</section>
+
+<section class="section" id="variantes">
+  <div class="section-label">Dos variantes principales</div>
+  <h2 class="section-title">Zero-Shot CoT vs Few-Shot CoT</h2>
+  <p class="section-sub">La diferencia está en cómo activas el razonamiento: con una frase simple o con ejemplos completos de cómo debe resolverse el problema.</p>
+
+  <div class="grid-2">
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="tag blue">Zero-Shot CoT</div>
+          <h3>Un trigger activa el razonamiento</h3>
+        </div>
+      </div>
+      <div class="panel-content">
+<pre class="prompt"><span class="purple-t">Rol:</span> Eres un analista de proyectos.
+
+<span class="blue-t">Tarea:</span> Evalúa si el proyecto es viable considerando mercado, competencia, margen y retorno.
+
+<span class="green-t">Caso:</span> App de delivery en ciudad de 80.000 habitantes.
+Inversión inicial: 50.000 USD.
+Competidores: 3 apps activas.
+Margen estimado por pedido: 1,20 USD.
+
+<span class="amber-t">Trigger:</span> Analiza paso a paso antes de emitir el veredicto final.</pre>
+        <div class="list">
+          <div>Más rápido de implementar.</div>
+          <div>Útil cuando el modelo ya conoce bien la tarea.</div>
+          <div>Agrega pocos tokens respecto a un prompt estándar.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="tag green">Few-Shot CoT</div>
+          <h3>Ejemplos enseñan el patrón</h3>
+        </div>
+      </div>
+      <div class="panel-content">
+<pre class="prompt"><span class="dim">// Ejemplo con razonamiento</span>
+<span class="blue-t">Problema:</span> María tiene 3 cajas. Cada caja tiene 4 pelotas.
+<span class="green-t">Paso 1:</span> número de cajas = 3
+<span class="green-t">Paso 2:</span> pelotas por caja = 4
+<span class="green-t">Paso 3:</span> total = 3 × 4 = 12
+<span class="amber-t">Respuesta:</span> 12 pelotas.
+
+<span class="dim">// Ahora resuelve</span>
+<span class="blue-t">Problema:</span> Juan tiene 5 estantes. Cada estante tiene 7 libros.</pre>
+        <div class="list">
+          <div>Más consistente en formato.</div>
+          <div>Útil si necesitas enseñar una estructura exacta.</div>
+          <div>Consume más tokens y puede aumentar latencia.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="callout" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br);">
+    <strong>Regla práctica:</strong> empieza con Zero-Shot CoT. Usa Few-Shot CoT solo si necesitas controlar formato, criterios o estilo de razonamiento con ejemplos.
+  </div>
+</section>
+
+<section class="section" id="triggers">
+  <div class="section-label">Activación Zero-Shot</div>
+  <h2 class="section-title">Triggers que orientan el razonamiento</h2>
+  <p class="section-sub">Un trigger es una frase breve que le dice al modelo cómo ejecutar la tarea. No todos funcionan igual: conviene alinearlo con el dominio.</p>
+
+  <div class="panel">
+    <div class="panel-content" style="padding-top:0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Trigger</th>
+            <th>Dominio recomendado</th>
+            <th>Uso práctico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>“Piensa paso a paso”</td>
+            <td>Matemáticas y lógica</td>
+            <td>Útil cuando la respuesta depende de cálculos o inferencias encadenadas.</td>
+          </tr>
+          <tr>
+            <td>“Analicemos sistemáticamente”</td>
+            <td>Negocios y estrategia</td>
+            <td>Ayuda a revisar factores antes de concluir.</td>
+          </tr>
+          <tr>
+            <td>“Desglosemos el problema”</td>
+            <td>Código y debugging</td>
+            <td>Orienta a identificar causa raíz, mecanismo y solución.</td>
+          </tr>
+          <tr>
+            <td>“Examinemos los datos metódicamente”</td>
+            <td>Análisis de datos</td>
+            <td>Favorece revisión de variables, supuestos y patrones.</td>
+          </tr>
+          <tr>
+            <td>“Primero analiza; luego revisa”</td>
+            <td>Diagnóstico y revisión</td>
+            <td>Introduce una segunda mirada antes de cerrar la respuesta.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br);">
+    <strong>Tip operativo:</strong> coloca el trigger al final del prompt, justo antes de la respuesta esperada. Así funciona como instrucción de ejecución, no como contexto decorativo.
+  </div>
+</section>
+
+<section class="section" id="uso">
+  <div class="section-label">Aplicación práctica</div>
+  <h2 class="section-title">Dónde CoT sí da valor y dónde sobra</h2>
+  <p class="section-sub">CoT es especialmente útil cuando el error puede esconderse en un paso intermedio. Si no hay pasos, probablemente no necesitas CoT.</p>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag green">Úsalo cuando</div>
+        <h3>La tarea tiene razonamiento encadenado</h3>
+        <div class="list">
+          <div>Problemas matemáticos o aritméticos multi-paso.</div>
+          <div>Razonamiento lógico, deducciones o silogismos.</div>
+          <div>Planificación con dependencias secuenciales.</div>
+          <div>Diagnóstico médico, técnico o legal.</div>
+          <div>Depuración de código con causa raíz trazable.</div>
+          <div>Decisiones financieras con cálculos encadenados.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag coral">Evítalo cuando</div>
+        <h3>La tarea es directa</h3>
+        <div class="list">
+          <div>Clasificación simple de texto.</div>
+          <div>Resumen o reformulación sin lógica intermedia.</div>
+          <div>Extracción de entidades con formato estándar.</div>
+          <div>Traducción directa sin ambigüedad técnica.</div>
+          <div>Tiempo de respuesta crítico.</div>
+          <div>Modelos con razonamiento nativo donde CoT manual puede ser redundante.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="examples">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Finanzas</div>
+        <h3>Cambio regulatorio</h3>
+        <p>Útil cuando hay que calcular impacto y justificarlo.</p>
+        <div class="example">
+          Prompt:
+          <code>Eres analista de riesgo financiero.
+Evalúa el capital adicional necesario.
+
+Requerimiento sube de 8% a 11%.
+APR = 2500M USD.
+
+Devuelve:
+1. capital previo
+2. capital nuevo
+3. diferencia
+4. impacto final</code>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">Código</div>
+        <h3>Depuración estructurada</h3>
+        <p>Útil para separar síntoma, causa raíz y solución.</p>
+        <div class="example">
+          Prompt:
+          <code>Eres senior developer.
+Diagnostica este error:
+
+def calcular_promedio(nums):
+    return sum(nums) / len(nums)
+
+result = calcular_promedio([])
+
+Devuelve:
+1. causa raíz
+2. por qué ocurre
+3. corrección mínima
+4. corrección robusta</code>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="self-consistency">
+  <div class="section-label">Extensión avanzada</div>
+  <h2 class="section-title">Self-Consistency: varias rutas, una respuesta más confiable</h2>
+  <p class="section-sub">Self-Consistency combina CoT con múltiples cadenas de razonamiento independientes y selecciona la respuesta más frecuente. Es útil cuando un error cuesta caro.</p>
+
+  <div class="flow">
+    <div class="step"><div class="n">01</div><h4>Prompt CoT</h4><p>Se define una tarea que requiere razonamiento estructurado.</p></div>
+    <div class="step"><div class="n">02</div><h4>N intentos</h4><p>El modelo genera varias cadenas independientes.</p></div>
+    <div class="step"><div class="n">03</div><h4>Diversidad</h4><p>Las rutas pueden diferir, pero algunas llegan a la misma conclusión.</p></div>
+    <div class="step"><div class="n">04</div><h4>Votación</h4><p>Se selecciona la respuesta más frecuente.</p></div>
+    <div class="step"><div class="n">05</div><h4>Uso</h4><p>Reservado para decisiones de alto valor o alta incertidumbre.</p></div>
+  </div>
+
+  <div class="grid-4">
+    <article class="card"><div class="card-body"><div class="tag purple">CoT</div><h3>56,5%</h3><p>CoT estándar en GSM8K con PaLM 540B, según el archivo fuente.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag amber">CoT + SC</div><h3>74,4%</h3><p>Self-Consistency con N=40 en GSM8K, según el archivo fuente.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag green">Ganancia</div><h3>+17,9 pp</h3><p>Mejora absoluta reportada sobre CoT simple.</p></div></article>
+    <article class="card"><div class="card-body"><div class="tag coral">Costo</div><h3>N×</h3><p>Self-Consistency requiere múltiples llamadas al modelo.</p></div></article>
+  </div>
+
+  <div class="callout" style="background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br);">
+    <strong>Recomendación de producción:</strong> no uses N=40 por defecto. Para tareas reales, N=5–10 suele ser un punto más razonable entre costo y mejora de fiabilidad.
+  </div>
+</section>
+
+<section class="section" id="evidencia">
+  <div class="section-label">Evidencia y benchmarks</div>
+  <h2 class="section-title">Resultados documentados en el material original</h2>
+  <p class="section-sub">La guía fuente recoge mejoras especialmente claras en matemáticas y lógica simbólica. Estos datos deben leerse como referencia, no como garantía universal.</p>
+
+  <div class="bars">
+    <div class="bar-row">
+      <div class="bar-label"><span>Prompting estándar — GSM8K</span><strong class="metric">17,9%</strong></div>
+      <div class="track"><div class="fill gray" style="width:17.9%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Zero-Shot CoT — “Let's think step by step”</span><strong class="metric">40,7%</strong></div>
+      <div class="track"><div class="fill blue" style="width:40.7%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Few-Shot CoT — 8 ejemplos</span><strong class="metric">56,9%</strong></div>
+      <div class="track"><div class="fill purple" style="width:56.9%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>CoT + calculadora externa</span><strong class="metric">58,6%</strong></div>
+      <div class="track"><div class="fill purple" style="width:58.6%"></div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>CoT + Self-Consistency N=40</span><strong class="metric">74,4%</strong></div>
+      <div class="track"><div class="fill amber" style="width:74.4%"></div></div>
+    </div>
+  </div>
+
+  <div class="callout" style="background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br);">
+    <strong>Lectura crítica:</strong> las ganancias fuertes se concentran en tareas de razonamiento. En tareas simples o de formato, CoT puede no aportar nada y hasta empeorar la salida.
+  </div>
+</section>
+
+<section class="section" id="limitaciones">
+  <div class="section-label">Limitaciones críticas</div>
+  <h2 class="section-title">Lo que debes controlar antes de usar CoT</h2>
+  <p class="section-sub">CoT es una herramienta potente, pero no es una capa mágica de verdad. Su uso debe depender del modelo, la tarea y el costo aceptable.</p>
+
+  <div class="grid-2">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag coral">Riesgo 01</div>
+        <h3>No equivale a explicabilidad real</h3>
+        <p>La cadena visible puede ser una reconstrucción plausible, no necesariamente el proceso interno real del modelo.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Riesgo 02</div>
+        <h3>Puede introducir sobre-razonamiento</h3>
+        <p>En tareas simples, pedir pasos puede sumar ruido, tokens y errores que una respuesta directa no tendría.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag coral">Riesgo 03</div>
+        <h3>Modelos pequeños pueden fallar</h3>
+        <p>El material original advierte que modelos pequeños pueden producir cadenas fluidas pero ilógicas.</p>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Riesgo 04</div>
+        <h3>Más latencia y más costo</h3>
+        <p>CoT aumenta la longitud de salida. Few-Shot CoT y Self-Consistency multiplican el costo operativo.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="panel" style="margin-top:16px;">
+    <div class="panel-content" style="padding-top:0;">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de modelo</th>
+            <th>¿Usar CoT?</th>
+            <th>Recomendación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LLMs grandes estándar</td>
+            <td><span class="ok">Sí, con criterio</span></td>
+            <td>Úsalo cuando la tarea tenga múltiples pasos verificables.</td>
+          </tr>
+          <tr>
+            <td>Modelos de razonamiento nativo</td>
+            <td><span class="no">No por defecto</span></td>
+            <td>Probar primero sin CoT manual; puede ser redundante o interferir.</td>
+          </tr>
+          <tr>
+            <td>LLMs medianos</td>
+            <td><span class="warn">Depende</span></td>
+            <td>Comparar con y sin CoT antes de adoptarlo.</td>
+          </tr>
+          <tr>
+            <td>LLMs pequeños</td>
+            <td><span class="no">Evitar</span></td>
+            <td>Puede generar pasos convincentes pero incorrectos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">Comparación aplicada</div>
+  <h2 class="section-title">La misma tarea en tres niveles</h2>
+  <p class="section-sub">Así cambia el prompt cuando pasas de una solicitud estándar a CoT y luego a Few-Shot CoT.</p>
+
+  <div class="grid-3">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag blue">Estándar</div>
+        <h3>Respuesta directa</h3>
+        <div class="example">
+          <code>Evalúa si este proyecto es viable.
+Responde “Viable” o “No viable”
+y agrega una frase de justificación.</code>
+        </div>
+        <p style="margin-top:12px;">Rápido, pero con poca visibilidad del criterio usado.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Zero-Shot CoT</div>
+        <h3>Análisis estructurado</h3>
+        <div class="example">
+          <code>Evalúa si este proyecto es viable.
+Considera mercado, competencia,
+economía unitaria y retorno.
+
+Analiza cada factor antes de emitir
+el veredicto final.</code>
+        </div>
+        <p style="margin-top:12px;">Mejor cuando quieres revisar la ruta de decisión.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag green">Few-Shot CoT</div>
+        <h3>Patrón enseñado</h3>
+        <div class="example">
+          <code>Ejemplo:
+Proyecto A → mercado limitado,
+competencia alta, margen bajo.
+Veredicto: No viable.
+
+Ahora evalúa el nuevo proyecto
+siguiendo el mismo patrón.</code>
+        </div>
+        <p style="margin-top:12px;">Útil si necesitas formato o criterio repetible.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="referencia">
+  <div class="section-label">Cheat sheet</div>
+  <h2 class="section-title">Decisión rápida para usar CoT</h2>
+
+  <div class="grid-3">
+    <article class="card">
+      <div class="card-body">
+        <div class="tag purple">Usa CoT si</div>
+        <h3>Hay pasos que auditar</h3>
+        <div class="list">
+          <div>El problema tiene cálculos o lógica secuencial.</div>
+          <div>Necesitas justificar una decisión.</div>
+          <div>El error puede aparecer en un paso intermedio.</div>
+          <div>La salida será revisada por humanos.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag coral">Evita CoT si</div>
+        <h3>La tarea es simple</h3>
+        <div class="list">
+          <div>Solo quieres clasificar, resumir o extraer.</div>
+          <div>La latencia importa más que la trazabilidad.</div>
+          <div>El modelo ya razona internamente de forma optimizada.</div>
+          <div>El prompt se vuelve más largo sin mejorar calidad.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-body">
+        <div class="tag amber">Escala a SC si</div>
+        <h3>El costo del error es alto</h3>
+        <div class="list">
+          <div>Necesitas mayor fiabilidad.</div>
+          <div>La respuesta es ambigua o sensible.</div>
+          <div>Hay presupuesto para múltiples llamadas.</div>
+          <div>Vas a comparar resultados por mayoría.</div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="footer">
+  <h3>Conclusión</h3>
+  <p>Chain of Thought es útil cuando el razonamiento importa más que la velocidad. No lo uses por reflejo: úsalo cuando necesites descomponer, revisar y justificar. Para tareas simples, una instrucción directa suele ganar. Para decisiones complejas, CoT puede convertir una respuesta opaca en un proceso revisable.</p>
+  <div class="list" style="margin-top:14px;">
+    <div>Zero-Shot CoT: rápido, simple y suficiente para muchos casos.</div>
+    <div>Few-Shot CoT: mejor cuando necesitas enseñar un patrón específico.</div>
+    <div>Self-Consistency: útil para decisiones de alto valor, pero costosa.</div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>
