@@ -4,230 +4,1047 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asistente de Modelo de Negocio — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --pink-bg: #faeaf1; --pink-text: #7a2050;
-    --radius: 10px; --radius-sm: 6px;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface-2: #fbfaf7;
+  --surface-3: #f1eee7;
+  --border: #e6e1d7;
+  --border-strong: #cbc3b4;
+  --text: #171614;
+  --muted: #67625a;
+  --faint: #98938a;
+
+  --blue-bg: #e9f2fb;
+  --blue: #195d9d;
+  --blue-br: #b8d2ef;
+
+  --teal-bg: #e4f5ee;
+  --teal: #0d6348;
+  --teal-br: #a7dfcc;
+
+  --purple-bg: #efecfb;
+  --purple: #43348d;
+  --purple-br: #cfc7f3;
+
+  --amber-bg: #fdf1db;
+  --amber: #855111;
+  --amber-br: #f0cf95;
+
+  --green-bg: #eaf4e5;
+  --green: #2d5a12;
+  --green-br: #c7deba;
+
+  --coral-bg: #faece7;
+  --coral: #8f3a20;
+  --coral-br: #eeb39f;
+
+  --red-bg: #fae8e6;
+  --red: #9e3028;
+  --red-br: #efb4aa;
+
+  --shadow: 0 18px 50px rgba(23, 22, 20, .06);
+  --shadow-soft: 0 10px 28px rgba(23, 22, 20, .045);
+
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --max: 1120px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  padding: 28px 18px 64px;
+  font-family: "DM Sans", sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  background:
+    radial-gradient(circle at top left, rgba(67, 52, 141, .08), transparent 34rem),
+    radial-gradient(circle at top right, rgba(13, 99, 72, .09), transparent 30rem),
+    var(--bg);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.hero {
+  overflow: hidden;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, #fff 0%, #fcfbf8 100%);
+  box-shadow: var(--shadow);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+  gap: 28px;
+  padding: 38px 32px 26px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border: 1px solid var(--purple-br);
+  border-radius: 999px;
+  background: var(--purple-bg);
+  color: var(--purple);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 850px;
+  font-size: clamp(34px, 5vw, 58px);
+  font-weight: 700;
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+
+.lead {
+  max-width: 780px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.btn-primary {
+  border: 1px solid #11100f;
+  background: #171614;
+  color: #fff;
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-content: start;
+}
+
+.mini {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.mini .k {
+  margin-bottom: 5px;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.mini .v {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hero-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 18px 32px 22px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.hero-note strong {
+  color: var(--text);
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section-head {
+  margin-bottom: 14px;
+}
+
+.section-label {
+  margin-bottom: 8px;
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  max-width: 820px;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -.025em;
+}
+
+.section-sub {
+  max-width: 840px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.quick-grid,
+.canvas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.card,
+.canvas-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.card-body,
+.canvas-card {
+  padding: 18px;
+}
+
+.step-number,
+.mono {
+  font-family: "DM Mono", monospace;
+}
+
+.step-number {
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.card h3,
+.canvas-card h3 {
+  margin-top: 8px;
+  font-size: 17px;
+  line-height: 1.22;
+  letter-spacing: -.015em;
+}
+
+.card p,
+.canvas-card p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.canvas-card .tag {
+  display: inline-flex;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--muted);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+}
+
+.route-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.route {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.route-a {
+  border: 1px solid var(--teal-br);
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+
+.route-b {
+  border: 1px solid var(--purple-br);
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+.route-body {
+  padding: 20px;
+}
+
+.route-tag {
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.route h3 {
+  font-size: 24px;
+  line-height: 1.12;
+  letter-spacing: -.02em;
+}
+
+.route p {
+  margin-top: 8px;
+  font-size: 14px;
+  opacity: .86;
+}
+
+.route-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.route-list div {
+  position: relative;
+  padding-left: 16px;
+  font-size: 13px;
+}
+
+.route-list div::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: .6;
+}
+
+.phrase-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.search svg {
+  width: 17px;
+  height: 17px;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+
+.search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.phrases {
+  display: grid;
+  gap: 10px;
+}
+
+.phrase-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  transition: .18s ease;
+}
+
+.phrase-card:hover {
+  border-color: var(--border-strong);
+}
+
+.phrase-card.open {
+  border-color: var(--border-strong);
+}
+
+.phrase-header {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  gap: 12px;
+  align-items: start;
+  width: 100%;
+  padding: 16px 18px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phrase-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 8px;
+  border-radius: 999px;
+}
+
+.phrase-label {
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.phrase-text {
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.chevron {
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+  color: var(--faint);
+  transition: transform .18s ease;
+}
+
+.phrase-card.open .chevron {
+  transform: rotate(180deg);
+}
+
+.phrase-body {
+  display: none;
+  padding: 0 18px 18px 40px;
+  border-top: 1px solid var(--border);
+}
+
+.phrase-card.open .phrase-body {
+  display: block;
+}
+
+.phrase-explanation {
+  max-width: 840px;
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.phrase-explanation b,
+.phrase-tip b,
+.step p strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.phrase-tip {
+  margin-top: 10px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.phrase-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.copy-small {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid var(--blue-br);
+  border-radius: 999px;
+  background: var(--blue-bg);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.copy-small svg {
+  width: 14px;
+  height: 14px;
+}
+
+.c-cliente .phrase-dot { background: var(--red); }
+.c-cliente .phrase-label { color: var(--red); }
+
+.c-estrategia .phrase-dot { background: var(--purple); }
+.c-estrategia .phrase-label { color: var(--purple); }
+
+.c-simplificacion .phrase-dot { background: var(--teal); }
+.c-simplificacion .phrase-label { color: var(--teal); }
+
+.c-indicadores .phrase-dot { background: var(--amber); }
+.c-indicadores .phrase-label { color: var(--amber); }
+
+.c-competencia .phrase-dot { background: var(--blue); }
+.c-competencia .phrase-label { color: var(--blue); }
+
+.c-claridad .phrase-dot { background: var(--green); }
+.c-claridad .phrase-label { color: var(--green); }
+
+.empty {
+  display: none;
+  padding: 24px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.6);
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty.show {
+  display: block;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.step {
+  position: relative;
+  padding: 18px 18px 18px 56px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.step-num {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--purple-bg);
+  color: var(--purple);
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step h3 {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.step p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.prompt-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.prompt-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.prompt-head h2 {
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.prompt-head p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border: 1px solid var(--blue-br);
+  border-radius: 999px;
+  background: var(--blue-bg);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: .18s ease;
+}
+
+.copy-btn:hover {
+  transform: translateY(-1px);
+}
+
+.copy-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.prompt-preview {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  background: #11100f;
+  color: #e8e1d8;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.prompt-box textarea {
+  width: 100%;
+  min-height: 620px;
+  max-height: 780px;
+  resize: vertical;
+  padding: 20px 22px;
+  border: 0;
+  outline: 0;
+  background: #171614;
+  color: #f5f0e8;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.prompt-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 22px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: #171614;
+  color: #cfc8bd;
+  font-size: 12px;
+}
+
+.footer {
+  margin-top: 28px;
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  background: #171614;
+  color: #f3eee7;
+}
+
+.footer h2 {
+  margin-bottom: 8px;
+  font-size: 24px;
+  letter-spacing: -.02em;
+}
+
+.footer p {
+  max-width: 860px;
+  color: #d8d1c6;
+  font-size: 14px;
+}
+
+@media (max-width: 980px) {
+  .hero-inner,
+  .quick-grid,
+  .route-grid,
+  .steps {
+    grid-template-columns: 1fr;
   }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--purple-bg); color: var(--purple-text); margin-bottom: 0.75rem; }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
-
-  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
-  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
-  .stat-value { font-size: 18px; font-weight: 500; line-height: 1.3; }
-
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
-
-  /* HOW TO USE */
-  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 0.5rem; }
-  .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
-  .how-step { font-size: 11px; font-weight: 500; color: var(--text-faint); margin-bottom: 6px; }
-  .how-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .how-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .how-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-  .how-icon svg { width: 14px; height: 14px; }
-  .ic-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .ic-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .ic-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .ic-blue { background: var(--accent-bg); color: var(--accent-text); }
-
-  /* ROUTES */
-  .routes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0.5rem; }
-  .route-card { border-radius: var(--radius); padding: 14px 16px; }
-  .route-a { background: var(--teal-bg); border: 1px solid var(--teal-border); }
-  .route-b { background: var(--purple-bg); border: 1px solid var(--purple-border); }
-  .route-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-  .route-a .route-tag { color: var(--teal-text); }
-  .route-b .route-tag { color: var(--purple-text); }
-  .route-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-  .route-a .route-title { color: var(--teal-text); }
-  .route-b .route-title { color: var(--purple-text); }
-  .route-desc { font-size: 12px; line-height: 1.6; }
-  .route-a .route-desc { color: var(--teal-text); opacity: 0.85; }
-  .route-b .route-desc { color: var(--purple-text); opacity: 0.85; }
-  .route-steps { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
-  .route-step { font-size: 11px; }
-  .route-a .route-step { color: var(--teal-text); }
-  .route-b .route-step { color: var(--purple-text); }
-
-  /* STARTER PHRASES */
-  .phrase-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; transition: border-color 0.15s; }
-  .phrase-card:hover { border-color: var(--border-strong); }
-  .phrase-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 13px 16px; gap: 12px; cursor: pointer; user-select: none; }
-  .phrase-left { display: flex; align-items: flex-start; gap: 10px; }
-  .phrase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-  .phrase-meta { display: flex; flex-direction: column; gap: 3px; }
-  .phrase-label { font-size: 11px; font-weight: 500; }
-  .phrase-text { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.5; font-family: 'DM Mono', monospace; }
-  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; margin-top: 2px; }
-  .chevron.open { transform: rotate(180deg); }
-  .phrase-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px 14px; }
-  .phrase-body.open { display: block; }
-  .phrase-explanation { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; }
-  .phrase-explanation b { font-weight: 500; color: var(--text); }
-  .phrase-tip { font-size: 12px; color: var(--text-faint); line-height: 1.6; padding: 8px 12px; background: var(--bg); border-radius: var(--radius-sm); }
-  .phrase-tip b { font-weight: 500; color: var(--text-muted); }
-
-  /* COPY AREA */
-  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
-  .copy-trigger:hover { background: var(--accent-border); }
-  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
-  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
-  .copy-hint b { font-weight: 500; opacity: 1; }
-  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
-  .copy-box.open { display: block; }
-  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
-  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
-  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .copy-box-footer strong { font-weight: 500; }
-
-  /* FULL PROMPT */
-  .prompt-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .prompt-block-header { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-  .prompt-block-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .prompt-block-sub { font-size: 12px; color: var(--text-faint); }
-  .prompt-preview { font-size: 12px; color: var(--text-muted); line-height: 1.7; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; max-height: 100px; overflow: hidden; mask-image: linear-gradient(to bottom, black 60%, transparent 100%); }
-
-  /* COLORS per phrase */
-  .c-cliente .phrase-dot { background: #E24B4A; }
-  .c-cliente .phrase-label { color: #A32D2D; }
-  .c-estrategia .phrase-dot { background: var(--purple-text); }
-  .c-estrategia .phrase-label { color: var(--purple-text); }
-  .c-simplificacion .phrase-dot { background: var(--teal-text); }
-  .c-simplificacion .phrase-label { color: var(--teal-text); }
-  .c-indicadores .phrase-dot { background: var(--amber-text); }
-  .c-indicadores .phrase-label { color: var(--amber-text); }
-  .c-competencia .phrase-dot { background: var(--accent-text); }
-  .c-competencia .phrase-label { color: var(--accent-text); }
-  .c-claridad .phrase-dot { background: var(--green-text); }
-  .c-claridad .phrase-label { color: var(--green-text); }
-
-  .tip-global { background: var(--purple-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--purple-text); line-height: 1.65; margin-bottom: 1.75rem; }
-  .tip-global b { font-weight: 500; }
-
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .routes { grid-template-columns: 1fr; }
-    .how-grid { grid-template-columns: 1fr; }
-    .copy-hint { display: none; }
+  .canvas-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
+
+  .prompt-head {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 16px 12px 44px;
+  }
+
+  .hero-inner,
+  .hero-note,
+  .prompt-head,
+  .prompt-preview,
+  .prompt-box textarea,
+  .prompt-foot {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-grid,
+  .canvas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .phrase-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .phrase-header {
+    grid-template-columns: 10px 1fr;
+  }
+
+  .phrase-header .chevron {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .phrase-body {
+    padding-left: 18px;
+  }
+
+  .prompt-foot {
+    flex-direction: column;
+  }
+}
 </style>
 </head>
+
 <body>
 <div class="page">
 
-  <header>
-    <div class="badge">IA Práctico — Asistentes</div>
-    <h1>Asistente de Modelo de Negocio</h1>
-    <p class="subtitle">Un consultor estratégico especializado en Business Model Canvas para Pymes, con contexto latinoamericano. Úsalo para construir tu modelo desde cero o auditar uno existente.</p>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">IA Práctico · Estrategia para Pymes</div>
+        <h1>Asistente de Modelo de Negocio</h1>
+        <p class="lead">
+          Un consultor estratégico especializado en Business Model Canvas para empresas que operan en Ecuador.
+          Sirve para construir un modelo desde cero, auditar uno existente y convertir hallazgos en decisiones
+          concretas para los próximos 30 días.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#prompt">Copiar prompt completo</a>
+          <a class="btn btn-secondary" href="#frases">Ver frases de inicio</a>
+        </div>
+      </div>
+
+      <div class="hero-grid" aria-label="Resumen del asistente">
+        <div class="mini">
+          <div class="k">Compatible</div>
+          <div class="v">GPT · Claude · Gemini</div>
+        </div>
+        <div class="mini">
+          <div class="k">Canvas</div>
+          <div class="v">9 bloques cubiertos</div>
+        </div>
+        <div class="mini">
+          <div class="k">Rutas</div>
+          <div class="v">Construcción y auditoría</div>
+        </div>
+        <div class="mini">
+          <div class="k">Enfoque</div>
+          <div class="v">Pymes en Ecuador</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-note">
+      <div>⚡</div>
+      <p>
+        <strong>Antes de empezar:</strong> funciona mejor si tienes una descripción de tu negocio,
+        un Canvas existente o una idea clara de a quién sirves y cómo generas dinero. Más contexto
+        produce respuestas más específicas.
+      </p>
+    </div>
   </header>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Compatible con</div><div class="stat-value">ChatGPT, Claude, Gemini</div></div>
-    <div class="stat"><div class="stat-label">Bloques cubiertos</div><div class="stat-value">9 del Canvas</div></div>
-    <div class="stat"><div class="stat-label">Frases de inicio</div><div class="stat-value">6 + 2 principales</div></div>
-  </div>
+  <section class="section">
+    <div class="quick-grid">
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">01</div>
+          <h3>Copia el prompt</h3>
+          <p>Usa la sección final para copiar el prompt completo y pegarlo como instrucciones del sistema.</p>
+        </div>
+      </article>
 
-  <div class="tip-global">
-    <b>Antes de empezar:</b> Este asistente funciona mejor si tienes algo preparado — una descripción de tu negocio, un Canvas existente, o al menos una idea clara de a quién sirves y cómo generas dinero. Cuanto más contexto le des, más específicas serán sus respuestas.
-  </div>
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">02</div>
+          <h3>Configura tu plataforma</h3>
+          <p>Crea un GPT personalizado, Proyecto de Claude o GEM de Gemini y pega el prompt en la configuración.</p>
+        </div>
+      </article>
 
-  <!-- CÓMO USARLO -->
-  <div class="section-label">Cómo funciona</div>
-  <div class="how-grid">
-    <div class="how-card">
-      <div class="how-icon ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-      <div class="how-step">Paso 1</div>
-      <div class="how-title">Copia el prompt</div>
-      <div class="how-desc">Ve a la sección "Prompt completo" al final de esta página, selecciona el texto y cópialo.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-icon ic-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-      <div class="how-step">Paso 2</div>
-      <div class="how-title">Configura el asistente</div>
-      <div class="how-desc">En ChatGPT: crea un GPT personalizado. En Claude: crea un Proyecto. En Gemini: crea un GEM. Pega el prompt en las instrucciones del sistema.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-icon ic-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div class="how-step">Paso 3</div>
-      <div class="how-title">Elige tu ruta</div>
-      <div class="how-desc">El asistente te preguntará si quieres construir un modelo nuevo o revisar uno existente. Ambas rutas tienen flujos distintos y entregables específicos.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-icon ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <div class="how-step">Paso 4</div>
-      <div class="how-title">Usa las frases de inicio</div>
-      <div class="how-desc">Una vez configurado, las frases de inicio activan análisis específicos dentro de cualquier conversación. Úsalas en cualquier momento.</div>
-    </div>
-  </div>
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">03</div>
+          <h3>Elige una ruta</h3>
+          <p>Construye un modelo nuevo paso a paso o revisa un Canvas existente con auditorías específicas.</p>
+        </div>
+      </article>
 
-  <!-- RUTAS -->
-  <div class="section-label">Dos rutas disponibles</div>
-  <div class="routes">
-    <div class="route-card route-a">
-      <div class="route-tag">Ruta A</div>
-      <div class="route-title">Construir desde cero</div>
-      <div class="route-desc">Para quien quiere diseñar su modelo de negocio por primera vez, bloque a bloque.</div>
-      <div class="route-steps">
-        <div class="route-step">→ 11 pasos secuenciales</div>
-        <div class="route-step">→ Entrevista guiada por el asistente</div>
-        <div class="route-step">→ Canvas completo al final</div>
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">04</div>
+          <h3>Activa análisis rápidos</h3>
+          <p>Usa las frases de inicio para pedir cliente escéptico, KPIs, simplificación, competencia o claridad.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="rutas">
+    <div class="section-head">
+      <div class="section-label">Dos rutas disponibles</div>
+      <h2 class="section-title">Construir desde cero o auditar lo que ya existe</h2>
+      <p class="section-sub">
+        El asistente no salta directo al análisis. Primero pregunta qué necesitas y luego adapta el flujo:
+        entrevista guiada para construir o auditoría estructurada para mejorar.
+      </p>
+    </div>
+
+    <div class="route-grid">
+      <article class="route route-a">
+        <div class="route-body">
+          <div class="route-tag">Ruta A</div>
+          <h3>Construir desde cero</h3>
+          <p>Para quien quiere diseñar su modelo de negocio por primera vez, bloque a bloque.</p>
+          <div class="route-list">
+            <div>11 pasos secuenciales</div>
+            <div>Entrevista guiada por el asistente</div>
+            <div>Canvas completo en formato tabla</div>
+            <div>2 o 3 áreas a fortalecer antes de operar</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="route route-b">
+        <div class="route-body">
+          <div class="route-tag">Ruta B</div>
+          <h3>Revisar uno existente</h3>
+          <p>Para quien ya tiene un Canvas y quiere auditarlo, mejorarlo o someterlo a análisis.</p>
+          <div class="route-list">
+            <div>7 tipos de análisis a elegir</div>
+            <div>Semáforo por bloque</div>
+            <div>Stress test con escenarios de crisis</div>
+            <div>Decisión estratégica prioritaria a 30 días</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="canvas">
+    <div class="section-head">
+      <div class="section-label">Business Model Canvas</div>
+      <h2 class="section-title">Los 9 bloques que el asistente construye o audita</h2>
+      <p class="section-sub">
+        Cada bloque se revisa por coherencia, riesgo, dependencia crítica y conexión con los demás elementos del modelo.
+      </p>
+    </div>
+
+    <div class="canvas-grid">
+      <article class="canvas-card"><span class="tag">01</span><h3>Segmento de Clientes</h3><p>Define cliente, usuario, anti-cliente y criterios geográficos, demográficos, psicográficos y conductuales.</p></article>
+      <article class="canvas-card"><span class="tag">02</span><h3>Propuesta de Valor</h3><p>Construye valor desde el dolor del cliente, no desde los atributos del producto.</p></article>
+      <article class="canvas-card"><span class="tag">03</span><h3>Canales</h3><p>Mapea adquisición, conversión, entrega y postventa con costo-beneficio estimado.</p></article>
+      <article class="canvas-card"><span class="tag">04</span><h3>Relación con Clientes</h3><p>Detecta si la relación depende de una sola persona o de procesos no escalables.</p></article>
+      <article class="canvas-card"><span class="tag">05</span><h3>Fuentes de Ingreso</h3><p>Evalúa mecanismos de precio, frecuencia, recurrencia y ecuación CAC vs LTV si hay datos.</p></article>
+      <article class="canvas-card"><span class="tag">06</span><h3>Recursos Clave</h3><p>Clasifica recursos físicos, intelectuales, humanos, financieros y tecnológicos.</p></article>
+      <article class="canvas-card"><span class="tag">07</span><h3>Actividades Clave</h3><p>Distingue lo que toca al cliente de lo que es soporte interno y detecta procesos no documentados.</p></article>
+      <article class="canvas-card"><span class="tag">08</span><h3>Socios Clave</h3><p>Solo considera clave a quien no puede reemplazarse en menos de dos semanas sin impacto grave.</p></article>
+      <article class="canvas-card"><span class="tag">09</span><h3>Estructura de Costos</h3><p>Incluye costos reales: tiempo del fundador, formalidad, depreciación y canales digitales.</p></article>
+    </div>
+  </section>
+
+  <section class="section" id="frases">
+    <div class="section-head">
+      <div class="section-label">Frases de inicio</div>
+      <h2 class="section-title">Atajos para activar análisis específicos</h2>
+      <p class="section-sub">
+        Estas frases funcionan dentro de una conversación ya iniciada con el asistente. Puedes copiarlas
+        tal como están o adaptarlas a tu negocio.
+      </p>
+    </div>
+
+    <div class="phrase-toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input id="phraseSearch" type="search" placeholder="Buscar por cliente, KPIs, competencia, claridad...">
+      </label>
+    </div>
+
+    <div class="phrases" id="phrasesList"></div>
+
+    <div class="empty" id="emptyState">
+      <strong>No encontré frases con ese criterio.</strong>
+      <p>Prueba con “cliente”, “estrategia”, “indicadores”, “competencia” o “claridad”.</p>
+    </div>
+  </section>
+
+  <section class="section" id="configuracion">
+    <div class="section-head">
+      <div class="section-label">Configuración recomendada</div>
+      <h2 class="section-title">Cómo usarlo sin perder calidad de análisis</h2>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-num">1</div>
+        <h3>Copia el prompt completo</h3>
+        <p>Está al final de esta página. Usa el botón de copiado para llevarlo completo a tu plataforma.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">2</div>
+        <h3>Pégalo como instrucción principal</h3>
+        <p>En ChatGPT úsalo en un GPT personalizado; en Claude, en un Proyecto; en Gemini, en un GEM.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">3</div>
+        <h3>Entrega contexto real</h3>
+        <p>Incluye descripción del negocio, segmento, propuesta, canales, costos y forma de generar ingresos.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">4</div>
+        <h3>Elige construcción o auditoría</h3>
+        <p>El asistente siempre debe preguntar si quieres construir desde cero o revisar un modelo existente.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">5</div>
+        <h3>Usa las frases de inicio</h3>
+        <p>Sirven para profundizar en cliente escéptico, indicadores, simplificación, competencia o propuesta de valor.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">6</div>
+        <h3>Convierte hallazgos en decisión</h3>
+        <p>El entregable debe terminar en próximos pasos priorizados y una decisión estratégica para ejecutar.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="prompt">
+    <div class="prompt-card">
+      <div class="prompt-head">
+        <div>
+          <div class="section-label">Prompt completo</div>
+          <h2>Prompt del Asistente de Modelo de Negocio</h2>
+          <p>Pégalo en las instrucciones del sistema de tu GPT, Proyecto de Claude o GEM de Gemini.</p>
+        </div>
+
+        <button class="copy-btn" type="button" id="copyPromptBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copiar prompt
+        </button>
       </div>
-    </div>
-    <div class="route-card route-b">
-      <div class="route-tag">Ruta B</div>
-      <div class="route-title">Revisar uno existente</div>
-      <div class="route-desc">Para quien ya tiene un modelo y quiere auditarlo, mejorarlo o someterlo a análisis.</div>
-      <div class="route-steps">
-        <div class="route-step">→ 7 tipos de análisis a elegir</div>
-        <div class="route-step">→ Semáforo por bloque</div>
-        <div class="route-step">→ Decisión estratégica de 30 días</div>
+
+      <div class="prompt-preview">
+        ## ROL Y PROPÓSITO — Eres un consultor estratégico especializado en modelos de negocio para empresas que operan en Ecuador, con profundo conocimiento del Business Model Canvas...
       </div>
-    </div>
-  </div>
 
-  <!-- FRASES DE INICIO -->
-  <div class="section-label">Frases de inicio</div>
-  <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">Estas frases activan análisis específicos dentro de una conversación ya iniciada con el asistente. Expande cada una para ver qué hace y cuándo usarla.</p>
-
-  <div id="phrases-list"></div>
-
-  <!-- PROMPT COMPLETO -->
-  <div class="section-label">Prompt completo</div>
-  <div class="prompt-block">
-    <div class="prompt-block-header">
-      <div class="prompt-block-title">Prompt del Asistente de Modelo de Negocio</div>
-      <div class="prompt-block-sub">Pégalo en las instrucciones del sistema de tu GPT, Proyecto de Claude o GEM de Gemini</div>
-    </div>
-    <div class="prompt-preview">## ROL Y PROPÓSITO
-
-Eres un consultor estratégico especializado en modelos de negocio para empresas que operan en Ecuador, con profundo conocimiento del Business Model Canvas (BMC) y sus 9 bloques: Segmento de Clientes, Propuesta de Valor, Canales, Relación con Clientes, Fuentes de Ingreso, Recursos Clave, Actividades Clave, Socios Clave y Estructura de Costos...</div>
-    <div class="copy-trigger" onclick="selectPrompt()">
-      <div class="copy-trigger-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Seleccionar prompt completo para copiar
-      </div>
-      <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-    </div>
-    <div class="copy-box" id="prompt-box">
-      <textarea id="prompt-ta" rows="12" readonly>## ROL Y PROPÓSITO
+      <div class="prompt-box">
+        <textarea id="promptTextarea" readonly>## ROL Y PROPÓSITO
 
 Eres un consultor estratégico especializado en modelos de negocio para empresas que operan en Ecuador, con profundo conocimiento del Business Model Canvas (BMC) y sus 9 bloques: Segmento de Clientes, Propuesta de Valor, Canales, Relación con Clientes, Fuentes de Ingreso, Recursos Clave, Actividades Clave, Socios Clave y Estructura de Costos.
 
@@ -322,12 +1139,22 @@ Basado en el modelo completo y los hallazgos del análisis, identifica la ÚNICA
 - Máximo 7 indicadores de resultado (lagging) y 15 indicadores proactivos (leading) en cualquier propuesta de KPIs.
 - Cuando detectes una dependencia crítica (persona, cliente, proveedor, tecnología), siempre ofrece las 3 opciones de mitigación: reemplazar localmente, tercerizar, o automatizar.
 - Considera siempre el contexto legal y operativo de Ecuador: obligaciones con SRI, IESS, regulaciones sectoriales, comportamiento del mercado local y acceso a financiamiento en el sistema financiero ecuatoriano.</textarea>
-      <div class="copy-box-footer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+
+        <div class="prompt-foot">
+          <span>Texto limpio · Listo para configurar</span>
+          <span id="promptCount">0 caracteres</span>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <footer class="footer">
+    <h2>Un Canvas útil termina en decisiones</h2>
+    <p>
+      Este asistente no solo ayuda a llenar bloques. Su valor está en detectar incoherencias,
+      dependencias críticas, costos invisibles y decisiones prioritarias para operar mejor en el contexto ecuatoriano.
+    </p>
+  </footer>
 
 </div>
 
@@ -383,68 +1210,141 @@ const phrases = [
   }
 ];
 
-document.getElementById('phrases-list').innerHTML = phrases.map(p => `
-  <div class="phrase-card ${p.clase}">
-    <div class="phrase-header" onclick="togglePhrase(${p.id})">
-      <div class="phrase-left">
-        <div class="phrase-dot"></div>
-        <div class="phrase-meta">
-          <span class="phrase-label">${p.label}</span>
-          <span class="phrase-text">${p.text}</span>
-        </div>
-      </div>
-      <svg class="chevron" id="pc-${p.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="phrase-body" id="pb-${p.id}">
-      <p class="phrase-explanation">${p.explanation}</p>
-      <p class="phrase-tip">${p.tip}</p>
-      <div class="copy-trigger" onclick="selectPhrase(${p.id})" style="margin-top:12px;border-radius:6px;">
-        <div class="copy-trigger-left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-          Seleccionar frase para copiar
-        </div>
-        <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-      </div>
-      <div class="copy-box" id="pbox-${p.id}">
-        <textarea id="pta-${p.id}" rows="3" readonly>${p.text}</textarea>
-        <div class="copy-box-footer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
-        </div>
-      </div>
-    </div>
-  </div>
-`).join('');
+const phrasesList = document.getElementById("phrasesList");
+const phraseSearch = document.getElementById("phraseSearch");
+const emptyState = document.getElementById("emptyState");
+const copyPromptBtn = document.getElementById("copyPromptBtn");
+const promptTextarea = document.getElementById("promptTextarea");
+const promptCount = document.getElementById("promptCount");
 
-function togglePhrase(id) {
-  const body = document.getElementById('pb-' + id);
-  const chev = document.getElementById('pc-' + id);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.phrase-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
-  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+function normalize(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
-function selectPhrase(id) {
-  const box = document.getElementById('pbox-' + id);
-  const ta = document.getElementById('pta-' + id);
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
+function copyIcon() {
+  return `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  `;
 }
 
-function selectPrompt() {
-  const box = document.getElementById('prompt-box');
-  const ta = document.getElementById('prompt-ta');
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
+function renderPhrases(query = "") {
+  const cleanQuery = normalize(query);
+
+  const filtered = phrases.filter(item => {
+    const searchable = normalize([
+      item.label,
+      item.text,
+      item.explanation,
+      item.tip
+    ].join(" "));
+
+    return !cleanQuery || searchable.includes(cleanQuery);
+  });
+
+  phrasesList.innerHTML = filtered.map(p => `
+    <article class="phrase-card ${p.clase}" data-phrase="${p.id}">
+      <button class="phrase-header" type="button" aria-expanded="false" aria-controls="phrase-body-${p.id}">
+        <div class="phrase-dot" aria-hidden="true"></div>
+
+        <div>
+          <div class="phrase-label">${p.label}</div>
+          <div class="phrase-text">${p.text}</div>
+        </div>
+
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+
+      <div class="phrase-body" id="phrase-body-${p.id}">
+        <p class="phrase-explanation">${p.explanation}</p>
+        <p class="phrase-tip">${p.tip}</p>
+
+        <div class="phrase-actions">
+          <button class="copy-small" type="button" data-copy-phrase="${p.id}">
+            ${copyIcon()}
+            Copiar frase
+          </button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  emptyState.classList.toggle("show", filtered.length === 0);
 }
+
+function togglePhrase(card) {
+  const isOpen = card.classList.contains("open");
+  const button = card.querySelector(".phrase-header");
+
+  document.querySelectorAll(".phrase-card").forEach(item => {
+    item.classList.remove("open");
+    item.querySelector(".phrase-header").setAttribute("aria-expanded", "false");
+  });
+
+  if (!isOpen) {
+    card.classList.add("open");
+    button.setAttribute("aria-expanded", "true");
+  }
+}
+
+async function copyText(text, button, successText) {
+  const original = button.innerHTML;
+
+  try {
+    await navigator.clipboard.writeText(text);
+    button.textContent = successText;
+  } catch (error) {
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.left = "-9999px";
+    document.body.appendChild(helper);
+    helper.focus();
+    helper.select();
+    document.execCommand("copy");
+    document.body.removeChild(helper);
+    button.textContent = "Texto copiado";
+  }
+
+  setTimeout(() => {
+    button.innerHTML = original;
+  }, 1600);
+}
+
+phrasesList.addEventListener("click", event => {
+  const header = event.target.closest(".phrase-header");
+  if (header) {
+    const card = header.closest(".phrase-card");
+    togglePhrase(card);
+    return;
+  }
+
+  const copyButton = event.target.closest("[data-copy-phrase]");
+  if (copyButton) {
+    const id = Number(copyButton.dataset.copyPhrase);
+    const phrase = phrases.find(item => item.id === id);
+    copyText(phrase.text, copyButton, "Frase copiada");
+  }
+});
+
+phraseSearch.addEventListener("input", event => {
+  renderPhrases(event.target.value.trim());
+});
+
+copyPromptBtn.addEventListener("click", () => {
+  copyText(promptTextarea.value, copyPromptBtn, "Prompt copiado");
+});
+
+promptCount.textContent = `${promptTextarea.value.length.toLocaleString("es-EC")} caracteres`;
+renderPhrases();
 </script>
 </body>
 </html>
