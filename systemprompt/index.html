@@ -3,507 +3,1031 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prompts de Sistema vs. Usuario — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<title>Prompts de Sistema vs Prompts de Usuario — Guía Visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --navy-bg: #e8eef8; --navy-text: #1e3a6e;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
-
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--navy-bg); color: var(--navy-text); margin-bottom: 0.75rem; }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
-
-  /* NAV TABS */
-  .nav-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 2rem; }
-  .nav-tab { flex: 1; font-size: 12px; font-weight: 500; padding: 11px 8px; text-align: center; cursor: pointer; color: var(--text-muted); background: var(--surface); border-right: 1px solid var(--border); transition: all 0.15s; line-height: 1.3; }
-  .nav-tab:last-child { border-right: none; }
-  .nav-tab:hover { background: var(--bg); color: var(--text); }
-  .nav-tab.active { background: var(--navy-bg); color: var(--navy-text); }
-  .nav-section { display: none; }
-  .nav-section.active { display: block; }
-
-  /* DEFINITION CARDS */
-  .def-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
-  .def-card { border-radius: var(--radius); padding: 16px; border: 1px solid; }
-  .dc-sistema { background: var(--navy-bg); border-color: var(--navy-border, #a8bfe0); }
-  .dc-usuario { background: var(--teal-bg); border-color: var(--teal-border); }
-  .def-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-  .dc-sistema .def-tag { color: var(--navy-text); }
-  .dc-usuario .def-tag { color: var(--teal-text); }
-  .def-title { font-size: 15px; font-weight: 500; margin-bottom: 8px; }
-  .dc-sistema .def-title { color: var(--navy-text); }
-  .dc-usuario .def-title { color: var(--teal-text); }
-  .def-desc { font-size: 12px; line-height: 1.65; margin-bottom: 10px; }
-  .dc-sistema .def-desc { color: var(--navy-text); opacity: 0.85; }
-  .dc-usuario .def-desc { color: var(--teal-text); opacity: 0.85; }
-  .def-items { display: flex; flex-direction: column; gap: 4px; }
-  .def-item { font-size: 11px; }
-  .dc-sistema .def-item { color: var(--navy-text); }
-  .dc-usuario .def-item { color: var(--teal-text); }
-
-  /* ANALOGY */
-  .analogy-row { display: flex; gap: 12px; align-items: stretch; margin-bottom: 1rem; }
-  .analogy-card { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 15px; }
-  .analogy-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
-  .al-sistema { color: var(--navy-text); }
-  .al-usuario { color: var(--teal-text); }
-  .analogy-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-  .analogy-text b { font-weight: 500; color: var(--text); }
-  .analogy-vs { display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: var(--text-faint); flex-shrink: 0; }
-
-  /* COMPARISON TABLE */
-  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); margin-bottom: 1rem; }
-  .comp-table th { background: var(--bg); font-weight: 500; font-size: 11px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text-faint); letter-spacing: 0.04em; text-transform: uppercase; }
-  .comp-table td { padding: 10px 14px; border-bottom: 0.5px solid var(--border); color: var(--text-muted); vertical-align: top; line-height: 1.55; }
-  .comp-table tr:last-child td { border-bottom: none; }
-  .comp-table td:first-child { font-weight: 500; color: var(--text); width: 28%; }
-  .comp-table td:nth-child(2) { color: var(--navy-text); }
-  .comp-table td:nth-child(3) { color: var(--teal-text); }
-
-  /* HIERARCHY */
-  .hierarchy { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-  .hier-row { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border-bottom: 0.5px solid var(--border); }
-  .hier-row:last-child { border-bottom: none; }
-  .hier-badge { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; min-width: 70px; text-align: center; }
-  .hb-1 { background: var(--navy-bg); color: var(--navy-text); }
-  .hb-2 { background: var(--teal-bg); color: var(--teal-text); }
-  .hier-arrow { font-size: 12px; color: var(--text-faint); flex-shrink: 0; }
-  .hier-text { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-  .hier-text b { font-weight: 500; color: var(--text); }
-
-  /* PLATFORMS */
-  .plat-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .ptab { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .ptab:hover { border-color: var(--border-strong); color: var(--text); }
-  .ptab-gem.active { background: var(--accent-bg); color: var(--accent-text); border-color: var(--accent-border); }
-  .ptab-gpt.active { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
-  .ptab-claude.active { background: var(--coral-bg); color: var(--coral-text); border-color: var(--coral-border); }
-  .plat-content { display: none; }
-  .plat-content.active { display: block; }
-  .plat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .plat-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-  .plat-icon { width: 30px; height: 30px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .plat-icon svg { width: 14px; height: 14px; }
-  .pi-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .pi-green { background: var(--green-bg); color: var(--green-text); }
-  .pi-coral { background: var(--coral-bg); color: var(--coral-text); }
-  .plat-name { font-size: 14px; font-weight: 500; color: var(--text); }
-  .plat-sub { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
-  .plat-body { padding: 14px 16px; }
-  .plat-field { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 8px; }
-  .plat-field-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; color: var(--text-faint); }
-  .plat-field-val { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
-  .plat-field-val b { font-weight: 500; color: var(--text); }
-  .plat-tip { font-size: 12px; line-height: 1.6; padding: 9px 12px; border-radius: var(--radius-sm); }
-  .pt-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .pt-green { background: var(--green-bg); color: var(--green-text); }
-  .pt-coral { background: var(--coral-bg); color: var(--coral-text); }
-  .plat-tip b { font-weight: 500; }
-
-  /* EXAMPLE INTERACTIVE */
-  .example-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-  .example-header { padding: 13px 16px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 500; color: var(--text); display: flex; align-items: center; gap: 8px; }
-  .example-header svg { width: 15px; height: 15px; color: var(--amber-text); }
-  .example-layer { border-bottom: 0.5px solid var(--border); }
-  .example-layer:last-child { border-bottom: none; }
-  .example-layer-header { display: flex; align-items: center; gap: 10px; padding: 11px 16px; cursor: pointer; user-select: none; }
-  .example-layer-header:hover { background: var(--bg); }
-  .el-tag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
-  .elt-sistema { background: var(--navy-bg); color: var(--navy-text); }
-  .elt-usuario { background: var(--teal-bg); color: var(--teal-text); }
-  .elt-resultado { background: var(--green-bg); color: var(--green-text); }
-  .el-preview { font-size: 12px; color: var(--text-faint); font-style: italic; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chevron { width: 15px; height: 15px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
-  .chevron.open { transform: rotate(180deg); }
-  .example-layer-body { display: none; padding: 10px 16px 14px; }
-  .example-layer-body.open { display: block; }
-  .elb-text { font-size: 13px; color: var(--text-muted); line-height: 1.7; font-family: 'DM Mono', monospace; font-size: 12px; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
-  .example-note { font-size: 11px; color: var(--text-faint); margin-top: 7px; line-height: 1.5; }
-  .example-note b { font-weight: 500; color: var(--text-muted); }
-
-  /* KEY CONCEPTS */
-  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-bottom: 1rem; }
-  .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 15px; }
-  .cc-icon { width: 28px; height: 28px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-  .cc-icon svg { width: 13px; height: 13px; }
-  .cci-navy { background: var(--navy-bg); color: var(--navy-text); }
-  .cci-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .cci-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .cci-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .cc-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .cc-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .cc-desc b { font-weight: 500; color: var(--text); }
-
-  .tip-global { background: var(--navy-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--navy-text); line-height: 1.65; margin-bottom: 1.75rem; }
-  .tip-global b { font-weight: 500; }
-
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .def-grid { grid-template-columns: 1fr; }
-    .analogy-row { flex-direction: column; }
-    .analogy-vs { display: none; }
-    .nav-tab { font-size: 11px; padding: 10px 4px; }
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#f6f4ef;
+--surface:#ffffff;
+--surface-2:#fbfaf7;
+--text:#171614;
+--muted:#68645c;
+--faint:#98938a;
+--border:#e6e1d7;
+--border-strong:#cbc3b4;
+--blue-bg:#e9f2fb;
+--blue:#195d9d;
+--blue-br:#b8d2ef;
+--green-bg:#eaf4e5;
+--green:#2d5a12;
+--green-br:#c7deba;
+--purple-bg:#efecfb;
+--purple:#43348d;
+--purple-br:#cfc7f3;
+--amber-bg:#fdf1db;
+--amber:#855111;
+--amber-br:#f0cf95;
+--coral-bg:#faece7;
+--coral:#8f3a20;
+--coral-br:#eeb39f;
+--dark:#171614;
+--radius:18px;
+--radius-lg:26px;
+--shadow:0 16px 45px rgba(20,18,15,.06);
+--max:1120px;
+}
+html{scroll-behavior:smooth}
+body{
+font-family:"DM Sans",sans-serif;
+background:
+radial-gradient(circle at top left,rgba(67,52,141,.09),transparent 32%),
+radial-gradient(circle at top right,rgba(25,93,157,.08),transparent 34%),
+var(--bg);
+color:var(--text);
+line-height:1.6;
+padding:28px 18px 64px;
+}
+.page{max-width:var(--max);margin:0 auto}
+.eyebrow{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:6px 12px;
+border-radius:999px;
+background:var(--purple-bg);
+color:var(--purple);
+border:1px solid var(--purple-br);
+font-size:12px;
+font-weight:700;
+letter-spacing:.06em;
+text-transform:uppercase;
+}
+.hero{
+background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%);
+border:1px solid var(--border);
+border-radius:var(--radius-lg);
+box-shadow:var(--shadow);
+overflow:hidden;
+margin-bottom:24px;
+}
+.hero-inner{
+display:grid;
+grid-template-columns:1.25fr .85fr;
+gap:28px;
+padding:38px 34px 28px;
+}
+.hero h1{
+font-size:44px;
+line-height:1.08;
+letter-spacing:-.035em;
+margin-top:16px;
+max-width:760px;
+}
+.lead{
+font-size:17px;
+color:var(--muted);
+margin-top:16px;
+max-width:760px;
+}
+.hero-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+align-content:start;
+}
+.mini{
+background:var(--surface-2);
+border:1px solid var(--border);
+border-radius:16px;
+padding:15px;
+}
+.mini .k{
+font-size:11px;
+font-weight:700;
+letter-spacing:.07em;
+text-transform:uppercase;
+color:var(--faint);
+margin-bottom:6px;
+}
+.mini .v{
+font-size:14px;
+line-height:1.45;
+color:var(--text);
+}
+.hero-note{
+border-top:1px solid var(--border);
+background:var(--surface-2);
+padding:18px 34px 22px;
+display:flex;
+gap:12px;
+align-items:flex-start;
+font-size:14px;
+color:var(--muted);
+}
+.hero-note strong{color:var(--text)}
+.nav{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin:0 0 28px;
+}
+.nav a{
+text-decoration:none;
+font-size:13px;
+font-weight:700;
+color:var(--muted);
+background:rgba(255,255,255,.7);
+border:1px solid var(--border);
+border-radius:999px;
+padding:8px 12px;
+transition:.18s ease;
+}
+.nav a:hover{
+color:var(--text);
+border-color:var(--border-strong);
+transform:translateY(-1px);
+}
+.section{
+margin-top:34px;
+}
+.section-head{
+margin-bottom:16px;
+}
+.section-label{
+font-size:12px;
+letter-spacing:.08em;
+text-transform:uppercase;
+font-weight:700;
+color:var(--faint);
+margin-bottom:8px;
+}
+.section-title{
+font-size:31px;
+line-height:1.15;
+letter-spacing:-.025em;
+margin-bottom:10px;
+}
+.section-sub{
+color:var(--muted);
+font-size:15px;
+max-width:840px;
+}
+.grid-2{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+}
+.grid-3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+}
+.grid-4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+}
+.card{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+overflow:hidden;
+}
+.card-body{
+padding:20px;
+}
+.card h3{
+font-size:20px;
+line-height:1.2;
+letter-spacing:-.01em;
+margin-bottom:8px;
+}
+.card p{
+font-size:14px;
+color:var(--muted);
+}
+.tag{
+display:inline-flex;
+align-items:center;
+gap:6px;
+border:1px solid transparent;
+border-radius:999px;
+padding:5px 10px;
+font-size:11px;
+font-weight:700;
+letter-spacing:.06em;
+text-transform:uppercase;
+margin-bottom:12px;
+}
+.blue{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-br)}
+.green{background:var(--green-bg);color:var(--green);border-color:var(--green-br)}
+.purple{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-br)}
+.amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-br)}
+.coral{background:var(--coral-bg);color:var(--coral);border-color:var(--coral-br)}
+.list{
+display:grid;
+gap:8px;
+margin-top:13px;
+}
+.list div{
+position:relative;
+font-size:14px;
+color:var(--muted);
+padding-left:17px;
+}
+.list div:before{
+content:"";
+position:absolute;
+left:0;
+top:10px;
+width:6px;
+height:6px;
+border-radius:999px;
+background:var(--border-strong);
+}
+.callout{
+border:1px solid;
+border-radius:var(--radius);
+padding:18px 20px;
+font-size:14px;
+line-height:1.65;
+}
+.callout strong{color:var(--text)}
+.callout-blue{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue)}
+.callout-amber{background:var(--amber-bg);border-color:var(--amber-br);color:var(--amber)}
+.callout-green{background:var(--green-bg);border-color:var(--green-br);color:var(--green)}
+.panel{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+overflow:hidden;
+}
+.panel-head{
+padding:20px 22px 14px;
+border-bottom:1px solid var(--border);
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:16px;
+}
+.panel-head h3{
+font-size:22px;
+line-height:1.15;
+}
+.panel-head p{
+font-size:14px;
+color:var(--muted);
+margin-top:6px;
+max-width:760px;
+}
+.panel-content{
+padding:20px 22px 22px;
+}
+.table-wrap{
+overflow-x:auto;
+border-radius:var(--radius);
+border:1px solid var(--border);
+background:var(--surface);
+box-shadow:var(--shadow);
+}
+table{
+width:100%;
+border-collapse:collapse;
+min-width:780px;
+font-size:14px;
+}
+th{
+text-align:left;
+font-size:11px;
+font-weight:700;
+letter-spacing:.07em;
+text-transform:uppercase;
+color:var(--faint);
+background:var(--surface-2);
+border-bottom:1px solid var(--border);
+padding:13px 15px;
+}
+td{
+padding:14px 15px;
+border-bottom:1px solid var(--border);
+vertical-align:top;
+color:var(--muted);
+}
+tr:last-child td{border-bottom:none}
+td:first-child{
+color:var(--text);
+font-weight:700;
+width:22%;
+}
+td:nth-child(2){color:var(--blue)}
+td:nth-child(3){color:var(--green)}
+.flow{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+}
+.step{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+padding:18px;
+min-height:176px;
+position:relative;
+}
+.step .n{
+font-family:"DM Mono",monospace;
+font-size:12px;
+font-weight:500;
+color:var(--faint);
+margin-bottom:10px;
+}
+.step h3{
+font-size:17px;
+line-height:1.2;
+margin-bottom:8px;
+}
+.step p{
+font-size:13px;
+color:var(--muted);
+}
+.example-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+.code-card{
+background:#171614;
+color:#f3eee7;
+border-radius:var(--radius);
+overflow:hidden;
+box-shadow:var(--shadow);
+}
+.code-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:12px 15px;
+border-bottom:1px solid rgba(255,255,255,.12);
+font-size:12px;
+font-weight:700;
+letter-spacing:.06em;
+text-transform:uppercase;
+color:#cfc7bd;
+}
+.code-head span:last-child{
+font-family:"DM Mono",monospace;
+color:#9f968b;
+font-weight:400;
+}
+pre{
+white-space:pre-wrap;
+font-family:"DM Mono",monospace;
+font-size:12px;
+line-height:1.7;
+padding:16px;
+color:#f4efe8;
+}
+details{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+overflow:hidden;
+}
+details + details{margin-top:12px}
+summary{
+list-style:none;
+cursor:pointer;
+padding:18px 20px;
+font-weight:700;
+display:flex;
+justify-content:space-between;
+gap:14px;
+align-items:center;
+}
+summary::-webkit-details-marker{display:none}
+summary:after{
+content:"+";
+font-family:"DM Mono",monospace;
+color:var(--faint);
+}
+details[open] summary:after{content:"–"}
+.details-body{
+border-top:1px solid var(--border);
+padding:16px 20px 20px;
+color:var(--muted);
+font-size:14px;
+}
+.platforms{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+}
+.platform-card{
+background:var(--surface);
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+overflow:hidden;
+}
+.platform-top{
+padding:18px 20px 14px;
+border-bottom:1px solid var(--border);
+}
+.platform-top h3{
+font-size:20px;
+line-height:1.15;
+margin-top:8px;
+}
+.platform-body{
+padding:18px 20px 20px;
+}
+.field{
+background:var(--surface-2);
+border:1px solid var(--border);
+border-radius:14px;
+padding:13px;
+margin-bottom:10px;
+}
+.field .label{
+font-size:10px;
+font-weight:700;
+letter-spacing:.07em;
+text-transform:uppercase;
+color:var(--faint);
+margin-bottom:5px;
+}
+.field .value{
+font-size:14px;
+color:var(--muted);
+line-height:1.55;
+}
+.checklist{
+display:grid;
+grid-template-columns:1.05fr .95fr;
+gap:16px;
+align-items:stretch;
+}
+.checklist .panel-content{
+display:grid;
+gap:10px;
+}
+.check{
+display:flex;
+gap:10px;
+align-items:flex-start;
+font-size:14px;
+color:var(--muted);
+}
+.check b{color:var(--text)}
+.check span{
+width:22px;
+height:22px;
+border-radius:999px;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+background:var(--green-bg);
+color:var(--green);
+border:1px solid var(--green-br);
+font-size:12px;
+font-weight:700;
+flex:0 0 auto;
+}
+.footer{
+margin-top:34px;
+background:#171614;
+color:#f3eee7;
+border-radius:var(--radius-lg);
+padding:28px 30px;
+}
+.footer h2{
+font-size:28px;
+line-height:1.15;
+letter-spacing:-.025em;
+margin-bottom:10px;
+}
+.footer p{
+font-size:15px;
+color:#d8d1c6;
+max-width:860px;
+}
+.footer .final-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-top:18px;
+}
+.footer .final-card{
+background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.11);
+border-radius:16px;
+padding:14px;
+}
+.footer .final-card .k{
+font-size:11px;
+font-weight:700;
+letter-spacing:.07em;
+text-transform:uppercase;
+color:#aaa196;
+margin-bottom:6px;
+}
+.footer .final-card .v{
+font-size:14px;
+color:#f3eee7;
+line-height:1.45;
+}
+@media(max-width:960px){
+.hero-inner,.grid-2,.example-grid,.checklist{grid-template-columns:1fr}
+.grid-3,.grid-4,.flow,.platforms,.footer .final-grid{grid-template-columns:1fr 1fr}
+.hero h1{font-size:36px}
+}
+@media(max-width:640px){
+body{padding:16px 12px 42px}
+.hero-inner,.hero-note,.panel-head,.panel-content,.card-body,.footer{padding-left:17px;padding-right:17px}
+.hero h1{font-size:30px}
+.section-title{font-size:25px}
+.grid-3,.grid-4,.flow,.platforms,.footer .final-grid,.hero-grid{grid-template-columns:1fr}
+.nav{display:none}
+table{min-width:720px}
+}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <header>
-    <div class="badge">IA Práctico — Prompting avanzado</div>
-    <h1>Prompts de Sistema vs. Prompts de Usuario</h1>
-    <p class="subtitle">Cómo funciona la jerarquía de instrucciones en la IA, dónde se configura cada nivel y cómo aplicarlo en herramientas personalizadas como GPTs, GEMs y Proyectos de Claude.</p>
-  </header>
+<section class="hero">
+<div class="hero-inner">
+<div>
+<div class="eyebrow">IA Práctico · Prompting avanzado</div>
+<h1>Prompts de Sistema vs Prompts de Usuario</h1>
+<p class="lead">La diferencia que separa una simple petición de una instrucción profesional: el sistema define las reglas; el usuario pide una tarea dentro de esas reglas.</p>
+</div>
+<div class="hero-grid">
+<div class="mini">
+<div class="k">Mayor autoridad</div>
+<div class="v">El prompt de sistema define rol, límites, formato y comportamiento base.</div>
+</div>
+<div class="mini">
+<div class="k">Tarea puntual</div>
+<div class="v">El prompt de usuario expresa qué quiere lograr en ese turno.</div>
+</div>
+<div class="mini">
+<div class="k">Clave profesional</div>
+<div class="v">Diseñar el marco antes de pedir el resultado.</div>
+</div>
+<div class="mini">
+<div class="k">Riesgo común</div>
+<div class="v">Intentar corregir con prompts de usuario algo que debía vivir en sistema.</div>
+</div>
+</div>
+</div>
+<div class="hero-note">
+<div>⚡</div>
+<div><strong>Idea central:</strong> no toda instrucción tiene el mismo peso. El prompt de sistema funciona como la constitución de la interacción; el prompt de usuario es la solicitud concreta que debe respetar esa constitución.</div>
+</div>
+</section>
 
-  <div class="tip-global">
-    <b>Idea central:</b> No toda instrucción que le das a la IA tiene el mismo peso. El prompt de sistema es la constitución — define las reglas que nunca cambian. El prompt de usuario es la petición dentro de esas reglas. Entender esta jerarquía es la base del prompting profesional.
-  </div>
+<nav class="nav" aria-label="Navegación de la guía">
+<a href="#definicion">Definiciones</a>
+<a href="#comparativa">Comparativa</a>
+<a href="#jerarquia">Jerarquía</a>
+<a href="#plataformas">Plataformas</a>
+<a href="#ejemplo">Ejemplo</a>
+<a href="#checklist">Checklist</a>
+</nav>
 
-  <div class="nav-tabs" id="navTabs">
-    <div class="nav-tab active" onclick="showSection('definicion', this)">Definiciones</div>
-    <div class="nav-tab" onclick="showSection('jerarquia', this)">Jerarquía y analogías</div>
-    <div class="nav-tab" onclick="showSection('plataformas', this)">En cada plataforma</div>
-    <div class="nav-tab" onclick="showSection('ejemplo', this)">Ejemplo en acción</div>
-  </div>
-
-  <!-- ===== SECCIÓN 1: DEFINICIONES ===== -->
-  <div class="nav-section active" id="sec-definicion">
-
-    <div class="section-label">Los dos niveles de comunicación con la IA</div>
-    <div class="def-grid">
-      <div class="def-card dc-sistema">
-        <div class="def-tag">Nivel 1 — Mayor autoridad</div>
-        <div class="def-title">Prompt de Sistema</div>
-        <div class="def-desc">Las instrucciones maestras. Se configura antes de que comience la interacción y define las reglas de juego para toda la sesión.</div>
-        <div class="def-items">
-          <div class="def-item">→ Define el rol y la personalidad de la IA</div>
-          <div class="def-item">→ Establece restricciones y límites éticos</div>
-          <div class="def-item">→ Persiste durante toda la conversación</div>
-          <div class="def-item">→ El usuario no puede anularlo</div>
-        </div>
-      </div>
-      <div class="def-card dc-usuario">
-        <div class="def-tag">Nivel 2 — Subordinado al sistema</div>
-        <div class="def-title">Prompt de Usuario</div>
-        <div class="def-desc">El mensaje directo del humano en la interfaz. Representa la necesidad inmediata dentro del marco definido por el sistema.</div>
-        <div class="def-items">
-          <div class="def-item">→ Activa una tarea específica</div>
-          <div class="def-item">→ Cambia en cada turno de conversación</div>
-          <div class="def-item">→ Opera dentro de las reglas del sistema</div>
-          <div class="def-item">→ Define el resultado que se desea</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-label">Comparativa de características</div>
-    <div style="overflow-x:auto">
-      <table class="comp-table">
-        <thead>
-          <tr><th>Característica</th><th>Prompt de sistema</th><th>Prompt de usuario</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Analogía</td><td>El manual de identidad corporativa</td><td>El pedido de un cliente específico</td></tr>
-          <tr><td>Persistencia</td><td>Permanente durante toda la sesión</td><td>Efímero — cambia en cada turno</td></tr>
-          <tr><td>Autoridad</td><td>Máxima — el modelo lo prioriza siempre</td><td>Subordinada a las reglas del sistema</td></tr>
-          <tr><td>Ejemplo</td><td>"Actúa como un analista de datos experto."</td><td>"¿Qué significa este gráfico de barras?"</td></tr>
-          <tr><td>Control que ejerce</td><td>Evita que la IA se salga de su propósito</td><td>Define el resultado que se desea obtener</td></tr>
-          <tr><td>Quién lo configura</td><td>El creador del asistente o aplicación</td><td>El usuario final en tiempo real</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-label">Conceptos clave</div>
-    <div class="concept-grid">
-      <div class="concept-card">
-        <div class="cc-icon cci-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div class="cc-title">Jerarquía de instrucciones</div>
-        <div class="cc-desc">El sistema siempre tiene más autoridad que el usuario. Si el sistema dice "no ofrezcas descuentos", ningún usuario puede obligar a la IA a ofrecerlos.</div>
-      </div>
-      <div class="concept-card">
-        <div class="cc-icon cci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="cc-title">Persistencia vs. efímero</div>
-        <div class="cc-desc">El sistema dura toda la sesión. El usuario cambia en cada mensaje. Esta distinción determina qué debe ir en cada nivel al diseñar un asistente.</div>
-      </div>
-      <div class="concept-card">
-        <div class="cc-icon cci-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="cc-title">Separación de roles</div>
-        <div class="cc-desc">El creador del asistente escribe el sistema. El usuario final escribe sus prompts. En herramientas personalizadas, estos dos roles raramente son la misma persona.</div>
-      </div>
-      <div class="concept-card">
-        <div class="cc-icon cci-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-        <div class="cc-title">Marco de comportamiento</div>
-        <div class="cc-desc">El sistema no solo restringe — también amplía. Puede dar al modelo acceso a herramientas, bases de conocimiento y comportamientos que sin el sistema no tendría.</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ===== SECCIÓN 2: JERARQUÍA ===== -->
-  <div class="nav-section" id="sec-jerarquia">
-
-    <div class="section-label">La jerarquía en una imagen</div>
-    <div class="hierarchy">
-      <div class="hier-row">
-        <span class="hier-badge hb-1">Sistema</span>
-        <span class="hier-arrow">↓ define el marco</span>
-        <span class="hier-text"><b>Nivel de mayor autoridad.</b> Establece las reglas, el rol, el tono y las restricciones. Ninguna instrucción del usuario puede anularlo.</span>
-      </div>
-      <div class="hier-row">
-        <span class="hier-badge hb-2">Usuario</span>
-        <span class="hier-arrow">↓ opera dentro</span>
-        <span class="hier-text"><b>Opera dentro del marco definido por el sistema.</b> Puede pedir lo que quiera, pero la IA solo responderá si la petición es compatible con las reglas del sistema.</span>
-      </div>
-      <div class="hier-row" style="background:var(--green-bg)">
-        <span class="hier-badge" style="background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)">Respuesta</span>
-        <span class="hier-arrow">← resultado</span>
-        <span class="hier-text" style="color:var(--green-text)"><b>La intersección de ambos niveles.</b> La IA responde a la petición del usuario sin violar las instrucciones del sistema.</span>
-      </div>
-    </div>
-
-    <div class="section-label">Analogías para entenderlo</div>
-    <div class="analogy-row">
-      <div class="analogy-card">
-        <div class="analogy-label al-sistema">Prompt de sistema</div>
-        <div class="analogy-text">El <b>manual de identidad corporativa</b> de una empresa. Define cómo habla la marca, qué puede y no puede prometer, y cuál es su propósito. Existe antes de que llegue ningún cliente.</div>
-      </div>
-      <div class="analogy-vs">vs.</div>
-      <div class="analogy-card">
-        <div class="analogy-label al-usuario">Prompt de usuario</div>
-        <div class="analogy-text">El <b>pedido de un cliente específico</b>. Puede pedir lo que quiera, pero el empleado (la IA) solo hará lo que está dentro del manual de la empresa.</div>
-      </div>
-    </div>
-
-    <div class="analogy-row">
-      <div class="analogy-card">
-        <div class="analogy-label al-sistema">Prompt de sistema</div>
-        <div class="analogy-text">La <b>constitución de un país</b>. Es la norma suprema que establece los principios fundamentales. Las leyes ordinarias (los usuarios) no pueden contradecirla.</div>
-      </div>
-      <div class="analogy-vs">vs.</div>
-      <div class="analogy-card">
-        <div class="analogy-label al-usuario">Prompt de usuario</div>
-        <div class="analogy-text">Una <b>ley ordinaria</b> o decreto. Puede crear reglas específicas, pero siempre dentro del marco constitucional. Si la contradice, no tiene efecto.</div>
-      </div>
-    </div>
-
-    <div class="analogy-row">
-      <div class="analogy-card">
-        <div class="analogy-label al-sistema">Prompt de sistema</div>
-        <div class="analogy-text">Las <b>instrucciones de un empleado nuevo</b> en su primer día: rol, valores de la empresa, qué puede y no puede hacer, cómo hablar con los clientes.</div>
-      </div>
-      <div class="analogy-vs">vs.</div>
-      <div class="analogy-card">
-        <div class="analogy-label al-usuario">Prompt de usuario</div>
-        <div class="analogy-text">La <b>consulta de un cliente</b> que llega a ese empleado. El empleado responde según lo que aprendió el primer día, no según lo que el cliente le pida que haga.</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ===== SECCIÓN 3: PLATAFORMAS ===== -->
-  <div class="nav-section" id="sec-plataformas">
-
-    <div class="section-label">Dónde se configura el prompt de sistema en cada plataforma</div>
-    <p style="font-size:13px;color:var(--text-muted);line-height:1.65;margin-bottom:1rem">Las principales plataformas de IA permiten crear asistentes personalizados. En todos los casos, el prompt de sistema es el campo donde configuras las instrucciones permanentes. El nombre del campo varía según la plataforma.</p>
-
-    <div class="plat-tabs">
-      <button class="ptab ptab-gem active" onclick="showPlat('gem', this)">Gemini — GEMs</button>
-      <button class="ptab ptab-gpt" onclick="showPlat('gpt', this)">ChatGPT — GPTs</button>
-      <button class="ptab ptab-claude" onclick="showPlat('claude', this)">Claude — Proyectos</button>
-    </div>
-
-    <div class="plat-content active" id="plat-gem">
-      <div class="plat-card">
-        <div class="plat-header">
-          <div class="plat-icon pi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-          <div>
-            <div class="plat-name">Gemini — GEMs</div>
-            <div class="plat-sub">gemini.google.com → Mis Gems → Editar</div>
-          </div>
-        </div>
-        <div class="plat-body">
-          <div class="plat-field">
-            <div class="plat-field-label">Nombre del campo en la interfaz</div>
-            <div class="plat-field-val"><b>Instrucciones</b> — es el área de texto principal al editar un GEM</div>
-          </div>
-          <div class="plat-field">
-            <div class="plat-field-label">Qué escribir aquí</div>
-            <div class="plat-field-val">El rol del GEM, su especialización, el tono de respuesta, qué puede y no puede hacer, y las fuentes que debe priorizar. También puedes cargar archivos en la sección <b>Conocimiento</b> para que el GEM los use como base de referencia.</div>
-          </div>
-          <div class="plat-field" style="margin-bottom:10px">
-            <div class="plat-field-label">Ejemplo de instrucción de sistema</div>
-            <div class="plat-field-val" style="font-family:'DM Mono',monospace;font-size:12px;line-height:1.7">Eres un editor de estilo especializado en comunicación corporativa. Siempre corriges usando las normas de la RAE. Nunca alteres el significado del texto original. Si encuentras laísmo o dequeísmo, señálalo con una nota explicativa antes de la corrección.</div>
-          </div>
-          <div class="plat-tip pt-blue"><b>Diferencia clave:</b> en Gems, el usuario final solo ve la interfaz de chat — nunca ve las instrucciones que escribiste. El sistema opera de forma invisible.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="plat-content" id="plat-gpt">
-      <div class="plat-card">
-        <div class="plat-header">
-          <div class="plat-icon pi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
-          <div>
-            <div class="plat-name">ChatGPT — GPTs personalizados</div>
-            <div class="plat-sub">chatgpt.com → Mis GPTs → Configurar</div>
-          </div>
-        </div>
-        <div class="plat-body">
-          <div class="plat-field">
-            <div class="plat-field-label">Nombre del campo en la interfaz</div>
-            <div class="plat-field-val"><b>Instructions</b> — en la pestaña "Configurar" del panel de edición del GPT</div>
-          </div>
-          <div class="plat-field">
-            <div class="plat-field-label">Qué escribir aquí</div>
-            <div class="plat-field-val">El rol del GPT, su comportamiento, qué herramientas puede activar (búsqueda web, generación de imágenes, análisis de datos) y bajo qué condiciones. También defines las restricciones de seguridad y el alcance de las respuestas.</div>
-          </div>
-          <div class="plat-field" style="margin-bottom:10px">
-            <div class="plat-field-label">Ventaja adicional de GPTs</div>
-            <div class="plat-field-val">Puedes definir en el sistema qué herramientas integradas tiene disponibles el GPT: si puede buscar en internet, generar imágenes con DALL-E o ejecutar código Python. El usuario no puede activar herramientas que el sistema no haya habilitado.</div>
-          </div>
-          <div class="plat-tip pt-green"><b>Buena práctica:</b> incluye en las instrucciones las "reglas de oro" del negocio — frases como "nunca ofrezcas reembolsos, solo soluciones técnicas" o "escala al humano si no puedes resolver en 3 intentos".</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="plat-content" id="plat-claude">
-      <div class="plat-card">
-        <div class="plat-header">
-          <div class="plat-icon pi-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <div>
-            <div class="plat-name">Claude — Proyectos</div>
-            <div class="plat-sub">claude.ai → Proyectos → Instrucciones del proyecto</div>
-          </div>
-        </div>
-        <div class="plat-body">
-          <div class="plat-field">
-            <div class="plat-field-label">Nombre del campo en la interfaz</div>
-            <div class="plat-field-val"><b>Instrucciones del proyecto</b> — en la configuración del Proyecto, se aplican a todos los chats dentro de ese proyecto</div>
-          </div>
-          <div class="plat-field">
-            <div class="plat-field-label">Qué escribir aquí</div>
-            <div class="plat-field-val">El comportamiento base que Claude debe mantener en todas las conversaciones del proyecto: rol, tono, restricciones y fuentes de verdad. Puedes también cargar archivos técnicos o manuales para que Claude responda basándose exclusivamente en esa documentación.</div>
-          </div>
-          <div class="plat-field" style="margin-bottom:10px">
-            <div class="plat-field-label">Ventaja adicional de Proyectos</div>
-            <div class="plat-field-val">Las instrucciones del proyecto se aplican automáticamente a <b>todos los chats nuevos</b> dentro del proyecto, sin necesidad de repetirlas. Ideal para equipos que comparten un mismo asistente especializado.</div>
-          </div>
-          <div class="plat-tip pt-coral"><b>Caso de uso ideal:</b> carga manuales internos o normativas como archivos del proyecto y escribe en las instrucciones: "Responde únicamente basándote en los documentos cargados. Si la información no está en ellos, indícalo explícitamente."</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- ===== SECCIÓN 4: EJEMPLO ===== -->
-  <div class="nav-section" id="sec-ejemplo">
-
-    <div class="section-label">El ejemplo completo — soporte técnico de software</div>
-    <p style="font-size:13px;color:var(--text-muted);line-height:1.65;margin-bottom:1rem">Este ejemplo muestra cómo los tres niveles interactúan: el sistema define las reglas, el usuario hace una petición que incluye algo que el sistema prohíbe, y la IA responde respetando las reglas del sistema sin importar lo que pida el usuario.</p>
-
-    <div class="example-box">
-      <div class="example-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Asistente de Soporte Técnico — cómo actúan los tres niveles
-      </div>
-
-      <div class="example-layer">
-        <div class="example-layer-header" onclick="toggleEx(1)">
-          <span class="el-tag elt-sistema">Sistema</span>
-          <span class="el-preview">Eres un técnico de nivel 2. Tu tono es paciente...</span>
-          <svg class="chevron" id="ex-chev-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="example-layer-body" id="ex-body-1">
-          <div class="elb-text">Eres un técnico de soporte de nivel 2. Tu tono es paciente y estructurado. Regla de oro: no ofrezcas reembolsos bajo ninguna circunstancia, solo soluciones técnicas. Si el problema persiste tras 3 intentos de solución, escala el caso al departamento humano.</div>
-          <div class="example-note"><b>Lo que hace este sistema:</b> define el rol (técnico L2), el tono (paciente), una restricción crítica (no reembolsos) y un protocolo de escalada. Todo esto opera en segundo plano — el usuario no lo ve.</div>
-        </div>
-      </div>
-
-      <div class="example-layer">
-        <div class="example-layer-header" onclick="toggleEx(2)">
-          <span class="el-tag elt-usuario">Usuario</span>
-          <span class="el-preview">Mi aplicación se cierra sola al abrir un PDF. ¡Exijo que me devuelvan mi dinero!</span>
-          <svg class="chevron" id="ex-chev-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="example-layer-body" id="ex-body-2">
-          <div class="elb-text">Mi aplicación se cierra sola al abrir un archivo PDF. ¡Exijo que me devuelvan mi dinero!</div>
-          <div class="example-note"><b>Lo que hace este prompt:</b> contiene dos cosas — un problema técnico legítimo (la app se cierra) y una petición que el sistema prohíbe (el reembolso). La IA debe atender lo primero e ignorar lo segundo.</div>
-        </div>
-      </div>
-
-      <div class="example-layer">
-        <div class="example-layer-header" onclick="toggleEx(3)">
-          <span class="el-tag elt-resultado">Resultado de la IA</span>
-          <span class="el-preview">Siento mucho los inconvenientes. Como técnico, mi prioridad es resolver...</span>
-          <svg class="chevron" id="ex-chev-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="example-layer-body" id="ex-body-3">
-          <div class="elb-text">Siento mucho los inconvenientes que está experimentando. Como técnico, mi prioridad es resolver el error de apertura del PDF para que pueda usar la aplicación con normalidad. Probemos primero borrando la caché: vaya a Configuración → Almacenamiento → Borrar caché y reinicie la aplicación. ¿El problema persiste después de ese paso?</div>
-          <div class="example-note"><b>Lo que demuestra este resultado:</b> la IA reconoció la frustración del usuario (tono empático), atendió el problema técnico con un paso concreto, e ignoró completamente la exigencia del reembolso — exactamente como el sistema indicó. El usuario no puede "romper" esa regla.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-label">Qué aprender de este ejemplo</div>
-    <div class="concept-grid">
-      <div class="concept-card">
-        <div class="cc-icon cci-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div class="cc-title">El sistema es invisible pero omnipresente</div>
-        <div class="cc-desc">El usuario nunca vio las instrucciones del sistema, pero cada respuesta de la IA estuvo moldeada por ellas. Las "reglas de oro" operan en segundo plano siempre.</div>
-      </div>
-      <div class="concept-card">
-        <div class="cc-icon cci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-        <div class="cc-title">El tono lo define el sistema, no el usuario</div>
-        <div class="cc-desc">Aunque el usuario escribió en mayúsculas con signo de exclamación, la IA respondió con calma. El tono "paciente y estructurado" del sistema prevalece sobre el tono del usuario.</div>
-      </div>
-      <div class="concept-card">
-        <div class="cc-icon cci-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-        <div class="cc-title">El sistema puede incluir protocolos completos</div>
-        <div class="cc-desc">La instrucción de escalar al humano tras 3 intentos es un protocolo operativo completo escrito en el sistema. El usuario no puede saltárselo, y la IA lo seguirá automáticamente.</div>
-      </div>
-    </div>
-
-  </div>
-
+<section class="section" id="definicion">
+<div class="section-head">
+<div class="section-label">Los dos niveles de comunicación</div>
+<h2 class="section-title">Primero el marco. Luego la petición.</h2>
+<p class="section-sub">Para trabajar bien con IA, conviene separar las instrucciones que definen cómo debe comportarse el modelo de las instrucciones que piden una tarea específica.</p>
 </div>
 
-<script>
-function showSection(id, el) {
-  document.querySelectorAll('.nav-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  el.classList.add('active');
-}
+<div class="grid-2">
+<article class="card">
+<div class="card-body">
+<div class="tag blue">Nivel 1 · Sistema</div>
+<h3>Prompt de Sistema</h3>
+<p>Es la instrucción maestra. Define el rol, el tono, los límites, los criterios de calidad y las reglas que deben mantenerse durante la interacción.</p>
+<div class="list">
+<div>Define la identidad operativa de la IA.</div>
+<div>Establece restricciones y prioridades.</div>
+<div>Persiste más allá de una sola pregunta.</div>
+<div>No debería ser reescrito en cada turno.</div>
+</div>
+</div>
+</article>
 
-function showPlat(id, el) {
-  document.querySelectorAll('.plat-content').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
-  document.getElementById('plat-' + id).classList.add('active');
-  el.classList.add('active');
-}
+<article class="card">
+<div class="card-body">
+<div class="tag green">Nivel 2 · Usuario</div>
+<h3>Prompt de Usuario</h3>
+<p>Es la solicitud inmediata del humano. Pide una acción concreta dentro del marco que ya fue definido por el sistema.</p>
+<div class="list">
+<div>Activa una tarea específica.</div>
+<div>Cambia según cada necesidad.</div>
+<div>Debe respetar las reglas superiores.</div>
+<div>Define el resultado esperado en ese momento.</div>
+</div>
+</div>
+</article>
+</div>
+</section>
 
-function toggleEx(n) {
-  const body = document.getElementById('ex-body-' + n);
-  const chev = document.getElementById('ex-chev-' + n);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.example-layer-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.example-layer-header .chevron').forEach(c => c.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
-}
-</script>
+<section class="section">
+<div class="callout callout-blue">
+<strong>Analogía rápida:</strong> el prompt de sistema es el manual de identidad y operación de una marca. El prompt de usuario es el pedido concreto del cliente: “hazme una pieza para Instagram”, “resume este informe” o “convierte esto en una tabla”.
+</div>
+</section>
+
+<section class="section" id="comparativa">
+<div class="section-head">
+<div class="section-label">Comparativa práctica</div>
+<h2 class="section-title">Qué cambia entre sistema y usuario</h2>
+<p class="section-sub">La diferencia no es solo técnica. Afecta la consistencia, el control del resultado y la forma en que se diseñan herramientas personalizadas.</p>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Dimensión</th>
+<th>Prompt de Sistema</th>
+<th>Prompt de Usuario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Función</td>
+<td>Define el marco de comportamiento.</td>
+<td>Pide una tarea concreta.</td>
+</tr>
+<tr>
+<td>Autoridad</td>
+<td>Alta. Se prioriza como regla base de la interacción.</td>
+<td>Menor. Opera dentro de las reglas ya definidas.</td>
+</tr>
+<tr>
+<td>Persistencia</td>
+<td>Se mantiene durante la sesión, herramienta o configuración.</td>
+<td>Suele durar un turno o una secuencia corta.</td>
+</tr>
+<tr>
+<td>Contenido típico</td>
+<td>Rol, tono, límites, formato, estilo, criterios de calidad.</td>
+<td>Pregunta, instrucción, archivo a analizar, objetivo inmediato.</td>
+</tr>
+<tr>
+<td>Ejemplo</td>
+<td>“Actúa como analista senior. Responde con estructura ejecutiva, sin relleno y con criterios verificables.”</td>
+<td>“Analiza este reporte y dame los tres riesgos principales.”</td>
+</tr>
+<tr>
+<td>Error común</td>
+<td>Hacerlo demasiado genérico o contradictorio.</td>
+<td>Pedir demasiado sin contexto suficiente.</td>
+</tr>
+<tr>
+<td>Mejor uso</td>
+<td>Diseñar comportamiento repetible.</td>
+<td>Ejecutar una tarea específica.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="section" id="jerarquia">
+<div class="section-head">
+<div class="section-label">Jerarquía de instrucciones</div>
+<h2 class="section-title">La IA no lee todo como si tuviera el mismo peso</h2>
+<p class="section-sub">Cuando hay varias instrucciones, el modelo intenta responder respetando una jerarquía. Por eso conviene ubicar cada regla en el nivel correcto.</p>
+</div>
+
+<div class="flow">
+<div class="step">
+<div class="n">01</div>
+<h3>Sistema</h3>
+<p>Define el rol, las reglas permanentes y los límites de operación.</p>
+</div>
+<div class="step">
+<div class="n">02</div>
+<h3>Configuración de la herramienta</h3>
+<p>Puede incluir instrucciones, fuentes, memoria o reglas del espacio de trabajo.</p>
+</div>
+<div class="step">
+<div class="n">03</div>
+<h3>Usuario</h3>
+<p>Formula la tarea del momento: resumir, comparar, redactar, analizar o convertir.</p>
+</div>
+<div class="step">
+<div class="n">04</div>
+<h3>Respuesta</h3>
+<p>El modelo produce una salida intentando respetar el marco superior y la petición concreta.</p>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="grid-3">
+<article class="card">
+<div class="card-body">
+<div class="tag purple">Constitución</div>
+<h3>El sistema crea el terreno</h3>
+<p>Antes de pedir resultados, define cómo debe razonar, escribir, limitarse y estructurar la respuesta.</p>
+</div>
+</article>
+<article class="card">
+<div class="card-body">
+<div class="tag amber">Pedido</div>
+<h3>El usuario activa la tarea</h3>
+<p>El mensaje de usuario debe ser específico: objetivo, contexto, formato esperado y restricciones inmediatas.</p>
+</div>
+</article>
+<article class="card">
+<div class="card-body">
+<div class="tag coral">Conflicto</div>
+<h3>La instrucción superior gana</h3>
+<p>Si el usuario pide algo que contradice el sistema, la IA debería seguir el marco de mayor autoridad.</p>
+</div>
+</article>
+</div>
+</section>
+
+<section class="section" id="plataformas">
+<div class="section-head">
+<div class="section-label">Aplicación en herramientas reales</div>
+<h2 class="section-title">Dónde aparece esta lógica en plataformas de IA</h2>
+<p class="section-sub">Cada plataforma usa nombres distintos, pero la lógica se repite: hay instrucciones estables para configurar el asistente y mensajes de usuario para trabajar en cada turno.</p>
+</div>
+
+<div class="platforms">
+<article class="platform-card">
+<div class="platform-top">
+<div class="tag blue">ChatGPT</div>
+<h3>GPTs personalizados</h3>
+</div>
+<div class="platform-body">
+<div class="field">
+<div class="label">Equivalente a sistema</div>
+<div class="value">Las instrucciones del GPT: rol, comportamiento, estilo, restricciones y formato de salida.</div>
+</div>
+<div class="field">
+<div class="label">Equivalente a usuario</div>
+<div class="value">Cada mensaje que el usuario envía al GPT durante la conversación.</div>
+</div>
+<div class="callout callout-blue">
+<strong>Uso ideal:</strong> crear asistentes reutilizables con comportamiento estable.
+</div>
+</div>
+</article>
+
+<article class="platform-card">
+<div class="platform-top">
+<div class="tag green">Gemini</div>
+<h3>GEMs</h3>
+</div>
+<div class="platform-body">
+<div class="field">
+<div class="label">Equivalente a sistema</div>
+<div class="value">Las instrucciones que configuran el GEM para una función o estilo de trabajo.</div>
+</div>
+<div class="field">
+<div class="label">Equivalente a usuario</div>
+<div class="value">La solicitud concreta que se le hace al GEM en cada interacción.</div>
+</div>
+<div class="callout callout-green">
+<strong>Uso ideal:</strong> guardar patrones de trabajo recurrentes sin reconstruir el briefing cada vez.
+</div>
+</div>
+</article>
+
+<article class="platform-card">
+<div class="platform-top">
+<div class="tag amber">Claude</div>
+<h3>Proyectos</h3>
+</div>
+<div class="platform-body">
+<div class="field">
+<div class="label">Equivalente a sistema</div>
+<div class="value">Las instrucciones del proyecto, junto con el contexto y documentos de referencia.</div>
+</div>
+<div class="field">
+<div class="label">Equivalente a usuario</div>
+<div class="value">Las tareas que se piden dentro del proyecto usando ese contexto estable.</div>
+</div>
+<div class="callout callout-amber">
+<strong>Uso ideal:</strong> sostener trabajo largo con contexto, documentos y reglas compartidas.
+</div>
+</div>
+</article>
+</div>
+</section>
+
+<section class="section" id="ejemplo">
+<div class="section-head">
+<div class="section-label">Ejemplo en acción</div>
+<h2 class="section-title">La misma tarea mejora cuando separas sistema y usuario</h2>
+<p class="section-sub">Un buen prompt no es solo “pedir mejor”. Es diseñar la relación entre reglas permanentes y tarea concreta.</p>
+</div>
+
+<div class="example-grid">
+<div class="code-card">
+<div class="code-head">
+<span>Prompt de sistema</span>
+<span>marco</span>
+</div>
+<pre>Eres un facilitador experto en IA aplicada para estudiantes.
+
+Tu estilo debe ser:
+- claro
+- práctico
+- sin tecnicismos innecesarios
+- con ejemplos cotidianos
+
+Cuando expliques conceptos, usa:
+1. definición breve
+2. analogía
+3. tabla comparativa
+4. ejemplo de uso</pre>
+</div>
+
+<div class="code-card">
+<div class="code-head">
+<span>Prompt de usuario</span>
+<span>tarea</span>
+</div>
+<pre>Explícame la diferencia entre prompt de sistema y prompt de usuario.
+
+Quiero usarlo para crear una actividad de clase de 15 minutos con ejemplos en ChatGPT, Gemini y Claude.</pre>
+</div>
+</div>
+
+<div class="section" style="margin-top:16px">
+<div class="panel">
+<div class="panel-head">
+<div>
+<h3>Resultado esperado</h3>
+<p>La respuesta debería respetar el estilo didáctico definido por el sistema y resolver la necesidad puntual del usuario.</p>
+</div>
+<div class="tag green">Salida guiada</div>
+</div>
+<div class="panel-content">
+<div class="grid-3">
+<div class="field">
+<div class="label">Definición</div>
+<div class="value">Explica ambos tipos de prompt de forma breve.</div>
+</div>
+<div class="field">
+<div class="label">Analogía</div>
+<div class="value">Usa una comparación fácil de recordar.</div>
+</div>
+<div class="field">
+<div class="label">Aplicación</div>
+<div class="value">Entrega una actividad práctica para clase.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head">
+<div class="section-label">Conceptos que conviene dominar</div>
+<h2 class="section-title">Cuatro reglas para escribir mejores prompts</h2>
+</div>
+
+<div class="grid-4">
+<article class="card">
+<div class="card-body">
+<div class="tag blue">Rol</div>
+<h3>Define quién responde</h3>
+<p>Un rol claro mejora el criterio de respuesta: analista, tutor, editor, estratega o desarrollador.</p>
+</div>
+</article>
+<article class="card">
+<div class="card-body">
+<div class="tag purple">Formato</div>
+<h3>Define cómo debe verse</h3>
+<p>Tabla, checklist, pasos, resumen ejecutivo, JSON, email o guion. El formato reduce ambigüedad.</p>
+</div>
+</article>
+<article class="card">
+<div class="card-body">
+<div class="tag amber">Contexto</div>
+<h3>Da información útil</h3>
+<p>La IA no adivina bien tus objetivos. Contexto, audiencia y restricciones elevan la calidad.</p>
+</div>
+</article>
+<article class="card">
+<div class="card-body">
+<div class="tag green">Criterios</div>
+<h3>Explica qué es “bueno”</h3>
+<p>Incluye criterios de evaluación: claridad, brevedad, tono, profundidad, ejemplos o fuentes.</p>
+</div>
+</article>
+</div>
+</section>
+
+<section class="section" id="checklist">
+<div class="section-head">
+<div class="section-label">Checklist práctico</div>
+<h2 class="section-title">Antes de crear un GPT, GEM o Proyecto</h2>
+<p class="section-sub">Usa esta lista para decidir qué debe vivir como instrucción estable y qué debe quedar como petición puntual.</p>
+</div>
+
+<div class="checklist">
+<div class="panel">
+<div class="panel-head">
+<div>
+<h3>Debe ir en el sistema</h3>
+<p>Reglas que quieres que se repitan en muchas interacciones.</p>
+</div>
+<div class="tag blue">estable</div>
+</div>
+<div class="panel-content">
+<div class="check"><span>✓</span><div><b>Rol principal:</b> quién debe ser la IA.</div></div>
+<div class="check"><span>✓</span><div><b>Tono:</b> profesional, didáctico, técnico, ejecutivo o creativo.</div></div>
+<div class="check"><span>✓</span><div><b>Formato base:</b> cómo debe ordenar sus respuestas.</div></div>
+<div class="check"><span>✓</span><div><b>Restricciones:</b> qué debe evitar o priorizar siempre.</div></div>
+<div class="check"><span>✓</span><div><b>Criterios de calidad:</b> qué hace que una respuesta sea útil.</div></div>
+</div>
+</div>
+
+<div class="panel">
+<div class="panel-head">
+<div>
+<h3>Debe ir en el usuario</h3>
+<p>Información específica de la tarea actual.</p>
+</div>
+<div class="tag green">variable</div>
+</div>
+<div class="panel-content">
+<div class="check"><span>✓</span><div><b>Objetivo:</b> qué necesitas lograr ahora.</div></div>
+<div class="check"><span>✓</span><div><b>Material:</b> texto, archivo, datos o caso concreto.</div></div>
+<div class="check"><span>✓</span><div><b>Audiencia:</b> para quién es la salida.</div></div>
+<div class="check"><span>✓</span><div><b>Extensión:</b> breve, completo, ejecutivo o detallado.</div></div>
+<div class="check"><span>✓</span><div><b>Entrega:</b> tabla, bullets, email, clase, rúbrica o plan.</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head">
+<div class="section-label">Errores frecuentes</div>
+<h2 class="section-title">Lo que más rompe un buen flujo de prompting</h2>
+</div>
+
+<details open>
+<summary>Meter todo en el prompt de usuario</summary>
+<div class="details-body">Si repites rol, tono, formato y restricciones en cada mensaje, estás usando el prompt de usuario para resolver un problema de diseño del sistema.</div>
+</details>
+
+<details>
+<summary>Crear un sistema demasiado vago</summary>
+<div class="details-body">“Sé útil y profesional” no alcanza. Un buen sistema indica cómo responder, qué evitar, qué formato usar y qué criterios cumplir.</div>
+</details>
+
+<details>
+<summary>Contradecir las reglas superiores</summary>
+<div class="details-body">Si el prompt de usuario pide algo incompatible con el marco del sistema, el resultado será inconsistente o el modelo priorizará la regla superior.</div>
+</details>
+
+<details>
+<summary>No definir el formato de salida</summary>
+<div class="details-body">La calidad mejora cuando la IA sabe si debe entregar una tabla, una lista, un análisis, una rúbrica, un email o una guía paso a paso.</div>
+</details>
+</section>
+
+<footer class="footer">
+<h2>Regla final: diseña comportamiento antes de pedir resultados</h2>
+<p>El prompting profesional no consiste en escribir órdenes más largas. Consiste en separar lo permanente de lo variable: sistema para el marco, usuario para la tarea.</p>
+<div class="final-grid">
+<div class="final-card">
+<div class="k">Sistema</div>
+<div class="v">Define cómo debe trabajar la IA.</div>
+</div>
+<div class="final-card">
+<div class="k">Usuario</div>
+<div class="v">Define qué necesita resolver ahora.</div>
+</div>
+<div class="final-card">
+<div class="k">Resultado</div>
+<div class="v">Mejor consistencia, menos retrabajo y respuestas más útiles.</div>
+</div>
+</div>
+</footer>
+
+</div>
 </body>
 </html>
