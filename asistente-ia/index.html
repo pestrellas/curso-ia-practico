@@ -4,322 +4,1193 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asistente Experto en IA — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --pink-bg: #faeaf1; --pink-text: #7a2050; --pink-border: #f4c0d1;
-    --gray-bg: #f1efe8; --gray-text: #444441;
-    --radius: 10px; --radius-sm: 6px;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface-2: #fbfaf7;
+  --surface-3: #f1eee7;
+  --border: #e6e1d7;
+  --border-strong: #cbc3b4;
+  --text: #171614;
+  --muted: #67625a;
+  --faint: #98938a;
+
+  --blue-bg: #e9f2fb;
+  --blue: #195d9d;
+  --blue-br: #b8d2ef;
+
+  --teal-bg: #e4f5ee;
+  --teal: #0d6348;
+  --teal-br: #a7dfcc;
+
+  --purple-bg: #efecfb;
+  --purple: #43348d;
+  --purple-br: #cfc7f3;
+
+  --amber-bg: #fdf1db;
+  --amber: #855111;
+  --amber-br: #f0cf95;
+
+  --green-bg: #eaf4e5;
+  --green: #2d5a12;
+  --green-br: #c7deba;
+
+  --coral-bg: #faece7;
+  --coral: #8f3a20;
+  --coral-br: #eeb39f;
+
+  --gray-bg: #efede6;
+  --gray: #4b4944;
+  --gray-br: #d9d3c7;
+
+  --shadow: 0 18px 50px rgba(23, 22, 20, .06);
+  --shadow-soft: 0 10px 28px rgba(23, 22, 20, .045);
+
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --max: 1120px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  padding: 28px 18px 64px;
+  font-family: "DM Sans", sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  background:
+    radial-gradient(circle at top left, rgba(13, 99, 72, .09), transparent 34rem),
+    radial-gradient(circle at top right, rgba(67, 52, 141, .08), transparent 32rem),
+    var(--bg);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.hero {
+  overflow: hidden;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, #fff 0%, #fcfbf8 100%);
+  box-shadow: var(--shadow);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+  gap: 28px;
+  padding: 38px 32px 26px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  border: 1px solid var(--teal-br);
+  border-radius: 999px;
+  background: var(--teal-bg);
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 820px;
+  font-size: clamp(34px, 5vw, 58px);
+  font-weight: 700;
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+
+.lead {
+  max-width: 760px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.btn-primary {
+  border: 1px solid #11100f;
+  background: #171614;
+  color: #fff;
+}
+
+.btn-secondary {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-content: start;
+}
+
+.mini {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.mini .k {
+  margin-bottom: 5px;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.mini .v {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hero-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 18px 32px 22px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.hero-note strong {
+  color: var(--text);
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section-head {
+  margin-bottom: 14px;
+}
+
+.section-label {
+  margin-bottom: 8px;
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  max-width: 760px;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -.025em;
+}
+
+.section-sub {
+  max-width: 820px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.card-body {
+  padding: 18px;
+}
+
+.step-number,
+.mono {
+  font-family: "DM Mono", monospace;
+}
+
+.step-number {
+  color: var(--faint);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.card h3 {
+  margin-top: 8px;
+  font-size: 18px;
+  line-height: 1.22;
+  letter-spacing: -.015em;
+}
+
+.card p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.source-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.source-card {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.source-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.doc {
+  background: var(--teal-bg);
+  color: var(--teal);
+  border: 1px solid var(--teal-br);
+}
+
+.general {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber-br);
+}
+
+.absent {
+  background: var(--gray-bg);
+  color: var(--gray);
+  border: 1px solid var(--gray-br);
+}
+
+.source-card h3 {
+  margin-bottom: 7px;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.source-card p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.mode {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.mode-blue {
+  border: 1px solid var(--blue-br);
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+
+.mode-purple {
+  border: 1px solid var(--purple-br);
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+.mode-body {
+  padding: 20px;
+}
+
+.mode-tag {
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.mode h3 {
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.mode p {
+  margin-top: 8px;
+  font-size: 14px;
+  opacity: .86;
+}
+
+.mode-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.mode-list div {
+  position: relative;
+  padding-left: 16px;
+  font-size: 13px;
+}
+
+.mode-list div::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: .6;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.profile {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.profile-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+}
+
+.profile-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.pi-blue {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+
+.pi-green {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.profile h3 {
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+.profile p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.profile-steps {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.profile-step {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 9px;
+  align-items: start;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.profile-step span {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+}
+
+.question-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.search svg {
+  width: 17px;
+  height: 17px;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+
+.search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.qtypes {
+  display: grid;
+  gap: 10px;
+}
+
+.qtype-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  transition: .18s ease;
+}
+
+.qtype-card:hover {
+  border-color: var(--border-strong);
+}
+
+.qtype-header {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 16px 18px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.qtype-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
+.qtype-label {
+  margin-bottom: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.qtype-title {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--faint);
+  transition: transform .18s ease;
+}
+
+.qtype-card.open .chevron {
+  transform: rotate(180deg);
+}
+
+.qtype-body {
+  display: none;
+  padding: 0 18px 18px 40px;
+  border-top: 1px solid var(--border);
+}
+
+.qtype-card.open .qtype-body {
+  display: block;
+}
+
+.qtype-desc {
+  max-width: 840px;
+  padding-top: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.examples-label {
+  margin-top: 14px;
+  margin-bottom: 8px;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.examples {
+  display: grid;
+  gap: 7px;
+}
+
+.example-item {
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.qt-conceptual .qtype-dot,
+.qt-conceptual .qtype-label { color: var(--blue); background: var(--blue); }
+
+.qt-practica .qtype-dot,
+.qt-practica .qtype-label { color: var(--teal); background: var(--teal); }
+
+.qt-estudiante .qtype-dot,
+.qt-estudiante .qtype-label { color: var(--purple); background: var(--purple); }
+
+.qt-instructor .qtype-dot,
+.qt-instructor .qtype-label { color: var(--amber); background: var(--amber); }
+
+.qt-fuentes .qtype-dot,
+.qt-fuentes .qtype-label { color: var(--green); background: var(--green); }
+
+.qt-conceptual .qtype-label,
+.qt-practica .qtype-label,
+.qt-estudiante .qtype-label,
+.qt-instructor .qtype-label,
+.qt-fuentes .qtype-label {
+  background: transparent;
+}
+
+.empty {
+  display: none;
+  padding: 24px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.6);
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty.show {
+  display: block;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.step {
+  position: relative;
+  padding: 18px 18px 18px 56px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.step-num {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--teal-bg);
+  color: var(--teal);
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step h3 {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.step p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.step strong {
+  color: var(--text);
+}
+
+.prompt-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.prompt-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.prompt-head h2 {
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.prompt-head p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 14px;
+  border: 1px solid var(--blue-br);
+  border-radius: 999px;
+  background: var(--blue-bg);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: .18s ease;
+}
+
+.copy-btn:hover {
+  transform: translateY(-1px);
+}
+
+.copy-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.prompt-preview {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  background: #11100f;
+  color: #e8e1d8;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.prompt-box textarea {
+  width: 100%;
+  min-height: 560px;
+  max-height: 760px;
+  resize: vertical;
+  padding: 20px 22px;
+  border: 0;
+  outline: 0;
+  background: #171614;
+  color: #f5f0e8;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.prompt-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 22px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: #171614;
+  color: #cfc8bd;
+  font-size: 12px;
+}
+
+.footer {
+  margin-top: 28px;
+  padding: 24px;
+  border-radius: var(--radius-xl);
+  background: #171614;
+  color: #f3eee7;
+}
+
+.footer h2 {
+  margin-bottom: 8px;
+  font-size: 24px;
+  letter-spacing: -.02em;
+}
+
+.footer p {
+  max-width: 860px;
+  color: #d8d1c6;
+  font-size: 14px;
+}
+
+@media (max-width: 960px) {
+  .hero-inner,
+  .quick-grid,
+  .source-grid,
+  .mode-grid,
+  .profile-grid,
+  .steps {
+    grid-template-columns: 1fr;
   }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
-  .badge-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .badge-blue { background: var(--accent-bg); color: var(--accent-text); }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
-
-  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
-  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
-  .stat-value { font-size: 17px; font-weight: 500; line-height: 1.3; }
-
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
-
-  /* TAG EXPLAINER */
-  .tag-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; }
-  .tag-box-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
-  .tag-box-title svg { width: 15px; height: 15px; color: var(--teal-text); }
-  .tag-row { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
-  .tag-row:last-child { border-bottom: none; }
-  .tag-pill { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: var(--radius-sm); flex-shrink: 0; margin-top: 1px; }
-  .tag-doc { background: var(--teal-bg); color: var(--teal-text); }
-  .tag-gen { background: var(--amber-bg); color: var(--amber-text); }
-  .tag-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
-  .tag-desc b { font-weight: 500; color: var(--text); }
-
-  /* MODES */
-  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0.5rem; }
-  .mode-card { border-radius: var(--radius); padding: 16px; border: 1px solid; }
-  .mode-a { background: var(--accent-bg); border-color: var(--accent-border); }
-  .mode-b { background: var(--purple-bg); border-color: var(--purple-border); }
-  .mode-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-  .mode-a .mode-tag { color: var(--accent-text); }
-  .mode-b .mode-tag { color: var(--purple-text); }
-  .mode-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
-  .mode-a .mode-title { color: var(--accent-text); }
-  .mode-b .mode-title { color: var(--purple-text); }
-  .mode-desc { font-size: 12px; line-height: 1.65; }
-  .mode-a .mode-desc { color: var(--accent-text); opacity: 0.85; }
-  .mode-b .mode-desc { color: var(--purple-text); opacity: 0.85; }
-  .mode-detail { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
-  .mode-item { font-size: 11px; }
-  .mode-a .mode-item { color: var(--accent-text); }
-  .mode-b .mode-item { color: var(--purple-text); }
-
-  /* PROFILES */
-  .profiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0.5rem; }
-  .profile-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
-  .profile-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-  .profile-icon svg { width: 14px; height: 14px; }
-  .pi-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .pi-green { background: var(--green-bg); color: var(--green-text); }
-  .profile-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .profile-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
-  .profile-steps { display: flex; flex-direction: column; gap: 3px; }
-  .profile-step { font-size: 11px; color: var(--text-faint); }
-
-  /* QUESTION TYPES */
-  .qtypes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 0.5rem; }
-  .qtype-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color 0.15s; }
-  .qtype-card:hover { border-color: var(--border-strong); }
-  .qtype-header { display: flex; align-items: center; gap: 10px; padding: 13px 16px; cursor: pointer; user-select: none; }
-  .qtype-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .qtype-left { flex: 1; }
-  .qtype-label { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
-  .qtype-title { font-size: 14px; font-weight: 500; color: var(--text); }
-  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
-  .chevron.open { transform: rotate(180deg); }
-  .qtype-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px 14px; }
-  .qtype-body.open { display: block; }
-  .qtype-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
-  .qtype-desc b { font-weight: 500; color: var(--text); }
-  .examples-label { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
-  .example-item { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; background: var(--bg); border-radius: var(--radius-sm); padding: 7px 10px; margin-bottom: 5px; line-height: 1.5; }
-  .example-item:last-child { margin-bottom: 0; }
-
-  /* HOW TO USE */
-  .steps { display: flex; flex-direction: column; gap: 0; }
-  .step-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
-  .step-item:last-child { border-bottom: none; }
-  .step-num-wrap { display: flex; flex-direction: column; align-items: center; gap: 0; flex-shrink: 0; }
-  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--teal-bg); color: var(--teal-text); font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .step-content { padding-top: 4px; }
-  .step-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
-  .step-desc b { font-weight: 500; color: var(--text); }
-
-  /* COPY AREA */
-  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
-  .copy-trigger:hover { background: var(--accent-border); }
-  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
-  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
-  .copy-hint b { font-weight: 500; opacity: 1; }
-  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
-  .copy-box.open { display: block; }
-  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
-  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
-  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .copy-box-footer strong { font-weight: 500; }
-
-  /* PROMPT BLOCK */
-  .prompt-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .prompt-block-header { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-  .prompt-block-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .prompt-block-sub { font-size: 12px; color: var(--text-faint); }
-  .prompt-preview { font-size: 12px; color: var(--text-muted); line-height: 1.7; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; max-height: 90px; overflow: hidden; mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
-
-  .tip-global { background: var(--teal-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--teal-text); line-height: 1.65; margin-bottom: 1.75rem; }
-  .tip-global b { font-weight: 500; }
-
-  /* colors per qtype */
-  .qt-conceptual .qtype-dot { background: var(--accent-text); }
-  .qt-conceptual .qtype-label { color: var(--accent-text); }
-  .qt-practica .qtype-dot { background: var(--teal-text); }
-  .qt-practica .qtype-label { color: var(--teal-text); }
-  .qt-estudiante .qtype-dot { background: var(--purple-text); }
-  .qt-estudiante .qtype-label { color: var(--purple-text); }
-  .qt-instructor .qtype-dot { background: var(--amber-text); }
-  .qt-instructor .qtype-label { color: var(--amber-text); }
-  .qt-fuentes .qtype-dot { background: var(--green-text); }
-  .qt-fuentes .qtype-label { color: var(--green-text); }
-
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .modes { grid-template-columns: 1fr; }
-    .profiles { grid-template-columns: 1fr; }
-    .copy-hint { display: none; }
+  .prompt-head {
+    grid-template-columns: 1fr;
   }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 16px 12px 44px;
+  }
+
+  .hero-inner,
+  .hero-note,
+  .prompt-head,
+  .prompt-preview,
+  .prompt-box textarea,
+  .prompt-foot {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .question-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .qtype-header {
+    grid-template-columns: 10px 1fr;
+  }
+
+  .qtype-header .chevron {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .qtype-body {
+    padding-left: 18px;
+  }
+
+  .prompt-foot {
+    flex-direction: column;
+  }
+}
 </style>
 </head>
+
 <body>
 <div class="page">
 
-  <header>
-    <div class="badges">
-      <span class="badge badge-teal">IA Práctico — Asistentes</span>
-      <span class="badge badge-blue">Para estudiantes e instructores</span>
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow">IA Práctico · Asistente académico</div>
+        <h1>Asistente Experto en IA</h1>
+        <p class="lead">
+          Biblioteca de referencia y diseñador curricular especializado en Inteligencia Artificial.
+          Opera con los documentos del curso como fuente primaria y diferencia siempre qué proviene
+          de la documentación frente al conocimiento general del modelo.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#prompt">Ir al prompt completo</a>
+          <a class="btn btn-secondary" href="#configuracion">Ver configuración</a>
+        </div>
+      </div>
+
+      <div class="hero-grid" aria-label="Resumen del asistente">
+        <div class="mini">
+          <div class="k">Compatible</div>
+          <div class="v">ChatGPT · Claude · Gemini</div>
+        </div>
+        <div class="mini">
+          <div class="k">Modos</div>
+          <div class="v">Consulta y diseño curricular</div>
+        </div>
+        <div class="mini">
+          <div class="k">Preguntas</div>
+          <div class="v">5 categorías</div>
+        </div>
+        <div class="mini">
+          <div class="k">Clave</div>
+          <div class="v">Documentos adjuntos</div>
+        </div>
+      </div>
     </div>
-    <h1>Asistente Experto en IA</h1>
-    <p class="subtitle">Biblioteca de referencia y diseñador curricular especializado en IA. Opera con los documentos del curso como fuente primaria y diferencia siempre lo que proviene de ellos frente al conocimiento general del modelo.</p>
+
+    <div class="hero-note">
+      <div>⚡</div>
+      <p>
+        <strong>Requisito clave:</strong> este asistente necesita los documentos del curso adjuntos
+        para funcionar correctamente. Sin ellos, puede responder con conocimiento general, pero no
+        podrá citar fuentes documentales del curso.
+      </p>
+    </div>
   </header>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Compatible con</div><div class="stat-value">ChatGPT, Claude, Gemini</div></div>
-    <div class="stat"><div class="stat-label">Modos de operación</div><div class="stat-value">2 — Consulta y Curricular</div></div>
-    <div class="stat"><div class="stat-label">Tipos de preguntas</div><div class="stat-value">5 categorías</div></div>
-  </div>
+  <section class="section">
+    <div class="quick-grid">
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">01</div>
+          <h3>Adjunta los documentos</h3>
+          <p>Los archivos del curso son la fuente primaria. El asistente debe consultarlos antes de responder temas técnicos.</p>
+        </div>
+      </article>
 
-  <div class="tip-global">
-    <b>Requisito clave:</b> Este asistente necesita los documentos del curso adjuntos para funcionar correctamente. Cuando lo configures en tu plataforma, adjunta los archivos del curso en el mismo contexto que el prompt. Sin ellos, el asistente opera solo con conocimiento general y no podrá citar fuentes documentales.
-  </div>
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">02</div>
+          <h3>Haz una pregunta o pide un plan</h3>
+          <p>Puede responder dudas puntuales, crear rutas de aprendizaje o diseñar módulos para instructores.</p>
+        </div>
+      </article>
 
-  <!-- ETIQUETAS -->
-  <div class="section-label">Cómo diferencia las fuentes</div>
-  <div class="tag-box">
-    <div class="tag-box-title">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Sistema de etiquetas de transparencia
+      <article class="card">
+        <div class="card-body">
+          <div class="step-number">03</div>
+          <h3>Revisa las etiquetas</h3>
+          <p>Cada respuesta distingue entre información documentada, conocimiento general o temas ausentes.</p>
+        </div>
+      </article>
     </div>
-    <div class="tag-row">
-      <span class="tag-pill tag-doc">[Doc]</span>
-      <div class="tag-desc"><b>Información que proviene de los documentos del curso.</b> Incluye la cita exacta con título del documento y sección. Es la fuente más confiable para el contexto del curso.</div>
-    </div>
-    <div class="tag-row">
-      <span class="tag-pill tag-gen">[General]</span>
-      <div class="tag-desc"><b>Información que proviene del conocimiento general del modelo.</b> No está respaldada por los documentos del curso. Útil como complemento, pero debe evaluarse con criterio.</div>
-    </div>
-    <div class="tag-row" style="border-bottom:none">
-      <span class="tag-pill" style="background:var(--gray-bg);color:var(--gray-text);font-family:'DM Mono',monospace;font-size:12px;font-weight:500;padding:3px 9px;border-radius:6px;flex-shrink:0;margin-top:1px">Sin tema</span>
-      <div class="tag-desc">Cuando un tema <b>no está cubierto en los documentos</b>, el asistente lo indica explícitamente y sugiere 3 términos de búsqueda para investigación externa en Google Scholar, arXiv o documentación oficial.</div>
-    </div>
-  </div>
+  </section>
 
-  <!-- MODOS -->
-  <div class="section-label">Dos modos de operación</div>
-  <div class="modes">
-    <div class="mode-card mode-a">
-      <div class="mode-tag">Modo 1</div>
-      <div class="mode-title">Consulta y asesoría</div>
-      <div class="mode-desc">Responde preguntas técnicas sobre IA con respaldo documental directo.</div>
-      <div class="mode-detail">
-        <div class="mode-item">→ Cita título y sección del documento</div>
-        <div class="mode-item">→ Aplica razonamiento a contextos prácticos</div>
-        <div class="mode-item">→ Declara siempre cuándo infiere</div>
-        <div class="mode-item">→ No especula sin respaldo</div>
-      </div>
+  <section class="section" id="fuentes">
+    <div class="section-head">
+      <div class="section-label">Transparencia de fuentes</div>
+      <h2 class="section-title">El asistente separa evidencia, complemento y ausencia</h2>
+      <p class="section-sub">
+        La página deja claro cómo interpretar cada respuesta. Esto evita mezclar lo que el curso sí cubre
+        con inferencias o conocimiento general del modelo.
+      </p>
     </div>
-    <div class="mode-card mode-b">
-      <div class="mode-tag">Modo 2</div>
-      <div class="mode-title">Diseño curricular</div>
-      <div class="mode-desc">Crea planes de estudio, módulos y materiales de evaluación anclados en los documentos.</div>
-      <div class="mode-detail">
-        <div class="mode-item">→ De 3 a 6 módulos estructurados</div>
-        <div class="mode-item">→ Objetivos, temas y actividades por módulo</div>
-        <div class="mode-item">→ Criterios de evaluación para instructores</div>
-        <div class="mode-item">→ Cuestionarios y guías bajo solicitud</div>
-      </div>
-    </div>
-  </div>
-  <p style="font-size:12px;color:var(--text-faint);margin-bottom:0.25rem">No necesitas activar los modos manualmente. El asistente detecta el tipo de solicitud y responde en consecuencia. Puedes mezclar ambos en la misma conversación.</p>
 
-  <!-- PERFILES -->
-  <div class="section-label">Según tu perfil</div>
-  <div class="profiles">
-    <div class="profile-card">
-      <div class="profile-icon pi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div class="profile-title">Estudiante</div>
-      <div class="profile-desc">El asistente adaptará su lenguaje y profundidad a tu nivel antes de generar cualquier plan.</div>
-      <div class="profile-steps">
-        <div class="profile-step">1. Pregunta tu nivel (principiante / intermedio / avanzado)</div>
-        <div class="profile-step">2. Genera un plan de estudio personalizado</div>
-        <div class="profile-step">3. Produce cuestionarios de autoevaluación bajo solicitud</div>
-      </div>
-    </div>
-    <div class="profile-card">
-      <div class="profile-icon pi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-      <div class="profile-title">Instructor</div>
-      <div class="profile-desc">Pide los objetivos del curso y la audiencia antes de estructurar el contenido.</div>
-      <div class="profile-steps">
-        <div class="profile-step">1. Pregunta objetivos, audiencia y duración disponible</div>
-        <div class="profile-step">2. Estructura módulos con criterios de evaluación</div>
-        <div class="profile-step">3. Genera guías de evaluación y materiales de apoyo</div>
-      </div>
-    </div>
-  </div>
+    <div class="source-grid">
+      <article class="source-card">
+        <span class="source-pill doc">[Doc]</span>
+        <h3>Información documentada</h3>
+        <p>Proviene de los documentos del curso. Incluye cita con título del documento y sección o tema relevante.</p>
+      </article>
 
-  <!-- TIPOS DE PREGUNTAS -->
-  <div class="section-label">Tipos de preguntas que puedes hacer</div>
-  <div class="qtypes" id="qtypes"></div>
+      <article class="source-card">
+        <span class="source-pill general">[General]</span>
+        <h3>Conocimiento complementario</h3>
+        <p>No está respaldado directamente por los documentos. Sirve como apoyo, pero debe evaluarse con criterio.</p>
+      </article>
 
-  <!-- CÓMO CONFIGURARLO -->
-  <div class="section-label">Cómo configurarlo paso a paso</div>
-  <div class="steps">
-    <div class="step-item">
-      <div class="step-num-wrap"><div class="step-num">1</div></div>
-      <div class="step-content">
-        <div class="step-title">Copia el prompt completo</div>
-        <div class="step-desc">Ve a la sección "Prompt completo" al final de esta página y selecciona todo el texto para copiarlo.</div>
-      </div>
+      <article class="source-card">
+        <span class="source-pill absent">Tema ausente</span>
+        <h3>Fuera de la base</h3>
+        <p>Si un tema no aparece en los documentos, el asistente lo indica y sugiere 3 términos de búsqueda externos.</p>
+      </article>
     </div>
-    <div class="step-item">
-      <div class="step-num-wrap"><div class="step-num">2</div></div>
-      <div class="step-content">
-        <div class="step-title">Configura el asistente con los documentos adjuntos</div>
-        <div class="step-desc">Crea un GPT, Proyecto de Claude o GEM de Gemini. Pega el prompt en las instrucciones del sistema <b>y adjunta los documentos del curso en el mismo contexto.</b> Sin los documentos, el asistente no puede citar fuentes.</div>
-      </div>
-    </div>
-    <div class="step-item">
-      <div class="step-num-wrap"><div class="step-num">3</div></div>
-      <div class="step-content">
-        <div class="step-title">Indica si eres estudiante o instructor</div>
-        <div class="step-desc">Al iniciar la conversación, el asistente adapta su modo según tu perfil. No es necesario que lo declares explícitamente — el tipo de pregunta que hagas lo indica.</div>
-      </div>
-    </div>
-    <div class="step-item">
-      <div class="step-num-wrap"><div class="step-num">4</div></div>
-      <div class="step-content">
-        <div class="step-title">Presta atención a las etiquetas [Doc] y [General]</div>
-        <div class="step-desc">Cada respuesta diferenciará su fuente. Si ves solo <b>[Doc]</b>, la respuesta está completamente respaldada por la bibliografía del curso. Si ves <b>[General]</b>, evalúa esa parte con criterio propio.</div>
-      </div>
-    </div>
-    <div class="step-item">
-      <div class="step-num-wrap"><div class="step-num">5</div></div>
-      <div class="step-content">
-        <div class="step-title">Solicita materiales adicionales cuando los necesites</div>
-        <div class="step-desc">Puedes pedir resúmenes por módulo, cuestionarios de autoevaluación o guías de estudio en cualquier momento. Todo se genera basado en los documentos adjuntos.</div>
-      </div>
-    </div>
-    <div class="step-item">
-      <div class="step-num-wrap"><div class="step-num">6</div></div>
-      <div class="step-content">
-        <div class="step-title">Si un tema no está en los documentos, usa los términos sugeridos</div>
-        <div class="step-desc">Cuando el asistente indique que un tema no está cubierto, te dará <b>3 términos de búsqueda específicos</b> para investigarlo en Google Scholar, arXiv o documentación oficial de herramientas de IA.</div>
-      </div>
-    </div>
-  </div>
+  </section>
 
-  <!-- PROMPT COMPLETO -->
-  <div class="section-label">Prompt completo</div>
-  <div class="prompt-block">
-    <div class="prompt-block-header">
-      <div class="prompt-block-title">Prompt del Asistente Experto en IA</div>
-      <div class="prompt-block-sub">Pégalo en las instrucciones del sistema y adjunta los documentos del curso en el mismo contexto</div>
+  <section class="section" id="modos">
+    <div class="section-head">
+      <div class="section-label">Dos modos de operación</div>
+      <h2 class="section-title">Puede responder dudas o construir experiencias de aprendizaje</h2>
+      <p class="section-sub">
+        No hace falta activar los modos manualmente. El asistente detecta la intención de la solicitud y ajusta la respuesta.
+      </p>
     </div>
-    <div class="prompt-preview">Eres el Asistente de Conocimiento y Aprendizaje en IA.
-Tu proposito es doble: actuar como biblioteca experta sobre los documentos de referencia adjuntos, y como disenador curricular que ayuda a los usuarios a dominar la Inteligencia Artificial...</div>
-    <div class="copy-trigger" onclick="selectPrompt()">
-      <div class="copy-trigger-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Seleccionar prompt completo para copiar
+
+    <div class="mode-grid">
+      <article class="mode mode-blue">
+        <div class="mode-body">
+          <div class="mode-tag">Modo 1</div>
+          <h3>Consulta y asesoría</h3>
+          <p>Responde preguntas técnicas sobre IA con respaldo documental directo.</p>
+          <div class="mode-list">
+            <div>Cita título y sección del documento</div>
+            <div>Aplica razonamiento a contextos prácticos</div>
+            <div>Declara cuándo infiere</div>
+            <div>No especula sin respaldo</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="mode mode-purple">
+        <div class="mode-body">
+          <div class="mode-tag">Modo 2</div>
+          <h3>Diseño curricular</h3>
+          <p>Crea planes de estudio, módulos y materiales de evaluación anclados en los documentos.</p>
+          <div class="mode-list">
+            <div>Planes de 3 a 6 módulos</div>
+            <div>Objetivos, temas y actividades</div>
+            <div>Criterios de evaluación para instructores</div>
+            <div>Cuestionarios y guías bajo solicitud</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="perfiles">
+    <div class="section-head">
+      <div class="section-label">Según tu perfil</div>
+      <h2 class="section-title">La respuesta cambia si estás aprendiendo o enseñando</h2>
+    </div>
+
+    <div class="profile-grid">
+      <article class="profile">
+        <div class="profile-top">
+          <div class="profile-icon pi-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3>Estudiante</h3>
+        </div>
+        <p>El asistente adapta lenguaje y profundidad antes de generar cualquier plan de estudio.</p>
+        <div class="profile-steps">
+          <div class="profile-step"><span>1</span><div>Pregunta nivel: principiante, intermedio o avanzado.</div></div>
+          <div class="profile-step"><span>2</span><div>Genera un plan de estudio personalizado.</div></div>
+          <div class="profile-step"><span>3</span><div>Produce cuestionarios de autoevaluación bajo solicitud.</div></div>
+        </div>
+      </article>
+
+      <article class="profile">
+        <div class="profile-top">
+          <div class="profile-icon pi-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3>Instructor</h3>
+        </div>
+        <p>El asistente pide objetivos, audiencia y duración antes de estructurar el contenido.</p>
+        <div class="profile-steps">
+          <div class="profile-step"><span>1</span><div>Pregunta objetivos, audiencia y duración disponible.</div></div>
+          <div class="profile-step"><span>2</span><div>Estructura módulos con criterios de evaluación.</div></div>
+          <div class="profile-step"><span>3</span><div>Genera guías de evaluación y materiales de apoyo.</div></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="preguntas">
+    <div class="section-head">
+      <div class="section-label">Tipos de preguntas</div>
+      <h2 class="section-title">Qué puedes pedirle al asistente</h2>
+      <p class="section-sub">
+        Usa el buscador para encontrar rápidamente ejemplos relacionados con estudio, aplicación práctica,
+        diseño curricular o verificación de fuentes.
+      </p>
+    </div>
+
+    <div class="question-toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input id="questionSearch" type="search" placeholder="Buscar por tema, uso o ejemplo...">
+      </label>
+    </div>
+
+    <div class="qtypes" id="qtypes"></div>
+    <div class="empty" id="emptyState">
+      <strong>No encontré una categoría con ese criterio.</strong>
+      <p>Prueba con “curso”, “fuentes”, “contact center”, “principiante” o “evaluación”.</p>
+    </div>
+  </section>
+
+  <section class="section" id="configuracion">
+    <div class="section-head">
+      <div class="section-label">Configuración paso a paso</div>
+      <h2 class="section-title">Cómo instalarlo sin perder trazabilidad</h2>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-num">1</div>
+        <h3>Copia el prompt completo</h3>
+        <p>Ve a la sección final y usa el botón “Copiar prompt” para llevarlo a tu plataforma.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">2</div>
+        <h3>Adjunta los documentos del curso</h3>
+        <p>Crea un GPT, Proyecto de Claude o GEM de Gemini. Pega el prompt y adjunta los documentos en el mismo contexto.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">3</div>
+        <h3>Indica tu perfil con la solicitud</h3>
+        <p>No es obligatorio declararlo explícitamente. El asistente detecta si estás aprendiendo o diseñando un curso.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">4</div>
+        <h3>Revisa [Doc] y [General]</h3>
+        <p>Si una respuesta usa solo <strong>[Doc]</strong>, está respaldada por la bibliografía. Si incluye <strong>[General]</strong>, evalúa esa parte con criterio.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">5</div>
+        <h3>Pide materiales adicionales</h3>
+        <p>Puede generar resúmenes por módulo, cuestionarios de autoevaluación o guías de estudio basadas en los documentos adjuntos.</p>
+      </article>
+
+      <article class="step">
+        <div class="step-num">6</div>
+        <h3>Investiga lo que no esté cubierto</h3>
+        <p>Cuando un tema no esté en la base, el asistente sugerirá 3 términos de búsqueda para Google Scholar, arXiv o documentación oficial.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="prompt">
+    <div class="prompt-card">
+      <div class="prompt-head">
+        <div>
+          <div class="section-label">Prompt completo</div>
+          <h2>Prompt del Asistente Experto en IA</h2>
+          <p>Pégalo en las instrucciones del sistema y adjunta los documentos del curso en el mismo contexto.</p>
+        </div>
+
+        <button class="copy-btn" type="button" id="copyPromptBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copiar prompt
+        </button>
       </div>
-      <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-    </div>
-    <div class="copy-box" id="prompt-box">
-      <textarea id="prompt-ta" rows="14" readonly>Eres el Asistente de Conocimiento y Aprendizaje en IA.
+
+      <div class="prompt-preview">
+        Eres el Asistente de Conocimiento y Aprendizaje en IA. Tu propósito es doble: actuar como biblioteca experta sobre los documentos de referencia adjuntos, y como diseñador curricular...
+      </div>
+
+      <div class="prompt-box">
+        <textarea id="promptTextarea" readonly>Eres el Asistente de Conocimiento y Aprendizaje en IA.
 Tu proposito es doble: actuar como biblioteca experta sobre los documentos de referencia adjuntos, y como disenador curricular que ayuda a los usuarios a dominar la Inteligencia Artificial.
 Responde siempre en espanol, con registro academico pero accesible, independientemente del idioma en que escriba el usuario.
 
@@ -398,18 +1269,31 @@ RESTRICCIONES
 - Ante solicitudes de opinion personal, declina con cortesia y ofrece
   perspectiva basada en datos o en los documentos de referencia
 - No generes contenido educativo que no pueda trazarse a los documentos adjuntos</textarea>
-      <div class="copy-box-footer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
+
+        <div class="prompt-foot">
+          <span>Texto limpio · Sin emojis · Listo para configurar</span>
+          <span id="promptCount">0 caracteres</span>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <footer class="footer">
+    <h2>El valor está en la trazabilidad</h2>
+    <p>
+      Este asistente no solo responde sobre IA: separa documentación del curso, conocimiento general
+      e información ausente. Eso lo hace útil para aprender, enseñar y diseñar contenidos sin perder
+      control sobre las fuentes.
+    </p>
+  </footer>
 
 </div>
+
 <script>
 const qtypes = [
   {
-    id: 1, clase: "qt-conceptual",
+    id: 1,
+    clase: "qt-conceptual",
     label: "Consulta conceptual",
     title: "Entender qué es y cómo funciona",
     desc: "Preguntas sobre definiciones, diferencias entre conceptos y funcionamiento interno de sistemas de IA. El asistente responde con respaldo documental y diferencia con etiquetas cuando complementa con conocimiento general.",
@@ -420,7 +1304,8 @@ const qtypes = [
     ]
   },
   {
-    id: 2, clase: "qt-practica",
+    id: 2,
+    clase: "qt-practica",
     label: "Aplicación práctica",
     title: "Llevar la teoría a un contexto real",
     desc: "Preguntas sobre cómo aplicar los conceptos del curso en situaciones reales de negocio. El asistente aplica razonamiento inferencial a partir de los documentos y declara explícitamente cuándo lo hace.",
@@ -431,7 +1316,8 @@ const qtypes = [
     ]
   },
   {
-    id: 3, clase: "qt-estudiante",
+    id: 3,
+    clase: "qt-estudiante",
     label: "Aprendizaje estructurado — estudiante",
     title: "Quiero aprender IA de forma estructurada",
     desc: "Solicitudes de planes de estudio personalizados, cuestionarios de autoevaluación o guías por módulo. El asistente preguntará tu nivel antes de generar cualquier plan y anclará todo a los documentos del curso.",
@@ -442,7 +1328,8 @@ const qtypes = [
     ]
   },
   {
-    id: 4, clase: "qt-instructor",
+    id: 4,
+    clase: "qt-instructor",
     label: "Diseño curricular — instructor",
     title: "Quiero diseñar o mejorar un curso",
     desc: "Solicitudes para estructurar módulos, definir objetivos de aprendizaje, diseñar cronogramas o crear guías de evaluación. El asistente pedirá objetivos, audiencia y duración antes de estructurar el contenido.",
@@ -453,7 +1340,8 @@ const qtypes = [
     ]
   },
   {
-    id: 5, clase: "qt-fuentes",
+    id: 5,
+    clase: "qt-fuentes",
     label: "Verificación de fuentes",
     title: "Saber exactamente de dónde viene la información",
     desc: "Preguntas sobre el origen de la información entregada o sobre qué documentos cubren determinado tema. El asistente indica sección exacta o —si el tema no está cubierto— sugiere términos de búsqueda externos.",
@@ -465,42 +1353,106 @@ const qtypes = [
   }
 ];
 
-document.getElementById('qtypes').innerHTML = qtypes.map(q => `
-  <div class="qtype-card ${q.clase}">
-    <div class="qtype-header" onclick="toggleQ(${q.id})">
-      <div class="qtype-dot"></div>
-      <div class="qtype-left">
-        <div class="qtype-label">${q.label}</div>
-        <div class="qtype-title">${q.title}</div>
+const qtypesContainer = document.getElementById("qtypes");
+const searchInput = document.getElementById("questionSearch");
+const emptyState = document.getElementById("emptyState");
+const copyPromptBtn = document.getElementById("copyPromptBtn");
+const promptTextarea = document.getElementById("promptTextarea");
+const promptCount = document.getElementById("promptCount");
+
+function normalize(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function renderQtypes(query = "") {
+  const cleanQuery = normalize(query);
+
+  const filtered = qtypes.filter(item => {
+    const searchable = normalize([
+      item.label,
+      item.title,
+      item.desc,
+      item.examples.join(" ")
+    ].join(" "));
+    return !cleanQuery || searchable.includes(cleanQuery);
+  });
+
+  qtypesContainer.innerHTML = filtered.map(q => `
+    <article class="qtype-card ${q.clase}" data-qtype="${q.id}">
+      <button class="qtype-header" type="button" aria-expanded="false" aria-controls="qbody-${q.id}">
+        <div class="qtype-dot" aria-hidden="true"></div>
+        <div>
+          <div class="qtype-label">${q.label}</div>
+          <div class="qtype-title">${q.title}</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+
+      <div class="qtype-body" id="qbody-${q.id}">
+        <p class="qtype-desc">${q.desc}</p>
+        <div class="examples-label">Ejemplos de preguntas</div>
+        <div class="examples">
+          ${q.examples.map(example => `<div class="example-item">“${example}”</div>`).join("")}
+        </div>
       </div>
-      <svg class="chevron" id="qc-${q.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="qtype-body" id="qb-${q.id}">
-      <p class="qtype-desc">${q.desc}</p>
-      <div class="examples-label">Ejemplos de preguntas</div>
-      ${q.examples.map(e => `<div class="example-item">"${e}"</div>`).join('')}
-    </div>
-  </div>
-`).join('');
+    </article>
+  `).join("");
 
-function toggleQ(id) {
-  const body = document.getElementById('qb-' + id);
-  const chev = document.getElementById('qc-' + id);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.qtype-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
+  emptyState.classList.toggle("show", filtered.length === 0);
 }
 
-function selectPrompt() {
-  const box = document.getElementById('prompt-box');
-  const ta = document.getElementById('prompt-ta');
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
+function toggleQtype(card) {
+  const isOpen = card.classList.contains("open");
+  const button = card.querySelector(".qtype-header");
+
+  document.querySelectorAll(".qtype-card").forEach(item => {
+    item.classList.remove("open");
+    item.querySelector(".qtype-header").setAttribute("aria-expanded", "false");
+  });
+
+  if (!isOpen) {
+    card.classList.add("open");
+    button.setAttribute("aria-expanded", "true");
+  }
 }
+
+qtypesContainer.addEventListener("click", event => {
+  const button = event.target.closest(".qtype-header");
+  if (!button) return;
+
+  const card = button.closest(".qtype-card");
+  toggleQtype(card);
+});
+
+searchInput.addEventListener("input", event => {
+  renderQtypes(event.target.value.trim());
+});
+
+copyPromptBtn.addEventListener("click", async () => {
+  const original = copyPromptBtn.innerHTML;
+
+  try {
+    await navigator.clipboard.writeText(promptTextarea.value);
+    copyPromptBtn.textContent = "Prompt copiado";
+  } catch (error) {
+    promptTextarea.focus();
+    promptTextarea.select();
+    document.execCommand("copy");
+    copyPromptBtn.textContent = "Texto seleccionado";
+  }
+
+  setTimeout(() => {
+    copyPromptBtn.innerHTML = original;
+  }, 1600);
+});
+
+promptCount.textContent = `${promptTextarea.value.length.toLocaleString("es-EC")} caracteres`;
+renderQtypes();
 </script>
 </body>
 </html>
