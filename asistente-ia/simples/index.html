@@ -3,168 +3,872 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biblioteca de Asistentes de Negocio — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<title>Biblioteca Premium de Asistentes de Negocio — IA Práctico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --pink-bg: #faeaf1; --pink-text: #7a2050; --pink-border: #f4c0d1;
-    --radius: 10px; --radius-sm: 6px;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface-soft: #fbfaf7;
+  --surface-warm: #f1eee7;
+  --border: #e6e1d7;
+  --border-strong: #cbc3b4;
+  --text: #171614;
+  --muted: #68645c;
+  --faint: #9b958b;
+
+  --blue-bg: #e9f2fb;
+  --blue: #195d9d;
+  --blue-br: #b8d2ef;
+
+  --teal-bg: #e4f5ee;
+  --teal: #0d6348;
+  --teal-br: #a7dfcc;
+
+  --purple-bg: #efecfb;
+  --purple: #43348d;
+  --purple-br: #cfc7f3;
+
+  --amber-bg: #fdf1db;
+  --amber: #855111;
+  --amber-br: #f0cf95;
+
+  --coral-bg: #faece7;
+  --coral: #8f3a20;
+  --coral-br: #eeb39f;
+
+  --green-bg: #eaf4e5;
+  --green: #2d5a12;
+  --green-br: #c7deba;
+
+  --shadow: 0 18px 48px rgba(23, 22, 20, .06);
+  --shadow-soft: 0 10px 28px rgba(23, 22, 20, .045);
+
+  --radius-lg: 28px;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --max: 1120px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(67, 52, 141, .08), transparent 34rem),
+    radial-gradient(circle at top right, rgba(25, 93, 157, .08), transparent 30rem),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  padding: 28px 18px 64px;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.hero {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #fff 0%, #fcfbf8 100%);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, .75fr);
+  gap: 28px;
+  padding: 38px 32px 28px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--purple-bg);
+  color: var(--purple);
+  border: 1px solid var(--purple-br);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: .98;
+  letter-spacing: -.055em;
+  font-weight: 700;
+  max-width: 820px;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+  margin-top: 18px;
+  max-width: 760px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-content: start;
+}
+
+.mini {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.mini .k {
+  color: var(--faint);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.mini .v {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hero-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-top: 1px solid var(--border);
+  padding: 18px 32px 22px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.hero-note strong {
+  color: var(--text);
+}
+
+.toolbar {
+  position: sticky;
+  top: 12px;
+  z-index: 30;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid rgba(230, 225, 215, .82);
+  background: rgba(246, 244, 239, .78);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  margin-bottom: 18px;
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 14px;
+  min-width: 220px;
+}
+
+.search svg {
+  width: 17px;
+  height: 17px;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+
+.search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.filters {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .18s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.filter-btn.active {
+  color: var(--text);
+  border-color: transparent;
+}
+
+.fb-all.active { background: var(--blue-bg); color: var(--blue); }
+.fb-productividad.active { background: var(--teal-bg); color: var(--teal); }
+.fb-comunicacion.active { background: var(--purple-bg); color: var(--purple); }
+.fb-comercial.active { background: var(--amber-bg); color: var(--amber); }
+
+.guide {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.guide-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 18px;
+}
+
+.guide-card .num {
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.guide-card h3 {
+  font-size: 17px;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  margin-top: 8px;
+}
+
+.guide-card p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.cat-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 26px 0 12px;
+}
+
+.cat-label-text {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.cat-label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.cl-productividad { color: var(--teal); }
+.cl-comunicacion { color: var(--purple); }
+.cl-comercial { color: var(--amber); }
+
+.assistant-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  margin-bottom: 14px;
+  transition: .2s ease;
+}
+
+.assistant-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  padding: 18px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.card-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.ci-teal,
+.ci-teal2 {
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+
+.ci-purple,
+.ci-purple2 {
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+.ci-amber,
+.ci-amber2 {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+}
+
+.category-pill {
+  display: inline-flex;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.pill-productividad {
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+
+.pill-comunicacion {
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+.pill-comercial {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+
+.card-tagline {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+  margin-top: 5px;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.platforms {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.plat {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.pl-gpt { background: var(--green-bg); color: var(--green); }
+.pl-claude { background: var(--coral-bg); color: var(--coral); }
+.pl-gemini { background: var(--blue-bg); color: var(--blue); }
+
+.chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--faint);
+  transition: transform .2s ease;
+  flex-shrink: 0;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.card-body {
+  display: none;
+  border-top: 1px solid var(--border);
+}
+
+.card-body.open {
+  display: block;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-soft);
+  overflow-x: auto;
+}
+
+.tab {
+  background: transparent;
+  color: var(--faint);
+  border-bottom: 2px solid transparent;
+  padding: 13px 18px 11px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--muted);
+}
+
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.desc-section,
+.instr-section,
+.prompt-section {
+  padding: 20px;
+}
+
+.desc-text {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.78;
+  max-width: 880px;
+  margin-bottom: 14px;
+}
+
+.desc-text b,
+.instr-text b,
+.io-val b {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.io-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.io-item {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.io-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 6px;
+}
+
+.io-val {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.instr-section {
+  display: grid;
+  gap: 12px;
+}
+
+.instr-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.instr-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.in-teal { background: var(--teal-bg); color: var(--teal); }
+.in-purple { background: var(--purple-bg); color: var(--purple); }
+.in-amber { background: var(--amber-bg); color: var(--amber); }
+
+.instr-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.instr-tip {
+  margin-top: 8px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 11px 13px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.prompt-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.prompt-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.prompt-title strong {
+  font-size: 15px;
+}
+
+.prompt-title span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-bg);
+  color: var(--blue);
+  border: 1px solid var(--blue-br);
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .18s ease;
+  white-space: nowrap;
+}
+
+.copy-btn:hover {
+  filter: brightness(.98);
+  transform: translateY(-1px);
+}
+
+.copy-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.prompt-box {
+  background: #11100f;
+  color: #f5f0e8;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.prompt-box textarea {
+  width: 100%;
+  min-height: 300px;
+  max-height: 520px;
+  resize: vertical;
+  border: 0;
+  outline: 0;
+  padding: 18px;
+  background: transparent;
+  color: #f5f0e8;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  line-height: 1.72;
+}
+
+.prompt-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 10px 14px;
+  color: #cfc8bd;
+  font-size: 12px;
+}
+
+.empty-state {
+  display: none;
+  background: rgba(255,255,255,.6);
+  border: 1px dashed var(--border-strong);
+  border-radius: 24px;
+  padding: 34px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty-state.show {
+  display: block;
+}
+
+.empty-state strong {
+  display: block;
+  color: var(--text);
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.footer {
+  margin-top: 26px;
+  background: #171614;
+  color: #f3eee7;
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.footer h2 {
+  font-size: 24px;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+
+.footer p {
+  color: #d8d1c6;
+  max-width: 860px;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 920px) {
+  .hero-inner,
+  .guide {
+    grid-template-columns: 1fr;
   }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--accent-bg); color: var(--accent-text); margin-bottom: 0.75rem; }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
-
-  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
-  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
-  .stat-value { font-size: 18px; font-weight: 500; line-height: 1.3; }
-
-  .tip-global { background: var(--accent-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--accent-text); line-height: 1.65; margin-bottom: 1.75rem; }
-  .tip-global b { font-weight: 500; }
-
-  /* FILTER */
-  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .filter-btn:hover { border-color: var(--border-strong); color: var(--text); }
-  .filter-btn.active { font-weight: 500; border-color: transparent; }
-  .fb-all.active { background: var(--accent-bg); color: var(--accent-text); }
-  .fb-productividad.active { background: var(--teal-bg); color: var(--teal-text); }
-  .fb-comunicacion.active { background: var(--purple-bg); color: var(--purple-text); }
-  .fb-comercial.active { background: var(--amber-bg); color: var(--amber-text); }
-
-  /* CATEGORY LABEL */
-  .cat-label { display: flex; align-items: center; gap: 10px; margin: 1.5rem 0 0.75rem; }
-  .cat-label-text { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; }
-  .cat-label-line { flex: 1; height: 0.5px; background: var(--border); }
-  .cl-productividad { color: var(--teal-text); }
-  .cl-comunicacion { color: var(--purple-text); }
-  .cl-comercial { color: var(--amber-text); }
-
-  /* ASSISTANT CARDS */
-  .assistant-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
-  .assistant-card:hover { border-color: var(--border-strong); }
-
-  .card-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 16px 12px; cursor: pointer; gap: 12px; user-select: none; }
-  .card-left { display: flex; align-items: flex-start; gap: 12px; }
-  .card-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .card-icon svg { width: 16px; height: 16px; }
-  .ci-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .ci-teal2 { background: var(--teal-bg); color: var(--teal-text); }
-  .ci-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .ci-purple2 { background: var(--purple-bg); color: var(--purple-text); }
-  .ci-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .ci-amber2 { background: var(--amber-bg); color: var(--amber-text); }
-
-  .card-meta { flex: 1; }
-  .card-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .card-tagline { font-size: 12px; color: var(--text-faint); }
-  .platforms { display: flex; gap: 4px; flex-shrink: 0; margin-top: 2px; }
-  .plat { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 999px; }
-  .pl-gpt { background: var(--green-bg); color: var(--green-text); }
-  .pl-claude { background: var(--coral-bg); color: var(--coral-text); }
-  .pl-gemini { background: var(--accent-bg); color: var(--accent-text); }
-  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; margin-top: 2px; }
-  .chevron.open { transform: rotate(180deg); }
-
-  .card-body { display: none; border-top: 1px solid var(--border); }
-  .card-body.open { display: block; }
-
-  /* TABS */
-  .tabs { display: flex; border-bottom: 1px solid var(--border); }
-  .tab { font-size: 12px; font-weight: 500; padding: 10px 16px; cursor: pointer; color: var(--text-faint); border-bottom: 2px solid transparent; transition: all 0.15s; white-space: nowrap; }
-  .tab:hover { color: var(--text-muted); }
-  .tab.active { color: var(--text); border-bottom-color: var(--text); }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  /* DESCRIPTION TAB */
-  .desc-section { padding: 14px 16px; }
-  .desc-text { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 12px; }
-  .desc-text b { font-weight: 500; color: var(--text); }
-  .io-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .io-item { background: var(--bg); border-radius: var(--radius-sm); padding: 9px 11px; }
-  .io-tag { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-  .io-val { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-  .io-val b { font-weight: 500; color: var(--text); }
-
-  /* INSTRUCTIONS TAB */
-  .instr-section { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
-  .instr-item { display: flex; gap: 10px; align-items: flex-start; }
-  .instr-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
-  .in-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .in-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .in-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .instr-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
-  .instr-text b { font-weight: 500; color: var(--text); }
-  .instr-tip { background: var(--bg); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-top: 4px; }
-  .instr-tip b { font-weight: 500; color: var(--text); }
-
-  /* COPY AREA */
-  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
-  .copy-trigger:hover { background: var(--accent-border); }
-  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
-  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
-  .copy-hint b { font-weight: 500; opacity: 1; }
-  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
-  .copy-box.open { display: block; }
-  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
-  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
-  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .copy-box-footer strong { font-weight: 500; }
-
-  .hidden { display: none !important; }
-
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .io-grid { grid-template-columns: 1fr; }
-    .copy-hint { display: none; }
-    .platforms { display: none; }
+  .toolbar {
+    position: static;
+    flex-direction: column;
+    align-items: stretch;
   }
+
+  .filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .filter-btn {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 16px 12px 44px;
+  }
+
+  .hero-inner,
+  .hero-note,
+  .desc-section,
+  .instr-section,
+  .prompt-section {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-grid,
+  .io-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-header {
+    grid-template-columns: 1fr;
+  }
+
+  .card-actions {
+    justify-content: space-between;
+  }
+
+  .platforms {
+    justify-content: flex-start;
+  }
+
+  .prompt-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .copy-btn {
+    justify-content: center;
+  }
+}
 </style>
 </head>
 <body>
 <div class="page">
 
-  <header>
-    <div class="badge">IA Práctico — Biblioteca de Asistentes</div>
-    <h1>Asistentes de Negocio</h1>
-    <p class="subtitle">6 asistentes especializados para operaciones reales de negocio. Cada uno puede configurarse como GPT en ChatGPT, GEM en Gemini o Proyecto en Claude.</p>
-  </header>
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">IA Práctico · Biblioteca Premium</div>
+      <h1>Asistentes de Negocio listos para operar</h1>
+      <p class="lead">Seis asistentes especializados para convertir trabajo repetitivo, reuniones, comunicación y procesos comerciales en entregables claros, consistentes y listos para usar.</p>
+    </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Asistentes disponibles</div><div class="stat-value">6</div></div>
-    <div class="stat"><div class="stat-label">Categorías</div><div class="stat-value">3</div></div>
-    <div class="stat"><div class="stat-label">Compatible con</div><div class="stat-value">ChatGPT, Claude, Gemini</div></div>
+    <div class="hero-grid">
+      <div class="mini"><div class="k">Asistentes</div><div class="v">6 configurables</div></div>
+      <div class="mini"><div class="k">Categorías</div><div class="v">3 áreas clave</div></div>
+      <div class="mini"><div class="k">Compatible</div><div class="v">GPT · Claude · Gemini</div></div>
+      <div class="mini"><div class="k">Formato</div><div class="v">Prompt listo para copiar</div></div>
+    </div>
   </div>
 
-  <div class="tip-global">
-    <b>Cómo usar cualquier asistente:</b> Copia el prompt completo desde la pestaña "Prompt" → en ChatGPT crea un GPT personalizado, en Claude crea un Proyecto, en Gemini crea un GEM → pega el prompt en las instrucciones del sistema → ya está listo para usar.
+  <div class="hero-note">
+    <div>⚡</div>
+    <p><strong>Cómo usarlo:</strong> abre una card, revisa qué entrada necesita y qué salida entrega, copia el prompt completo y úsalo como instrucciones principales en ChatGPT, Claude o Gemini.</p>
   </div>
+</section>
+
+<section class="toolbar" aria-label="Herramientas de búsqueda y filtrado">
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M20 20l-3.5-3.5"></path>
+    </svg>
+    <input id="searchInput" type="search" placeholder="Buscar por tarea, asistente o resultado...">
+  </label>
 
   <div class="filters" id="filters">
-    <button class="filter-btn fb-all active" data-cat="all">Todos</button>
-    <button class="filter-btn fb-productividad" data-cat="productividad">Productividad y reuniones</button>
-    <button class="filter-btn fb-comunicacion" data-cat="comunicacion">Comunicación</button>
-    <button class="filter-btn fb-comercial" data-cat="comercial">Comercial y marketing</button>
+    <button class="filter-btn fb-all active" data-cat="all" type="button">Todos</button>
+    <button class="filter-btn fb-productividad" data-cat="productividad" type="button">Productividad</button>
+    <button class="filter-btn fb-comunicacion" data-cat="comunicacion" type="button">Comunicación</button>
+    <button class="filter-btn fb-comercial" data-cat="comercial" type="button">Comercial</button>
   </div>
+</section>
 
-  <div id="library"></div>
+<section class="guide" aria-label="Flujo de uso">
+  <article class="guide-card">
+    <div class="num">01</div>
+    <h3>Elige el caso de uso</h3>
+    <p>Filtra por área o busca directamente por problema: reunión, correo, propuesta, webinar o feedback.</p>
+  </article>
+  <article class="guide-card">
+    <div class="num">02</div>
+    <h3>Valida entrada y salida</h3>
+    <p>Cada asistente indica qué necesita recibir y qué entregable genera para evitar pruebas a ciegas.</p>
+  </article>
+  <article class="guide-card">
+    <div class="num">03</div>
+    <h3>Copia el prompt completo</h3>
+    <p>Úsalo como instrucción base en tu plataforma y ajusta solo el contexto operativo del negocio.</p>
+  </article>
+</section>
+
+<main id="library" aria-live="polite"></main>
+
+<div id="emptyState" class="empty-state">
+  <strong>No encontré asistentes con ese criterio.</strong>
+  <p>Prueba con otra palabra clave o vuelve al filtro “Todos”.</p>
+</div>
+
+<section class="footer">
+  <h2>Diseñado para uso real, no para decoración</h2>
+  <p>La biblioteca funciona como un repositorio operativo: cada asistente tiene propósito, entrada, salida, guía de uso y prompt completo. El objetivo es reducir fricción, estandarizar calidad y acelerar tareas repetibles.</p>
+</section>
 
 </div>
+
 <script>
 const assistants = [
   {
@@ -183,7 +887,7 @@ const assistants = [
       { text: "Pega el prompt como primer mensaje en una conversación nueva o configúralo como <b>system prompt</b> en tu plataforma.", tip: null },
       { text: "Indica tu nombre o el del analista responsable. Puedes incluirlo en el primer mensaje: <b>\"Mi nombre es [nombre], aquí la transcripción:\"</b>", tip: null },
       { text: "Pega la transcripción completa. <b>No es necesario limpiarla ni formatearla</b> — el asistente procesa texto corrido, notas sueltas o transcripción automática.", tip: null },
-      { text: "Responde las preguntas de validación si las hay (participantes, fecha, tipo de reunión). El asistente las agrupa en un solo bloque.", tip: null },
+      { text: "Responde las preguntas de validación si las hay: participantes, fecha o tipo de reunión. El asistente las agrupa en un solo bloque.", tip: null },
       { text: "Revisa el <b>análisis interpretativo de 3 párrafos</b> antes del informe final. Si algo no refleja la realidad, corrígelo en ese momento.", tip: null },
       { text: "Copia el informe final directamente a Word o tu herramienta. Sin emojis, sin formatos especiales, listo para aplicar tu plantilla.", tip: "Consejo: si usas Zoom, Teams u Otter.ai, no corrijas la transcripción antes de pegarla. El asistente extrae inteligencia incluso de textos con errores." }
     ],
@@ -305,15 +1009,15 @@ Genera una tabla con las columnas: Prioridad (1-3-5) | Tarea | Impacto Estimado 
     title: "Asistente de Comunicación Corporativa",
     tagline: "Redacta correos estratégicos con variante alternativa y mensaje para WhatsApp",
     desc: `Redactor profesional para comunicación corporativa de alto impacto. Adapta el tono según el nivel de confianza con el destinatario, <b>infiere el contexto automáticamente</b> si hay correo previo, y entrega siempre tres entregables: correo principal, variante alternativa y mensaje corto para WhatsApp, Slack o Teams.`,
-    input: "Correo previo (para responder) o descripción del correo a redactar desde cero",
+    input: "Correo previo para responder o descripción del correo a redactar desde cero",
     output: "Correo principal + variante alternativa + mensaje corto para app de mensajería",
     instructions: [
       { text: "Configura el asistente con el prompt. Lo primero que preguntará es si <b>partes de cero o tienes un correo previo</b>.", tip: null },
       { text: "Si tienes correo previo: pégalo completo. El asistente inferirá tono, nombre del destinatario y contexto <b>automáticamente sin preguntar</b>.", tip: null },
-      { text: "Si partes de cero: responde el bloque de preguntas con nombre del destinatario, tratamiento (tú/usted), <b>grado de confianza</b> (casual, informal, formal, protocolar) y propósito.", tip: null },
+      { text: "Si partes de cero: responde el bloque de preguntas con nombre del destinatario, tratamiento, grado de confianza y propósito.", tip: null },
       { text: "Revisa las inferencias antes de aprobar. Si el tono o el nombre no son correctos, corrígelos en ese momento.", tip: null },
       { text: "Recibe los tres entregables y elige la combinación que mejor se ajusta a la situación.", tip: null },
-      { text: "Pide ajustes directamente: <b>\"hazlo más breve\"</b>, <b>\"sube el tono a protocolar\"</b>, <b>\"elimina el CTA\"</b>. No repetirá las preguntas de configuración.", tip: "Consejo: en situaciones delicadas (escaladas, cobros, negociaciones tensas) pega siempre el hilo completo, no solo el último mensaje." }
+      { text: "Pide ajustes directamente: <b>\"hazlo más breve\"</b>, <b>\"sube el tono a protocolar\"</b>, <b>\"elimina el CTA\"</b>.", tip: "Consejo: en situaciones delicadas —escaladas, cobros, negociaciones tensas— pega siempre el hilo completo, no solo el último mensaje." }
     ],
     prompt: `Eres un Asistente Experto en Comunicacion Corporativa Estrategica.
 Tu especialidad es redactar correos para el ambito comercial, gestion de proveedores y consultas tecnicas.
@@ -389,13 +1093,13 @@ REGLAS DE CALIDAD
     title: "Redactor de Feedback y Evaluaciones",
     tagline: "Convierte observaciones crudas en feedback constructivo profesional",
     desc: `Convierte notas crudas sobre el desempeño de un colaborador o proveedor en <b>feedback profesional usando comunicación no violenta</b>. Genera tres entregables: guion para reunión 1:1, resumen ejecutivo para RRHH y variante diplomática. Adapta el tono según el nivel de confianza.`,
-    input: "Notas crudas sobre desempeño (ej: \"llega tarde\", \"buen diseño pero olvida los textos\")",
+    input: "Notas crudas sobre desempeño, relación y puntos positivos o a mejorar",
     output: "Guion 1:1 + resumen ejecutivo para RRHH + variante diplomática",
     instructions: [
-      { text: "Configura el asistente con el prompt. Pedirá en un solo bloque: <b>nombre del evaluado, relación (par, subordinado, proveedor) y puntos positivos y a mejorar</b>.", tip: null },
-      { text: "Escribe los puntos en <b>lenguaje natural, sin filtrar</b>. No hace falta redactarlos bien — el asistente aplica el método sándwich y comunicación no violenta.", tip: null },
-      { text: "Recibe los tres entregables. Usa el <b>guion de 1:1</b> para la conversación presencial y el <b>resumen ejecutivo</b> para el expediente formal.", tip: null },
-      { text: "Si la situación es delicada, elige la <b>variante diplomática</b> que enfoca el mensaje en el crecimiento a largo plazo del evaluado.", tip: "Consejo: para proveedores externos usa tono Formal. Para subordinados directos, Informal o Formal según la relación. El asistente te pedirá confirmarlo." }
+      { text: "Configura el asistente con el prompt. Pedirá en un solo bloque: <b>nombre del evaluado, relación y puntos positivos y a mejorar</b>.", tip: null },
+      { text: "Escribe los puntos en <b>lenguaje natural, sin filtrar</b>. No hace falta redactarlos bien: el asistente aplica método sándwich y comunicación no violenta.", tip: null },
+      { text: "Recibe los tres entregables. Usa el <b>guion de 1:1</b> para conversación presencial y el <b>resumen ejecutivo</b> para seguimiento formal.", tip: null },
+      { text: "Si la situación es delicada, elige la <b>variante diplomática</b> que enfoca el mensaje en crecimiento a largo plazo.", tip: "Consejo: para proveedores externos usa tono Formal. Para subordinados directos, Informal o Formal según la relación." }
     ],
     prompt: `Eres un Experto en Desarrollo Organizacional y Comunicación No Violenta. Tu función es convertir observaciones crudas sobre el desempeño en feedback constructivo y profesional.
 
@@ -429,14 +1133,14 @@ CRITERIOS DE CALIDAD:
     instrClass: "in-amber",
     title: "Optimizador de Propuestas Comerciales",
     tagline: "Audita y estructura propuestas antes de que salgan al cliente",
-    desc: `Asegura que ninguna propuesta salga sin un CTA claro y un valor diferencial definido. Evalúa si la propuesta responde a: <b>¿qué problema resuelve?, ¿por qué nosotros?, ¿cuál es el siguiente paso?</b> — y la convierte en un documento ejecutivo con resumen, tabla de inversión y análisis de riesgos.`,
+    desc: `Asegura que ninguna propuesta salga sin un CTA claro y un valor diferencial definido. Evalúa si la propuesta responde a: <b>¿qué problema resuelve?, ¿por qué nosotros?, ¿cuál es el siguiente paso?</b> — y la convierte en un documento ejecutivo con resumen, tabla de inversión y análisis de valor.`,
     input: "Borrador de propuesta, descripción del servicio y precio",
     output: "Resumen ejecutivo + tabla de inversión + análisis de valor + próximos pasos",
     instructions: [
       { text: "Configura el asistente con el prompt. Pedirá el <b>borrador de tu propuesta</b>. Puedes pegarlo aunque esté incompleto.", tip: null },
-      { text: "Si faltan precio, alcance o fecha de validez, el asistente lo indicará como <b>advertencia antes de procesar</b>. Completa esos datos antes de continuar.", tip: null },
-      { text: "Revisa el <b>análisis de valor</b>: el asistente evaluará si la propuesta responde claramente al problema del cliente y si el diferencial es concreto.", tip: null },
-      { text: "Usa el entregable completo: <b>resumen ejecutivo para la apertura</b>, tabla de inversión para transparencia y próximos pasos para cerrar el acuerdo.", tip: "Consejo: pasa siempre por este asistente antes de enviar cualquier propuesta. Detecta los huecos que el cliente sí notará aunque tú no los veas." }
+      { text: "Si faltan precio, alcance o fecha de validez, el asistente lo indicará como <b>advertencia antes de procesar</b>.", tip: null },
+      { text: "Revisa el <b>análisis de valor</b>: evaluará si la propuesta responde claramente al problema del cliente y si el diferencial es concreto.", tip: null },
+      { text: "Usa el entregable completo: <b>resumen ejecutivo</b>, tabla de inversión y próximos pasos para cerrar el acuerdo.", tip: "Consejo: pasa siempre por este asistente antes de enviar cualquier propuesta. Detecta huecos que el cliente sí notará aunque tú no los veas." }
     ],
     prompt: `Eres un Analista de Estrategia Comercial. Tu misión es asegurar que ninguna propuesta salga sin un Call to Action (CTA) claro y un valor diferencial definido.
 
@@ -473,10 +1177,10 @@ CRITERIOS DE CALIDAD:
     output: "Tabla cronológica con fecha, hora, canal, tipo de acción y descripción — lista para Excel",
     instructions: [
       { text: "Configura el asistente con el prompt. Presentará <b>6 preguntas en un solo bloque</b>. Respóndelas todas juntas.", tip: null },
-      { text: "Las preguntas son: nombre del webinar, fecha (DD/MM/AAAA), si habrá correo masivo, qué redes sociales, si habrá artículo y cómo se distribuirá el video.", tip: null },
-      { text: "El asistente calculará los días disponibles y <b>adaptará el plan automáticamente</b>. Si la fecha está muy próxima recibirás una advertencia con fechas alternativas.", tip: null },
-      { text: "Pide ajustes directamente: <b>\"cambia la fecha a...\"</b>, <b>\"agrega TikTok\"</b>, <b>\"elimina los correos\"</b>. Actualizará la tabla sin repetir las preguntas.", tip: null },
-      { text: "Copia la tabla y pégala directamente en Excel o Google Sheets. <b>Sin emojis, sin celdas combinadas</b>, cada fila autónoma y comprensible.", tip: "Recomendación: úsalo con al menos 3 semanas de anticipación al webinar para obtener el plan con mayor impacto posible." }
+      { text: "Las preguntas son: nombre del webinar, fecha, correo masivo, redes sociales, artículo y distribución del video.", tip: null },
+      { text: "El asistente calculará los días disponibles y <b>adaptará el plan automáticamente</b>. Si la fecha está muy próxima, recibes advertencia con alternativas.", tip: null },
+      { text: "Pide ajustes directamente: <b>\"cambia la fecha a...\"</b>, <b>\"agrega TikTok\"</b>, <b>\"elimina los correos\"</b>.", tip: null },
+      { text: "Copia la tabla y pégala directamente en Excel o Google Sheets. <b>Sin emojis, sin celdas combinadas</b>, cada fila autónoma.", tip: "Recomendación: úsalo con al menos 3 semanas de anticipación al webinar para obtener el plan con mayor impacto posible." }
     ],
     prompt: `Eres un asistente de planificación de marketing especializado en la promoción de webinars. Responde siempre en español, independientemente del idioma en que el usuario escriba.
 
@@ -500,14 +1204,10 @@ Si el usuario corrige o ajusta alguna respuesta después de haberla dado, actual
 Etapa 2 – Lógica temporal (anticipación dinámica)
 
 1. Calcula automáticamente los días que faltan entre la fecha actual y la fecha del webinar.
-
-2. Según el resultado:
-   - 30 días o más: plan estándar: 1 mes de promoción previa + 2 semanas posteriores.
-   - Entre 14 y 29 días: plan ajustado: 2 semanas de promoción previa + 2 semanas posteriores.
-   - Menos de 14 días: no generes la tabla. Muestra este mensaje:
-     "La fecha del webinar está demasiado próxima para una campaña efectiva. Te recomiendo reprogramar el evento. Fecha mínima sugerida (2 semanas): [fecha actual + 14 días]. Fecha ideal (1 mes): [fecha actual + 30 días]"
-
-3. Para los horarios de publicación, usa como referencia UTC-5 (Ecuador, Colombia, Perú). Horarios sugeridos de alta interacción: 08:00, 12:00 o 19:00 (UTC-5).
+2. Si hay margen amplio, genera una planificación de hasta un mes antes.
+3. Si hay margen reducido, genera una planificación concentrada de dos semanas.
+4. Si la fecha está demasiado próxima, advierte el riesgo y sugiere fechas alternativas o un plan mínimo viable.
+5. Para los horarios de publicación, usa como referencia UTC-5 (Ecuador, Colombia, Perú). Horarios sugeridos de alta interacción: 08:00, 12:00 o 19:00 (UTC-5).
 
 ---
 
@@ -538,128 +1238,273 @@ Reglas de formato para exportación limpia:
   }
 ];
 
-let activeFilter = 'all';
+const state = {
+  category: "all",
+  query: ""
+};
 
-document.getElementById('filters').addEventListener('click', e => {
-  const btn = e.target.closest('.filter-btn');
-  if (!btn) return;
-  activeFilter = btn.dataset.cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+const library = document.getElementById("library");
+const filters = document.getElementById("filters");
+const searchInput = document.getElementById("searchInput");
+const emptyState = document.getElementById("emptyState");
+
+const catOrder = ["productividad", "comunicacion", "comercial"];
+const catNames = {
+  productividad: "Productividad y reuniones",
+  comunicacion: "Comunicación",
+  comercial: "Comercial y marketing"
+};
+
+function normalize(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function categoryClass(cat) {
+  return {
+    productividad: "cl-productividad",
+    comunicacion: "cl-comunicacion",
+    comercial: "cl-comercial"
+  }[cat] || "";
+}
+
+function pillClass(cat) {
+  return {
+    productividad: "pill-productividad",
+    comunicacion: "pill-comunicacion",
+    comercial: "pill-comercial"
+  }[cat] || "";
+}
+
+function matchesAssistant(assistant) {
+  const matchesCategory = state.category === "all" || assistant.cat === state.category;
+
+  const searchable = normalize([
+    assistant.title,
+    assistant.tagline,
+    assistant.desc,
+    assistant.input,
+    assistant.output,
+    assistant.catLabel
+  ].join(" "));
+
+  const matchesQuery = !state.query || searchable.includes(normalize(state.query));
+
+  return matchesCategory && matchesQuery;
+}
+
+function renderLibrary() {
+  const filtered = assistants.filter(matchesAssistant);
+  let html = "";
+
+  catOrder.forEach(cat => {
+    const items = filtered.filter(item => item.cat === cat);
+    if (!items.length) return;
+
+    html += `
+      <section class="category-section">
+        <div class="cat-label">
+          <span class="cat-label-text ${categoryClass(cat)}">${catNames[cat]}</span>
+          <div class="cat-label-line"></div>
+        </div>
+        ${items.map(renderAssistant).join("")}
+      </section>
+    `;
+  });
+
+  library.innerHTML = html;
+  emptyState.classList.toggle("show", filtered.length === 0);
+}
+
+function renderAssistant(a) {
+  return `
+    <article class="assistant-card" data-cat="${a.cat}">
+      <div class="card-header" role="button" tabindex="0" aria-expanded="false" data-toggle="${a.id}">
+        <div class="card-left">
+          <div class="card-icon ${a.iconClass}" aria-hidden="true">${a.icon}</div>
+          <div class="card-meta">
+            <div class="card-title-row">
+              <h2 class="card-title">${a.title}</h2>
+              <span class="category-pill ${pillClass(a.cat)}">${a.catLabel}</span>
+            </div>
+            <p class="card-tagline">${a.tagline}</p>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <div class="platforms" aria-label="Plataformas compatibles">
+            <span class="plat pl-gpt">GPT</span>
+            <span class="plat pl-claude">Claude</span>
+            <span class="plat pl-gemini">Gemini</span>
+          </div>
+          <svg class="chevron" id="chev-${a.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card-body" id="body-${a.id}">
+        <div class="tabs" role="tablist">
+          <button class="tab active" type="button" data-tab="desc" data-id="${a.id}">Resumen</button>
+          <button class="tab" type="button" data-tab="instr" data-id="${a.id}">Cómo usarlo</button>
+          <button class="tab" type="button" data-tab="prompt" data-id="${a.id}">Prompt</button>
+        </div>
+
+        <div class="tab-content active" id="tc-${a.id}-desc">
+          <div class="desc-section">
+            <p class="desc-text">${a.desc}</p>
+            <div class="io-grid">
+              <div class="io-item">
+                <div class="io-tag" style="color:var(--teal)">Entrada</div>
+                <div class="io-val">${a.input}</div>
+              </div>
+              <div class="io-item">
+                <div class="io-tag" style="color:var(--purple)">Salida</div>
+                <div class="io-val">${a.output}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tc-${a.id}-instr">
+          <div class="instr-section">
+            ${a.instructions.map((item, index) => `
+              <div class="instr-item">
+                <div class="instr-num ${a.instrClass}">${index + 1}</div>
+                <div>
+                  <div class="instr-text">${item.text}</div>
+                  ${item.tip ? `<div class="instr-tip">${item.tip}</div>` : ""}
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="tab-content" id="tc-${a.id}-prompt">
+          <div class="prompt-section">
+            <div class="prompt-toolbar">
+              <div class="prompt-title">
+                <strong>Prompt completo</strong>
+                <span>Úsalo como instrucción principal del asistente.</span>
+              </div>
+
+              <button class="copy-btn" type="button" data-copy="${a.id}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copiar prompt
+              </button>
+            </div>
+
+            <div class="prompt-box">
+              <textarea readonly id="ta-${a.id}">${a.prompt}</textarea>
+              <div class="prompt-foot">
+                <span>Texto limpio · Sin emojis · Listo para configurar</span>
+                <span>${a.prompt.length.toLocaleString("es-EC")} caracteres</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function toggleCard(id, header) {
+  const body = document.getElementById(`body-${id}`);
+  const chevron = document.getElementById(`chev-${id}`);
+  const isOpen = body.classList.contains("open");
+
+  document.querySelectorAll(".card-body").forEach(item => item.classList.remove("open"));
+  document.querySelectorAll(".chevron").forEach(item => item.classList.remove("open"));
+  document.querySelectorAll(".card-header").forEach(item => item.setAttribute("aria-expanded", "false"));
+
+  if (!isOpen) {
+    body.classList.add("open");
+    chevron.classList.add("open");
+    header.setAttribute("aria-expanded", "true");
+  }
+}
+
+function setTab(id, tabName) {
+  const card = document.getElementById(`body-${id}`);
+  card.querySelectorAll(".tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.tab === tabName);
+  });
+
+  ["desc", "instr", "prompt"].forEach(name => {
+    document.getElementById(`tc-${id}-${name}`).classList.toggle("active", name === tabName);
+  });
+}
+
+async function copyPrompt(id, button) {
+  const textarea = document.getElementById(`ta-${id}`);
+  const original = button.innerHTML;
+
+  try {
+    await navigator.clipboard.writeText(textarea.value);
+    button.textContent = "Prompt copiado";
+  } catch (error) {
+    textarea.focus();
+    textarea.select();
+    document.execCommand("copy");
+    button.textContent = "Texto seleccionado";
+  }
+
+  setTimeout(() => {
+    button.innerHTML = original;
+  }, 1600);
+}
+
+document.addEventListener("click", event => {
+  const header = event.target.closest("[data-toggle]");
+  if (header) {
+    toggleCard(header.dataset.toggle, header);
+    return;
+  }
+
+  const tab = event.target.closest("[data-tab]");
+  if (tab) {
+    setTab(tab.dataset.id, tab.dataset.tab);
+    return;
+  }
+
+  const copyButton = event.target.closest("[data-copy]");
+  if (copyButton) {
+    copyPrompt(copyButton.dataset.copy, copyButton);
+  }
+});
+
+document.addEventListener("keydown", event => {
+  const header = event.target.closest("[data-toggle]");
+  if (!header) return;
+
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    toggleCard(header.dataset.toggle, header);
+  }
+});
+
+filters.addEventListener("click", event => {
+  const button = event.target.closest(".filter-btn");
+  if (!button) return;
+
+  state.category = button.dataset.cat;
+
+  document.querySelectorAll(".filter-btn").forEach(item => {
+    item.classList.toggle("active", item === button);
+  });
+
   renderLibrary();
 });
 
-function renderLibrary() {
-  const filtered = assistants.filter(a => activeFilter === 'all' || a.cat === activeFilter);
-  const container = document.getElementById('library');
-
-  const cats = [...new Set(filtered.map(a => a.cat))];
-  const catOrder = ['productividad','comunicacion','comercial'];
-  const catNames = { productividad: 'Productividad y reuniones', comunicacion: 'Comunicación', comercial: 'Comercial y marketing' };
-
-  let html = '';
-  catOrder.filter(c => cats.includes(c)).forEach(cat => {
-    const items = filtered.filter(a => a.cat === cat);
-    html += `<div class="cat-label"><span class="cat-label-text cl-${cat}">${catNames[cat]}</span><div class="cat-label-line"></div></div>`;
-    items.forEach(a => {
-      html += `
-      <div class="assistant-card" data-cat="${a.cat}">
-        <div class="card-header" onclick="toggle(${a.id})">
-          <div class="card-left">
-            <div class="card-icon ${a.iconClass}">${a.icon}</div>
-            <div class="card-meta">
-              <div class="card-title">${a.title}</div>
-              <div class="card-tagline">${a.tagline}</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-            <div class="platforms">
-              <span class="plat pl-gpt">GPT</span>
-              <span class="plat pl-claude">Claude</span>
-              <span class="plat pl-gemini">Gemini</span>
-            </div>
-            <svg class="chevron" id="chev-${a.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-        </div>
-        <div class="card-body" id="body-${a.id}">
-          <div class="tabs" id="tabs-${a.id}">
-            <div class="tab active" onclick="setTab(${a.id},'desc',this)">Descripción</div>
-            <div class="tab" onclick="setTab(${a.id},'instr',this)">Cómo usarlo</div>
-            <div class="tab" onclick="setTab(${a.id},'prompt',this)">Prompt</div>
-          </div>
-          <div class="tab-content active" id="tc-${a.id}-desc">
-            <div class="desc-section">
-              <div class="desc-text">${a.desc}</div>
-              <div class="io-grid">
-                <div class="io-item"><div class="io-tag" style="color:var(--teal-text)">Entrada</div><div class="io-val">${a.input}</div></div>
-                <div class="io-item"><div class="io-tag" style="color:var(--purple-text)">Salida</div><div class="io-val">${a.output}</div></div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-content" id="tc-${a.id}-instr">
-            <div class="instr-section">
-              ${a.instructions.map((ins, i) => `
-                <div class="instr-item">
-                  <div class="instr-num ${a.instrClass}">${i+1}</div>
-                  <div style="flex:1">
-                    <div class="instr-text">${ins.text}</div>
-                    ${ins.tip ? `<div class="instr-tip"><b>Consejo:</b> ${ins.tip}</div>` : ''}
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-          <div class="tab-content" id="tc-${a.id}-prompt">
-            <div class="copy-trigger" onclick="selectPrompt(${a.id})">
-              <div class="copy-trigger-left">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Seleccionar prompt para copiar
-              </div>
-              <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-            </div>
-            <div class="copy-box" id="box-${a.id}">
-              <textarea id="ta-${a.id}" rows="8" readonly>${a.prompt}</textarea>
-              <div class="copy-box-footer">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    });
-  });
-  container.innerHTML = html;
-}
-
-function toggle(id) {
-  const body = document.getElementById('body-' + id);
-  const chev = document.getElementById('chev-' + id);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.card-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
-  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
-}
-
-function setTab(id, tab, el) {
-  document.getElementById('tabs-' + id).querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  ['desc','instr','prompt'].forEach(t => {
-    document.getElementById('tc-' + id + '-' + t).classList.toggle('active', t === tab);
-  });
-  if (tab !== 'prompt') document.getElementById('box-' + id).classList.remove('open');
-}
-
-function selectPrompt(id) {
-  const box = document.getElementById('box-' + id);
-  const ta = document.getElementById('ta-' + id);
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
-}
+searchInput.addEventListener("input", event => {
+  state.query = event.target.value.trim();
+  renderLibrary();
+});
 
 renderLibrary();
 </script>
