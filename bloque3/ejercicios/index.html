@@ -1,0 +1,3333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Laboratorio de prácticas del Bloque 3 de AI360: generación de imágenes, sistemas visuales de marca, producción multicanal, evaluación de herramientas y video con IA."
+  >
+
+  <title>AI360 · Laboratorio de prácticas · Bloque 3</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f4f3ef;
+      --surface: #ffffff;
+      --surface-soft: #faf9f6;
+      --surface-dark: #0b1622;
+      --surface-dark-2: #142437;
+
+      --text: #17191d;
+      --muted: #666c74;
+      --faint: #969ba3;
+
+      --border: #e3dfd7;
+      --border-strong: #cbc5ba;
+
+      --magenta: #ec4899;
+      --magenta-dark: #a82568;
+      --magenta-soft: #fce8f3;
+
+      --blue: #286ca3;
+      --blue-soft: #e8f2fa;
+
+      --teal: #178c88;
+      --teal-soft: #e5f5f2;
+
+      --violet: #604cab;
+      --violet-soft: #efecfb;
+
+      --green: #39714d;
+      --green-soft: #e7f3e9;
+
+      --amber: #94600d;
+      --amber-soft: #fcefd2;
+
+      --coral: #a14936;
+      --coral-soft: #faeae5;
+
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 27px;
+
+      --shadow: 0 14px 38px rgba(20, 25, 32, 0.055);
+      --shadow-dark: 0 24px 56px rgba(7, 16, 27, 0.2);
+
+      --max-width: 1180px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 95px;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 20px 16px 64px;
+      background:
+        radial-gradient(
+          circle at 4% 3%,
+          rgba(236, 72, 153, 0.08),
+          transparent 28rem
+        ),
+        radial-gradient(
+          circle at 97% 18%,
+          rgba(40, 108, 163, 0.08),
+          transparent 31rem
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    pre,
+    code,
+    .mono {
+      font-family: "DM Mono", monospace;
+    }
+
+    ::selection {
+      background: var(--magenta-soft);
+      color: var(--magenta-dark);
+    }
+
+    .page {
+      width: min(100%, var(--max-width));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      margin-bottom: 18px;
+      padding: 10px 12px;
+      border: 1px solid rgba(227, 223, 215, 0.9);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 28px rgba(20, 25, 32, 0.07);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .brand-text strong,
+    .brand-text span {
+      display: block;
+    }
+
+    .brand-text strong {
+      font-size: 13px;
+      line-height: 1.15;
+    }
+
+    .brand-text span {
+      margin-top: 2px;
+      color: var(--faint);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .topnav a {
+      padding: 8px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      transition: 150ms ease;
+    }
+
+    .topnav a:hover,
+    .topnav a:focus-visible {
+      background: var(--surface-soft);
+      color: var(--text);
+      outline: none;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .small-button {
+      padding: 7px 10px;
+      border: 1px solid var(--border-strong);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .small-button:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(236, 72, 153, 0.18),
+          transparent 43%
+        ),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .hero::after {
+      position: absolute;
+      top: -190px;
+      right: -120px;
+      width: 460px;
+      height: 460px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(40, 108, 163, 0.34),
+        transparent 69%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      gap: 34px;
+      padding: 48px 42px 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffacd3;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--magenta);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.15);
+    }
+
+    .hero h1 {
+      max-width: 850px;
+      margin-top: 18px;
+      font-size: clamp(2.55rem, 5vw, 4.7rem);
+      line-height: 0.99;
+      letter-spacing: -0.056em;
+    }
+
+    .hero .lead {
+      max-width: 730px;
+      margin-top: 20px;
+      color: #b9c7d3;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .hero .lead strong {
+      color: #fff;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 10px;
+      align-content: end;
+    }
+
+    .hero-card {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .hero-card strong,
+    .hero-card span {
+      display: block;
+    }
+
+    .hero-card strong {
+      font-size: 15px;
+    }
+
+    .hero-card span {
+      margin-top: 3px;
+      color: #8fa2b2;
+      font-size: 12px;
+    }
+
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.13);
+    }
+
+    .hero-meta div {
+      padding: 17px 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .hero-meta div:last-child {
+      border-right: 0;
+    }
+
+    .hero-meta span,
+    .hero-meta strong {
+      display: block;
+    }
+
+    .hero-meta span {
+      color: #788c9e;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .hero-meta strong {
+      margin-top: 4px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .progress-shell {
+      margin-top: 16px;
+      padding: 17px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .progress-top strong {
+      font-size: 14px;
+    }
+
+    .progress-top span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .progress-track {
+      height: 9px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #ece9e3;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--magenta), var(--blue));
+      transition: width 250ms ease;
+    }
+
+    .section {
+      margin-top: 36px;
+      scroll-margin-top: 96px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(300px, 0.5fr);
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      margin-bottom: 8px;
+      color: var(--magenta-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section h2 {
+      max-width: 830px;
+      font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .tag-magenta {
+      border-color: #efbfd7;
+      background: var(--magenta-soft);
+      color: var(--magenta-dark);
+    }
+
+    .tag-blue {
+      border-color: #bfd7e8;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .tag-teal {
+      border-color: #b9ded9;
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .tag-violet {
+      border-color: #d1c9ef;
+      background: var(--violet-soft);
+      color: var(--violet);
+    }
+
+    .tag-green {
+      border-color: #c4dcc8;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .tag-amber {
+      border-color: #ead09a;
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .tag-coral {
+      border-color: #e9bdb2;
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .route-card {
+      min-height: 205px;
+      padding: 18px;
+      transition: 170ms ease;
+    }
+
+    .route-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .route-number {
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .route-card h3 {
+      margin-top: 14px;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .route-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .route-card .tag {
+      margin-top: 14px;
+    }
+
+    .practice {
+      position: relative;
+      overflow: hidden;
+      margin-top: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .practice::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--practice-color, var(--magenta));
+      content: "";
+    }
+
+    .practice[data-theme="blue"] {
+      --practice-color: var(--blue);
+    }
+
+    .practice[data-theme="teal"] {
+      --practice-color: var(--teal);
+    }
+
+    .practice[data-theme="violet"] {
+      --practice-color: var(--violet);
+    }
+
+    .practice[data-theme="green"] {
+      --practice-color: var(--green);
+    }
+
+    .practice[data-theme="amber"] {
+      --practice-color: #d69219;
+    }
+
+    .practice-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: start;
+      padding: 26px 27px 22px 31px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--practice-color) 7%, white),
+        #fff 48%
+      );
+    }
+
+    .practice-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .practice-head h2 {
+      margin-top: 10px;
+      font-size: clamp(1.65rem, 3vw, 2.25rem);
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    .practice-head p {
+      max-width: 760px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .practice-status {
+      min-width: 190px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .practice-status label {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .practice-status input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--practice-color);
+    }
+
+    .practice-status span {
+      display: block;
+      margin-top: 8px;
+      color: var(--faint);
+      font-size: 10px;
+    }
+
+    .practice-body {
+      padding: 24px 27px 29px 31px;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .overview-card {
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface-soft);
+    }
+
+    .overview-card span,
+    .overview-card strong {
+      display: block;
+    }
+
+    .overview-card span {
+      color: var(--faint);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .overview-card strong {
+      margin-top: 5px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .step {
+      min-height: 175px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .step-number {
+      color: var(--practice-color);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .step h3 {
+      margin-top: 13px;
+      font-size: 15px;
+    }
+
+    .step p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 15px;
+    }
+
+    .prompt-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .prompt-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .prompt-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .prompt-head h3 {
+      font-size: 15px;
+    }
+
+    .prompt-head p {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .copy-button {
+      min-width: 72px;
+      padding: 7px 9px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      transition: 150ms ease;
+    }
+
+    .copy-button:hover,
+    .copy-button:focus-visible {
+      border-color: var(--text);
+      color: var(--text);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .copy-button.copied {
+      border-color: #9fc8aa;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .prompt-text {
+      min-height: 140px;
+      padding: 18px;
+      background: #101b28;
+      color: #dce7ef;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .prompt-text.light {
+      background: #fff;
+      color: #34404a;
+    }
+
+    .prompt-text.tall {
+      min-height: 320px;
+    }
+
+    .prompt-text.medium {
+      min-height: 235px;
+    }
+
+    .callout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      margin-top: 15px;
+      padding: 17px 18px;
+      border: 1px solid;
+      border-radius: 15px;
+      font-size: 12px;
+    }
+
+    .callout-icon {
+      display: grid;
+      width: 35px;
+      height: 35px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      font-weight: 700;
+    }
+
+    .callout h3 {
+      font-size: 14px;
+    }
+
+    .callout p {
+      margin-top: 4px;
+    }
+
+    .callout-tip {
+      border-color: #b9ded9;
+      background: var(--teal-soft);
+      color: #286d68;
+    }
+
+    .callout-warning {
+      border-color: #ead09a;
+      background: var(--amber-soft);
+      color: #76500f;
+    }
+
+    .callout-danger {
+      border-color: #e9bdb2;
+      background: var(--coral-soft);
+      color: #814334;
+    }
+
+    .evaluation {
+      margin-top: 15px;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--surface-soft);
+    }
+
+    .evaluation h3 {
+      font-size: 16px;
+    }
+
+    .evaluation > p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .check-item input {
+      width: 15px;
+      height: 15px;
+      margin-top: 1px;
+      accent-color: var(--practice-color);
+    }
+
+    .comparison-table {
+      margin-top: 15px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th,
+    td {
+      padding: 12px 13px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: 0;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      background: var(--surface-dark);
+      color: #fff;
+      font-size: 9px;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    td:first-child {
+      background: var(--surface-soft);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .score-input,
+    .text-input {
+      width: 100%;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+
+    .score-input {
+      min-width: 58px;
+      height: 34px;
+      padding: 0 7px;
+      text-align: center;
+    }
+
+    .text-input {
+      min-width: 145px;
+      height: 36px;
+      padding: 0 9px;
+    }
+
+    .score-input:focus,
+    .text-input:focus {
+      border-color: var(--practice-color);
+      box-shadow: 0 0 0 3px rgba(40, 108, 163, 0.09);
+    }
+
+    .evidence {
+      margin-top: 15px;
+      padding: 18px;
+      border-radius: 15px;
+      background: var(--surface-dark);
+      color: #fff;
+    }
+
+    .evidence h3 {
+      font-size: 16px;
+    }
+
+    .evidence p {
+      margin-top: 5px;
+      color: #adbdca;
+      font-size: 12px;
+    }
+
+    .evidence-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .evidence-chip {
+      padding: 6px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #d6e0e7;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .final-delivery {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      gap: 15px;
+    }
+
+    .delivery-main {
+      display: flex;
+      min-height: 320px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 27px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(236, 72, 153, 0.18),
+          transparent 54%
+        ),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .delivery-main h2 {
+      margin-top: 18px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+    }
+
+    .delivery-main p {
+      margin-top: 14px;
+      color: #adbdca;
+      font-size: 14px;
+    }
+
+    .delivery-rule {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .delivery-rule span,
+    .delivery-rule strong {
+      display: block;
+    }
+
+    .delivery-rule span {
+      color: #8498aa;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .delivery-rule strong {
+      margin-top: 6px;
+      font-size: 16px;
+    }
+
+    .delivery-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .delivery-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 16px;
+    }
+
+    .delivery-number {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--magenta-soft);
+      color: var(--magenta-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .delivery-item h3 {
+      font-size: 14px;
+    }
+
+    .delivery-item p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      padding: 22px 4px 0;
+      color: var(--faint);
+      font-size: 10px;
+    }
+
+    .footer strong {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1020px) {
+      .route-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .prompt-grid.three {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-grid.three .prompt-text {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .topnav {
+        display: none;
+      }
+
+      .hero-inner,
+      .section-head,
+      .final-delivery {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-meta div:nth-child(2) {
+        border-right: 0;
+      }
+
+      .hero-meta div:nth-child(-n + 2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 10px 10px 50px;
+      }
+
+      .topbar {
+        top: 7px;
+      }
+
+      .top-actions .small-button:first-child {
+        display: none;
+      }
+
+      .hero-inner {
+        padding: 34px 23px 25px;
+      }
+
+      .hero-side,
+      .hero-meta,
+      .route-grid,
+      .overview-grid,
+      .steps,
+      .prompt-grid,
+      .check-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-meta div {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .hero-meta div:last-child {
+        border-bottom: 0;
+      }
+
+      .section-head {
+        gap: 12px;
+      }
+
+      .practice-head {
+        grid-template-columns: 1fr;
+        padding: 23px 20px 19px 25px;
+      }
+
+      .practice-status {
+        min-width: 0;
+      }
+
+      .practice-body {
+        padding: 20px 19px 24px 25px;
+      }
+
+      .prompt-text,
+      .prompt-text.medium,
+      .prompt-text.tall {
+        min-height: auto;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer span {
+        display: block;
+        margin-top: 4px;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 12mm;
+      }
+
+      body {
+        padding: 0;
+        background: #fff;
+      }
+
+      .page {
+        width: 100%;
+      }
+
+      .topbar,
+      .copy-button,
+      .progress-shell {
+        display: none !important;
+      }
+
+      .hero,
+      .delivery-main {
+        box-shadow: none;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .practice,
+      .card {
+        box-shadow: none;
+      }
+
+      .practice,
+      .prompt-card,
+      .evaluation,
+      .delivery-item {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#inicio" aria-label="Ir al inicio">
+          <span class="brand-mark">360</span>
+
+          <span class="brand-text">
+            <strong>AI360 · Bloque 3</strong>
+            <span>Laboratorio práctico</span>
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Navegación de prácticas">
+          <a href="#practica-1">P1</a>
+          <a href="#practica-2">P2</a>
+          <a href="#practica-3">P3</a>
+          <a href="#practica-4">P4</a>
+          <a href="#practica-5">P5</a>
+          <a href="#practica-6">P6</a>
+          <a href="#practica-7">P7</a>
+        </nav>
+
+        <div class="top-actions">
+          <button class="small-button" id="reset-progress" type="button">
+            Reiniciar
+          </button>
+
+          <button class="small-button" type="button" onclick="window.print()">
+            Imprimir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <section class="hero" id="inicio">
+        <div class="hero-inner">
+          <div>
+            <span class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              Generación de imágenes y video
+            </span>
+
+            <h1>Siete prácticas para pasar de probar a dirigir</h1>
+
+            <p class="lead">
+              Un laboratorio centrado en <strong>hacer, comparar y documentar</strong>.
+              Cada práctica conserva un prompt, controla una variable y produce
+              una evidencia que puede reutilizarse en el trabajo.
+            </p>
+          </div>
+
+          <div class="hero-side">
+            <article class="hero-card">
+              <strong>Copia el prompt</strong>
+              <span>Ejecuta primero la versión facilitada sin modificarla.</span>
+            </article>
+
+            <article class="hero-card">
+              <strong>Compara resultados</strong>
+              <span>Describe diferencias observables, no impresiones genéricas.</span>
+            </article>
+
+            <article class="hero-card">
+              <strong>Guarda la evidencia</strong>
+              <span>Prompt, herramienta, resultado y conclusión.</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero-meta">
+          <div>
+            <span>Contenido</span>
+            <strong>7 prácticas</strong>
+          </div>
+
+          <div>
+            <span>Ámbitos</span>
+            <strong>Imagen + video</strong>
+          </div>
+
+          <div>
+            <span>Método</span>
+            <strong>Comparación controlada</strong>
+          </div>
+
+          <div>
+            <span>Resultado</span>
+            <strong>Portafolio de evidencias</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="progress-shell" aria-label="Progreso del laboratorio">
+        <div class="progress-top">
+          <strong>Progreso del laboratorio</strong>
+          <span id="progress-label">0 de 7 prácticas completadas</span>
+        </div>
+
+        <div class="progress-track">
+          <div
+            class="progress-bar"
+            id="progress-bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="7"
+            aria-valuenow="0"
+          ></div>
+        </div>
+      </section>
+
+      <section class="section" id="ruta">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Ruta del laboratorio</div>
+            <h2>Una progresión desde el prompt básico hasta el clip dirigido</h2>
+          </div>
+
+          <p class="section-intro">
+            Las prácticas están ordenadas para aumentar gradualmente el nivel
+            de control: primero el lenguaje visual, después la consistencia,
+            la adaptación, la evaluación y finalmente el movimiento.
+          </p>
+        </div>
+
+        <div class="route-grid">
+          <a class="card route-card" href="#practica-1">
+            <span class="route-number">01</span>
+            <h3>Prompt vago vs. prompt dirigido</h3>
+            <p>
+              Comprueba el impacto de especificar plano, luz, lente y paleta.
+            </p>
+            <span class="tag tag-magenta">Dirección visual</span>
+          </a>
+
+          <a class="card route-card" href="#practica-2">
+            <span class="route-number">02</span>
+            <h3>Infografía de los 14 bloques</h3>
+            <p>
+              Evalúa composición editorial y generación de texto.
+            </p>
+            <span class="tag tag-blue">Texto y layout</span>
+          </a>
+
+          <a class="card route-card" href="#practica-3">
+            <span class="route-number">03</span>
+            <h3>Ablación de bloques</h3>
+            <p>
+              Elimina una variable cada vez y analiza su impacto.
+            </p>
+            <span class="tag tag-teal">Experimentación</span>
+          </a>
+
+          <a class="card route-card" href="#practica-4">
+            <span class="route-number">04</span>
+            <h3>Sistema Visual de Marca</h3>
+            <p>
+              Genera dos escenas diferentes con la misma identidad.
+            </p>
+            <span class="tag tag-violet">Consistencia</span>
+          </a>
+
+          <a class="card route-card" href="#practica-5">
+            <span class="route-number">05</span>
+            <h3>Hero y derivados</h3>
+            <p>
+              Adapta una misma campaña a 4:5, 9:16 y 16:9.
+            </p>
+            <span class="tag tag-green">Multicanal</span>
+          </a>
+
+          <a class="card route-card" href="#practica-6">
+            <span class="route-number">06</span>
+            <h3>Benchmark de motores</h3>
+            <p>
+              Compara el mismo briefing mediante una rúbrica común.
+            </p>
+            <span class="tag tag-amber">Evaluación</span>
+          </a>
+
+          <a class="card route-card" href="#practica-7">
+            <span class="route-number">07</span>
+            <h3>Video sin dirección vs. dirigido</h3>
+            <p>
+              Contrasta una animación abierta con un slow push in controlado.
+            </p>
+            <span class="tag tag-coral">Movimiento</span>
+          </a>
+        </div>
+      </section>
+
+      <article
+        class="practice"
+        id="practica-1"
+        data-theme="magenta"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-magenta">Práctica 1</span>
+              <span class="tag tag-blue">Imagen</span>
+            </div>
+
+            <h2>Del prompt vago al prompt dirigido</h2>
+
+            <p>
+              Comprueba cómo unas pocas decisiones fotográficas convierten
+              una petición genérica en una dirección visual verificable.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-1"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Observar el impacto de plano, iluminación, lente y color.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Dos imágenes y tres diferencias observables.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                ChatGPT, Gemini o Grok.
+              </strong>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Genera la versión vaga</h3>
+              <p>
+                Copia el primer prompt sin añadir información.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Genera la versión dirigida</h3>
+              <p>
+                Mantén el mismo tema y utiliza el segundo prompt.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Colócalas juntas</h3>
+              <p>
+                Evalúa encuadre, luz, profundidad y coherencia cromática.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Explica la mejora</h3>
+              <p>
+                Escribe tres diferencias concretas y visibles.
+              </p>
+            </article>
+          </div>
+
+          <div class="prompt-grid">
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt vago</h3>
+                  <p>El modelo completa las decisiones ausentes.</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p1-vago"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text" id="p1-vago">Una foto de una oficina.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt mejorado</h3>
+                  <p>Incluye cuatro decisiones visuales.</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p1-mejorado"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text" id="p1-mejorado">Oficina moderna, plano medio, luz natural de ventana lateral, 35 mm, paleta neutra.</pre>
+            </article>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+            <p>
+              Marca aquello que puedas justificar señalando una diferencia visible.
+            </p>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p1-framing">
+                <span>El encuadre de la versión dirigida parece más intencional.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p1-light">
+                <span>La dirección de luz puede identificarse con claridad.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p1-depth">
+                <span>La lente influye en la profundidad y en la lectura del espacio.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p1-color">
+                <span>La paleta visual es más coherente y menos aleatoria.</span>
+              </label>
+            </div>
+          </section>
+
+          <div class="evidence">
+            <h3>Evidencia que debes guardar</h3>
+            <p>
+              Nombra los archivos de forma que puedan compararse posteriormente.
+            </p>
+
+            <div class="evidence-list">
+              <span class="evidence-chip">P1_vago</span>
+              <span class="evidence-chip">P1_dirigido</span>
+              <span class="evidence-chip">3 diferencias</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article
+        class="practice"
+        id="practica-2"
+        data-theme="blue"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-blue">Práctica 2</span>
+              <span class="tag tag-violet">Infografía</span>
+            </div>
+
+            <h2>Los 14 bloques como tablero visual</h2>
+
+            <p>
+              Genera una infografía compleja y analiza cómo cada motor interpreta
+              la jerarquía, la cuadrícula, los colores y el texto.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-2"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Evaluar texto, numeración, layout y fidelidad a una composición.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Una infografía por motor y una tabla de errores.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                ChatGPT, Gemini o Grok.
+              </strong>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Copia el prompt completo</h3>
+              <p>
+                No simplifiques la estructura ni el sistema de color.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Ejecuta en varios motores</h3>
+              <p>
+                Mantén exactamente la misma instrucción.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Amplía las imágenes</h3>
+              <p>
+                Revisa título, números, palabras y frases de cada tarjeta.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Documenta errores</h3>
+              <p>
+                Registra omisiones, sustituciones y fallos de composición.
+              </p>
+            </article>
+          </div>
+
+          <article class="prompt-card" style="margin-top:15px">
+            <div class="prompt-head">
+              <div>
+                <h3>Prompt de infografía</h3>
+                <p>Brief editorial completo · relación 16:9</p>
+              </div>
+
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="p2-infografia"
+              >
+                Copiar
+              </button>
+            </div>
+
+            <pre class="prompt-text tall" id="p2-infografia">Infografía educativa tipo tablero de referencia, titulada "Los 14 bloques (columna vertebral)", sobre fondo azul marino oscuro (#0B1622). Cuadrícula de 4 columnas × 4 filas de tarjetas redondeadas del mismo tamaño, con espaciado uniforme entre ellas.
+
+Las primeras dos tarjetas (arriba a la izquierda) destacadas en magenta intenso (#EC4899) con un pequeño ícono de estrella, cada una con un número grande, una palabra clave corta en la parte superior y una frase muy breve debajo. Las doce tarjetas restantes en azul grisáceo oscuro (#1E2E48) con borde sutil, mismo formato: número, palabra clave, frase breve. La última celda (posición 15 de 16) ocupa el doble de ancho, con fondo dorado (#FBBF24) translúcido y un texto corto de una sola línea a modo de nota destacada.
+
+Estilo: infografía plana de diseño editorial minimalista tipo dashboard o tablero de checklist, vectorial, tipografía sans-serif geométrica, iconografía de línea simple, sin ilustraciones detalladas ni fotografías incrustadas.
+
+Composición: cuadrícula perfectamente alineada, jerarquía visual clara mediante el color (dos tarjetas destacadas vs. el resto).
+
+Atmósfera: clara, ordenada, profesional, fácil de escanear visualmente.
+
+Negativos: sin párrafos largos, sin texto decorativo o cursivo, sin gradientes ni brillos excesivos, sin caras o personas, sin marcas de agua. --ar 16:9</pre>
+          </article>
+
+          <div class="callout callout-warning">
+            <div class="callout-icon">Aa</div>
+
+            <div>
+              <h3>Desafío principal: revisar el texto generado</h3>
+
+              <p>
+                No evalúes únicamente la apariencia general. Comprueba si el
+                título, la numeración, las palabras clave y las frases son
+                legibles, correctas y están colocadas en la tarjeta adecuada.
+              </p>
+            </div>
+          </div>
+
+          <div class="comparison-table">
+            <table aria-label="Matriz de evaluación de la infografía">
+              <thead>
+                <tr>
+                  <th>Motor</th>
+                  <th>Título correcto</th>
+                  <th>Números correctos</th>
+                  <th>Texto legible</th>
+                  <th>Cuadrícula fiel</th>
+                  <th>Observación principal</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>
+                    <input class="text-input" value="Motor 1">
+                  </td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Error o fortaleza"></td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input class="text-input" value="Motor 2">
+                  </td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Error o fortaleza"></td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <input class="text-input" value="Motor 3">
+                  </td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="score-input" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Error o fortaleza"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p2-title">
+                <span>Comprobé el título carácter por carácter.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p2-grid">
+                <span>Conté las tarjetas y revisé la cuadrícula.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p2-color">
+                <span>Verifiqué las dos tarjetas magenta y la nota dorada.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p2-winner">
+                <span>Identifiqué el motor más fiel al briefing completo.</span>
+              </label>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <article
+        class="practice"
+        id="practica-3"
+        data-theme="teal"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-teal">Práctica 3</span>
+              <span class="tag tag-blue">Ablación controlada</span>
+            </div>
+
+            <h2>Qué cambia cuando eliminas un bloque</h2>
+
+            <p>
+              Genera tres versiones del mismo sujeto y modifica una única
+              variable cada vez para identificar su peso visual.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-3"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Medir el impacto de iluminación y cámara sin cambiar el sujeto.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Tres imágenes y un diagnóstico técnico.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                ChatGPT, Gemini, Grok o Midjourney.
+              </strong>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Genera la base</h3>
+              <p>
+                Ejecuta el prompt completo y consérvalo como referencia.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Elimina iluminación</h3>
+              <p>
+                No cambies ninguna otra frase ni parámetro.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Restaura y elimina cámara</h3>
+              <p>
+                El tercer prompt facilitado mantiene la lente y retira la cámara.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Compara técnicamente</h3>
+              <p>
+                Explica qué bloque produjo el cambio más visible.
+              </p>
+            </article>
+          </div>
+
+          <div class="prompt-grid three">
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Versión base</h3>
+                  <p>Prompt completo</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p3-base"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text tall" id="p3-base">Tommy, un perro schnauzer de pelaje gris canoso, bigotes y cejas pobladas característicos, saltando en el aire para atrapar una pelota amarilla con la boca, en un parque con césped verde y árboles desenfocados al fondo.
+
+Composición: plano medio, a Tommy ligeramente descentrado según la regla de tercios, con espacio libre arriba para que se vea el salto completo.
+
+Iluminación: luz cálida frontal tipo atardecer, iluminando directamente el rostro de Tommy.
+
+Cámara: ángulo lateral desde la derecha, a la altura del perro.
+
+Lente: 85 mm f/2.8, para desenfocar el fondo y aislarlo del parque.
+
+Estilo: fotografía de acción nítida, editorial de mascotas.
+
+Atmósfera: alegría y energía pura, momento de diversión genuina.
+
+Color: paleta cálida, dorados y verdes suaves.
+
+Negativos: sin desenfoque de movimiento excesivo, sin distorsión en las patas, sin fondo desordenado, sin marcas de agua.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Variación A</h3>
+                  <p>Sin bloque de iluminación</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p3-sin-luz"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text tall" id="p3-sin-luz">Tommy, un perro schnauzer de pelaje gris canoso, bigotes y cejas pobladas característicos, saltando en el aire para atrapar una pelota amarilla con la boca, en un parque con césped verde y árboles desenfocados al fondo.
+
+Composición: plano medio, a Tommy ligeramente descentrado según la regla de tercios, con espacio libre arriba para que se vea el salto completo.
+
+Cámara: ángulo lateral desde la derecha, a la altura del perro.
+
+Lente: 85 mm f/2.8, para desenfocar el fondo y aislarlo del parque.
+
+Estilo: fotografía de acción nítida, editorial de mascotas.
+
+Atmósfera: alegría y energía pura, momento de diversión genuina.
+
+Color: paleta cálida, dorados y verdes suaves.
+
+Negativos: sin desenfoque de movimiento excesivo, sin distorsión en las patas, sin fondo desordenado, sin marcas de agua.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Variación B</h3>
+                  <p>Sin bloque de cámara</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p3-sin-camara"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text tall" id="p3-sin-camara">Tommy, un perro schnauzer de pelaje gris canoso, bigotes y cejas pobladas característicos, saltando en el aire para atrapar una pelota amarilla con la boca, en un parque con césped verde y árboles desenfocados al fondo.
+
+Composición: plano medio, a Tommy ligeramente descentrado según la regla de tercios, con espacio libre arriba para que se vea el salto completo.
+
+Iluminación: luz cálida frontal tipo atardecer, iluminando directamente el rostro de Tommy.
+
+Lente: 85 mm f/2.8, para desenfocar el fondo y aislarlo del parque.
+
+Estilo: fotografía de acción nítida, editorial de mascotas.
+
+Atmósfera: alegría y energía pura, momento de diversión genuina.
+
+Color: paleta cálida, dorados y verdes suaves.
+
+Negativos: sin desenfoque de movimiento excesivo, sin distorsión en las patas, sin fondo desordenado, sin marcas de agua.</pre>
+            </article>
+          </div>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">1×</div>
+
+            <div>
+              <h3>Regla experimental</h3>
+
+              <p>
+                Cambia una sola variable cada vez. Si modificas iluminación,
+                lente, color y estilo simultáneamente, no podrás saber qué
+                bloque produjo el resultado.
+              </p>
+            </div>
+          </div>
+
+          <div class="comparison-table">
+            <table aria-label="Comparación de los bloques eliminados">
+              <thead>
+                <tr>
+                  <th>Versión</th>
+                  <th>Luz y volumen</th>
+                  <th>Ángulo y punto de vista</th>
+                  <th>Separación del fondo</th>
+                  <th>Diagnóstico</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>Base</td>
+                  <td><input class="text-input" placeholder="Observación"></td>
+                  <td><input class="text-input" placeholder="Observación"></td>
+                  <td><input class="text-input" placeholder="Observación"></td>
+                  <td><input class="text-input" placeholder="Referencia"></td>
+                </tr>
+
+                <tr>
+                  <td>Sin iluminación</td>
+                  <td><input class="text-input" placeholder="¿Más plana?"></td>
+                  <td><input class="text-input" placeholder="¿Se conserva?"></td>
+                  <td><input class="text-input" placeholder="¿Se conserva?"></td>
+                  <td><input class="text-input" placeholder="Impacto"></td>
+                </tr>
+
+                <tr>
+                  <td>Sin cámara</td>
+                  <td><input class="text-input" placeholder="¿Se conserva?"></td>
+                  <td><input class="text-input" placeholder="¿Cambió?"></td>
+                  <td><input class="text-input" placeholder="¿Se conserva?"></td>
+                  <td><input class="text-input" placeholder="Impacto"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p3-same-subject">
+                <span>Mantuve el mismo sujeto y la misma acción.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p3-one-variable">
+                <span>Cambié únicamente un bloque en cada variante.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p3-light-impact">
+                <span>Puedo explicar el impacto de retirar iluminación.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p3-camera-impact">
+                <span>Puedo explicar el impacto de retirar cámara.</span>
+              </label>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <article
+        class="practice"
+        id="practica-4"
+        data-theme="violet"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-violet">Práctica 4</span>
+              <span class="tag tag-teal">Sistema Visual de Marca</span>
+            </div>
+
+            <h2>Dos escenas, una identidad</h2>
+
+            <p>
+              Aplica literalmente el mismo Sistema Visual de Marca a dos escenas
+              departamentales y comprueba si ambas pertenecen a la misma familia.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-4"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Mantener paleta, fotografía, atmósfera y composición.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Dos imágenes institucionales coherentes.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                ChatGPT, Gemini, Grok o Midjourney.
+              </strong>
+            </div>
+          </div>
+
+          <article class="prompt-card" style="margin-top:15px">
+            <div class="prompt-head">
+              <div>
+                <h3>Sistema Visual de Marca · Vértice</h3>
+                <p>Debe copiarse literalmente al inicio de cada prompt.</p>
+              </div>
+
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="p4-svm"
+              >
+                Copiar
+              </button>
+            </div>
+
+            <pre class="prompt-text medium" id="p4-svm">ESTILO DE MARCA VÉRTICE:
+
+Paleta: azul profundo #15314B, gris cálido #6B6661, blanco; acento turquesa #1FA8A0.
+
+Fotografía: realista y limpia, 35–50 mm, luz natural suave, leve profundidad de campo.
+
+Atmósfera: cercana, experta, optimista; humana sin ser informal.
+
+Composición: ordenada, amplia, con espacio negativo para texto.
+
+Personas diversas y naturales.
+
+Evitar: estética de stock, colores fuera de paleta, texto IA.</pre>
+          </article>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Copia el SVM</h3>
+              <p>
+                No lo resumas ni lo reescribas entre generaciones.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Genera Marketing</h3>
+              <p>
+                Añade la primera escena después del bloque de marca.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Genera RR. HH.</h3>
+              <p>
+                Utiliza exactamente el mismo SVM y cambia solo la escena.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Evalúa la familia</h3>
+              <p>
+                Observa las dos imágenes simultáneamente.
+              </p>
+            </article>
+          </div>
+
+          <div class="prompt-grid">
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Escena 1 · Marketing</h3>
+                  <p>Colaboración y copy space superior</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p4-marketing"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p4-marketing">[Pegar el SVM aquí]. Escena: dos colegas diversos revisando juntos una pantalla en una oficina luminosa, conversación natural, plano medio, luz de ventana, copy space superior para titular.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Escena 2 · RR. HH.</h3>
+                  <p>Onboarding y copy space lateral</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p4-rrhh"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p4-rrhh">[Pegar el SVM aquí]. Escena: nueva incorporación siendo recibida por su equipo en un espacio abierto, sonrisas naturales, plano medio, luz natural, copy space lateral para claim.</pre>
+            </article>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p4-literal">
+                <span>Pegué el mismo SVM de forma literal en ambos prompts.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p4-palette">
+                <span>Las dos piezas respetan la misma paleta.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p4-photo">
+                <span>La fotografía y la iluminación se sienten coherentes.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p4-family">
+                <span>Las escenas son diferentes, pero parecen de la misma marca.</span>
+              </label>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <article
+        class="practice"
+        id="practica-5"
+        data-theme="green"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-green">Práctica 5</span>
+              <span class="tag tag-blue">Producción multicanal</span>
+            </div>
+
+            <h2>Un hero, tres formatos</h2>
+
+            <p>
+              Genera una pieza principal 4:5 y deriva versiones 9:16 y 16:9
+              manteniendo escena, personajes, luz y estilo.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-5"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Reencuadrar una campaña sin regenerarla desde cero.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Hero 4:5, vertical 9:16 y banner 16:9.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                ChatGPT, Gemini, Grok o Midjourney.
+              </strong>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Genera el hero</h3>
+              <p>
+                Deja un 20 % de margen alrededor del grupo.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Deriva a 9:16</h3>
+              <p>
+                Protege las zonas superiores e inferiores de la interfaz.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Deriva a 16:9</h3>
+              <p>
+                Desplaza el grupo y reserva un lado para el mensaje.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Revisa el conjunto</h3>
+              <p>
+                Comprueba que las tres piezas formen una campaña.
+              </p>
+            </article>
+          </div>
+
+          <div class="prompt-grid three">
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 1 · Hero 4:5</h3>
+                  <p>Pieza principal · seed 1207</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p5-hero"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p5-hero">[Pegar el SVM aquí]. Escena de un equipo diverso y sonriente dando la bienvenida en una oficina luminosa, plano medio, luz natural cálida, atmósfera humana, amplio copy space superior para el titular "Únete a nuestro equipo". --ar 4:5 --seed 1207. Importante: dejar 20% de margen alrededor del grupo.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 2 · Vertical 9:16</h3>
+                  <p>Misma escena y mismo seed</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p5-story"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p5-story">Misma escena, personajes, luz y estilo del hero (seed 1207). Reencuadrar en vertical 9:16, sujeto centrado, zonas seguras arriba y abajo libres de elementos. --ar 9:16 --seed 1207</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 3 · Banner 16:9</h3>
+                  <p>Misma escena y mismo seed</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p5-banner"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p5-banner">Misma escena y estilo del hero (seed 1207). Reencuadrar en 16:9, grupo desplazado a la derecha, amplio espacio a la izquierda para titular y botón. --ar 16:9 --seed 1207</pre>
+            </article>
+          </div>
+
+          <div class="callout callout-warning">
+            <div class="callout-icon">--</div>
+
+            <div>
+              <h3>Los parámetros no funcionan igual en todas las herramientas</h3>
+
+              <p>
+                Cuando el motor no reconozca instrucciones como
+                <code>--ar</code> o <code>--seed</code>, utiliza sus controles
+                nativos de relación de aspecto, referencia de imagen o edición.
+                Conserva el principio: misma escena, distinto encuadre.
+              </p>
+            </div>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p5-margin">
+                <span>El hero tiene margen suficiente alrededor del grupo.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p5-story-safe">
+                <span>La versión 9:16 protege las zonas de interfaz.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p5-banner-space">
+                <span>La versión 16:9 reserva espacio para titular y botón.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p5-campaign">
+                <span>Las tres piezas parecen parte de la misma campaña.</span>
+              </label>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <article
+        class="practice"
+        id="practica-6"
+        data-theme="amber"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-amber">Práctica 6</span>
+              <span class="tag tag-violet">Benchmark</span>
+            </div>
+
+            <h2>El mismo briefing en varios motores</h2>
+
+            <p>
+              Compara herramientas mediante prompts comunes y una rúbrica
+              basada en realismo, fidelidad y estética.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-6"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Elegir herramientas por resultado y no por popularidad.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Tabla comparativa y conclusión por caso de uso.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                ChatGPT, Gemini, Grok o Midjourney.
+              </strong>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Elige un prompt</h3>
+              <p>
+                Utiliza el retrato, el producto o ambos.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Copia literalmente</h3>
+              <p>
+                No adaptes el texto para cada herramienta.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Puntúa resultados</h3>
+              <p>
+                Usa la misma escala de uno a cinco.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Declara un ganador por eje</h3>
+              <p>
+                Evita presentar un ganador universal.
+              </p>
+            </article>
+          </div>
+
+          <div class="prompt-grid">
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 1 · Retrato</h3>
+                  <p>Persona profesional · fotografía editorial</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p6-retrato"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p6-retrato">Retrato corporativo de una persona profesional de unos 40 años, plano medio, 85 mm f1.8, luz suave de ventana lateral, fondo de oficina moderna desenfocado, paleta neutra y azul corporativo, expresión confiada, fotografía editorial limpia.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 2 · Producto</h3>
+                  <p>Audífonos premium · catálogo editorial</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p6-producto"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p6-producto">Fotografía de producto: un par de audífonos inalámbricos premium color grafito sobre un escritorio de oficina moderno, plano medio, 85 mm f1.8, luz suave de ventana lateral, fondo de oficina desenfocado, paleta neutra y azul corporativo, fotografía editorial limpia de catálogo.</pre>
+            </article>
+          </div>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">=</div>
+
+            <div>
+              <h3>Control de variables</h3>
+
+              <p>
+                Mantén el mismo prompt, la misma relación de aspecto y un número
+                similar de intentos. Cambiar las condiciones invalida la comparación.
+              </p>
+            </div>
+          </div>
+
+          <div class="comparison-table">
+            <table aria-label="Rúbrica para comparar motores">
+              <thead>
+                <tr>
+                  <th>Herramienta</th>
+                  <th>Realismo · 1–5</th>
+                  <th>Fidelidad · 1–5</th>
+                  <th>Estética · 1–5</th>
+                  <th>Consistencia · 1–5</th>
+                  <th>Conclusión</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td><input class="text-input" value="Motor 1"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Mejor para..."></td>
+                </tr>
+
+                <tr>
+                  <td><input class="text-input" value="Motor 2"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Mejor para..."></td>
+                </tr>
+
+                <tr>
+                  <td><input class="text-input" value="Motor 3"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Mejor para..."></td>
+                </tr>
+
+                <tr>
+                  <td><input class="text-input" value="Motor 4"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="score-input benchmark-score" type="number" min="1" max="5"></td>
+                  <td><input class="text-input" placeholder="Mejor para..."></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p6-same-prompt">
+                <span>Usé el mismo prompt en todos los motores.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p6-rubric">
+                <span>Evalué mediante una rúbrica común.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p6-axis">
+                <span>Identifiqué un ganador distinto según el eje.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p6-reason">
+                <span>Puedo justificar qué herramienta usaría para cada caso.</span>
+              </label>
+            </div>
+          </section>
+
+          <div class="callout callout-warning">
+            <div class="callout-icon">!</div>
+
+            <div>
+              <h3>Disponibilidad y planes</h3>
+
+              <p>
+                El material menciona herramientas gratuitas y de pago.
+                Los planes, límites y funciones pueden variar; verifica las
+                condiciones disponibles antes de organizar la práctica.
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article
+        class="practice"
+        id="practica-7"
+        data-theme="blue"
+      >
+        <header class="practice-head">
+          <div>
+            <div class="practice-title-row">
+              <span class="tag tag-coral">Práctica 7</span>
+              <span class="tag tag-blue">Image-to-video</span>
+            </div>
+
+            <h2>Animación abierta vs. movimiento dirigido</h2>
+
+            <p>
+              Utiliza una imagen generada durante las prácticas anteriores
+              y compara una instrucción abierta con un slow push in controlado.
+            </p>
+          </div>
+
+          <div class="practice-status">
+            <label>
+              <input
+                type="checkbox"
+                class="practice-complete"
+                data-practice-id="practice-7"
+              >
+              <span>Marcar práctica como completada</span>
+            </label>
+
+            <span>Se guarda en este navegador.</span>
+          </div>
+        </header>
+
+        <div class="practice-body">
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span>Objetivo</span>
+              <strong>
+                Comprobar que un movimiento concreto mejora el control.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Entregable</span>
+              <strong>
+                Dos clips y una comparación de estabilidad.
+              </strong>
+            </div>
+
+            <div class="overview-card">
+              <span>Herramientas indicadas</span>
+              <strong>
+                Gemini, ElevenLabs o Kling según el flujo disponible.
+              </strong>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step">
+              <span class="step-number">01</span>
+              <h3>Elige la imagen</h3>
+              <p>
+                Utiliza un fotograma aprobado de una práctica anterior.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">02</span>
+              <h3>Genera el clip abierto</h3>
+              <p>
+                Permite que el modelo decida el movimiento.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">03</span>
+              <h3>Genera el clip dirigido</h3>
+              <p>
+                Solicita un acercamiento lento y escena estable.
+              </p>
+            </article>
+
+            <article class="step">
+              <span class="step-number">04</span>
+              <h3>Compara los resultados</h3>
+              <p>
+                Observa cámara, sujetos, deformaciones y ritmo.
+              </p>
+            </article>
+          </div>
+
+          <div class="prompt-grid">
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 1 · Sin dirección</h3>
+                  <p>El modelo improvisa el movimiento.</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p7-abierto"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text" id="p7-abierto">Animar esta imagen.</pre>
+            </article>
+
+            <article class="prompt-card">
+              <div class="prompt-head">
+                <div>
+                  <h3>Prompt 2 · Movimiento dirigido</h3>
+                  <p>Un slow push in durante aproximadamente cinco segundos.</p>
+                </div>
+
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="p7-dirigido"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre class="prompt-text medium" id="p7-dirigido">A partir de esta imagen: slow push in (acercamiento lento y constante de la cámara), el resto de la escena permanece estable. Ritmo contemplativo, ~5 s. Sin movimiento de los sujetos salvo el natural (vapor, leve brisa).</pre>
+            </article>
+          </div>
+
+          <div class="comparison-table">
+            <table aria-label="Comparación de clips de video">
+              <thead>
+                <tr>
+                  <th>Criterio</th>
+                  <th>Clip abierto</th>
+                  <th>Clip dirigido</th>
+                  <th>Conclusión</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>Movimiento de cámara</td>
+                  <td><input class="text-input" placeholder="¿Qué hizo?"></td>
+                  <td><input class="text-input" placeholder="¿Ejecutó el push in?"></td>
+                  <td><input class="text-input" placeholder="Mejor resultado"></td>
+                </tr>
+
+                <tr>
+                  <td>Estabilidad del sujeto</td>
+                  <td><input class="text-input" placeholder="Observación"></td>
+                  <td><input class="text-input" placeholder="Observación"></td>
+                  <td><input class="text-input" placeholder="Conclusión"></td>
+                </tr>
+
+                <tr>
+                  <td>Deformaciones</td>
+                  <td><input class="text-input" placeholder="Errores"></td>
+                  <td><input class="text-input" placeholder="Errores"></td>
+                  <td><input class="text-input" placeholder="Conclusión"></td>
+                </tr>
+
+                <tr>
+                  <td>Utilidad editorial</td>
+                  <td><input class="text-input" placeholder="¿Es utilizable?"></td>
+                  <td><input class="text-input" placeholder="¿Es utilizable?"></td>
+                  <td><input class="text-input" placeholder="Ganador"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <section class="evaluation">
+            <h3>Criterios de observación</h3>
+
+            <div class="check-grid">
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p7-approved-image">
+                <span>Partí de una imagen que ya funcionaba como fotograma.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p7-two-clips">
+                <span>Conservé las dos versiones para compararlas.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p7-movement">
+                <span>Puedo identificar el movimiento principal de cada clip.</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" data-task-id="p7-conclusion">
+                <span>Puedo explicar por qué el clip dirigido ofrece más control.</span>
+              </label>
+            </div>
+          </section>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">▶</div>
+
+            <div>
+              <h3>Idea que debes demostrar</h3>
+
+              <p>
+                Una imagen aprobada más un único movimiento reconocible suele
+                producir un resultado más estable que una instrucción abierta.
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <section class="section" id="entrega">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Cierre del laboratorio</div>
+            <h2>Qué debe contener la carpeta final</h2>
+          </div>
+
+          <p class="section-intro">
+            Guarda no solo los resultados finales. Los prompts, comparaciones
+            y observaciones convierten las prácticas en conocimiento reutilizable.
+          </p>
+        </div>
+
+        <div class="final-delivery">
+          <article class="delivery-main">
+            <div>
+              <span class="tag tag-magenta">Portafolio de evidencias</span>
+
+              <h2>Resultados, prompts y decisiones en un solo lugar</h2>
+
+              <p>
+                Utiliza una carpeta por práctica y conserva la herramienta,
+                la fecha, el prompt ejecutado, la salida seleccionada y una
+                conclusión breve.
+              </p>
+            </div>
+
+            <div class="delivery-rule">
+              <span>Regla de documentación</span>
+              <strong>
+                Prompt + resultado + comparación + conclusión
+              </strong>
+            </div>
+          </article>
+
+          <div class="delivery-list">
+            <article class="card delivery-item">
+              <span class="delivery-number">01</span>
+
+              <div>
+                <h3>Dirección visual</h3>
+                <p>
+                  Dos oficinas comparadas y tres diferencias observables.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">02</span>
+
+              <div>
+                <h3>Infografía y texto</h3>
+                <p>
+                  Resultados por motor y registro de errores tipográficos.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">03</span>
+
+              <div>
+                <h3>Ablación de bloques</h3>
+                <p>
+                  Tres imágenes de Tommy y diagnóstico de iluminación y cámara.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">04</span>
+
+              <div>
+                <h3>Sistema Visual de Marca</h3>
+                <p>
+                  Dos escenas institucionales que pertenecen a la misma identidad.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">05</span>
+
+              <div>
+                <h3>Campaña multicanal</h3>
+                <p>
+                  Hero 4:5 y derivados 9:16 y 16:9.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">06</span>
+
+              <div>
+                <h3>Benchmark</h3>
+                <p>
+                  Rúbrica por herramienta y elección justificada.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">07</span>
+
+              <div>
+                <h3>Video dirigido</h3>
+                <p>
+                  Dos clips y análisis de movimiento, estabilidad y utilidad.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <strong>AI360 · Bloque 3 · Laboratorio de generación visual</strong>
+      <span>TechXpert Guru por Opendireito</span>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const copyButtons = document.querySelectorAll("[data-copy-target]");
+      const practiceChecks = document.querySelectorAll(".practice-complete");
+      const taskChecks = document.querySelectorAll("[data-task-id]");
+      const editableFields = document.querySelectorAll(
+        ".comparison-table input"
+      );
+
+      const progressBar = document.getElementById("progress-bar");
+      const progressLabel = document.getElementById("progress-label");
+      const resetButton = document.getElementById("reset-progress");
+
+      const practiceKey = "ai360-b3-practice-progress";
+      const taskKey = "ai360-b3-practice-tasks";
+      const fieldKey = "ai360-b3-practice-fields";
+
+      const fallbackCopy = (text) => {
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        fallbackCopy(text);
+      };
+
+      const showCopied = (button) => {
+        const original = button.textContent;
+
+        button.textContent = "Copiado";
+        button.classList.add("copied");
+
+        window.setTimeout(() => {
+          button.textContent = original;
+          button.classList.remove("copied");
+        }, 1500);
+      };
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const target = document.getElementById(
+            button.dataset.copyTarget
+          );
+
+          if (!target) {
+            return;
+          }
+
+          try {
+            await copyText(target.innerText.trim());
+            showCopied(button);
+          } catch (error) {
+            button.textContent = "Error";
+          }
+        });
+      });
+
+      const safeParse = (value) => {
+        try {
+          return JSON.parse(value) || {};
+        } catch (error) {
+          return {};
+        }
+      };
+
+      const loadPracticeState = () =>
+        safeParse(localStorage.getItem(practiceKey));
+
+      const loadTaskState = () =>
+        safeParse(localStorage.getItem(taskKey));
+
+      const loadFieldState = () =>
+        safeParse(localStorage.getItem(fieldKey));
+
+      const updateProgress = () => {
+        const complete = Array.from(practiceChecks).filter(
+          (checkbox) => checkbox.checked
+        ).length;
+
+        const total = practiceChecks.length;
+        const percentage = total
+          ? Math.round((complete / total) * 100)
+          : 0;
+
+        progressBar.style.width = `${percentage}%`;
+        progressBar.setAttribute("aria-valuenow", String(complete));
+
+        progressLabel.textContent =
+          `${complete} de ${total} prácticas completadas`;
+      };
+
+      const savePracticeState = () => {
+        const state = {};
+
+        practiceChecks.forEach((checkbox) => {
+          state[checkbox.dataset.practiceId] = checkbox.checked;
+        });
+
+        localStorage.setItem(practiceKey, JSON.stringify(state));
+        updateProgress();
+      };
+
+      const saveTaskState = () => {
+        const state = {};
+
+        taskChecks.forEach((checkbox) => {
+          state[checkbox.dataset.taskId] = checkbox.checked;
+        });
+
+        localStorage.setItem(taskKey, JSON.stringify(state));
+      };
+
+      const saveFieldState = () => {
+        const state = {};
+
+        editableFields.forEach((field, index) => {
+          state[index] = field.value;
+        });
+
+        localStorage.setItem(fieldKey, JSON.stringify(state));
+      };
+
+      const practiceState = loadPracticeState();
+      const taskState = loadTaskState();
+      const fieldState = loadFieldState();
+
+      practiceChecks.forEach((checkbox) => {
+        checkbox.checked = Boolean(
+          practiceState[checkbox.dataset.practiceId]
+        );
+
+        checkbox.addEventListener("change", savePracticeState);
+      });
+
+      taskChecks.forEach((checkbox) => {
+        checkbox.checked = Boolean(
+          taskState[checkbox.dataset.taskId]
+        );
+
+        checkbox.addEventListener("change", saveTaskState);
+      });
+
+      editableFields.forEach((field, index) => {
+        if (Object.prototype.hasOwnProperty.call(fieldState, index)) {
+          field.value = fieldState[index];
+        }
+
+        field.addEventListener("input", saveFieldState);
+        field.addEventListener("change", saveFieldState);
+      });
+
+      resetButton.addEventListener("click", () => {
+        const confirmed = window.confirm(
+          "¿Deseas borrar el progreso, las casillas y las anotaciones de esta página?"
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        localStorage.removeItem(practiceKey);
+        localStorage.removeItem(taskKey);
+        localStorage.removeItem(fieldKey);
+
+        practiceChecks.forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+
+        taskChecks.forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+
+        editableFields.forEach((field) => {
+          if (
+            field.classList.contains("score-input") ||
+            field.placeholder
+          ) {
+            field.value = "";
+          }
+        });
+
+        updateProgress();
+      });
+
+      updateProgress();
+    })();
+  </script>
+</body>
+</html>
