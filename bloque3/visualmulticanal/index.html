@@ -1,0 +1,3190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="AI360 Bloque 3: producción visual multicanal mediante la técnica hero más derivados."
+  >
+  <title>AI360 · Producción visual multicanal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f5f3ee;
+      --surface: #ffffff;
+      --surface-soft: #faf9f6;
+      --surface-dark: #0c1723;
+      --surface-dark-2: #142638;
+
+      --text: #17191d;
+      --muted: #666b73;
+      --faint: #969ba2;
+
+      --border: #e4e0d8;
+      --border-strong: #cbc5ba;
+
+      --orange: #dc6b35;
+      --orange-dark: #9c431e;
+      --orange-soft: #fae9df;
+
+      --blue: #256a9f;
+      --blue-soft: #e7f1f9;
+
+      --teal: #178d89;
+      --teal-soft: #e5f5f2;
+
+      --purple: #59489f;
+      --purple-soft: #eeebfa;
+
+      --green: #39714d;
+      --green-soft: #e8f3e9;
+
+      --amber: #94600d;
+      --amber-soft: #fcefd2;
+
+      --coral: #a14936;
+      --coral-soft: #faeae5;
+
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 26px;
+
+      --shadow: 0 14px 38px rgba(20, 25, 32, 0.055);
+      --shadow-dark: 0 24px 56px rgba(7, 16, 27, 0.2);
+
+      --max-width: 1160px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 20px 16px 64px;
+      background:
+        radial-gradient(circle at 7% 3%, rgba(220, 107, 53, 0.09), transparent 28rem),
+        radial-gradient(circle at 96% 17%, rgba(37, 106, 159, 0.08), transparent 31rem),
+        var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    pre,
+    code,
+    .mono {
+      font-family: "DM Mono", monospace;
+    }
+
+    ::selection {
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+    }
+
+    .page {
+      width: min(100%, var(--max-width));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 30;
+      margin-bottom: 18px;
+      padding: 10px 12px;
+      border: 1px solid rgba(228, 224, 216, 0.88);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 8px 28px rgba(20, 25, 32, 0.07);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-text strong,
+    .brand-text span {
+      display: block;
+    }
+
+    .brand-text strong {
+      font-size: 13px;
+      line-height: 1.15;
+    }
+
+    .brand-text span {
+      margin-top: 2px;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .topnav a {
+      padding: 8px 9px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      transition: 160ms ease;
+    }
+
+    .topnav a:hover,
+    .topnav a:focus-visible {
+      background: var(--surface-soft);
+      color: var(--text);
+      outline: none;
+    }
+
+    .module-pill {
+      padding: 7px 11px;
+      border: 1px solid #efc5ae;
+      border-radius: 999px;
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(135deg, rgba(220, 107, 53, 0.18), transparent 44%),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .hero::after {
+      position: absolute;
+      top: -180px;
+      right: -110px;
+      width: 440px;
+      height: 440px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(37, 106, 159, 0.34),
+        transparent 69%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.38fr) minmax(290px, 0.62fr);
+      gap: 32px;
+      padding: 47px 42px 35px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffb68f;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef8553;
+      box-shadow: 0 0 0 4px rgba(239, 133, 83, 0.15);
+    }
+
+    .hero h1 {
+      max-width: 800px;
+      margin-top: 18px;
+      font-size: clamp(2.5rem, 5vw, 4.6rem);
+      line-height: 0.99;
+      letter-spacing: -0.055em;
+    }
+
+    .hero .lead {
+      max-width: 700px;
+      margin-top: 20px;
+      color: #b9c7d3;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .hero .lead strong {
+      color: #fff;
+    }
+
+    .hero-summary {
+      display: grid;
+      gap: 10px;
+      align-content: end;
+    }
+
+    .hero-card {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.055);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card strong,
+    .hero-card span {
+      display: block;
+    }
+
+    .hero-card strong {
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .hero-card span {
+      margin-top: 3px;
+      color: #8fa1b1;
+      font-size: 12px;
+    }
+
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.13);
+    }
+
+    .hero-meta div {
+      padding: 17px 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .hero-meta div:last-child {
+      border-right: 0;
+    }
+
+    .hero-meta span,
+    .hero-meta strong {
+      display: block;
+    }
+
+    .hero-meta span {
+      color: #788c9e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .hero-meta strong {
+      margin-top: 4px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 35px;
+      scroll-margin-top: 92px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(300px, 0.52fr);
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      margin-bottom: 8px;
+      color: var(--orange-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section h2 {
+      max-width: 810px;
+      font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 15px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .tag-orange {
+      border-color: #efc4ac;
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+    }
+
+    .tag-blue {
+      border-color: #bfd7e8;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .tag-teal {
+      border-color: #b9ded9;
+      background: var(--teal-soft);
+      color: var(--teal);
+    }
+
+    .tag-purple {
+      border-color: #d0c8ef;
+      background: var(--purple-soft);
+      color: var(--purple);
+    }
+
+    .tag-green {
+      border-color: #c5dcc9;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .tag-amber {
+      border-color: #ead09a;
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .tag-coral {
+      border-color: #e9bdb3;
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .mindset {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 15px;
+    }
+
+    .mindset-main {
+      display: flex;
+      min-height: 310px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 26px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(145deg, rgba(220, 107, 53, 0.15), transparent 52%),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .mindset-main h3 {
+      max-width: 470px;
+      margin-top: 25px;
+      font-size: clamp(2.1rem, 4vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .mindset-main p {
+      max-width: 500px;
+      margin-top: 17px;
+      color: #adbdca;
+      font-size: 14px;
+    }
+
+    .mindset-rule {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .mindset-rule span,
+    .mindset-rule strong {
+      display: block;
+    }
+
+    .mindset-rule span {
+      color: #8296a8;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .mindset-rule strong {
+      margin-top: 5px;
+      font-size: 17px;
+    }
+
+    .comparison-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .comparison-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 20px;
+    }
+
+    .comparison-icon {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 13px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .comparison-card h3 {
+      font-size: 18px;
+    }
+
+    .comparison-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .comparison-card strong {
+      color: var(--text);
+    }
+
+    .ratio-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .ratio-card {
+      position: relative;
+      min-height: 230px;
+      overflow: hidden;
+      padding: 18px;
+    }
+
+    .ratio-preview {
+      display: grid;
+      height: 94px;
+      margin-bottom: 15px;
+      place-items: center;
+      border: 1px solid #cbd5df;
+      border-radius: 13px;
+      background:
+        linear-gradient(135deg, #dbe6ee, #f7f9fa);
+      color: var(--blue);
+      font-family: "DM Mono", monospace;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .ratio-preview.square {
+      width: 94px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .ratio-preview.portrait {
+      width: 76px;
+      height: 95px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .ratio-preview.story {
+      width: 55px;
+      height: 98px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .ratio-preview.wide {
+      height: 68px;
+      margin-top: 13px;
+      margin-bottom: 28px;
+    }
+
+    .ratio-card h3 {
+      font-size: 16px;
+    }
+
+    .ratio-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .ratio-card .uses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 11px;
+    }
+
+    .use-chip {
+      padding: 4px 7px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .format-table {
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .format-head,
+    .format-row {
+      display: grid;
+      grid-template-columns: 1.1fr 0.7fr 1.2fr;
+    }
+
+    .format-head {
+      background: var(--surface-dark);
+      color: #fff;
+    }
+
+    .format-head div {
+      padding: 13px 16px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .format-head div:last-child {
+      border-right: 0;
+    }
+
+    .format-row > div {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .format-row > div:last-child {
+      border-right: 0;
+    }
+
+    .format-row .channel {
+      background: var(--surface-soft);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .format-row .ratio {
+      color: var(--orange-dark);
+      font-family: "DM Mono", monospace;
+      font-weight: 500;
+    }
+
+    .hero-system {
+      overflow: hidden;
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-dark);
+      box-shadow: var(--shadow-dark);
+    }
+
+    .hero-system-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero-system-head h3 {
+      font-size: 24px;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-system-head p {
+      max-width: 590px;
+      color: #95a7b6;
+      font-size: 13px;
+    }
+
+    .derivative-flow {
+      display: grid;
+      grid-template-columns: minmax(175px, 0.75fr) auto minmax(0, 1.7fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .frame-card {
+      display: flex;
+      min-height: 280px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 17px;
+      border: 1px solid #2b4154;
+      border-radius: 17px;
+      background: var(--surface-dark-2);
+    }
+
+    .frame-label {
+      margin-bottom: 13px;
+      color: #8fa3b5;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .visual-frame {
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.74);
+      border-radius: 11px;
+      background:
+        radial-gradient(circle at 53% 52%, #f2bd96 0 9%, transparent 9.5%),
+        radial-gradient(circle at 53% 63%, #2d5875 0 20%, transparent 20.5%),
+        linear-gradient(155deg, #dce4e5 0 52%, #b5c8b8 52% 100%);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .visual-frame::after {
+      position: absolute;
+      inset: 12%;
+      border: 1px dashed rgba(255, 255, 255, 0.62);
+      border-radius: 7px;
+      content: "";
+    }
+
+    .hero-frame {
+      width: 145px;
+      aspect-ratio: 4 / 5;
+    }
+
+    .story-frame {
+      width: 86px;
+      aspect-ratio: 9 / 16;
+    }
+
+    .banner-frame {
+      width: min(100%, 245px);
+      aspect-ratio: 16 / 9;
+    }
+
+    .square-frame {
+      width: 145px;
+      aspect-ratio: 1 / 1;
+    }
+
+    .frame-card strong {
+      margin-top: 14px;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .frame-card span:last-child {
+      margin-top: 3px;
+      color: #7f95a8;
+      font-size: 10px;
+    }
+
+    .flow-arrow {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      border: 1px solid #31495e;
+      border-radius: 50%;
+      background: #172c3e;
+      color: #f0a37d;
+      font-size: 20px;
+    }
+
+    .derivatives-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .hero-system-note {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 13px;
+      align-items: center;
+      margin-top: 14px;
+      padding: 14px 15px;
+      border: 1px solid rgba(245, 170, 101, 0.25);
+      border-radius: 13px;
+      background: rgba(245, 170, 101, 0.09);
+      color: #d7b592;
+      font-size: 12px;
+    }
+
+    .hero-system-note strong {
+      color: #ffd0aa;
+    }
+
+    .safe-zone-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .safe-card {
+      padding: 20px;
+    }
+
+    .safe-visual-wrap {
+      display: grid;
+      min-height: 220px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--surface-soft);
+    }
+
+    .safe-story {
+      position: relative;
+      width: 92px;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      border: 2px solid var(--surface-dark);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 50% 47%, #efc09d 0 8%, transparent 8.5%),
+        radial-gradient(circle at 50% 60%, #345c79 0 18%, transparent 18.5%),
+        linear-gradient(160deg, #d9e3e5 0 57%, #b7cab8 57%);
+    }
+
+    .safe-story::before,
+    .safe-story::after {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 17%;
+      background: repeating-linear-gradient(
+        135deg,
+        rgba(220, 107, 53, 0.24),
+        rgba(220, 107, 53, 0.24) 6px,
+        rgba(220, 107, 53, 0.09) 6px,
+        rgba(220, 107, 53, 0.09) 12px
+      );
+      content: "";
+    }
+
+    .safe-story::before {
+      top: 0;
+      border-bottom: 1px dashed var(--orange);
+    }
+
+    .safe-story::after {
+      bottom: 0;
+      border-top: 1px dashed var(--orange);
+    }
+
+    .safe-banner {
+      position: relative;
+      width: 220px;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border: 2px solid var(--surface-dark);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 75% 45%, #efc09d 0 8%, transparent 8.5%),
+        radial-gradient(circle at 75% 62%, #345c79 0 18%, transparent 18.5%),
+        linear-gradient(145deg, #dfe6e7, #b6c8b7);
+    }
+
+    .safe-banner::after {
+      position: absolute;
+      top: 10%;
+      bottom: 10%;
+      left: 6%;
+      width: 48%;
+      border: 1px dashed var(--blue);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.47);
+      content: "COPY SPACE";
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .safe-hero {
+      position: relative;
+      width: 142px;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      border: 2px solid var(--surface-dark);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 52% 47%, #efc09d 0 8%, transparent 8.5%),
+        radial-gradient(circle at 52% 60%, #345c79 0 18%, transparent 18.5%),
+        linear-gradient(145deg, #dde5e6, #b6c9b8);
+    }
+
+    .safe-hero::after {
+      position: absolute;
+      inset: 20%;
+      border: 1px dashed var(--teal);
+      border-radius: 8px;
+      content: "SUJETO";
+      display: grid;
+      place-items: end center;
+      padding-bottom: 8px;
+      color: var(--teal);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .safe-card h3 {
+      margin-top: 16px;
+      font-size: 17px;
+    }
+
+    .safe-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .callout {
+      padding: 17px;
+      border: 1px solid;
+      border-radius: 15px;
+    }
+
+    .callout h4 {
+      font-size: 14px;
+    }
+
+    .callout p {
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .callout-tip {
+      border-color: #badfd9;
+      background: var(--teal-soft);
+      color: #286d68;
+    }
+
+    .callout-warning {
+      border-color: #ead09a;
+      background: var(--amber-soft);
+      color: #77500f;
+    }
+
+    .callout-danger {
+      border-color: #e9bdb2;
+      background: var(--coral-soft);
+      color: #814334;
+    }
+
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .area-card {
+      min-height: 230px;
+      padding: 18px;
+    }
+
+    .area-number {
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .area-card h3 {
+      margin-top: 13px;
+      font-size: 17px;
+    }
+
+    .area-card .piece {
+      margin-top: 8px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .area-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .impact {
+      display: inline-flex;
+      margin-top: 13px;
+      padding: 5px 8px;
+      border-radius: 8px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .workflow-step {
+      position: relative;
+      min-height: 190px;
+      padding: 18px;
+    }
+
+    .workflow-step:not(:last-child)::after {
+      position: absolute;
+      top: 37px;
+      right: -17px;
+      z-index: 2;
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--faint);
+      content: "→";
+      font-size: 11px;
+    }
+
+    .workflow-step .number {
+      color: var(--orange-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .workflow-step h3 {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .workflow-step p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tools-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 15px;
+    }
+
+    .tool-card {
+      padding: 19px;
+    }
+
+    .tool-card h3 {
+      margin-top: 12px;
+      font-size: 17px;
+    }
+
+    .tool-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .governance {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .governance-card {
+      overflow: hidden;
+    }
+
+    .governance-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .governance-head h3 {
+      font-size: 19px;
+    }
+
+    .governance-head p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .governance-head.ai {
+      background: var(--blue-soft);
+    }
+
+    .governance-head.human {
+      background: var(--green-soft);
+    }
+
+    .governance-list {
+      display: grid;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .governance-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .governance-dot {
+      display: grid;
+      width: 19px;
+      height: 19px;
+      margin-top: 1px;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--surface-soft);
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .copy-warning {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 15px;
+      align-items: center;
+      margin-top: 15px;
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .copy-warning-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 14px;
+      background: rgba(220, 107, 53, 0.13);
+      color: #ffb18a;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .copy-warning h3 {
+      font-size: 18px;
+    }
+
+    .copy-warning p {
+      margin-top: 4px;
+      color: #adbdca;
+      font-size: 13px;
+    }
+
+    .practice {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #efcbb8;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .practice::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--orange);
+      content: "";
+    }
+
+    .practice-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding: 25px 26px 21px 30px;
+      border-bottom: 1px solid #efded5;
+    }
+
+    .practice-head h3 {
+      margin-top: 8px;
+      font-size: clamp(1.5rem, 2.8vw, 2.05rem);
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+    }
+
+    .practice-head p {
+      max-width: 690px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .practice-meta {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 8px;
+    }
+
+    .practice-meta div {
+      min-width: 99px;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .practice-meta span,
+    .practice-meta strong {
+      display: block;
+    }
+
+    .practice-meta span {
+      color: var(--faint);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .practice-meta strong {
+      margin-top: 2px;
+      font-size: 12px;
+    }
+
+    .practice-body {
+      padding: 23px 26px 27px 30px;
+    }
+
+    .practice-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .practice-step {
+      min-height: 195px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .practice-step .time {
+      color: var(--orange-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .practice-step .number {
+      margin-top: 13px;
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .practice-step h4 {
+      margin-top: 5px;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .practice-step p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 15px;
+    }
+
+    .prompt-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .prompt-card.hero-prompt {
+      border-color: #efc4ae;
+    }
+
+    .prompt-card.story-prompt {
+      border-color: #bfd9e9;
+    }
+
+    .prompt-card.banner-prompt {
+      border-color: #bedfd9;
+    }
+
+    .prompt-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .hero-prompt .prompt-card-head {
+      background: var(--orange-soft);
+    }
+
+    .story-prompt .prompt-card-head {
+      background: var(--blue-soft);
+    }
+
+    .banner-prompt .prompt-card-head {
+      background: var(--teal-soft);
+    }
+
+    .prompt-card-head h4 {
+      font-size: 15px;
+    }
+
+    .prompt-card-head p {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .copy-button {
+      min-width: 70px;
+      padding: 6px 9px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      transition: 160ms ease;
+    }
+
+    .copy-button:hover,
+    .copy-button:focus-visible {
+      border-color: var(--text);
+      color: var(--text);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .copy-button.copied {
+      border-color: #9ec7a8;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .prompt-text {
+      min-height: 270px;
+      padding: 17px;
+      color: #35404a;
+      font-family: "DM Mono", monospace;
+      font-size: 10.5px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .practice-support {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.44fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .plan-b {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 15px;
+      align-items: start;
+      padding: 20px;
+    }
+
+    .plan-b-icon {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .plan-b h3 {
+      font-size: 17px;
+    }
+
+    .plan-b p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .plan-b-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .plan-node {
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .plan-arrow {
+      color: var(--faint);
+      font-size: 10px;
+    }
+
+    .diagnosis {
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .diagnosis h3 {
+      font-size: 17px;
+    }
+
+    .diagnosis p {
+      margin-top: 6px;
+      color: #adbdca;
+      font-size: 12px;
+    }
+
+    .diagnosis ul {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+      list-style: none;
+    }
+
+    .diagnosis li {
+      position: relative;
+      padding-left: 15px;
+      color: #adbdca;
+      font-size: 11px;
+    }
+
+    .diagnosis li::before {
+      position: absolute;
+      top: 7px;
+      left: 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #f19a70;
+      content: "";
+    }
+
+    .evaluation {
+      margin-top: 15px;
+      padding: 20px;
+    }
+
+    .evaluation h3 {
+      font-size: 19px;
+    }
+
+    .evaluation > p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 11px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .check-item:hover {
+      border-color: var(--border-strong);
+      background: #fff;
+    }
+
+    .check-item input {
+      width: 16px;
+      height: 16px;
+      margin-top: 1px;
+      accent-color: var(--orange);
+    }
+
+    .mistakes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .mistake-card {
+      min-height: 210px;
+      padding: 19px;
+    }
+
+    .mistake-icon {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--coral-soft);
+      color: var(--coral);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mistake-card h3 {
+      margin-top: 15px;
+      font-size: 17px;
+    }
+
+    .mistake-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .delivery {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 15px;
+    }
+
+    .delivery-main {
+      display: flex;
+      min-height: 290px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 25px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(145deg, rgba(220, 107, 53, 0.16), transparent 55%),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .delivery-main h3 {
+      margin-top: 17px;
+      font-size: 28px;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    .delivery-main p {
+      margin-top: 10px;
+      color: #adbdca;
+      font-size: 14px;
+    }
+
+    .delivery-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 22px;
+    }
+
+    .delivery-meta span {
+      padding: 6px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #b8c5cf;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .delivery-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .delivery-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 17px;
+    }
+
+    .delivery-number {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--orange-soft);
+      color: var(--orange-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .delivery-item h4 {
+      font-size: 14px;
+    }
+
+    .delivery-item p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      margin-top: 35px;
+      padding: 34px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(135deg, rgba(220, 107, 53, 0.17), transparent 45%),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .closing::after {
+      position: absolute;
+      right: -140px;
+      bottom: -190px;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(37, 106, 159, 0.28),
+        transparent 70%
+      );
+      content: "";
+    }
+
+    .closing-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.46fr);
+      gap: 30px;
+      align-items: end;
+    }
+
+    .closing h2 {
+      max-width: 760px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.03;
+      letter-spacing: -0.05em;
+    }
+
+    .closing p {
+      max-width: 690px;
+      margin-top: 13px;
+      color: #adbdca;
+      font-size: 15px;
+    }
+
+    .closing-rule {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .closing-rule span,
+    .closing-rule strong {
+      display: block;
+    }
+
+    .closing-rule span {
+      color: #8498aa;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .closing-rule strong {
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 4px 0;
+      color: var(--faint);
+      font-size: 11px;
+    }
+
+    .footer strong {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1050px) {
+      .area-grid,
+      .workflow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .area-card:nth-child(n + 4),
+      .workflow-step:nth-child(n + 4) {
+        min-height: auto;
+      }
+
+      .workflow-step:nth-child(3)::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .topnav {
+        display: none;
+      }
+
+      .hero-inner,
+      .section-head,
+      .mindset,
+      .delivery,
+      .closing-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-summary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-meta div:nth-child(2) {
+        border-right: 0;
+      }
+
+      .hero-meta div:nth-child(-n + 2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .ratio-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .derivative-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-arrow {
+        margin: 0 auto;
+        transform: rotate(90deg);
+      }
+
+      .prompt-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-text {
+        min-height: auto;
+      }
+
+      .practice-support {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 10px 10px 50px;
+      }
+
+      .topbar {
+        top: 7px;
+      }
+
+      .module-pill {
+        display: none;
+      }
+
+      .hero-inner {
+        padding: 34px 23px 25px;
+      }
+
+      .hero-summary,
+      .hero-meta,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .ratio-grid,
+      .safe-zone-grid,
+      .area-grid,
+      .workflow,
+      .tools-strip,
+      .governance,
+      .practice-steps,
+      .check-grid,
+      .mistakes {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-meta div {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .hero-meta div:last-child {
+        border-bottom: 0;
+      }
+
+      .section-head {
+        gap: 12px;
+      }
+
+      .format-table {
+        overflow-x: auto;
+      }
+
+      .format-head,
+      .format-row {
+        min-width: 690px;
+      }
+
+      .hero-system-head {
+        display: block;
+      }
+
+      .hero-system-head p {
+        margin-top: 7px;
+      }
+
+      .derivatives-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .frame-card {
+        min-height: 250px;
+      }
+
+      .workflow-step:not(:last-child)::after {
+        display: none;
+      }
+
+      .practice-head {
+        grid-template-columns: 1fr;
+        padding: 22px 20px 18px 25px;
+      }
+
+      .practice-meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .practice-body {
+        padding: 20px 19px 23px 25px;
+      }
+
+      .closing {
+        padding: 27px 23px;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer span {
+        display: block;
+        margin-top: 4px;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 13mm;
+      }
+
+      body {
+        padding: 0;
+        background: #fff;
+      }
+
+      .page {
+        width: 100%;
+      }
+
+      .topbar,
+      .copy-button {
+        display: none !important;
+      }
+
+      .hero,
+      .mindset-main,
+      .hero-system,
+      .copy-warning,
+      .diagnosis,
+      .delivery-main,
+      .closing {
+        box-shadow: none;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .card,
+      .practice {
+        box-shadow: none;
+      }
+
+      .section,
+      .card,
+      .practice-step,
+      .prompt-card {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand-lockup" href="#inicio" aria-label="Ir al inicio">
+          <span class="brand-mark">360</span>
+
+          <span class="brand-text">
+            <strong>AI360 · Bloque 3</strong>
+            <span>TechXpert</span>
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Navegación de la página">
+          <a href="#formatos">Formatos</a>
+          <a href="#hero-derivados">Hero + derivados</a>
+          <a href="#zonas-seguras">Zonas seguras</a>
+          <a href="#areas">Áreas</a>
+          <a href="#practica">Práctica</a>
+        </nav>
+
+        <span class="module-pill">HTML 3 de 5</span>
+      </div>
+    </header>
+
+    <main>
+
+      <section class="hero" id="inicio">
+        <div class="hero-inner">
+          <div>
+            <span class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              Contenido interno y comercial
+            </span>
+
+            <h1>Producción visual multicanal</h1>
+
+            <p class="lead">
+              Produce una pieza principal y conviértela en una
+              <strong>familia coherente de formatos</strong>.
+              La clave no es generar más imágenes: es diseñar una escena
+              suficientemente flexible para adaptarla sin perder identidad.
+            </p>
+          </div>
+
+          <div class="hero-summary">
+            <article class="hero-card">
+              <strong>Un solo hero</strong>
+              <span>La escena principal se genera una vez.</span>
+            </article>
+
+            <article class="hero-card">
+              <strong>Tres encuadres</strong>
+              <span>4:5, 9:16 y 16:9 con la misma identidad.</span>
+            </article>
+
+            <article class="hero-card">
+              <strong>Una campaña</strong>
+              <span>Mismos personajes, luz, estilo y atmósfera.</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero-meta">
+          <div>
+            <span>Segmento</span>
+            <strong>4 · Contenido multicanal</strong>
+          </div>
+
+          <div>
+            <span>Duración</span>
+            <strong>20 minutos</strong>
+          </div>
+
+          <div>
+            <span>Práctica</span>
+            <strong>8 minutos</strong>
+          </div>
+
+          <div>
+            <span>Resultado</span>
+            <strong>Set de 3 formatos</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="principio">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Cambio de mentalidad</div>
+            <h2>Adaptar una escena es más eficiente que volver a inventarla</h2>
+          </div>
+
+          <p class="section-intro">
+            Cada canal necesita un encuadre distinto, pero eso no obliga a producir
+            una escena nueva. El objetivo es mantener constante la identidad y variar
+            únicamente la ventana desde la que se observa.
+          </p>
+        </div>
+
+        <div class="mindset">
+          <article class="mindset-main">
+            <div>
+              <span class="tag tag-orange">Idea central</span>
+
+              <h3>Reencuadrar, no regenerar.</h3>
+
+              <p>
+                La coherencia aparece cuando los distintos formatos conservan
+                los mismos personajes, la misma luz y la misma intención visual.
+              </p>
+            </div>
+
+            <div class="mindset-rule">
+              <span>Fórmula</span>
+              <strong>Escena fija + encuadre variable = campaña coherente</strong>
+            </div>
+          </article>
+
+          <div class="comparison-stack">
+            <article class="card comparison-card">
+              <div class="comparison-icon tag-coral">×</div>
+
+              <div>
+                <h3>Regenerar cada formato</h3>
+                <p>
+                  El modelo vuelve a decidir rostros, poses, iluminación,
+                  proporciones y detalles. El resultado puede parecer
+                  <strong>tres campañas diferentes</strong>.
+                </p>
+              </div>
+            </article>
+
+            <article class="card comparison-card">
+              <div class="comparison-icon tag-green">✓</div>
+
+              <div>
+                <h3>Derivar desde el hero</h3>
+                <p>
+                  Se conserva la escena y solo cambia el recorte, la posición
+                  del sujeto o el espacio reservado para la interfaz y el texto.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="formatos">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Referencia rápida</div>
+            <h2>El formato responde al canal y a la función</h2>
+          </div>
+
+          <p class="section-intro">
+            La relación de aspecto determina cuánto espacio existe alrededor
+            del sujeto y dónde podrán colocarse titulares, botones o elementos
+            de interfaz.
+          </p>
+        </div>
+
+        <div class="ratio-grid">
+          <article class="card ratio-card">
+            <div class="ratio-preview portrait">4:5</div>
+            <h3>Vertical editorial</h3>
+            <p>
+              Ofrece presencia en feed y suficiente altura para retratos,
+              producto o escenas humanas.
+            </p>
+
+            <div class="uses">
+              <span class="use-chip">Instagram</span>
+              <span class="use-chip">LinkedIn</span>
+              <span class="use-chip">Hero base</span>
+            </div>
+          </article>
+
+          <article class="card ratio-card">
+            <div class="ratio-preview story">9:16</div>
+            <h3>Vertical de pantalla</h3>
+            <p>
+              Ocupa todo el móvil. Debe proteger las zonas superiores
+              e inferiores utilizadas por la interfaz.
+            </p>
+
+            <div class="uses">
+              <span class="use-chip">Stories</span>
+              <span class="use-chip">Reels</span>
+              <span class="use-chip">TikTok</span>
+            </div>
+          </article>
+
+          <article class="card ratio-card">
+            <div class="ratio-preview wide">16:9</div>
+            <h3>Horizontal estándar</h3>
+            <p>
+              Ideal para reservar un lado al sujeto y el otro a titulares,
+              botones o contenido editorial.
+            </p>
+
+            <div class="uses">
+              <span class="use-chip">Web</span>
+              <span class="use-chip">Slides</span>
+              <span class="use-chip">Blog</span>
+            </div>
+          </article>
+
+          <article class="card ratio-card">
+            <div class="ratio-preview square">1:1</div>
+            <h3>Cuadrado compacto</h3>
+            <p>
+              Funciona bien cuando la pieza debe ser modular,
+              reutilizable y fácil de insertar en distintos layouts.
+            </p>
+
+            <div class="uses">
+              <span class="use-chip">Feed</span>
+              <span class="use-chip">Newsletter</span>
+              <span class="use-chip">Miniatura</span>
+            </div>
+          </article>
+        </div>
+
+        <div
+          class="card format-table"
+          role="table"
+          aria-label="Formatos recomendados por canal"
+        >
+          <div class="format-head" role="row">
+            <div role="columnheader">Canal o pieza</div>
+            <div role="columnheader">Formato</div>
+            <div role="columnheader">Consideración principal</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Feed Instagram / LinkedIn</div>
+            <div class="ratio" role="cell">4:5 o 1:1</div>
+            <div role="cell">Sujeto legible y composición que funcione en scroll.</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Stories / Reels / TikTok</div>
+            <div class="ratio" role="cell">9:16</div>
+            <div role="cell">Proteger las zonas de interfaz arriba y abajo.</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Banner web / hero</div>
+            <div class="ratio" role="cell">16:9 o 21:9</div>
+            <div role="cell">Desplazar el sujeto y reservar un lado para el mensaje.</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Presentación</div>
+            <div class="ratio" role="cell">16:9</div>
+            <div role="cell">Evitar detalles pequeños y dejar espacio para jerarquía editorial.</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Blog / artículo</div>
+            <div class="ratio" role="cell">16:9 o 3:2</div>
+            <div role="cell">Composición horizontal compatible con encabezados y portadas.</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Newsletter</div>
+            <div class="ratio" role="cell">16:9 o 1:1</div>
+            <div role="cell">Lectura clara incluso en tamaños reducidos.</div>
+          </div>
+
+          <div class="format-row" role="row">
+            <div class="channel" role="cell">Infografía</div>
+            <div class="ratio" role="cell">9:16 o 2:3</div>
+            <div role="cell">Secuencia vertical y contenido dividido en bloques breves.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="hero-derivados">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Sistema de producción</div>
+            <h2>Hero + derivados: una escena, varias ventanas</h2>
+          </div>
+
+          <p class="section-intro">
+            El hero se diseña con margen suficiente para sobrevivir a recortes
+            verticales, horizontales y cuadrados sin perder al sujeto ni la
+            intención narrativa.
+          </p>
+        </div>
+
+        <div class="hero-system">
+          <div class="hero-system-head">
+            <div>
+              <div class="section-kicker">Flujo recomendado</div>
+              <h3>Crea una vez. Deriva después.</h3>
+            </div>
+
+            <p>
+              El seed, los personajes, la iluminación y el estilo permanecen
+              constantes. Solo cambia la relación de aspecto o el recorte.
+            </p>
+          </div>
+
+          <div class="derivative-flow">
+            <article class="frame-card">
+              <span class="frame-label">PIEZA PRINCIPAL</span>
+              <div class="visual-frame hero-frame" aria-hidden="true"></div>
+              <strong>Hero 4:5</strong>
+              <span>20 % de margen alrededor</span>
+            </article>
+
+            <div class="flow-arrow" aria-hidden="true">→</div>
+
+            <div class="derivatives-grid">
+              <article class="frame-card">
+                <span class="frame-label">DERIVADO 01</span>
+                <div class="visual-frame story-frame" aria-hidden="true"></div>
+                <strong>9:16</strong>
+                <span>Stories y reels</span>
+              </article>
+
+              <article class="frame-card">
+                <span class="frame-label">DERIVADO 02</span>
+                <div class="visual-frame banner-frame" aria-hidden="true"></div>
+                <strong>16:9</strong>
+                <span>Banner y presentación</span>
+              </article>
+
+              <article class="frame-card">
+                <span class="frame-label">DERIVADO 03</span>
+                <div class="visual-frame square-frame" aria-hidden="true"></div>
+                <strong>1:1</strong>
+                <span>Feed y newsletter</span>
+              </article>
+            </div>
+          </div>
+
+          <div class="hero-system-note">
+            <strong>★</strong>
+            <span>
+              <strong>El margen del hero es una reserva de flexibilidad.</strong>
+              Sin aire alrededor del sujeto, los recortes posteriores terminarán
+              cortando personas, producto o elementos importantes.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="zonas-seguras">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Diseñar para el destino</div>
+            <h2>Las zonas seguras cambian según el formato</h2>
+          </div>
+
+          <p class="section-intro">
+            Una imagen puede verse bien aislada y fallar al publicarse si la
+            interfaz, el copy o el recorte cubren el elemento principal.
+          </p>
+        </div>
+
+        <div class="safe-zone-grid">
+          <article class="card safe-card">
+            <div class="safe-visual-wrap">
+              <div class="safe-hero" aria-hidden="true"></div>
+            </div>
+
+            <h3>Hero 4:5 · margen de maniobra</h3>
+            <p>
+              Mantén al sujeto dentro del área central y deja aproximadamente
+              un 20 % de aire alrededor para futuros recortes.
+            </p>
+          </article>
+
+          <article class="card safe-card">
+            <div class="safe-visual-wrap">
+              <div class="safe-story" aria-hidden="true"></div>
+            </div>
+
+            <h3>9:16 · interfaz superior e inferior</h3>
+            <p>
+              Evita colocar rostros, logos o información esencial en las áreas
+              donde la aplicación muestra controles y navegación.
+            </p>
+          </article>
+
+          <article class="card safe-card">
+            <div class="safe-visual-wrap">
+              <div class="safe-banner" aria-hidden="true"></div>
+            </div>
+
+            <h3>16:9 · espacio lateral para copy</h3>
+            <p>
+              Desplaza el sujeto hacia un lado y reserva el otro para incorporar
+              el titular, el botón y la información definitiva en edición.
+            </p>
+          </article>
+        </div>
+
+        <div class="grid-2" style="margin-top:15px">
+          <div class="callout callout-tip">
+            <h4>Buena señal</h4>
+            <p>
+              Puedes recortar la imagen a vertical, horizontal y cuadrado
+              sin cortar al sujeto ni perder el contexto.
+            </p>
+          </div>
+
+          <div class="callout callout-warning">
+            <h4>Señal de alerta</h4>
+            <p>
+              Cada adaptación exige reconstruir la escena o inventar contenido
+              nuevo en los bordes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="areas">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Aplicación empresarial</div>
+            <h2>Cinco áreas donde la producción visual aporta valor</h2>
+          </div>
+
+          <p class="section-intro">
+            El sistema no se limita a redes sociales. También sirve para
+            comunicación interna, ventas, onboarding y materiales educativos.
+          </p>
+        </div>
+
+        <div class="area-grid">
+          <article class="card area-card">
+            <span class="area-number">01</span>
+            <h3>Marketing</h3>
+            <div class="piece">Campaña multicanal</div>
+            <p>
+              Una misma idea se adapta a feed, stories, banner,
+              newsletter y presentación.
+            </p>
+            <span class="impact">Velocidad + pruebas A/B</span>
+          </article>
+
+          <article class="card area-card">
+            <span class="area-number">02</span>
+            <h3>RR. HH.</h3>
+            <div class="piece">Employer branding y onboarding</div>
+            <p>
+              Escenas coherentes para vacantes, bienvenida,
+              cultura y comunicación de personas.
+            </p>
+            <span class="impact">Cercanía + consistencia</span>
+          </article>
+
+          <article class="card area-card">
+            <span class="area-number">03</span>
+            <h3>Ventas</h3>
+            <div class="piece">Producto en contexto</div>
+            <p>
+              Mockups y escenas de uso adaptadas a propuestas,
+              presentaciones y materiales comerciales.
+            </p>
+            <span class="impact">Mayor poder persuasivo</span>
+          </article>
+
+          <article class="card area-card">
+            <span class="area-number">04</span>
+            <h3>Comunicación interna</h3>
+            <div class="piece">Boletines y reconocimientos</div>
+            <p>
+              Piezas visuales para anuncios, hitos, eventos
+              y mensajes dirigidos al equipo.
+            </p>
+            <span class="impact">Mensajes más claros</span>
+          </article>
+
+          <article class="card area-card">
+            <span class="area-number">05</span>
+            <h3>Capacitación</h3>
+            <div class="piece">Cursos, guías y ebooks</div>
+            <p>
+              Portadas, escenas conceptuales y recursos
+              visuales coherentes con el programa.
+            </p>
+            <span class="impact">Aprendizaje memorable</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="flujo">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Flujo de producción</div>
+            <h2>De la idea al set final sin perder control</h2>
+          </div>
+
+          <p class="section-intro">
+            La generación visual es una fase del proceso, no el producto final.
+            Después vienen el recorte, la composición editorial y la validación.
+          </p>
+        </div>
+
+        <div class="workflow">
+          <article class="card workflow-step">
+            <span class="number">01</span>
+            <h3>Define el mensaje</h3>
+            <p>
+              Una intención simple y accionable:
+              vacante, producto, evento o contenido educativo.
+            </p>
+          </article>
+
+          <article class="card workflow-step">
+            <span class="number">02</span>
+            <h3>Aplica el SVM</h3>
+            <p>
+              Pega literalmente el Sistema Visual de Marca para fijar
+              identidad, paleta y fotografía.
+            </p>
+          </article>
+
+          <article class="card workflow-step">
+            <span class="number">03</span>
+            <h3>Genera el hero</h3>
+            <p>
+              Produce la escena en 4:5 con suficiente margen
+              alrededor del sujeto principal.
+            </p>
+          </article>
+
+          <article class="card workflow-step">
+            <span class="number">04</span>
+            <h3>Deriva formatos</h3>
+            <p>
+              Reutiliza la escena y el seed para crear
+              9:16, 16:9 y las variantes necesarias.
+            </p>
+          </article>
+
+          <article class="card workflow-step">
+            <span class="number">05</span>
+            <h3>Maqueta y valida</h3>
+            <p>
+              Añade copy, logos y datos finales en edición.
+              Revisa zonas seguras y consistencia.
+            </p>
+          </article>
+        </div>
+
+        <div class="tools-strip">
+          <article class="card tool-card">
+            <span class="tag tag-blue">Generar y editar</span>
+            <h3>GPT Image / Gemini</h3>
+            <p>
+              Producción de la escena, ajustes conversacionales
+              y variaciones visuales.
+            </p>
+          </article>
+
+          <article class="card tool-card">
+            <span class="tag tag-orange">Maquetar</span>
+            <h3>Canva + Brand Kit</h3>
+            <p>
+              Recortes, formatos, tipografía, logo,
+              jerarquía editorial y exportación.
+            </p>
+          </article>
+
+          <article class="card tool-card">
+            <span class="tag tag-purple">Diseño fino</span>
+            <h3>Figma</h3>
+            <p>
+              Composición precisa, sistemas de componentes
+              y entrega a equipos de diseño o desarrollo.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="gobernanza">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Control editorial</div>
+            <h2>La IA genera la escena. El equipo controla el mensaje.</h2>
+          </div>
+
+          <p class="section-intro">
+            Separar ambas responsabilidades reduce errores y evita publicar
+            datos incorrectos, textos deformados o afirmaciones sin revisión.
+          </p>
+        </div>
+
+        <div class="governance">
+          <article class="card governance-card">
+            <div class="governance-head ai">
+              <h3>La IA puede generar</h3>
+              <p>El material visual base de la pieza.</p>
+            </div>
+
+            <div class="governance-list">
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Escena, entorno y personajes.</span>
+              </div>
+
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Iluminación, atmósfera y estilo.</span>
+              </div>
+
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Composición y espacio negativo.</span>
+              </div>
+
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Variaciones y reencuadres visuales.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card governance-card">
+            <div class="governance-head human">
+              <h3>La edición manual debe controlar</h3>
+              <p>Todo dato que deba ser exacto y verificable.</p>
+            </div>
+
+            <div class="governance-list">
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Precios, descuentos y condiciones.</span>
+              </div>
+
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Fechas, horarios y ubicaciones.</span>
+              </div>
+
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Nombres, puestos y datos corporativos.</span>
+              </div>
+
+              <div class="governance-item">
+                <span class="governance-dot">✓</span>
+                <span>Claims legales, logos y tipografía de marca.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="copy-warning">
+          <div class="copy-warning-icon">!</div>
+
+          <div>
+            <h3>Nunca confíes a la IA el copy definitivo</h3>
+            <p>
+              Genera la escena con espacio reservado. Añade después precios,
+              fechas, nombres, botones, términos legales y mensajes finales
+              en Canva, Figma o el editor utilizado por el equipo.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="practica">
+        <div class="practice">
+          <div class="practice-head">
+            <div>
+              <span class="tag tag-orange">Práctica 4</span>
+              <h3>Un concepto, tres canales</h3>
+              <p>
+                Produce un hero y dos derivados para comprobar que reencuadrar
+                preserva mejor la coherencia que regenerar desde cero.
+              </p>
+            </div>
+
+            <div class="practice-meta">
+              <div>
+                <span>Duración</span>
+                <strong>8 min</strong>
+              </div>
+
+              <div>
+                <span>Modalidad</span>
+                <strong>Individual</strong>
+              </div>
+
+              <div>
+                <span>Nivel</span>
+                <strong>Básico</strong>
+              </div>
+
+              <div>
+                <span>Resultado</span>
+                <strong>3 piezas</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="practice-body">
+            <div class="practice-steps">
+              <article class="practice-step">
+                <span class="time">1 min</span>
+                <div class="number">01</div>
+                <h4>Elige el mensaje</h4>
+                <p>
+                  Usa una idea simple: “Únete a nuestro equipo”
+                  o un anuncio de producto.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">3 min</span>
+                <div class="number">02</div>
+                <h4>Genera el hero</h4>
+                <p>
+                  Crea la pieza 4:5 con el SVM y deja 20 %
+                  de margen alrededor del sujeto.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">2 min</span>
+                <div class="number">03</div>
+                <h4>Deriva 9:16</h4>
+                <p>
+                  Reutiliza escena y seed. Protege
+                  las zonas superiores e inferiores.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">2 min</span>
+                <div class="number">04</div>
+                <h4>Deriva 16:9</h4>
+                <p>
+                  Desplaza el grupo a un lado y reserva
+                  el otro para titular y botón.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">Cierre</span>
+                <div class="number">05</div>
+                <h4>Compara el set</h4>
+                <p>
+                  Decide si las tres piezas se sienten
+                  parte de la misma campaña.
+                </p>
+              </article>
+            </div>
+
+            <div class="prompt-grid">
+              <article class="prompt-card hero-prompt">
+                <div class="prompt-card-head">
+                  <div>
+                    <h4>Hero 4:5</h4>
+                    <p>Pieza principal · seed 1207</p>
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-hero"
+                    aria-label="Copiar prompt del hero">
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-hero">[Pega tu SVM]. Escena de un equipo diverso y sonriente dando la bienvenida en una oficina luminosa, plano medio, luz natural cálida, atmósfera humana, amplio copy space superior para añadir en edición el titular “Únete a nuestro equipo”. --ar 4:5 --seed 1207. Importante: dejar 20% de margen alrededor del grupo.</pre>
+              </article>
+
+              <article class="prompt-card story-prompt">
+                <div class="prompt-card-head">
+                  <div>
+                    <h4>Derivado 9:16</h4>
+                    <p>Stories / reels · mismo seed</p>
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-story"
+                    aria-label="Copiar prompt del derivado vertical">
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-story">Misma escena, personajes, luz y estilo del hero (seed 1207). Reencuadrar en vertical 9:16, sujeto centrado, zonas seguras arriba y abajo libres de elementos. --ar 9:16 --seed 1207</pre>
+              </article>
+
+              <article class="prompt-card banner-prompt">
+                <div class="prompt-card-head">
+                  <div>
+                    <h4>Derivado 16:9</h4>
+                    <p>Banner web · mismo seed</p>
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-banner"
+                    aria-label="Copiar prompt del banner">
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-banner">Misma escena y estilo del hero (seed 1207). Reencuadrar en 16:9, grupo desplazado a la derecha, amplio espacio a la izquierda para añadir titular y botón en edición. --ar 16:9 --seed 1207</pre>
+              </article>
+            </div>
+
+            <div class="practice-support">
+              <article class="card plan-b">
+                <div class="plan-b-icon">↔</div>
+
+                <div>
+                  <h3>Plan B: recorte manual</h3>
+                  <p>
+                    Cuando la herramienta no permite reutilizar el seed o
+                    reencuadrar con precisión, genera un hero amplio y recorta
+                    los demás formatos en Canva.
+                  </p>
+
+                  <div class="plan-b-flow">
+                    <span class="plan-node">Hero con aire</span>
+                    <span class="plan-arrow">→</span>
+                    <span class="plan-node">Duplicar</span>
+                    <span class="plan-arrow">→</span>
+                    <span class="plan-node">Recortar</span>
+                    <span class="plan-arrow">→</span>
+                    <span class="plan-node">Validar</span>
+                  </div>
+                </div>
+              </article>
+
+              <aside class="diagnosis">
+                <h3>Si el set no se ve coherente...</h3>
+                <p>Revisa primero estas dos causas.</p>
+
+                <ul>
+                  <li>El hero no dejó suficiente margen.</li>
+                  <li>La escena o el seed se regeneraron desde cero.</li>
+                </ul>
+              </aside>
+            </div>
+
+            <article class="card evaluation">
+              <h3>Criterios de autoevaluación</h3>
+              <p>
+                Marca cada criterio después de observar las tres piezas juntas.
+              </p>
+
+              <div class="check-grid">
+                <label class="check-item">
+                  <input type="checkbox" data-check-id="hero-margin">
+                  <span>
+                    Generé el hero con margen extra alrededor del sujeto.
+                  </span>
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" data-check-id="same-seed">
+                  <span>
+                    Reutilicé la misma escena y el mismo seed.
+                  </span>
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" data-check-id="story-safe">
+                  <span>
+                    Dejé libres las zonas de interfaz en 9:16.
+                  </span>
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" data-check-id="banner-copy">
+                  <span>
+                    Reservé espacio lateral para texto en 16:9.
+                  </span>
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" data-check-id="same-campaign">
+                  <span>
+                    Las tres piezas se sienten de la misma campaña.
+                  </span>
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" data-check-id="manual-copy">
+                  <span>
+                    Dejé el copy definitivo para la edición manual.
+                  </span>
+                </label>
+              </div>
+            </article>
+
+            <div class="grid-2" style="margin-top:15px">
+              <div class="callout callout-tip">
+                <h4>Pregunta de discusión</h4>
+                <p>
+                  ¿Por qué reutilizar la escena preserva mejor la coherencia
+                  que generar cada canal de manera independiente?
+                </p>
+              </div>
+
+              <div class="callout callout-warning">
+                <h4>Resultado esperado</h4>
+                <p>
+                  Un observador externo debe reconocer 4:5, 9:16 y 16:9
+                  como tres versiones de una misma campaña.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="errores">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Siempre evitar</div>
+            <h2>Tres errores que destruyen el sistema</h2>
+          </div>
+
+          <p class="section-intro">
+            La mayoría de los fallos no proviene del modelo, sino de una
+            pieza principal mal preparada o de una adaptación sin criterio.
+          </p>
+        </div>
+
+        <div class="mistakes">
+          <article class="card mistake-card">
+            <div class="mistake-icon">01</div>
+            <h3>Regenerar desde cero</h3>
+            <p>
+              Cambian personas, poses, luz y detalles. La campaña deja de
+              sentirse como un sistema visual.
+            </p>
+          </article>
+
+          <article class="card mistake-card">
+            <div class="mistake-icon">02</div>
+            <h3>Crear un hero demasiado cerrado</h3>
+            <p>
+              Sin margen alrededor del sujeto, los formatos verticales
+              y horizontales terminan cortando elementos importantes.
+            </p>
+          </article>
+
+          <article class="card mistake-card">
+            <div class="mistake-icon">03</div>
+            <h3>Ignorar la interfaz del canal</h3>
+            <p>
+              Botones, barras y etiquetas pueden cubrir rostros,
+              productos o información visual esencial.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="entregable">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Resultado del ejercicio</div>
+            <h2>Qué debes conservar al terminar</h2>
+          </div>
+
+          <p class="section-intro">
+            El valor no está únicamente en las imágenes. También está en
+            documentar el sistema que permitió producirlas.
+          </p>
+        </div>
+
+        <div class="delivery">
+          <article class="delivery-main">
+            <div>
+              <span class="tag tag-orange">Entregable</span>
+              <h3>Un set de tres piezas que se percibe como una sola campaña.</h3>
+              <p>
+                Hero 4:5, derivado vertical 9:16 y derivado horizontal 16:9,
+                acompañados por los prompts y el seed utilizado.
+              </p>
+            </div>
+
+            <div class="delivery-meta">
+              <span>4:5</span>
+              <span>9:16</span>
+              <span>16:9</span>
+              <span>Mismo seed</span>
+              <span>Misma escena</span>
+            </div>
+          </article>
+
+          <div class="delivery-list">
+            <article class="card delivery-item">
+              <span class="delivery-number">01</span>
+
+              <div>
+                <h4>Hero original</h4>
+                <p>
+                  Pieza 4:5 con margen suficiente y SVM aplicado.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">02</span>
+
+              <div>
+                <h4>Dos derivados</h4>
+                <p>
+                  Versiones 9:16 y 16:9 con zonas seguras respetadas.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">03</span>
+
+              <div>
+                <h4>Prompts documentados</h4>
+                <p>
+                  Instrucciones guardadas para reproducir o ajustar la campaña.
+                </p>
+              </div>
+            </article>
+
+            <article class="card delivery-item">
+              <span class="delivery-number">04</span>
+
+              <div>
+                <h4>Validación conjunta</h4>
+                <p>
+                  Las tres piezas revisadas simultáneamente, no de forma aislada.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <div class="closing-inner">
+          <div>
+            <div class="section-kicker">Idea para llevarte</div>
+            <h2>La escalabilidad comienza en el encuadre del hero.</h2>
+            <p>
+              Una pieza principal amplia y bien dirigida permite multiplicar
+              formatos sin multiplicar inconsistencias. Diseña desde el inicio
+              pensando en todas las ventanas donde deberá vivir.
+            </p>
+          </div>
+
+          <div class="closing-rule">
+            <span>Regla multicanal</span>
+            <strong>
+              Genera una escena.<br>
+              Reserva margen.<br>
+              Reencuadra con intención.
+            </strong>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <strong>AI360 · Bloque 3 · Generación de Contenido y Comunicación</strong>
+      <span>TechXpert Guru por Opendireito</span>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const copyButtons = document.querySelectorAll("[data-copy-target]");
+      const checkboxes = document.querySelectorAll("[data-check-id]");
+      const storageKey = "ai360-b3-html3-multicanal-checks";
+
+      const fallbackCopy = (text) => {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        fallbackCopy(text);
+      };
+
+      const showCopied = (button) => {
+        const originalText = button.textContent;
+
+        button.textContent = "Copiado";
+        button.classList.add("copied");
+
+        window.setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove("copied");
+        }, 1500);
+      };
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const targetId = button.dataset.copyTarget;
+          const target = document.getElementById(targetId);
+
+          if (!target) {
+            return;
+          }
+
+          try {
+            await copyText(target.innerText.trim());
+            showCopied(button);
+          } catch (error) {
+            button.textContent = "Error";
+
+            window.setTimeout(() => {
+              button.textContent = "Copiar";
+            }, 1500);
+          }
+        });
+      });
+
+      const loadChecks = () => {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey)) || {};
+        } catch (error) {
+          return {};
+        }
+      };
+
+      const saveChecks = () => {
+        const state = {};
+
+        checkboxes.forEach((checkbox) => {
+          state[checkbox.dataset.checkId] = checkbox.checked;
+        });
+
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          return;
+        }
+      };
+
+      const savedChecks = loadChecks();
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = Boolean(savedChecks[checkbox.dataset.checkId]);
+        checkbox.addEventListener("change", saveChecks);
+      });
+    })();
+  </script>
+</body>
+</html>
