@@ -1,0 +1,3859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="AI360 Bloque 3: fundamentos de generación de video, lenguaje cinematográfico y flujo profesional de imagen a video."
+  >
+
+  <title>AI360 · Generación de video con IA</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f5f3ee;
+      --surface: #ffffff;
+      --surface-soft: #faf9f6;
+      --surface-dark: #091722;
+      --surface-dark-2: #132635;
+
+      --text: #17191d;
+      --muted: #666c74;
+      --faint: #969ba3;
+
+      --border: #e4e0d8;
+      --border-strong: #cbc5ba;
+
+      --cyan: #168c9c;
+      --cyan-dark: #116775;
+      --cyan-soft: #e4f4f5;
+
+      --blue: #286ca3;
+      --blue-soft: #e8f2fa;
+
+      --violet: #604cab;
+      --violet-soft: #efecfb;
+
+      --green: #39714d;
+      --green-soft: #e7f3e9;
+
+      --amber: #94600d;
+      --amber-soft: #fcefd2;
+
+      --coral: #a14936;
+      --coral-soft: #faeae5;
+
+      --pink: #aa326e;
+      --pink-soft: #f9e7f0;
+
+      --radius-sm: 12px;
+      --radius: 18px;
+      --radius-lg: 26px;
+
+      --shadow: 0 14px 38px rgba(20, 25, 32, 0.055);
+      --shadow-dark: 0 24px 56px rgba(7, 16, 27, 0.2);
+
+      --max-width: 1160px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 92px;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 20px 16px 64px;
+      background:
+        radial-gradient(
+          circle at 7% 3%,
+          rgba(22, 140, 156, 0.1),
+          transparent 28rem
+        ),
+        radial-gradient(
+          circle at 96% 17%,
+          rgba(96, 76, 171, 0.08),
+          transparent 31rem
+        ),
+        var(--bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    pre,
+    code,
+    .mono {
+      font-family: "DM Mono", monospace;
+    }
+
+    ::selection {
+      background: var(--cyan-soft);
+      color: var(--cyan-dark);
+    }
+
+    .page {
+      width: min(100%, var(--max-width));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 40;
+      margin-bottom: 18px;
+      padding: 10px 12px;
+      border: 1px solid rgba(228, 224, 216, 0.88);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 8px 28px rgba(20, 25, 32, 0.07);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-text strong,
+    .brand-text span {
+      display: block;
+    }
+
+    .brand-text strong {
+      font-size: 13px;
+      line-height: 1.15;
+    }
+
+    .brand-text span {
+      margin-top: 2px;
+      color: var(--faint);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .topnav a {
+      padding: 8px 9px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      transition: 160ms ease;
+    }
+
+    .topnav a:hover,
+    .topnav a:focus-visible {
+      background: var(--surface-soft);
+      color: var(--text);
+      outline: none;
+    }
+
+    .module-pill {
+      padding: 7px 11px;
+      border: 1px solid #bce0e4;
+      border-radius: 999px;
+      background: var(--cyan-soft);
+      color: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(22, 140, 156, 0.2),
+          transparent 44%
+        ),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .hero::after {
+      position: absolute;
+      top: -180px;
+      right: -110px;
+      width: 445px;
+      height: 445px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(96, 76, 171, 0.34),
+        transparent 69%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.38fr) minmax(290px, 0.62fr);
+      gap: 32px;
+      padding: 47px 42px 35px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #9be1e8;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #49c4d1;
+      box-shadow: 0 0 0 4px rgba(73, 196, 209, 0.15);
+    }
+
+    .hero h1 {
+      max-width: 820px;
+      margin-top: 18px;
+      font-size: clamp(2.5rem, 5vw, 4.6rem);
+      line-height: 0.99;
+      letter-spacing: -0.055em;
+    }
+
+    .hero .lead {
+      max-width: 710px;
+      margin-top: 20px;
+      color: #b9c7d3;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+
+    .hero .lead strong {
+      color: #fff;
+    }
+
+    .hero-summary {
+      display: grid;
+      gap: 10px;
+      align-content: end;
+    }
+
+    .hero-card {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.055);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card strong,
+    .hero-card span {
+      display: block;
+    }
+
+    .hero-card strong {
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .hero-card span {
+      margin-top: 3px;
+      color: #8fa1b1;
+      font-size: 12px;
+    }
+
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.13);
+    }
+
+    .hero-meta div {
+      padding: 17px 20px;
+      border-right: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .hero-meta div:last-child {
+      border-right: 0;
+    }
+
+    .hero-meta span,
+    .hero-meta strong {
+      display: block;
+    }
+
+    .hero-meta span {
+      color: #788c9e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .hero-meta strong {
+      margin-top: 4px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-top: 35px;
+      scroll-margin-top: 94px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(300px, 0.52fr);
+      gap: 32px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      margin-bottom: 8px;
+      color: var(--cyan-dark);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section h2 {
+      max-width: 820px;
+      font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 15px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .tag-cyan {
+      border-color: #b9dfe3;
+      background: var(--cyan-soft);
+      color: var(--cyan-dark);
+    }
+
+    .tag-blue {
+      border-color: #bfd7e8;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .tag-violet {
+      border-color: #d1c9ef;
+      background: var(--violet-soft);
+      color: var(--violet);
+    }
+
+    .tag-green {
+      border-color: #c4dcc8;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .tag-amber {
+      border-color: #ead09a;
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .tag-coral {
+      border-color: #e9bdb2;
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .tag-pink {
+      border-color: #e9bad0;
+      background: var(--pink-soft);
+      color: var(--pink);
+    }
+
+    .transition-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .transition-card {
+      min-height: 305px;
+      padding: 24px;
+    }
+
+    .transition-card h3 {
+      margin-top: 16px;
+      font-size: 25px;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+    }
+
+    .transition-card > p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .transition-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .transition-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .transition-dot {
+      display: grid;
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--surface-soft);
+      color: var(--text);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .transition-card.video {
+      border-color: #bcdfe3;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(22, 140, 156, 0.08),
+          transparent 58%
+        ),
+        #fff;
+    }
+
+    .transition-arrow {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      margin: auto;
+      place-items: center;
+      border: 1px solid #bedce0;
+      border-radius: 50%;
+      background: var(--cyan-soft);
+      color: var(--cyan-dark);
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .formula {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 15px;
+      align-items: center;
+      margin-top: 15px;
+      padding: 21px 23px;
+      border-radius: var(--radius);
+      background: var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .formula-symbol {
+      display: grid;
+      width: 50px;
+      height: 50px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 14px;
+      background: rgba(22, 140, 156, 0.13);
+      color: #82dce5;
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .formula h3 {
+      font-size: 19px;
+    }
+
+    .formula p {
+      margin-top: 4px;
+      color: #adbdca;
+      font-size: 13px;
+    }
+
+    .dimensions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .dimension-card {
+      position: relative;
+      min-height: 250px;
+      overflow: hidden;
+      padding: 22px;
+    }
+
+    .dimension-card::after {
+      position: absolute;
+      right: -46px;
+      bottom: -55px;
+      width: 145px;
+      height: 145px;
+      border-radius: 50%;
+      background: rgba(22, 140, 156, 0.055);
+      content: "";
+    }
+
+    .dimension-number {
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .dimension-icon {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      width: 46px;
+      height: 46px;
+      margin-top: 17px;
+      place-items: center;
+      border-radius: 14px;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .dimension-card h3 {
+      position: relative;
+      z-index: 1;
+      margin-top: 15px;
+      font-size: 20px;
+    }
+
+    .dimension-card p {
+      position: relative;
+      z-index: 1;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dimension-example {
+      position: relative;
+      z-index: 1;
+      margin-top: 13px;
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-soft);
+      color: #4f5660;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .anatomy-shell {
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--surface-dark);
+      box-shadow: var(--shadow-dark);
+    }
+
+    .anatomy-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 22px;
+      padding: 23px 24px 18px;
+      color: #fff;
+    }
+
+    .anatomy-head h3 {
+      font-size: 24px;
+      letter-spacing: -0.035em;
+    }
+
+    .anatomy-head p {
+      max-width: 590px;
+      color: #94a6b5;
+      font-size: 13px;
+    }
+
+    .anatomy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 0 20px 20px;
+    }
+
+    .anatomy-card {
+      min-height: 155px;
+      padding: 16px;
+      border: 1px solid #2b4052;
+      border-radius: 14px;
+      background: var(--surface-dark-2);
+    }
+
+    .anatomy-card.primary {
+      border-color: #3d9fac;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(22, 140, 156, 0.18),
+          transparent 58%
+        ),
+        var(--surface-dark-2);
+    }
+
+    .anatomy-card .number {
+      color: #71899c;
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+    }
+
+    .anatomy-card h4 {
+      margin-top: 12px;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .anatomy-card p {
+      margin-top: 6px;
+      color: #91a4b4;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .anatomy-note {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin: 0 20px 20px;
+      padding: 13px 15px;
+      border: 1px solid rgba(126, 216, 226, 0.2);
+      border-radius: 13px;
+      background: rgba(22, 140, 156, 0.08);
+      color: #a8cbd0;
+      font-size: 12px;
+    }
+
+    .anatomy-note strong {
+      color: #bdebf0;
+    }
+
+    .movement-shell {
+      overflow: hidden;
+    }
+
+    .movement-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 21px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .movement-head h3 {
+      font-size: 20px;
+    }
+
+    .movement-head p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .movement-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.58fr);
+      gap: 18px;
+      padding: 21px;
+    }
+
+    .movement-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .movement-button {
+      min-height: 108px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #fff;
+      color: var(--text);
+      text-align: left;
+      transition: 160ms ease;
+    }
+
+    .movement-button:hover,
+    .movement-button:focus-visible {
+      border-color: #9fcfd5;
+      background: var(--cyan-soft);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .movement-button.active {
+      border-color: var(--cyan);
+      background: var(--cyan-soft);
+      box-shadow: 0 0 0 3px rgba(22, 140, 156, 0.1);
+    }
+
+    .movement-button strong,
+    .movement-button span,
+    .movement-button code {
+      display: block;
+    }
+
+    .movement-button strong {
+      font-size: 13px;
+    }
+
+    .movement-button span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .movement-button code {
+      margin-top: 7px;
+      color: var(--cyan-dark);
+      font-size: 9px;
+    }
+
+    .movement-result {
+      min-height: 100%;
+      padding: 22px;
+      border-radius: 17px;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(22, 140, 156, 0.17),
+          transparent 54%
+        ),
+        var(--surface-dark);
+      color: #fff;
+    }
+
+    .movement-result .label {
+      color: #8fa2b2;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .movement-result h4 {
+      margin-top: 10px;
+      font-size: 25px;
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+    }
+
+    .movement-result p {
+      margin-top: 10px;
+      color: #adbdca;
+      font-size: 13px;
+    }
+
+    .movement-prompt {
+      margin-top: 17px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #d7e3eb;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      line-height: 1.6;
+    }
+
+    .less-is-more {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: 15px;
+    }
+
+    .less-main {
+      display: flex;
+      min-height: 300px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 25px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(22, 140, 156, 0.17),
+          transparent 54%
+        ),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .less-main h3 {
+      max-width: 480px;
+      margin-top: 20px;
+      font-size: clamp(2.1rem, 4vw, 3.4rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .less-main p {
+      max-width: 510px;
+      margin-top: 16px;
+      color: #adbdca;
+      font-size: 14px;
+    }
+
+    .less-rule {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .less-rule span,
+    .less-rule strong {
+      display: block;
+    }
+
+    .less-rule span {
+      color: #8297a8;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .less-rule strong {
+      margin-top: 5px;
+      font-size: 16px;
+    }
+
+    .complexity-stack {
+      display: grid;
+      gap: 13px;
+    }
+
+    .complexity-card {
+      padding: 19px;
+    }
+
+    .complexity-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .complexity-card h3 {
+      font-size: 17px;
+    }
+
+    .complexity-score {
+      padding: 5px 8px;
+      border-radius: 8px;
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .complexity-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .motion-line {
+      display: flex;
+      gap: 6px;
+      margin-top: 13px;
+    }
+
+    .motion-unit {
+      height: 7px;
+      flex: 1;
+      border-radius: 999px;
+      background: var(--border);
+    }
+
+    .motion-unit.good {
+      background: #69b984;
+    }
+
+    .motion-unit.medium {
+      background: #e2b052;
+    }
+
+    .motion-unit.bad {
+      background: #d67863;
+    }
+
+    .expert-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .flow-card {
+      position: relative;
+      min-height: 205px;
+      padding: 18px;
+    }
+
+    .flow-card:not(:last-child)::after {
+      position: absolute;
+      top: 37px;
+      right: -17px;
+      z-index: 2;
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--faint);
+      content: "→";
+      font-size: 11px;
+    }
+
+    .flow-card .number {
+      color: var(--cyan-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .flow-card h3 {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .flow-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .flow-emphasis {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-top: 15px;
+      padding: 20px;
+      border: 1px solid #bcdfe3;
+      border-radius: var(--radius);
+      background: var(--cyan-soft);
+      color: #2a6971;
+    }
+
+    .flow-emphasis-icon {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      border-radius: 13px;
+      background: #fff;
+      color: var(--cyan-dark);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .flow-emphasis h3 {
+      color: #20555d;
+      font-size: 17px;
+    }
+
+    .flow-emphasis p {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .builder {
+      overflow: hidden;
+    }
+
+    .builder-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 21px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .builder-head h3 {
+      font-size: 20px;
+    }
+
+    .builder-head p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .builder-body {
+      padding: 21px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .field small {
+      color: var(--faint);
+      font-size: 10px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--border-strong);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      outline: none;
+      transition: 150ms ease;
+    }
+
+    .field input,
+    .field select {
+      height: 43px;
+      padding: 0 12px;
+    }
+
+    .field textarea {
+      min-height: 80px;
+      padding: 11px 12px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(22, 140, 156, 0.11);
+    }
+
+    .builder-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 15px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .primary-button {
+      border: 1px solid var(--cyan);
+      background: var(--cyan);
+      color: #fff;
+    }
+
+    .primary-button:hover {
+      background: var(--cyan-dark);
+    }
+
+    .secondary-button {
+      border: 1px solid var(--border-strong);
+      background: #fff;
+      color: var(--muted);
+    }
+
+    .secondary-button:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
+    .builder-output {
+      margin-top: 15px;
+      overflow: hidden;
+      border: 1px solid #bedfe3;
+      border-radius: 14px;
+      background: #f4fbfb;
+    }
+
+    .builder-output-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid #cce5e8;
+    }
+
+    .builder-output-head strong {
+      color: var(--cyan-dark);
+      font-size: 12px;
+    }
+
+    .builder-output pre {
+      min-height: 135px;
+      padding: 15px;
+      color: #26474b;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .copy-button {
+      min-width: 74px;
+      padding: 7px 10px;
+      border: 1px solid var(--border-strong);
+      border-radius: 9px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      transition: 160ms ease;
+    }
+
+    .copy-button:hover,
+    .copy-button:focus-visible {
+      border-color: var(--text);
+      color: var(--text);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .copy-button.copied {
+      border-color: #9fc8aa;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .practice {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #bedfe3;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #fff 0%, #faffff 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .practice::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--cyan);
+      content: "";
+    }
+
+    .practice-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding: 25px 26px 21px 30px;
+      border-bottom: 1px solid #dbecee;
+    }
+
+    .practice-head h3 {
+      margin-top: 8px;
+      font-size: clamp(1.5rem, 2.8vw, 2.05rem);
+      line-height: 1.15;
+      letter-spacing: -0.035em;
+    }
+
+    .practice-head p {
+      max-width: 710px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .practice-meta {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 8px;
+    }
+
+    .practice-meta div {
+      min-width: 101px;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .practice-meta span,
+    .practice-meta strong {
+      display: block;
+    }
+
+    .practice-meta span {
+      color: var(--faint);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .practice-meta strong {
+      margin-top: 2px;
+      font-size: 12px;
+    }
+
+    .practice-body {
+      padding: 23px 26px 27px 30px;
+    }
+
+    .materials {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .material-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface-soft);
+    }
+
+    .material-icon {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--cyan-soft);
+      color: var(--cyan-dark);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .material-card h4 {
+      font-size: 13px;
+    }
+
+    .material-card p {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .practice-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .practice-step {
+      min-height: 185px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .practice-step .time {
+      color: var(--cyan-dark);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      font-weight: 500;
+    }
+
+    .practice-step .number {
+      margin-top: 13px;
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .practice-step h4 {
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .practice-step p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .prompt-comparison {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 14px;
+      margin-top: 15px;
+    }
+
+    .prompt-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .prompt-card.bad {
+      border-color: #e9beb4;
+    }
+
+    .prompt-card.good {
+      border-color: #b8dcd0;
+    }
+
+    .prompt-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .prompt-card.bad .prompt-card-head {
+      background: var(--coral-soft);
+    }
+
+    .prompt-card.good .prompt-card-head {
+      background: var(--green-soft);
+    }
+
+    .prompt-card-head h4 {
+      font-size: 15px;
+    }
+
+    .prompt-card-head p {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .prompt-text {
+      min-height: 190px;
+      padding: 18px;
+      color: #35404a;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .expected-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 15px;
+    }
+
+    .expected-card {
+      padding: 18px;
+    }
+
+    .expected-card h3 {
+      margin-top: 12px;
+      font-size: 17px;
+    }
+
+    .expected-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .expected-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .expected-dot {
+      display: grid;
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--surface-soft);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .bad .expected-dot {
+      background: var(--coral-soft);
+      color: var(--coral);
+    }
+
+    .good .expected-dot {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .comparison-question {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      margin-top: 15px;
+      padding: 19px;
+      border: 1px solid #c3dcec;
+      border-radius: 15px;
+      background: var(--blue-soft);
+      color: #2b5f82;
+    }
+
+    .question-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--blue);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .comparison-question h4 {
+      color: #234e69;
+      font-size: 15px;
+    }
+
+    .comparison-question p {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .evaluation-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.45fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .evaluation {
+      padding: 20px;
+    }
+
+    .evaluation h3 {
+      font-size: 19px;
+    }
+
+    .evaluation > p {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 11px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .check-item:hover {
+      border-color: var(--border-strong);
+      background: #fff;
+    }
+
+    .check-item input {
+      width: 16px;
+      height: 16px;
+      margin-top: 1px;
+      accent-color: var(--cyan);
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .callout {
+      padding: 17px;
+      border: 1px solid;
+      border-radius: 15px;
+    }
+
+    .callout h4 {
+      font-size: 14px;
+    }
+
+    .callout p {
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .callout-tip {
+      border-color: #b9dfe3;
+      background: var(--cyan-soft);
+      color: #276970;
+    }
+
+    .callout-warning {
+      border-color: #ead09a;
+      background: var(--amber-soft);
+      color: #77500f;
+    }
+
+    .callout-danger {
+      border-color: #e9bdb2;
+      background: var(--coral-soft);
+      color: #814334;
+    }
+
+    .quality-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .quality-card {
+      min-height: 205px;
+      padding: 18px;
+    }
+
+    .quality-number {
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .quality-card h3 {
+      margin-top: 14px;
+      font-size: 16px;
+    }
+
+    .quality-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mistakes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .mistake-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 20px;
+    }
+
+    .mistake-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--coral-soft);
+      color: var(--coral);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .mistake-card h3 {
+      font-size: 17px;
+    }
+
+    .mistake-card p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .block-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .summary-card {
+      min-height: 170px;
+      padding: 18px;
+    }
+
+    .summary-card .segment {
+      color: var(--faint);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+    }
+
+    .summary-card h3 {
+      margin-top: 14px;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .summary-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .async {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: 15px;
+    }
+
+    .async-main {
+      display: flex;
+      min-height: 280px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 25px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(96, 76, 171, 0.18),
+          transparent 54%
+        ),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .async-main h3 {
+      margin-top: 16px;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+
+    .async-main p {
+      margin-top: 10px;
+      color: #adbdca;
+      font-size: 14px;
+    }
+
+    .async-level {
+      display: inline-flex;
+      width: max-content;
+      margin-top: 25px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #cabdff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .async-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .async-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 17px;
+    }
+
+    .async-number {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--violet-soft);
+      color: var(--violet);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .async-item h4 {
+      font-size: 14px;
+    }
+
+    .async-item p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      margin-top: 35px;
+      padding: 34px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(22, 140, 156, 0.2),
+          transparent 45%
+        ),
+        var(--surface-dark);
+      color: #fff;
+      box-shadow: var(--shadow-dark);
+    }
+
+    .closing::after {
+      position: absolute;
+      right: -140px;
+      bottom: -190px;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(96, 76, 171, 0.3),
+        transparent 70%
+      );
+      content: "";
+    }
+
+    .closing-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.46fr);
+      gap: 30px;
+      align-items: end;
+    }
+
+    .closing h2 {
+      max-width: 760px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.03;
+      letter-spacing: -0.05em;
+    }
+
+    .closing p {
+      max-width: 700px;
+      margin-top: 13px;
+      color: #adbdca;
+      font-size: 15px;
+    }
+
+    .closing-rule {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .closing-rule span,
+    .closing-rule strong {
+      display: block;
+    }
+
+    .closing-rule span {
+      color: #8498aa;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .closing-rule strong {
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 4px 0;
+      color: var(--faint);
+      font-size: 11px;
+    }
+
+    .footer strong {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1050px) {
+      .expert-flow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .flow-card:nth-child(3)::after {
+        display: none;
+      }
+
+      .quality-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .topnav {
+        display: none;
+      }
+
+      .hero-inner,
+      .section-head,
+      .less-is-more,
+      .async,
+      .closing-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-summary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-meta div:nth-child(2) {
+        border-right: 0;
+      }
+
+      .hero-meta div:nth-child(-n + 2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .transition-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .transition-arrow {
+        transform: rotate(90deg);
+      }
+
+      .movement-body {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .prompt-text {
+        min-height: auto;
+      }
+
+      .evaluation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .block-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 10px 10px 50px;
+      }
+
+      .topbar {
+        top: 7px;
+      }
+
+      .module-pill {
+        display: none;
+      }
+
+      .hero-inner {
+        padding: 34px 23px 25px;
+      }
+
+      .hero-summary,
+      .hero-meta,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .dimensions,
+      .anatomy-grid,
+      .movement-buttons,
+      .form-grid,
+      .materials,
+      .practice-steps,
+      .expected-grid,
+      .check-grid,
+      .quality-grid,
+      .mistakes,
+      .block-summary,
+      .expert-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-meta div {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .hero-meta div:last-child {
+        border-bottom: 0;
+      }
+
+      .section-head {
+        gap: 12px;
+      }
+
+      .anatomy-head,
+      .movement-head,
+      .builder-head {
+        display: block;
+      }
+
+      .anatomy-head p,
+      .movement-head .tag,
+      .builder-head .tag {
+        margin-top: 9px;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .flow-card:not(:last-child)::after {
+        display: none;
+      }
+
+      .practice-head {
+        grid-template-columns: 1fr;
+        padding: 22px 20px 18px 25px;
+      }
+
+      .practice-meta {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .practice-body {
+        padding: 20px 19px 23px 25px;
+      }
+
+      .closing {
+        padding: 27px 23px;
+      }
+
+      .footer {
+        display: block;
+      }
+
+      .footer span {
+        display: block;
+        margin-top: 4px;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 13mm;
+      }
+
+      body {
+        padding: 0;
+        background: #fff;
+      }
+
+      .page {
+        width: 100%;
+      }
+
+      .topbar,
+      .copy-button,
+      .builder-actions {
+        display: none !important;
+      }
+
+      .hero,
+      .formula,
+      .anatomy-shell,
+      .movement-result,
+      .less-main,
+      .async-main,
+      .closing {
+        box-shadow: none;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      .card,
+      .practice {
+        box-shadow: none;
+      }
+
+      .section,
+      .card,
+      .practice-step,
+      .quality-card {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand-lockup" href="#inicio" aria-label="Ir al inicio">
+          <span class="brand-mark">360</span>
+
+          <span class="brand-text">
+            <strong>AI360 · Bloque 3</strong>
+            <span>TechXpert</span>
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Navegación de la página">
+          <a href="#diferencia">Imagen vs. video</a>
+          <a href="#lenguaje">Movimientos</a>
+          <a href="#flujo">Flujo experto</a>
+          <a href="#constructor">Constructor</a>
+          <a href="#practica">Práctica</a>
+          <a href="#cierre-bloque">Cierre</a>
+        </nav>
+
+        <span class="module-pill">HTML 5 de 5</span>
+      </div>
+    </header>
+
+    <main>
+
+      <section class="hero" id="inicio">
+        <div class="hero-inner">
+          <div>
+            <span class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              Generación de video
+            </span>
+
+            <h1>Del fotograma al movimiento</h1>
+
+            <p class="lead">
+              Un prompt de video no solo describe lo que se ve.
+              Explica <strong>cómo evoluciona la escena en el tiempo</strong>:
+              qué se mueve, durante cuánto tiempo y qué debe permanecer estable.
+            </p>
+          </div>
+
+          <div class="hero-summary">
+            <article class="hero-card">
+              <strong>Parte de una imagen</strong>
+              <span>Utiliza un fotograma que ya funciona visualmente.</span>
+            </article>
+
+            <article class="hero-card">
+              <strong>Dirige un movimiento</strong>
+              <span>Controla la cámara sin sobrecargar el clip.</span>
+            </article>
+
+            <article class="hero-card">
+              <strong>Protege la continuidad</strong>
+              <span>Mantén identidad, luz, composición y estabilidad.</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero-meta">
+          <div>
+            <span>Segmento</span>
+            <strong>6 · Video</strong>
+          </div>
+
+          <div>
+            <span>Duración</span>
+            <strong>15 minutos</strong>
+          </div>
+
+          <div>
+            <span>Práctica</span>
+            <strong>7 minutos</strong>
+          </div>
+
+          <div>
+            <span>Nivel</span>
+            <strong>Introductorio</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="diferencia">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Cambio de dominio</div>
+            <h2>Una imagen describe un instante. Un video describe su evolución.</h2>
+          </div>
+
+          <p class="section-intro">
+            Todo lo aprendido sobre sujeto, composición, luz y estilo sigue
+            siendo válido. El video añade una dimensión temporal que también
+            debe dirigirse.
+          </p>
+        </div>
+
+        <div class="transition-layout">
+          <article class="card transition-card">
+            <span class="tag tag-blue">Prompt de imagen</span>
+            <h3>Describe un fotograma fijo</h3>
+
+            <p>
+              Define qué aparece y cómo debe verse en un momento concreto.
+            </p>
+
+            <div class="transition-list">
+              <div class="transition-item">
+                <span class="transition-dot">01</span>
+                <span>Sujeto y acción congelada.</span>
+              </div>
+
+              <div class="transition-item">
+                <span class="transition-dot">02</span>
+                <span>Composición y encuadre.</span>
+              </div>
+
+              <div class="transition-item">
+                <span class="transition-dot">03</span>
+                <span>Iluminación, color y estilo.</span>
+              </div>
+
+              <div class="transition-item">
+                <span class="transition-dot">04</span>
+                <span>Atmósfera del instante.</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="transition-arrow" aria-hidden="true">+</div>
+
+          <article class="card transition-card video">
+            <span class="tag tag-cyan">Prompt de video</span>
+            <h3>Describe el fotograma y cómo cambia</h3>
+
+            <p>
+              Mantiene la dirección visual y añade las instrucciones que
+              controlan el tiempo.
+            </p>
+
+            <div class="transition-list">
+              <div class="transition-item">
+                <span class="transition-dot">01</span>
+                <span>Movimiento de cámara y sujetos.</span>
+              </div>
+
+              <div class="transition-item">
+                <span class="transition-dot">02</span>
+                <span>Duración y ritmo.</span>
+              </div>
+
+              <div class="transition-item">
+                <span class="transition-dot">03</span>
+                <span>Continuidad entre clips.</span>
+              </div>
+
+              <div class="transition-item">
+                <span class="transition-dot">04</span>
+                <span>Elementos que deben permanecer estables.</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="formula">
+          <div class="formula-symbol">→</div>
+
+          <div>
+            <h3>Si no especificas el movimiento, el modelo lo inventa.</h3>
+
+            <p>
+              En video, esa improvisación puede convertirse en zooms,
+              deriva de cámara, gestos exagerados o deformaciones difíciles
+              de utilizar en una pieza profesional.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="dimensiones">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Tres elementos nuevos</div>
+            <h2>Lo que debes añadir al pasar de imagen a video</h2>
+          </div>
+
+          <p class="section-intro">
+            Estas tres decisiones convierten una descripción visual en una
+            instrucción temporal controlada.
+          </p>
+        </div>
+
+        <div class="dimensions">
+          <article class="card dimension-card">
+            <span class="dimension-number">01</span>
+            <div class="dimension-icon tag-cyan">↔</div>
+
+            <h3>Movimiento</h3>
+
+            <p>
+              Define cómo se desplaza la cámara y qué movimiento, si existe,
+              realizan los sujetos o elementos del entorno.
+            </p>
+
+            <div class="dimension-example">
+              slow push in · escena estable
+            </div>
+          </article>
+
+          <article class="card dimension-card">
+            <span class="dimension-number">02</span>
+            <div class="dimension-icon tag-blue">◷</div>
+
+            <h3>Tiempo</h3>
+
+            <p>
+              Indica la duración aproximada y el ritmo: lento, constante,
+              contemplativo o enérgico.
+            </p>
+
+            <div class="dimension-example">
+              ritmo contemplativo · ~5 s
+            </div>
+          </article>
+
+          <article class="card dimension-card">
+            <span class="dimension-number">03</span>
+            <div class="dimension-icon tag-violet">∞</div>
+
+            <h3>Continuidad</h3>
+
+            <p>
+              Protege la identidad visual cuando varios clips deben pertenecer
+              a la misma secuencia o campaña.
+            </p>
+
+            <div class="dimension-example">
+              mantener luz, sujeto y composición
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="anatomia">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Estructura práctica</div>
+            <h2>Anatomía de un prompt de video controlado</h2>
+          </div>
+
+          <p class="section-intro">
+            No todos los prompts necesitan el mismo nivel de detalle.
+            Esta estructura funciona como lista de comprobación.
+          </p>
+        </div>
+
+        <div class="anatomy-shell">
+          <div class="anatomy-head">
+            <div>
+              <div class="section-kicker">Checklist temporal</div>
+              <h3>Seis decisiones para dirigir el clip</h3>
+            </div>
+
+            <p>
+              El fotograma aporta la apariencia. El prompt de video controla
+              principalmente movimiento, ritmo y estabilidad.
+            </p>
+          </div>
+
+          <div class="anatomy-grid">
+            <article class="anatomy-card primary">
+              <span class="number">01 · BASE</span>
+              <h4>Fotograma de origen</h4>
+              <p>
+                Una imagen ya aprobada que define sujeto, composición,
+                luz, color y estilo.
+              </p>
+            </article>
+
+            <article class="anatomy-card primary">
+              <span class="number">02 · CÁMARA</span>
+              <h4>Movimiento principal</h4>
+              <p>
+                Un pan, tilt, push in, tracking, orbit o cámara fija.
+              </p>
+            </article>
+
+            <article class="anatomy-card">
+              <span class="number">03 · SUJETOS</span>
+              <h4>Movimiento interno</h4>
+              <p>
+                Indica si permanecen quietos o realizan únicamente
+                movimientos naturales.
+              </p>
+            </article>
+
+            <article class="anatomy-card">
+              <span class="number">04 · TIEMPO</span>
+              <h4>Duración</h4>
+              <p>
+                Define la longitud aproximada del clip para orientar
+                la evolución del movimiento.
+              </p>
+            </article>
+
+            <article class="anatomy-card">
+              <span class="number">05 · RITMO</span>
+              <h4>Velocidad y tono</h4>
+              <p>
+                Lento, constante, contemplativo o energético,
+                según la intención de la pieza.
+              </p>
+            </article>
+
+            <article class="anatomy-card">
+              <span class="number">06 · CONTROL</span>
+              <h4>Estabilidad y continuidad</h4>
+              <p>
+                Nombra aquello que no debe cambiar mientras la cámara
+                realiza el movimiento.
+              </p>
+            </article>
+          </div>
+
+          <div class="anatomy-note">
+            <strong>★</strong>
+
+            <span>
+              <strong>La prioridad es el movimiento principal.</strong>
+              Todo lo demás protege la escena para que ese movimiento pueda
+              ejecutarse con claridad.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="lenguaje">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Lenguaje cinematográfico</div>
+            <h2>Siete movimientos que debes reconocer</h2>
+          </div>
+
+          <p class="section-intro">
+            Las instrucciones se presentan en inglés porque son expresiones
+            habituales en las herramientas de video. Selecciona un movimiento
+            para consultar su uso.
+          </p>
+        </div>
+
+        <article class="card movement-shell">
+          <div class="movement-head">
+            <div>
+              <h3>Selector de movimiento de cámara</h3>
+              <p>
+                Empieza por un único movimiento lento y reconocible.
+              </p>
+            </div>
+
+            <span class="tag tag-cyan">Referencia interactiva</span>
+          </div>
+
+          <div class="movement-body">
+            <div class="movement-buttons">
+              <button
+                class="movement-button active"
+                type="button"
+                data-movement="push"
+              >
+                <strong>Dolly / push in</strong>
+                <span>Acerca lentamente la cámara al sujeto.</span>
+                <code>slow dolly in / push in</code>
+              </button>
+
+              <button
+                class="movement-button"
+                type="button"
+                data-movement="pan"
+              >
+                <strong>Paneo · pan</strong>
+                <span>Recorre la escena horizontalmente.</span>
+                <code>slow pan left / right</code>
+              </button>
+
+              <button
+                class="movement-button"
+                type="button"
+                data-movement="tilt"
+              >
+                <strong>Tilt</strong>
+                <span>Recorre la escena de manera vertical.</span>
+                <code>tilt up / down</code>
+              </button>
+
+              <button
+                class="movement-button"
+                type="button"
+                data-movement="tracking"
+              >
+                <strong>Tracking</strong>
+                <span>Sigue el desplazamiento del sujeto.</span>
+                <code>tracking shot following subject</code>
+              </button>
+
+              <button
+                class="movement-button"
+                type="button"
+                data-movement="orbit"
+              >
+                <strong>Órbita · arc</strong>
+                <span>Gira alrededor del sujeto principal.</span>
+                <code>orbit / arc shot around subject</code>
+              </button>
+
+              <button
+                class="movement-button"
+                type="button"
+                data-movement="locked"
+              >
+                <strong>Estática · locked</strong>
+                <span>La cámara permanece fija.</span>
+                <code>static locked-off shot</code>
+              </button>
+
+              <button
+                class="movement-button"
+                type="button"
+                data-movement="handheld"
+              >
+                <strong>Cámara en mano</strong>
+                <span>Añade energía mediante una vibración sutil.</span>
+                <code>handheld, subtle camera shake</code>
+              </button>
+            </div>
+
+            <aside
+              class="movement-result"
+              id="movement-result"
+              aria-live="polite"
+            >
+              <span class="label">Movimiento seleccionado</span>
+              <h4>Slow push in</h4>
+
+              <p>
+                Acercamiento lento y constante. Funciona bien para centrar
+                la atención y añadir profundidad sin alterar demasiado la escena.
+              </p>
+
+              <div class="movement-prompt">
+                Slow push in de la cámara. El resto de la escena permanece estable.
+              </div>
+            </aside>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="menos">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Regla de calidad</div>
+            <h2>En video, menos movimiento suele producir más control</h2>
+          </div>
+
+          <p class="section-intro">
+            Cada instrucción adicional obliga al modelo a mantener más
+            relaciones espaciales y temporales al mismo tiempo.
+          </p>
+        </div>
+
+        <div class="less-is-more">
+          <article class="less-main">
+            <div>
+              <span class="tag tag-cyan">Idea fuerza</span>
+
+              <h3>Un movimiento bien ejecutado supera a tres mal combinados.</h3>
+
+              <p>
+                Para el primer clip, controla una única acción de cámara.
+                Amplía la complejidad solo después de obtener un resultado estable.
+              </p>
+            </div>
+
+            <div class="less-rule">
+              <span>Regla operativa</span>
+              <strong>Una cámara · un movimiento · una intención</strong>
+            </div>
+          </article>
+
+          <div class="complexity-stack">
+            <article class="card complexity-card">
+              <div class="complexity-top">
+                <h3>Un movimiento lento</h3>
+                <span class="complexity-score tag-green">Control alto</span>
+              </div>
+
+              <p>
+                El modelo puede concentrarse en preservar sujetos,
+                formas y composición.
+              </p>
+
+              <div class="motion-line" aria-hidden="true">
+                <span class="motion-unit good"></span>
+              </div>
+            </article>
+
+            <article class="card complexity-card">
+              <div class="complexity-top">
+                <h3>Dos movimientos coordinados</h3>
+                <span class="complexity-score tag-amber">Validar</span>
+              </div>
+
+              <p>
+                Puede funcionar, pero aumenta el riesgo de deriva
+                o de pérdida de estabilidad.
+              </p>
+
+              <div class="motion-line" aria-hidden="true">
+                <span class="motion-unit medium"></span>
+                <span class="motion-unit medium"></span>
+              </div>
+            </article>
+
+            <article class="card complexity-card">
+              <div class="complexity-top">
+                <h3>Tres movimientos encadenados</h3>
+                <span class="complexity-score tag-coral">Riesgo alto</span>
+              </div>
+
+              <p>
+                La complejidad dificulta identificar qué movimiento falló
+                y suele reducir la utilidad del clip.
+              </p>
+
+              <div class="motion-line" aria-hidden="true">
+                <span class="motion-unit bad"></span>
+                <span class="motion-unit bad"></span>
+                <span class="motion-unit bad"></span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="flujo">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Flujo experto</div>
+            <h2>Imagen primero. Movimiento después.</h2>
+          </div>
+
+          <p class="section-intro">
+            Partir de un fotograma aprobado reduce el número de decisiones
+            que delegas al modelo de video.
+          </p>
+        </div>
+
+        <div class="expert-flow">
+          <article class="card flow-card">
+            <span class="number">01</span>
+            <h3>Genera la imagen</h3>
+            <p>
+              Crea el sujeto, la composición y el estilo con el modelo visual.
+            </p>
+          </article>
+
+          <article class="card flow-card">
+            <span class="number">02</span>
+            <h3>Aprueba el fotograma</h3>
+            <p>
+              Comprueba que la imagen ya podría funcionar como pieza estática.
+            </p>
+          </article>
+
+          <article class="card flow-card">
+            <span class="number">03</span>
+            <h3>Sube la referencia</h3>
+            <p>
+              Usa la imagen aprobada como punto de partida del clip.
+            </p>
+          </article>
+
+          <article class="card flow-card">
+            <span class="number">04</span>
+            <h3>Añade la cámara</h3>
+            <p>
+              Define un movimiento, duración, ritmo y estabilidad.
+            </p>
+          </article>
+
+          <article class="card flow-card">
+            <span class="number">05</span>
+            <h3>Compara e itera</h3>
+            <p>
+              Conserva una línea base y modifica una decisión cada vez.
+            </p>
+          </article>
+        </div>
+
+        <div class="flow-emphasis">
+          <div class="flow-emphasis-icon">▶</div>
+
+          <div>
+            <h3>No delegues dos problemas al mismo tiempo</h3>
+
+            <p>
+              Texto → video obliga al modelo a inventar apariencia y movimiento.
+              Imagen → video fija primero la apariencia y delega únicamente
+              la evolución temporal.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="constructor">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Herramienta de trabajo</div>
+            <h2>Construye un prompt de video controlado</h2>
+          </div>
+
+          <p class="section-intro">
+            Completa los controles principales. El constructor genera una
+            instrucción breve orientada a image-to-video.
+          </p>
+        </div>
+
+        <article class="card builder">
+          <div class="builder-head">
+            <div>
+              <h3>Constructor de prompt cinematográfico</h3>
+              <p>
+                El ejemplo inicial reproduce el movimiento dirigido de la práctica.
+              </p>
+            </div>
+
+            <span class="tag tag-violet">Plantilla editable</span>
+          </div>
+
+          <div class="builder-body">
+            <div class="form-grid">
+              <div class="field">
+                <label for="builder-origin">Punto de partida</label>
+                <input
+                  id="builder-origin"
+                  type="text"
+                  value="A partir de esta imagen"
+                >
+              </div>
+
+              <div class="field">
+                <label for="builder-movement">Movimiento de cámara</label>
+
+                <select id="builder-movement">
+                  <option value="slow push in (acercamiento lento y constante de la cámara)">
+                    Slow push in
+                  </option>
+
+                  <option value="slow pan right (paneo horizontal lento hacia la derecha)">
+                    Slow pan right
+                  </option>
+
+                  <option value="slow pan left (paneo horizontal lento hacia la izquierda)">
+                    Slow pan left
+                  </option>
+
+                  <option value="tilt up (recorrido vertical lento hacia arriba)">
+                    Tilt up
+                  </option>
+
+                  <option value="tilt down (recorrido vertical lento hacia abajo)">
+                    Tilt down
+                  </option>
+
+                  <option value="tracking shot following subject (la cámara sigue al sujeto)">
+                    Tracking
+                  </option>
+
+                  <option value="orbit shot around subject (órbita lenta alrededor del sujeto)">
+                    Orbit
+                  </option>
+
+                  <option value="static locked-off shot (cámara completamente fija)">
+                    Locked
+                  </option>
+
+                  <option value="handheld with subtle camera shake (cámara en mano con vibración sutil)">
+                    Handheld
+                  </option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="builder-duration">Duración</label>
+                <input
+                  id="builder-duration"
+                  type="text"
+                  value="~5 s"
+                >
+              </div>
+
+              <div class="field">
+                <label for="builder-rhythm">Ritmo</label>
+                <input
+                  id="builder-rhythm"
+                  type="text"
+                  value="ritmo contemplativo"
+                >
+              </div>
+
+              <div class="field full">
+                <label for="builder-stability">Estabilidad de la escena</label>
+
+                <textarea id="builder-stability">El resto de la escena permanece estable.</textarea>
+              </div>
+
+              <div class="field full">
+                <label for="builder-subject">Movimiento de sujetos</label>
+
+                <textarea id="builder-subject">Sin movimiento de los sujetos salvo el natural: vapor o una leve brisa.</textarea>
+
+                <small>
+                  Limita el movimiento interno cuando la prioridad sea la cámara.
+                </small>
+              </div>
+            </div>
+
+            <div class="builder-actions">
+              <button
+                class="primary-button"
+                id="build-prompt"
+                type="button"
+              >
+                Construir prompt
+              </button>
+
+              <button
+                class="secondary-button"
+                id="load-directed"
+                type="button"
+              >
+                Cargar práctica
+              </button>
+
+              <button
+                class="secondary-button"
+                id="load-locked"
+                type="button"
+              >
+                Ejemplo cámara fija
+              </button>
+            </div>
+
+            <div class="builder-output">
+              <div class="builder-output-head">
+                <strong>Prompt resultante</strong>
+
+                <button
+                  class="copy-button"
+                  id="copy-builder"
+                  type="button"
+                  aria-label="Copiar prompt construido"
+                >
+                  Copiar
+                </button>
+              </div>
+
+              <pre id="builder-result">A partir de esta imagen: slow push in (acercamiento lento y constante de la cámara). El resto de la escena permanece estable. Ritmo contemplativo, ~5 s. Sin movimiento de los sujetos salvo el natural: vapor o una leve brisa.</pre>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="practica">
+        <div class="practice">
+          <div class="practice-head">
+            <div>
+              <span class="tag tag-cyan">Práctica 6 · Cierre del bloque</span>
+              <h3>Tu primer clip dirigido</h3>
+
+              <p>
+                Compara una animación abierta con una versión que controla
+                un único movimiento de cámara.
+              </p>
+            </div>
+
+            <div class="practice-meta">
+              <div>
+                <span>Duración</span>
+                <strong>7 min</strong>
+              </div>
+
+              <div>
+                <span>Modalidad</span>
+                <strong>Demo / parejas</strong>
+              </div>
+
+              <div>
+                <span>Nivel</span>
+                <strong>Introductorio</strong>
+              </div>
+
+              <div>
+                <span>Entregable</span>
+                <strong>2 clips</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="practice-body">
+            <div class="materials">
+              <article class="material-card">
+                <div class="material-icon">▧</div>
+
+                <div>
+                  <h4>Una imagen aprobada</h4>
+                  <p>
+                    Preferiblemente generada en la Práctica 2 o 3.
+                  </p>
+                </div>
+              </article>
+
+              <article class="material-card">
+                <div class="material-icon">▶</div>
+
+                <div>
+                  <h4>Herramienta image-to-video</h4>
+                  <p>
+                    Debe permitir subir una imagen como referencia inicial.
+                  </p>
+                </div>
+              </article>
+
+              <article class="material-card">
+                <div class="material-icon">◫</div>
+
+                <div>
+                  <h4>Vista comparativa</h4>
+                  <p>
+                    Conserva ambos resultados para observarlos juntos.
+                  </p>
+                </div>
+              </article>
+            </div>
+
+            <div class="practice-steps">
+              <article class="practice-step">
+                <span class="time">90 s</span>
+                <div class="number">01</div>
+                <h4>Sube la imagen</h4>
+                <p>
+                  Utiliza un fotograma que ya te guste y que no necesite
+                  correcciones visuales.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">90 s</span>
+                <div class="number">02</div>
+                <h4>Genera la versión A</h4>
+                <p>
+                  Usa “Animar esta imagen” y permite que el modelo
+                  improvise el movimiento.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">90 s</span>
+                <div class="number">03</div>
+                <h4>Genera la versión B</h4>
+                <p>
+                  Mantén la imagen y solicita un único slow push in.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">2 min</span>
+                <div class="number">04</div>
+                <h4>Compara los clips</h4>
+                <p>
+                  Observa la cámara, la estabilidad y las posibles
+                  deformaciones.
+                </p>
+              </article>
+
+              <article class="practice-step">
+                <span class="time">30 s</span>
+                <div class="number">05</div>
+                <h4>Formula la conclusión</h4>
+                <p>
+                  Resume la práctica: menos movimiento produce más control.
+                </p>
+              </article>
+            </div>
+
+            <div class="prompt-comparison">
+              <article class="prompt-card bad">
+                <div class="prompt-card-head">
+                  <div>
+                    <h4>Versión A · Sin dirección</h4>
+                    <p>Línea base para comparar</p>
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-undirected"
+                    aria-label="Copiar prompt sin dirección"
+                  >
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-undirected">Animar esta imagen.</pre>
+              </article>
+
+              <article class="prompt-card good">
+                <div class="prompt-card-head">
+                  <div>
+                    <h4>Versión B · Un solo movimiento</h4>
+                    <p>Dirección controlada</p>
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-directed"
+                    aria-label="Copiar prompt dirigido"
+                  >
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-directed">A partir de esta imagen: slow push in (acercamiento lento y constante de la cámara), el resto de la escena permanece estable. Ritmo contemplativo, ~5 s. Sin movimiento de los sujetos salvo el natural (vapor, leve brisa).</pre>
+              </article>
+            </div>
+
+            <div class="expected-grid">
+              <article class="card expected-card bad">
+                <span class="tag tag-coral">Resultado habitual A</span>
+                <h3>Movimiento improvisado</h3>
+
+                <div class="expected-list">
+                  <div class="expected-item">
+                    <span class="expected-dot">×</span>
+                    <span>Zooms o deriva no solicitados.</span>
+                  </div>
+
+                  <div class="expected-item">
+                    <span class="expected-dot">×</span>
+                    <span>Movimiento difícil de reconocer.</span>
+                  </div>
+
+                  <div class="expected-item">
+                    <span class="expected-dot">×</span>
+                    <span>Posibles deformaciones de sujetos.</span>
+                  </div>
+
+                  <div class="expected-item">
+                    <span class="expected-dot">×</span>
+                    <span>Clip difícil de utilizar directamente.</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card expected-card good">
+                <span class="tag tag-green">Resultado esperado B</span>
+                <h3>Movimiento reconocible</h3>
+
+                <div class="expected-list">
+                  <div class="expected-item">
+                    <span class="expected-dot">✓</span>
+                    <span>Acercamiento lento y constante.</span>
+                  </div>
+
+                  <div class="expected-item">
+                    <span class="expected-dot">✓</span>
+                    <span>Escena y composición estables.</span>
+                  </div>
+
+                  <div class="expected-item">
+                    <span class="expected-dot">✓</span>
+                    <span>Menor riesgo de deformación.</span>
+                  </div>
+
+                  <div class="expected-item">
+                    <span class="expected-dot">✓</span>
+                    <span>Resultado preparado para edición.</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="comparison-question">
+              <div class="question-icon">?</div>
+
+              <div>
+                <h4>Pregunta para el grupo</h4>
+
+                <p>
+                  ¿Por qué el clip con slow push in se percibe como más
+                  profesional que la versión en la que el modelo improvisó
+                  el movimiento?
+                </p>
+              </div>
+            </div>
+
+            <div class="evaluation-layout">
+              <article class="card evaluation">
+                <h3>Criterios de autoevaluación</h3>
+
+                <p>
+                  Marca cada criterio después de visualizar ambos clips juntos.
+                </p>
+
+                <div class="check-grid">
+                  <label class="check-item">
+                    <input type="checkbox" data-check-id="image-first">
+                    <span>
+                      Partí de una imagen que ya había aprobado.
+                    </span>
+                  </label>
+
+                  <label class="check-item">
+                    <input type="checkbox" data-check-id="one-movement">
+                    <span>
+                      Dirigí un único movimiento de cámara.
+                    </span>
+                  </label>
+
+                  <label class="check-item">
+                    <input type="checkbox" data-check-id="baseline">
+                    <span>
+                      Conservé y comparé la versión sin dirección.
+                    </span>
+                  </label>
+
+                  <label class="check-item">
+                    <input type="checkbox" data-check-id="difference">
+                    <span>
+                      Puedo explicar por qué el movimiento dirigido es superior.
+                    </span>
+                  </label>
+
+                  <label class="check-item">
+                    <input type="checkbox" data-check-id="three-movements">
+                    <span>
+                      Puedo nombrar al menos tres movimientos de cámara.
+                    </span>
+                  </label>
+
+                  <label class="check-item">
+                    <input type="checkbox" data-check-id="use-cases">
+                    <span>
+                      Puedo explicar cuándo usaría cada movimiento.
+                    </span>
+                  </label>
+                </div>
+              </article>
+
+              <aside class="side-stack">
+                <div class="callout callout-tip">
+                  <h4>Tip del experto</h4>
+
+                  <p>
+                    Usa image-to-video para conservar el look. Delega
+                    únicamente el movimiento.
+                  </p>
+                </div>
+
+                <div class="callout callout-warning">
+                  <h4>Cuando el tiempo sea limitado</h4>
+
+                  <p>
+                    El instructor puede ejecutar ambos clips con una imagen
+                    aportada por una persona del grupo.
+                  </p>
+                </div>
+
+                <div class="callout callout-danger">
+                  <h4>Señal de exceso</h4>
+
+                  <p>
+                    Si no puedes describir el movimiento principal en una
+                    frase breve, probablemente estás pidiendo demasiado.
+                  </p>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="calidad">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Control de calidad</div>
+            <h2>Qué revisar antes de aprobar un clip</h2>
+          </div>
+
+          <p class="section-intro">
+            La calidad no depende únicamente de que exista movimiento.
+            El movimiento debe servir a la intención y preservar el fotograma.
+          </p>
+        </div>
+
+        <div class="quality-grid">
+          <article class="card quality-card">
+            <span class="quality-number">01</span>
+            <h3>Movimiento reconocible</h3>
+            <p>
+              La cámara realiza la acción solicitada sin mezclar recorridos
+              adicionales.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">02</span>
+            <h3>Sujeto estable</h3>
+            <p>
+              Rostros, manos, objetos y siluetas mantienen su identidad
+              durante el clip.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">03</span>
+            <h3>Composición preservada</h3>
+            <p>
+              El movimiento no elimina el espacio útil ni rompe el equilibrio
+              del fotograma.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">04</span>
+            <h3>Ritmo coherente</h3>
+            <p>
+              La velocidad de cámara se corresponde con la atmósfera
+              y la finalidad de la pieza.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">05</span>
+            <h3>Duración suficiente</h3>
+            <p>
+              El movimiento tiene tiempo para desarrollarse sin parecer
+              abrupto o incompleto.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">06</span>
+            <h3>Movimiento natural</h3>
+            <p>
+              Cuando los sujetos se mueven, sus gestos permanecen sutiles
+              y creíbles.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">07</span>
+            <h3>Continuidad visual</h3>
+            <p>
+              Color, luz y estilo siguen perteneciendo a la misma campaña
+              o secuencia.
+            </p>
+          </article>
+
+          <article class="card quality-card">
+            <span class="quality-number">08</span>
+            <h3>Utilidad editorial</h3>
+            <p>
+              El clip puede incorporarse a una pieza real sin ocultar
+              sus errores mediante edición excesiva.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="errores">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Siempre evitar</div>
+            <h2>Dos errores que reducen el control</h2>
+          </div>
+
+          <p class="section-intro">
+            Ambos errores delegan demasiadas decisiones al modelo en una sola
+            generación.
+          </p>
+        </div>
+
+        <div class="mistakes">
+          <article class="card mistake-card">
+            <div class="mistake-icon">01</div>
+
+            <div>
+              <h3>Encadenar tres movimientos en un clip</h3>
+
+              <p>
+                Combinar pan, orbit y zoom hace más difícil preservar sujetos,
+                composición y estabilidad. Empieza por uno.
+              </p>
+            </div>
+          </article>
+
+          <article class="card mistake-card">
+            <div class="mistake-icon">02</div>
+
+            <div>
+              <h3>Ir directamente de texto a video</h3>
+
+              <p>
+                Cuando ya podrías partir de una imagen aprobada, el texto-to-video
+                vuelve a abrir decisiones visuales que ya habías resuelto.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="cierre-bloque">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Cierre del Bloque 3</div>
+            <h2>Seis frases para conservar el sistema completo</h2>
+          </div>
+
+          <p class="section-intro">
+            Cada frase resume una decisión operativa que puede aplicarse
+            en cualquier herramienta o área de la organización.
+          </p>
+        </div>
+
+        <div class="block-summary">
+          <article class="card summary-card">
+            <span class="segment">SEGMENTO 01</span>
+            <h3>Dirigir es describir.</h3>
+            <p>
+              Lo que no nombras queda abierto a la interpretación del modelo.
+            </p>
+          </article>
+
+          <article class="card summary-card">
+            <span class="segment">SEGMENTO 02</span>
+            <h3>Sujeto primero, estilo al final.</h3>
+            <p>
+              La jerarquía del prompt comienza por lo que debe aparecer.
+            </p>
+          </article>
+
+          <article class="card summary-card">
+            <span class="segment">SEGMENTO 03</span>
+            <h3>La marca se codifica en un SVM.</h3>
+            <p>
+              La consistencia surge de repetir instrucciones de identidad.
+            </p>
+          </article>
+
+          <article class="card summary-card">
+            <span class="segment">SEGMENTO 04</span>
+            <h3>Genera el hero; deriva, no regeneres.</h3>
+            <p>
+              Una escena principal puede convertirse en múltiples formatos.
+            </p>
+          </article>
+
+          <article class="card summary-card">
+            <span class="segment">SEGMENTO 05</span>
+            <h3>Elige la herramienta por caso de uso.</h3>
+            <p>
+              El criterio importa más que la popularidad o la novedad.
+            </p>
+          </article>
+
+          <article class="card summary-card">
+            <span class="segment">SEGMENTO 06</span>
+            <h3>El movimiento se dirige; menos es más.</h3>
+            <p>
+              Un movimiento claro ofrece más control y mejor calidad.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="siguiente">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Profundización</div>
+            <h2>El siguiente reto: una pieza narrativa</h2>
+          </div>
+
+          <p class="section-intro">
+            Después de dominar un clip controlado, el cuaderno de soluciones
+            propone extender el aprendizaje hacia un spot breve con storyboard.
+          </p>
+        </div>
+
+        <div class="async">
+          <article class="async-main">
+            <div>
+              <span class="tag tag-violet">Ejercicio complementario</span>
+
+              <h3>Spot de 15 segundos con storyboard</h3>
+
+              <p>
+                El reto avanzado traslada la lógica de movimiento dirigido
+                a una secuencia completa, cuidando la continuidad entre clips.
+              </p>
+            </div>
+
+            <span class="async-level">Nivel avanzado · Capítulo 6</span>
+          </article>
+
+          <div class="async-list">
+            <article class="card async-item">
+              <span class="async-number">01</span>
+
+              <div>
+                <h4>Conserva una identidad visual</h4>
+                <p>
+                  Usa imágenes que pertenezcan a la misma campaña o sistema de marca.
+                </p>
+              </div>
+            </article>
+
+            <article class="card async-item">
+              <span class="async-number">02</span>
+
+              <div>
+                <h4>Dirige cada clip</h4>
+                <p>
+                  Cada fragmento debe tener una intención y un movimiento reconocible.
+                </p>
+              </div>
+            </article>
+
+            <article class="card async-item">
+              <span class="async-number">03</span>
+
+              <div>
+                <h4>Comprueba la continuidad</h4>
+                <p>
+                  Revisa que los clips puedan encadenarse sin romper el estilo.
+                </p>
+              </div>
+            </article>
+
+            <article class="card async-item">
+              <span class="async-number">04</span>
+
+              <div>
+                <h4>Evalúa la secuencia completa</h4>
+                <p>
+                  La pieza final debe funcionar como narrativa, no como clips aislados.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing">
+        <div class="closing-inner">
+          <div>
+            <div class="section-kicker">Idea final</div>
+
+            <h2>Primero controla el fotograma. Después dirige el tiempo.</h2>
+
+            <p>
+              La generación de video no reemplaza la dirección visual aprendida
+              en el resto del bloque. La amplía: añade movimiento, duración
+              y continuidad a una escena que ya debe funcionar por sí sola.
+            </p>
+          </div>
+
+          <div class="closing-rule">
+            <span>Regla de video</span>
+
+            <strong>
+              Imagen aprobada.<br>
+              Un movimiento.<br>
+              Escena estable.
+            </strong>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <strong>AI360 · Bloque 3 · Generación de Contenido y Comunicación</strong>
+      <span>TechXpert Guru por Opendireito</span>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const movementButtons = document.querySelectorAll("[data-movement]");
+      const movementResult = document.getElementById("movement-result");
+
+      const copyButtons = document.querySelectorAll("[data-copy-target]");
+      const copyBuilderButton = document.getElementById("copy-builder");
+
+      const checkboxes = document.querySelectorAll("[data-check-id]");
+      const checkStorageKey = "ai360-b3-html5-video-checks";
+
+      const builderFields = {
+        origin: document.getElementById("builder-origin"),
+        movement: document.getElementById("builder-movement"),
+        duration: document.getElementById("builder-duration"),
+        rhythm: document.getElementById("builder-rhythm"),
+        stability: document.getElementById("builder-stability"),
+        subject: document.getElementById("builder-subject")
+      };
+
+      const builderResult = document.getElementById("builder-result");
+
+      const movementData = {
+        push: {
+          title: "Slow push in",
+          description:
+            "Acercamiento lento y constante. Funciona bien para centrar la atención y añadir profundidad sin alterar demasiado la escena.",
+          prompt:
+            "Slow push in de la cámara. El resto de la escena permanece estable."
+        },
+
+        pan: {
+          title: "Slow pan",
+          description:
+            "Recorrido horizontal que permite revelar información situada a un lado de la escena.",
+          prompt:
+            "Slow pan right. Movimiento horizontal lento y constante. Escena estable."
+        },
+
+        tilt: {
+          title: "Tilt",
+          description:
+            "Recorrido vertical que puede revelar altura, contexto o una relación entre elementos situados arriba y abajo.",
+          prompt:
+            "Slow tilt up. Recorrido vertical controlado. El sujeto mantiene su posición."
+        },
+
+        tracking: {
+          title: "Tracking shot",
+          description:
+            "La cámara acompaña a un sujeto que se desplaza y conserva su relación con el encuadre.",
+          prompt:
+            "Tracking shot following subject. Movimiento fluido, distancia constante."
+        },
+
+        orbit: {
+          title: "Orbit / arc shot",
+          description:
+            "La cámara gira alrededor del sujeto y muestra progresivamente diferentes ángulos.",
+          prompt:
+            "Slow orbit around subject. Movimiento uniforme. Sujeto estable."
+        },
+
+        locked: {
+          title: "Static locked-off shot",
+          description:
+            "La cámara permanece completamente fija y solo se permite movimiento interno en la escena.",
+          prompt:
+            "Static locked-off shot. Cámara fija. Solo movimiento natural del entorno."
+        },
+
+        handheld: {
+          title: "Handheld",
+          description:
+            "Añade una vibración sutil para crear sensación de energía o realismo documental.",
+          prompt:
+            "Handheld camera with subtle camera shake. Movimiento natural y controlado."
+        }
+      };
+
+      const fallbackCopy = (text) => {
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+          document.execCommand("copy");
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      };
+
+      const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        fallbackCopy(text);
+      };
+
+      const showCopied = (button) => {
+        const originalText = button.textContent;
+
+        button.textContent = "Copiado";
+        button.classList.add("copied");
+
+        window.setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove("copied");
+        }, 1500);
+      };
+
+      movementButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const data = movementData[button.dataset.movement];
+
+          if (!data) {
+            return;
+          }
+
+          movementButtons.forEach((item) => {
+            item.classList.toggle("active", item === button);
+          });
+
+          movementResult.querySelector("h4").textContent = data.title;
+          movementResult.querySelector("p").textContent =
+            data.description;
+
+          movementResult.querySelector(".movement-prompt").textContent =
+            data.prompt;
+        });
+      });
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const target = document.getElementById(
+            button.dataset.copyTarget
+          );
+
+          if (!target) {
+            return;
+          }
+
+          try {
+            await copyText(target.innerText.trim());
+            showCopied(button);
+          } catch (error) {
+            button.textContent = "Error";
+          }
+        });
+      });
+
+      const cleanSentence = (value) => {
+        const text = value.trim();
+
+        if (!text) {
+          return "";
+        }
+
+        return /[.!?]$/.test(text) ? text : `${text}.`;
+      };
+
+      const buildPrompt = () => {
+        const origin =
+          builderFields.origin.value.trim() || "A partir de esta imagen";
+
+        const movement = builderFields.movement.value.trim();
+        const stability = cleanSentence(builderFields.stability.value);
+        const rhythm = builderFields.rhythm.value.trim();
+        const duration = builderFields.duration.value.trim();
+        const subject = cleanSentence(builderFields.subject.value);
+
+        const timing = [rhythm, duration]
+          .filter(Boolean)
+          .join(", ");
+
+        const parts = [
+          `${origin}: ${movement}.`,
+          stability,
+          timing ? `${timing.charAt(0).toUpperCase()}${timing.slice(1)}.` : "",
+          subject
+        ];
+
+        builderResult.textContent = parts
+          .filter(Boolean)
+          .join(" ")
+          .replace(/\.\./g, ".");
+      };
+
+      document
+        .getElementById("build-prompt")
+        .addEventListener("click", buildPrompt);
+
+      document
+        .getElementById("load-directed")
+        .addEventListener("click", () => {
+          builderFields.origin.value = "A partir de esta imagen";
+          builderFields.movement.value =
+            "slow push in (acercamiento lento y constante de la cámara)";
+          builderFields.duration.value = "~5 s";
+          builderFields.rhythm.value = "ritmo contemplativo";
+          builderFields.stability.value =
+            "El resto de la escena permanece estable.";
+          builderFields.subject.value =
+            "Sin movimiento de los sujetos salvo el natural: vapor o una leve brisa.";
+
+          buildPrompt();
+        });
+
+      document
+        .getElementById("load-locked")
+        .addEventListener("click", () => {
+          builderFields.origin.value = "A partir de esta imagen";
+          builderFields.movement.value =
+            "static locked-off shot (cámara completamente fija)";
+          builderFields.duration.value = "~5 s";
+          builderFields.rhythm.value = "ritmo calmado";
+          builderFields.stability.value =
+            "La cámara y la composición permanecen completamente estables.";
+          builderFields.subject.value =
+            "Solo se permite movimiento natural y sutil dentro de la escena.";
+
+          buildPrompt();
+        });
+
+      copyBuilderButton.addEventListener("click", async () => {
+        const text = builderResult.textContent.trim();
+
+        if (!text) {
+          return;
+        }
+
+        try {
+          await copyText(text);
+          showCopied(copyBuilderButton);
+        } catch (error) {
+          copyBuilderButton.textContent = "Error";
+        }
+      });
+
+      const loadCheckState = () => {
+        try {
+          return JSON.parse(
+            localStorage.getItem(checkStorageKey)
+          ) || {};
+        } catch (error) {
+          return {};
+        }
+      };
+
+      const saveCheckState = () => {
+        const state = {};
+
+        checkboxes.forEach((checkbox) => {
+          state[checkbox.dataset.checkId] = checkbox.checked;
+        });
+
+        try {
+          localStorage.setItem(
+            checkStorageKey,
+            JSON.stringify(state)
+          );
+        } catch (error) {
+          return;
+        }
+      };
+
+      const savedChecks = loadCheckState();
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = Boolean(
+          savedChecks[checkbox.dataset.checkId]
+        );
+
+        checkbox.addEventListener("change", saveCheckState);
+      });
+    })();
+  </script>
+</body>
+</html>
