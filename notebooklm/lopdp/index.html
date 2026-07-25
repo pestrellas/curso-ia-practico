@@ -1,329 +1,1990 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Experto en LOPDP Ecuador — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --pink-bg: #faeaf1; --pink-text: #7a2050;
-    --navy-bg: #e8eef8; --navy-text: #1e3a6e; --navy-border: #a8bfe0;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Guía para configurar un asistente de IA especializado en auditoría documental y cumplimiento de la LOPDP de Ecuador."
+  >
+  <title>Experto en LOPDP Ecuador y Auditor Documental</title>
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
-  .badge-navy { background: var(--navy-bg); color: var(--navy-text); }
-  .badge-teal { background: var(--teal-bg); color: var(--teal-text); }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
 
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-  /* STATS */
-  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
-  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
-  .stat-value { font-size: 17px; font-weight: 500; line-height: 1.3; }
+    :root {
+      --page-bg: #f5f4ef;
+      --surface: #ffffff;
+      --surface-soft: #faf9f6;
+      --surface-dark: #171917;
 
-  /* CAPABILITIES */
-  .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 0.5rem; }
-  .cap-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
-  .cap-icon { width: 30px; height: 30px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
-  .cap-icon svg { width: 14px; height: 14px; }
-  .ci-navy { background: var(--navy-bg); color: var(--navy-text); }
-  .ci-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .ci-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .ci-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .cap-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .cap-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .cap-desc b { font-weight: 500; color: var(--text); }
+      --text: #191a17;
+      --text-soft: #625f58;
+      --text-faint: #918d84;
+      --text-inverse: #f7f5ef;
 
-  /* LEGAL DOCS */
-  .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
-  .doc-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
-  .doc-num { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: var(--radius-sm); flex-shrink: 0; }
-  .dn-1 { background: var(--navy-bg); color: var(--navy-text); }
-  .dn-2 { background: var(--teal-bg); color: var(--teal-text); }
-  .dn-3 { background: var(--amber-bg); color: var(--amber-text); }
-  .doc-meta { flex: 1; }
-  .doc-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-  .doc-sub { font-size: 12px; color: var(--text-faint); }
-  .doc-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 999px; flex-shrink: 0; }
-  .db-primary { background: var(--navy-bg); color: var(--navy-text); }
-  .db-required { background: var(--teal-bg); color: var(--teal-text); }
-  .db-complement { background: var(--amber-bg); color: var(--amber-text); }
-  .doc-body { border-top: 1px solid var(--border); padding: 12px 16px; font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-  .doc-body b { font-weight: 500; color: var(--text); }
+      --border: #e3dfd6;
+      --border-strong: #c8c1b5;
 
-  /* PLATFORM CARDS */
-  .platform-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .ptab { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .ptab:hover { border-color: var(--border-strong); color: var(--text); }
-  .ptab.active { border-color: transparent; }
-  .ptab-gpt.active { background: var(--green-bg); color: var(--green-text); }
-  .ptab-gem.active { background: var(--accent-bg); color: var(--accent-text); }
-  .ptab-nb.active { background: var(--teal-bg); color: var(--teal-text); }
+      --navy-bg: #e9eff8;
+      --navy: #294776;
+      --navy-border: #b8c9e2;
 
-  .platform-content { display: none; }
-  .platform-content.active { display: block; }
+      --teal-bg: #e5f4ee;
+      --teal: #156047;
+      --teal-border: #abd8c8;
 
-  .plat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .plat-card-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); }
-  .plat-card-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .plat-card-sub { font-size: 12px; color: var(--text-faint); }
+      --blue-bg: #eaf2fb;
+      --blue: #175b96;
+      --blue-border: #b9d2ec;
 
-  .plat-steps { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-  .plat-step { display: flex; gap: 10px; align-items: flex-start; }
-  .plat-step-num { width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-  .psn-green { background: var(--green-bg); color: var(--green-text); }
-  .psn-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .psn-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .plat-step-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; flex: 1; }
-  .plat-step-text b { font-weight: 500; color: var(--text); }
-  .plat-tip { background: var(--bg); border-radius: var(--radius-sm); padding: 9px 12px; margin: 0 16px 14px; font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .plat-tip b { font-weight: 500; color: var(--text); }
+      --purple-bg: #efedfa;
+      --purple: #49398f;
+      --purple-border: #cbc5ee;
 
-  /* RESPONSE PROTOCOL */
-  .protocol-steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 0.5rem; }
-  .protocol-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; display: flex; gap: 12px; align-items: flex-start; }
-  .proto-num { width: 28px; height: 28px; border-radius: 50%; background: var(--navy-bg); color: var(--navy-text); font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .proto-content { flex: 1; }
-  .proto-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .proto-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .proto-desc b { font-weight: 500; color: var(--text); }
+      --amber-bg: #fbefd9;
+      --amber: #80500f;
+      --amber-border: #ebca8f;
 
-  /* COPY AREA */
-  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
-  .copy-trigger:hover { background: var(--accent-border); }
-  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
-  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
-  .copy-hint b { font-weight: 500; opacity: 1; }
-  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
-  .copy-box.open { display: block; }
-  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
-  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
-  .copy-box-footer svg { width: 13px; height: 13px; }
-  .copy-box-footer strong { font-weight: 500; }
+      --green-bg: #eaf3e4;
+      --green: #315b18;
+      --green-border: #c6ddb7;
 
-  /* PROMPT BLOCK */
-  .prompt-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .prompt-block-header { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-  .prompt-block-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .prompt-block-sub { font-size: 12px; color: var(--text-faint); }
-  .prompt-preview { font-size: 12px; color: var(--text-muted); line-height: 1.7; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); font-family: 'DM Mono', monospace; max-height: 90px; overflow: hidden; mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
+      --coral-bg: #faebe6;
+      --coral: #8c3b22;
+      --coral-border: #edb49f;
 
-  .disclaimer-box { background: var(--amber-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 12px; color: var(--amber-text); line-height: 1.65; margin-bottom: 1.75rem; }
-  .disclaimer-box b { font-weight: 500; }
+      --shadow-sm: 0 8px 26px rgba(30, 29, 25, 0.04);
+      --shadow-md: 0 18px 52px rgba(30, 29, 25, 0.07);
 
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .cap-grid { grid-template-columns: 1fr; }
-    .copy-hint { display: none; }
-  }
-</style>
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 30px;
+
+      --page-width: 1160px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 0 0, rgba(233, 239, 248, 0.72), transparent 28rem),
+        radial-gradient(circle at 100% 10%, rgba(229, 244, 238, 0.58), transparent 28rem),
+        var(--page-bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    svg {
+      display: block;
+    }
+
+    ::selection {
+      background: var(--navy-border);
+      color: var(--text);
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(23, 91, 150, 0.3);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      text-decoration: none;
+      transform: translateY(-160%);
+      transition: transform 0.2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page-shell {
+      width: min(calc(100% - 32px), var(--page-width));
+      margin: 0 auto;
+      padding: 18px 0 70px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      margin-bottom: 24px;
+      padding: 10px 12px 10px 18px;
+      border: 1px solid rgba(227, 223, 214, 0.9);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.87);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .brand-mark svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topnav a {
+      padding: 8px 10px;
+      border-radius: 9px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease;
+    }
+
+    .topnav a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 249, 246, 0.96)),
+        var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero::after {
+      position: absolute;
+      right: -100px;
+      bottom: -135px;
+      width: 390px;
+      height: 390px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184, 201, 226, 0.45), transparent 69%);
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-main {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(290px, 0.78fr);
+      gap: 42px;
+      padding: 52px 50px 42px;
+    }
+
+    .eyebrows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin-bottom: 18px;
+      font-size: clamp(2.45rem, 6vw, 4.65rem);
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero-lead {
+      max-width: 760px;
+      margin-bottom: 25px;
+      color: var(--text-soft);
+      font-size: clamp(1rem, 2vw, 1.16rem);
+      line-height: 1.72;
+    }
+
+    .hero-lead strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .button.primary {
+      border-color: var(--surface-dark);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hero-summary {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: start;
+      gap: 11px;
+    }
+
+    .summary-card {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(8px);
+    }
+
+    .summary-label {
+      margin-bottom: 5px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .hero-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      background: rgba(250, 249, 246, 0.74);
+    }
+
+    .hero-stat {
+      min-height: 108px;
+      padding: 21px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child {
+      border-right: 0;
+    }
+
+    .hero-stat-number {
+      margin-bottom: 5px;
+      font-family: "DM Mono", monospace;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-stat-text {
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .legal-notice {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 13px;
+      align-items: start;
+      margin-top: 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--amber-border);
+      border-radius: var(--radius-md);
+      background: var(--amber-bg);
+      color: var(--amber);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .legal-notice svg {
+      width: 19px;
+      height: 19px;
+      margin-top: 2px;
+    }
+
+    .legal-notice strong {
+      color: var(--text);
+    }
+
+    .section {
+      margin-top: 72px;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      margin-bottom: 9px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin-bottom: 0;
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 1.06;
+    }
+
+    .section-intro {
+      max-width: 700px;
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tone-navy {
+      border-color: var(--navy-border);
+      background: var(--navy-bg);
+      color: var(--navy);
+    }
+
+    .tone-teal {
+      border-color: var(--teal-border);
+      background: var(--teal-bg);
+      color: var(--teal);
+    }
+
+    .tone-blue {
+      border-color: var(--blue-border);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .tone-purple {
+      border-color: var(--purple-border);
+      background: var(--purple-bg);
+      color: var(--purple);
+    }
+
+    .tone-amber {
+      border-color: var(--amber-border);
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .tone-green {
+      border-color: var(--green-border);
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .tone-coral {
+      border-color: var(--coral-border);
+      background: var(--coral-bg);
+      color: var(--coral);
+    }
+
+    .capability-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+    }
+
+    .capability-card {
+      min-height: 252px;
+      padding: 21px;
+    }
+
+    .icon-box {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 27px;
+      border: 1px solid;
+      border-radius: 13px;
+    }
+
+    .icon-box svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .card-label {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 5px 9px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .capability-card h3 {
+      margin-bottom: 8px;
+      font-size: 18px;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .capability-card p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .capability-card strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .protocol-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .protocol-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      padding: 24px 26px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .protocol-header h3 {
+      margin-bottom: 5px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .protocol-header p {
+      max-width: 710px;
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .protocol-badge {
+      align-self: start;
+      padding: 6px 10px;
+      border: 1px solid var(--navy-border);
+      border-radius: 999px;
+      background: var(--navy-bg);
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .protocol-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .protocol-step {
+      position: relative;
+      min-height: 236px;
+      padding: 22px;
+      border-right: 1px solid var(--border);
+    }
+
+    .protocol-step:last-child {
+      border-right: 0;
+    }
+
+    .protocol-number {
+      margin-bottom: 39px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .protocol-step h3 {
+      margin-bottom: 8px;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .protocol-step p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .protocol-step strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .documents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .document-card {
+      display: flex;
+      min-height: 310px;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .document-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .document-index {
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .document-status {
+      padding: 4px 8px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .document-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 21px;
+    }
+
+    .document-body h3 {
+      margin-bottom: 7px;
+      font-size: 19px;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .document-meta {
+      margin-bottom: 18px;
+      color: var(--text-faint);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .document-body p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.67;
+    }
+
+    .document-body strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .source-note {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      margin-top: 14px;
+      padding: 15px 17px;
+      border: 1px solid var(--coral-border);
+      border-radius: 14px;
+      background: var(--coral-bg);
+      color: var(--coral);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .source-note svg {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+    }
+
+    .source-note strong {
+      color: var(--text);
+    }
+
+    .platform-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .platform-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .platform-tab {
+      position: relative;
+      min-height: 76px;
+      padding: 17px 20px;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-soft);
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background 0.17s ease,
+        color 0.17s ease;
+    }
+
+    .platform-tab:last-child {
+      border-right: 0;
+    }
+
+    .platform-tab:hover {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .platform-tab[aria-selected="true"] {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .platform-tab[aria-selected="true"]::after {
+      position: absolute;
+      right: 20px;
+      bottom: -1px;
+      left: 20px;
+      height: 3px;
+      border-radius: 4px 4px 0 0;
+      background: var(--navy);
+      content: "";
+    }
+
+    .platform-tab-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .platform-tab-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .platform-panel {
+      display: none;
+    }
+
+    .platform-panel.active {
+      display: block;
+      animation: panel-in 0.23s ease;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .platform-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      padding: 25px 26px 21px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .platform-header h3 {
+      margin-bottom: 5px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .platform-header p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .platform-pill {
+      align-self: start;
+      padding: 6px 10px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .platform-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+      gap: 22px;
+      padding: 24px 26px 27px;
+    }
+
+    .steps-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .setup-step {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-soft);
+    }
+
+    .setup-number {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid;
+      border-radius: 11px;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .setup-step p {
+      margin: 1px 0 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .setup-step strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .platform-aside {
+      align-self: start;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .platform-aside-label {
+      margin-bottom: 8px;
+      color: #9f9c94;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .platform-aside h4 {
+      margin-bottom: 8px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .platform-aside p {
+      margin-bottom: 0;
+      color: #c7c4bb;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .prompt-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .prompt-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: #121411;
+    }
+
+    .prompt-header h3 {
+      margin-bottom: 4px;
+      font-size: 20px;
+      letter-spacing: -0.025em;
+    }
+
+    .prompt-header p {
+      margin-bottom: 0;
+      color: #aaa79f;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 38px;
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-inverse);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        background 0.16s ease,
+        border-color 0.16s ease;
+    }
+
+    .copy-button:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.11);
+    }
+
+    .copy-button svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .prompt-content {
+      max-height: 620px;
+      overflow: auto;
+      margin: 0;
+      padding: 24px;
+      color: #ddd9d0;
+      font-family: "DM Mono", monospace;
+      font-size: 12px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      scrollbar-color: #5c5e58 #171917;
+      scrollbar-width: thin;
+    }
+
+    .prompt-footer {
+      padding: 12px 22px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #a6a39b;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      margin-top: 72px;
+      padding: 38px;
+      border-radius: var(--radius-xl);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .closing::after {
+      position: absolute;
+      top: -120px;
+      right: -90px;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(171, 216, 200, 0.2), transparent 68%);
+      content: "";
+    }
+
+    .closing-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+      gap: 30px;
+      align-items: center;
+    }
+
+    .closing h2 {
+      max-width: 730px;
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    .closing p {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: #c9c6bd;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .closing-card {
+      padding: 19px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .closing-card-label {
+      margin-bottom: 7px;
+      color: #9d9a92;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .closing-card-value {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.58;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 4px 0;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 100;
+      max-width: min(360px, calc(100% - 36px));
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 12px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1020px) {
+      .hero-main {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-summary {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .capability-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .protocol-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .protocol-step {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .protocol-step:nth-child(2) {
+        border-right: 0;
+      }
+
+      .protocol-step:nth-child(3),
+      .protocol-step:nth-child(4) {
+        border-bottom: 0;
+      }
+
+      .documents-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .document-card {
+        min-height: auto;
+      }
+
+      .platform-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 740px) {
+      .page-shell {
+        width: min(calc(100% - 20px), var(--page-width));
+        padding-top: 10px;
+      }
+
+      .topbar {
+        top: 6px;
+        min-height: 52px;
+        padding-left: 12px;
+      }
+
+      .brand-text {
+        display: none;
+      }
+
+      .topnav a {
+        padding: 7px 8px;
+        font-size: 11px;
+      }
+
+      .hero-main {
+        padding: 36px 24px 29px;
+      }
+
+      h1 {
+        font-size: clamp(2.35rem, 13vw, 4rem);
+      }
+
+      .hero-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-stat:last-child {
+        border-bottom: 0;
+      }
+
+      .capability-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .protocol-header,
+      .platform-header {
+        grid-template-columns: 1fr;
+      }
+
+      .protocol-badge,
+      .platform-pill {
+        width: fit-content;
+      }
+
+      .protocol-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .protocol-step {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .protocol-step:nth-child(3) {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .protocol-step:last-child {
+        border-bottom: 0;
+      }
+
+      .protocol-number {
+        margin-bottom: 22px;
+      }
+
+      .platform-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .platform-tab {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .platform-tab:last-child {
+        border-bottom: 0;
+      }
+
+      .platform-body {
+        padding: 20px;
+      }
+
+      .prompt-header {
+        flex-direction: column;
+      }
+
+      .copy-button {
+        width: 100%;
+      }
+
+      .closing {
+        padding: 28px 24px;
+      }
+
+      .closing-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .topnav a:nth-child(2) {
+        display: none;
+      }
+
+      .setup-step {
+        grid-template-columns: 30px minmax(0, 1fr);
+        padding: 12px;
+      }
+
+      .setup-number {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page-shell {
+        width: 100%;
+        padding: 0;
+      }
+
+      .topbar,
+      .hero-actions,
+      .platform-tabs,
+      .copy-button,
+      .toast {
+        display: none !important;
+      }
+
+      .hero,
+      .card,
+      .protocol-shell,
+      .document-card,
+      .platform-shell,
+      .prompt-shell,
+      .closing {
+        box-shadow: none;
+      }
+
+      .platform-panel {
+        display: block !important;
+        break-inside: avoid;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .prompt-content {
+        max-height: none;
+        overflow: visible;
+      }
+
+      .section,
+      .closing {
+        margin-top: 36px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="page">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header>
-    <div class="badges">
-      <span class="badge badge-navy">IA Práctico — Asistentes</span>
-      <span class="badge badge-teal">Ecuador — LOPDP</span>
-    </div>
-    <h1>Experto en LOPDP Ecuador y Auditor Documental</h1>
-    <p class="subtitle">Asistente de IA especializado en la Ley Orgánica de Protección de Datos Personales de Ecuador. Audita contratos, políticas y fichas técnicas para detectar brechas de cumplimiento y fundamentar cada hallazgo en artículos específicos de la ley.</p>
-  </header>
-
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Compatible con</div><div class="stat-value">ChatGPT GPT y Gemini GEM</div></div>
-    <div class="stat"><div class="stat-label">Marco legal</div><div class="stat-value">LOPDP + Reglamento + Resoluciones</div></div>
-    <div class="stat"><div class="stat-label">Documentos a cargar</div><div class="stat-value">3 pilares normativos</div></div>
-  </div>
-
-  <div class="disclaimer-box">
-    <b>Nota importante:</b> Las respuestas del asistente son una guía informativa basada en la normativa vigente y los documentos proporcionados. No constituyen asesoría legal formal ni un dictamen vinculante. Se recomienda la validación con un equipo legal especializado en protección de datos.
-  </div>
-
-  <!-- CAPACIDADES -->
-  <div class="section-label">Qué puede hacer este asistente</div>
-  <div class="cap-grid">
-    <div class="cap-card">
-      <div class="cap-icon ci-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
-      <div class="cap-title">Auditoría de documentos</div>
-      <div class="cap-desc">Analiza <b>contratos, políticas de privacidad y manuales</b>. Detecta omisiones, ambigüedades y contradicciones entre archivos cruzando información con la LOPDP.</div>
-    </div>
-    <div class="cap-card">
-      <div class="cap-icon ci-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-      <div class="cap-title">Identificación de actores</div>
-      <div class="cap-desc">Determina quién es el <b>Titular, el Responsable y el Encargado</b> del tratamiento en cada escenario analizado, según la definición legal ecuatoriana.</div>
-    </div>
-    <div class="cap-card">
-      <div class="cap-icon ci-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      <div class="cap-title">Detección de brechas</div>
-      <div class="cap-desc">Señala qué apartados obligatorios de la LOPDP <b>faltan en los documentos</b> y clasifica los hallazgos por nivel de riesgo legal.</div>
-    </div>
-    <div class="cap-card">
-      <div class="cap-icon ci-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-      <div class="cap-title">Recomendaciones accionables</div>
-      <div class="cap-desc">Para cada brecha detectada, propone <b>pasos concretos de remediación</b> con referencia al artículo específico de la ley que debe cumplirse.</div>
-    </div>
-  </div>
-
-  <!-- PROTOCOLO DE RESPUESTA -->
-  <div class="section-label">Cómo estructura el asistente sus respuestas</div>
-  <div class="protocol-steps">
-    <div class="protocol-item">
-      <div class="proto-num">1</div>
-      <div class="proto-content">
-        <div class="proto-title">Análisis de actores del tratamiento</div>
-        <div class="proto-desc">Identifica quién es el <b>Titular</b> (persona cuyos datos se tratan), el <b>Responsable</b> (quien define el propósito) y el <b>Encargado</b> (quien ejecuta el tratamiento) en el escenario planteado.</div>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </span>
+        <span class="brand-text">Experto LOPDP Ecuador</span>
       </div>
-    </div>
-    <div class="protocol-item">
-      <div class="proto-num">2</div>
-      <div class="proto-content">
-        <div class="proto-title">Fundamentación legal con trazabilidad documental</div>
-        <div class="proto-desc">Cita el artículo específico de la LOPDP o su Reglamento, e indica el nombre del documento y la cláusula exacta de donde extrae la información. Ej: <b>"Según la cláusula décima del Contrato_Servicios.pdf..."</b></div>
-      </div>
-    </div>
-    <div class="protocol-item">
-      <div class="proto-num">3</div>
-      <div class="proto-content">
-        <div class="proto-title">Diagnóstico detallado con tabla comparativa</div>
-        <div class="proto-desc">Presenta una tabla <b>Requisito Legal vs. Estado del Documento</b> con los puntos de cumplimiento, hallazgos, omisiones críticas y contradicciones entre archivos.</div>
-      </div>
-    </div>
-    <div class="protocol-item">
-      <div class="proto-num">4</div>
-      <div class="proto-content">
-        <div class="proto-title">Recomendaciones de mitigación</div>
-        <div class="proto-desc">Pasos prácticos para corregir cada brecha, redactados en lenguaje jurídico claro y ordenados por prioridad de riesgo.</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- DOCUMENTOS LEGALES -->
-  <div class="section-label">Documentos legales que debes cargar</div>
-  <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;line-height:1.65">El asistente necesita estos tres documentos como base de conocimiento para dar respuestas precisas. Sin ellos, operará solo con el conocimiento general del modelo, lo que reduce significativamente la precisión jurídica.</p>
+      <nav class="topnav" aria-label="Navegación principal">
+        <a href="#capacidades">Capacidades</a>
+        <a href="#configuracion">Configuración</a>
+        <a href="#prompt">Prompt</a>
+      </nav>
+    </header>
 
-  <div class="doc-card">
-    <div class="doc-header">
-      <span class="doc-num dn-1">01</span>
-      <div class="doc-meta">
-        <div class="doc-title">Ley Orgánica de Protección de Datos Personales (LOPDP)</div>
-        <div class="doc-sub">Registro Oficial Suplemento 459 — 26 de mayo de 2021</div>
-      </div>
-      <span class="doc-badge db-primary">Primario</span>
-    </div>
-    <div class="doc-body">
-      La ley principal. Define los principios del tratamiento de datos, los derechos ARCO (Acceso, Rectificación, Cancelación, Oposición), las bases legales para el tratamiento, las obligaciones del Responsable y el Encargado, y el régimen sancionador. <b>Es la fuente de verdad primaria del asistente.</b>
-    </div>
-  </div>
+    <main id="contenido">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-main">
+          <div>
+            <div class="eyebrows">
+              <span class="eyebrow tone-navy">
+                <span class="eyebrow-dot" aria-hidden="true"></span>
+                IA Práctico · Asistentes
+              </span>
 
-  <div class="doc-card">
-    <div class="doc-header">
-      <span class="doc-num dn-2">02</span>
-      <div class="doc-meta">
-        <div class="doc-title">Reglamento General a la LOPDP</div>
-        <div class="doc-sub">Decreto Ejecutivo 864 — Registro Oficial 13 de agosto de 2021</div>
-      </div>
-      <span class="doc-badge db-required">Requerido</span>
-    </div>
-    <div class="doc-body">
-      Desarrolla y operativiza los artículos de la ley. Define criterios técnicos para las medidas de seguridad del Art. 38, los procedimientos para atender solicitudes de derechos, los contratos entre Responsable y Encargado, y los umbrales para la evaluación de impacto. <b>Imprescindible para análisis de contratos y políticas internas.</b>
-    </div>
-  </div>
+              <span class="eyebrow tone-teal">
+                <span class="eyebrow-dot" aria-hidden="true"></span>
+                Ecuador · LOPDP
+              </span>
+            </div>
 
-  <div class="doc-card">
-    <div class="doc-header">
-      <span class="doc-num dn-3">03</span>
-      <div class="doc-meta">
-        <div class="doc-title">Guías y Resoluciones de la Autoridad de Protección de Datos</div>
-        <div class="doc-sub">Dirección Nacional de Registro de Datos Públicos (DINARDAP)</div>
-      </div>
-      <span class="doc-badge db-complement">Complementario</span>
-    </div>
-    <div class="doc-body">
-      Resoluciones, guías interpretativas y criterios emitidos por la autoridad de control ecuatoriana. Incluyen lineamientos sobre transferencias internacionales de datos, brechas de seguridad y requisitos específicos por sector. <b>Añaden el criterio regulatorio más actualizado al análisis.</b>
-    </div>
-  </div>
+            <h1 id="hero-title">Auditoría documental asistida para la LOPDP de Ecuador.</h1>
 
-  <!-- CÓMO CONFIGURAR -->
-  <div class="section-label">Cómo configurarlo según tu plataforma</div>
-  <div class="platform-tabs" id="platform-tabs">
-    <button class="ptab ptab-gpt active" onclick="showPlat('gpt', this)">ChatGPT — GPT personalizado</button>
-    <button class="ptab ptab-gem" onclick="showPlat('gem', this)">Gemini — GEM</button>
-  </div>
+            <p class="hero-lead">
+              Un asistente de IA para analizar <strong>contratos, políticas, manuales y
+              fichas técnicas</strong>, detectar brechas de cumplimiento y fundamentar
+              cada hallazgo con referencias jurídicas y trazabilidad documental.
+            </p>
 
-  <div class="platform-content active" id="plat-gpt">
-    <div class="plat-card">
-      <div class="plat-card-header">
-        <div class="plat-card-title">Configuración en ChatGPT como GPT personalizado</div>
-        <div class="plat-card-sub">Requiere plan Plus, Pro o Team — Disponible en chatgpt.com</div>
-      </div>
-      <div class="plat-steps">
-        <div class="plat-step"><div class="plat-step-num psn-green">1</div><div class="plat-step-text">Ve a <b>chatgpt.com</b>, haz clic en tu avatar → <b>Mis GPTs</b> → <b>Crear un GPT</b>.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-green">2</div><div class="plat-step-text">En la pestaña <b>Configurar</b>, escribe el nombre: <b>"Experto LOPDP Ecuador"</b> y una descripción breve.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-green">3</div><div class="plat-step-text">En el campo <b>Instrucciones</b>, pega el prompt completo que encontrarás al final de esta página.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-green">4</div><div class="plat-step-text">En la sección <b>Conocimiento</b>, sube los tres documentos legales: LOPDP, Reglamento y Resoluciones. El GPT los usará como fuente primaria.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-green">5</div><div class="plat-step-text">Haz clic en <b>Guardar</b> → elige visibilidad <b>Solo yo</b> → <b>Actualizar</b>. El GPT queda listo para usar.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-green">6</div><div class="plat-step-text">Para usarlo: abre el GPT, sube el contrato o política a revisar y escribe: <b>"Análisis de cumplimiento según el protocolo estructurado"</b>.</div></div>
-      </div>
-      <div class="plat-tip"><b>Consejo:</b> Cada vez que la Autoridad de Protección de Datos publique nuevas resoluciones, actualiza los archivos en la sección Conocimiento del GPT para mantener el análisis al día.</div>
-    </div>
-  </div>
+            <div class="hero-actions">
+              <a class="button primary" href="#configuracion">
+                Configurar el asistente
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m9 18 6-6-6-6"></path>
+                </svg>
+              </a>
 
-  <div class="platform-content" id="plat-gem">
-    <div class="plat-card">
-      <div class="plat-card-header">
-        <div class="plat-card-title">Configuración en Gemini como GEM</div>
-        <div class="plat-card-sub">Disponible en gemini.google.com — Requiere cuenta de Google</div>
-      </div>
-      <div class="plat-steps">
-        <div class="plat-step"><div class="plat-step-num psn-blue">1</div><div class="plat-step-text">Ve a <b>gemini.google.com</b>, en el menú lateral busca <b>Gems</b> → <b>Crear un Gem</b>.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-blue">2</div><div class="plat-step-text">Asigna un nombre: <b>"Experto LOPDP Ecuador"</b>.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-blue">3</div><div class="plat-step-text">En el campo de instrucciones, pega el prompt completo desde la sección inferior de esta página.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-blue">4</div><div class="plat-step-text">En la sección <b>Conocimiento</b>, sube los tres documentos legales directamente desde tu dispositivo o desde Google Drive.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-blue">5</div><div class="plat-step-text">Haz clic en <b>Guardar</b>. El GEM aparecerá en tu lista de Gems personalizados.</div></div>
-        <div class="plat-step"><div class="plat-step-num psn-blue">6</div><div class="plat-step-text">Para usarlo: abre el GEM, adjunta el documento a auditar y escribe: <b>"Análisis de cumplimiento según el protocolo estructurado"</b>.</div></div>
-      </div>
-      <div class="plat-tip"><b>Ventaja de Gems:</b> Si tienes los documentos legales en Google Drive, puedes vincularlos directamente sin subirlos manualmente cada vez que actualicen.</div>
-    </div>
-  </div>
+              <a class="button" href="#prompt">Copiar el prompt</a>
+            </div>
+          </div>
 
-  <!-- PROMPT COMPLETO -->
-  <div class="section-label">Prompt completo</div>
-  <div class="prompt-block">
-    <div class="prompt-block-header">
-      <div class="prompt-block-title">Prompt del Experto en LOPDP Ecuador</div>
-      <div class="prompt-block-sub">Pega este texto en las instrucciones del sistema de tu GPT, GEM o cuaderno de NotebookLM</div>
-    </div>
-    <div class="prompt-preview">ROL:
-Eres un Asistente Experto en la Ley Orgánica de Protección de Datos Personales (LOPDP) de Ecuador. Tu función es realizar auditorías técnico-legales, asesorar a empresas y analizar archivos...</div>
-    <div class="copy-trigger" onclick="selectPrompt()">
-      <div class="copy-trigger-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Seleccionar prompt completo para copiar
-      </div>
-      <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-    </div>
-    <div class="copy-box" id="prompt-box">
-      <textarea id="prompt-ta" rows="14" readonly>ROL:
+          <aside class="hero-summary" aria-label="Resumen del asistente">
+            <div class="summary-card">
+              <div class="summary-label">Objetivo</div>
+              <div class="summary-value">
+                Auditar documentos y señalar brechas de cumplimiento.
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Base jurídica</div>
+              <div class="summary-value">
+                LOPDP, Reglamento General y resoluciones o guías aplicables.
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Resultado</div>
+              <div class="summary-value">
+                Diagnóstico estructurado, riesgos y recomendaciones de mitigación.
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-number">02</div>
+            <div class="hero-stat-text">
+              plataformas descritas: GPT personalizado y Gemini Gem
+            </div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">03</div>
+            <div class="hero-stat-text">
+              pilares normativos recomendados para la base de conocimiento
+            </div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">04</div>
+            <div class="hero-stat-text">
+              etapas obligatorias dentro del protocolo de respuesta
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="legal-notice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 9v4"></path>
+          <path d="M12 17h.01"></path>
+          <path d="M10.3 2.9 1.8 17a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 2.9a2 2 0 0 0-3.4 0Z"></path>
+        </svg>
+
+        <div>
+          <strong>Alcance informativo:</strong> las respuestas del asistente se basan
+          en la normativa y los documentos proporcionados. No constituyen asesoría
+          legal formal ni un dictamen vinculante. Se recomienda validación con un
+          equipo jurídico especializado en protección de datos.
+        </div>
+      </aside>
+
+      <section class="section" id="capacidades" aria-labelledby="capacidades-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Capacidades principales</div>
+            <h2 class="section-title" id="capacidades-title">Qué puede hacer el asistente</h2>
+          </div>
+
+          <p class="section-intro">
+            Su función es convertir documentos dispersos en un diagnóstico jurídico
+            estructurado, manteniendo visible la relación entre requisito normativo,
+            evidencia documental y acción de remediación.
+          </p>
+        </div>
+
+        <div class="capability-grid">
+          <article class="card capability-card">
+            <div class="icon-box tone-navy" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                <path d="M14 2v6h6"></path>
+                <path d="M8 13h8"></path>
+                <path d="M8 17h6"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-navy">Documentos</span>
+            <h3>Auditoría interdocumental</h3>
+            <p>
+              Analiza <strong>contratos, políticas y manuales</strong>. Busca omisiones,
+              ambigüedades y contradicciones entre los archivos cargados.
+            </p>
+          </article>
+
+          <article class="card capability-card">
+            <div class="icon-box tone-teal" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-teal">Actores</span>
+            <h3>Identificación de roles</h3>
+            <p>
+              Determina quién actúa como <strong>Titular, Responsable y Encargado</strong>
+              dentro de cada escenario analizado.
+            </p>
+          </article>
+
+          <article class="card capability-card">
+            <div class="icon-box tone-amber" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-amber">Riesgo</span>
+            <h3>Detección de brechas</h3>
+            <p>
+              Señala apartados obligatorios ausentes y clasifica los hallazgos según
+              su importancia o exposición jurídica.
+            </p>
+          </article>
+
+          <article class="card capability-card">
+            <div class="icon-box tone-purple" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m9 11 3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-purple">Remediación</span>
+            <h3>Recomendaciones accionables</h3>
+            <p>
+              Propone pasos concretos para corregir cada brecha y vincula la acción
+              recomendada con su fundamento normativo.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="protocolo-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Modelo de respuesta</div>
+            <h2 class="section-title" id="protocolo-title">Un protocolo obligatorio de cuatro etapas</h2>
+          </div>
+
+          <p class="section-intro">
+            Cada respuesta debe mantener la misma estructura para facilitar revisión,
+            comparación entre documentos y seguimiento de las acciones correctivas.
+          </p>
+        </div>
+
+        <div class="protocol-shell">
+          <div class="protocol-header">
+            <div>
+              <h3>Protocolo de auditoría y diagnóstico</h3>
+              <p>
+                La estructura separa actores, fundamento legal, estado documental y
+                recomendaciones para evitar respuestas jurídicas genéricas.
+              </p>
+            </div>
+
+            <span class="protocol-badge">Respuesta estructurada</span>
+          </div>
+
+          <div class="protocol-grid">
+            <article class="protocol-step">
+              <div class="protocol-number">01 · ACTORES</div>
+              <h3>Analizar el escenario</h3>
+              <p>
+                Identifica al <strong>Titular</strong>, al <strong>Responsable</strong>
+                y al <strong>Encargado</strong> del tratamiento.
+              </p>
+            </article>
+
+            <article class="protocol-step">
+              <div class="protocol-number">02 · TRAZABILIDAD</div>
+              <h3>Fundamentar cada punto</h3>
+              <p>
+                Cita el artículo aplicable e indica el archivo, sección o cláusula de
+                donde se obtiene la evidencia.
+              </p>
+            </article>
+
+            <article class="protocol-step">
+              <div class="protocol-number">03 · DIAGNÓSTICO</div>
+              <h3>Comparar requisito y estado</h3>
+              <p>
+                Expone cumplimiento, hallazgos, omisiones y contradicciones mediante
+                una tabla comparativa.
+              </p>
+            </article>
+
+            <article class="protocol-step">
+              <div class="protocol-number">04 · ACCIÓN</div>
+              <h3>Priorizar la mitigación</h3>
+              <p>
+                Propone pasos prácticos para corregir los problemas, ordenados por
+                nivel de riesgo.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="documentos-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Base de conocimiento</div>
+            <h2 class="section-title" id="documentos-title">Los tres pilares normativos</h2>
+          </div>
+
+          <p class="section-intro">
+            Estos documentos forman la base de conocimiento recomendada. Sin ellos, el
+            asistente dependerá del conocimiento general del modelo y perderá precisión
+            y trazabilidad jurídica.
+          </p>
+        </div>
+
+        <div class="documents-grid">
+          <article class="document-card">
+            <div class="document-head">
+              <span class="document-index">01</span>
+              <span class="document-status tone-navy">Primario</span>
+            </div>
+
+            <div class="document-body">
+              <h3>Ley Orgánica de Protección de Datos Personales</h3>
+              <div class="document-meta">
+                Registro Oficial Suplemento 459 · 26 de mayo de 2021
+              </div>
+
+              <p>
+                Define principios del tratamiento, derechos ARCO, bases legales,
+                obligaciones del Responsable y del Encargado, y régimen sancionador.
+                <strong>Es la fuente de verdad primaria del asistente.</strong>
+              </p>
+            </div>
+          </article>
+
+          <article class="document-card">
+            <div class="document-head">
+              <span class="document-index">02</span>
+              <span class="document-status tone-teal">Requerido</span>
+            </div>
+
+            <div class="document-body">
+              <h3>Reglamento General a la LOPDP</h3>
+              <div class="document-meta">
+                Decreto Ejecutivo 864 · Registro Oficial 13 de agosto de 2021
+              </div>
+
+              <p>
+                Desarrolla los artículos de la ley y detalla medidas de seguridad,
+                atención de derechos, contratos entre Responsable y Encargado y
+                evaluaciones de impacto.
+                <strong>Es esencial para análisis operativos y contractuales.</strong>
+              </p>
+            </div>
+          </article>
+
+          <article class="document-card">
+            <div class="document-head">
+              <span class="document-index">03</span>
+              <span class="document-status tone-amber">Complementario</span>
+            </div>
+
+            <div class="document-body">
+              <h3>Guías y resoluciones de la autoridad</h3>
+              <div class="document-meta">
+                Criterios, resoluciones y lineamientos regulatorios
+              </div>
+
+              <p>
+                Complementan la ley con orientaciones sobre transferencias
+                internacionales, brechas de seguridad y requisitos sectoriales.
+                <strong>Añaden interpretación regulatoria al análisis.</strong>
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <aside class="source-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v4"></path>
+            <path d="M12 16h.01"></path>
+          </svg>
+
+          <div>
+            <strong>Disciplina documental:</strong> actualiza los archivos de conocimiento
+            cuando se publiquen nuevas resoluciones o cambien los documentos internos que
+            serán utilizados por el asistente.
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="configuracion" aria-labelledby="configuracion-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Implementación</div>
+            <h2 class="section-title" id="configuracion-title">Cómo configurarlo según la plataforma</h2>
+          </div>
+
+          <p class="section-intro">
+            El mismo prompt puede utilizarse como instrucción principal. La diferencia
+            está en dónde se cargan los documentos y cómo se administra el asistente.
+          </p>
+        </div>
+
+        <div class="platform-shell">
+          <div class="platform-tabs" role="tablist" aria-label="Plataformas de configuración">
+            <button
+              class="platform-tab"
+              id="platform-tab-gpt"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="platform-panel-gpt"
+              data-platform="gpt"
+            >
+              <span class="platform-tab-label">Plataforma 01</span>
+              <span class="platform-tab-title">ChatGPT · GPT personalizado</span>
+            </button>
+
+            <button
+              class="platform-tab"
+              id="platform-tab-gem"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="platform-panel-gem"
+              data-platform="gem"
+              tabindex="-1"
+            >
+              <span class="platform-tab-label">Plataforma 02</span>
+              <span class="platform-tab-title">Gemini · Gem</span>
+            </button>
+          </div>
+
+          <section
+            class="platform-panel active"
+            id="platform-panel-gpt"
+            role="tabpanel"
+            aria-labelledby="platform-tab-gpt"
+          >
+            <div class="platform-header">
+              <div>
+                <h3>Configuración como GPT personalizado</h3>
+                <p>Flujo descrito para la creación y administración dentro de ChatGPT.</p>
+              </div>
+
+              <span class="platform-pill tone-green">GPT personalizado</span>
+            </div>
+
+            <div class="platform-body">
+              <div class="steps-list">
+                <article class="setup-step">
+                  <span class="setup-number tone-green">01</span>
+                  <p>
+                    Ve a <strong>chatgpt.com</strong>, abre tu perfil, entra en
+                    <strong>Mis GPTs</strong> y selecciona <strong>Crear un GPT</strong>.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-green">02</span>
+                  <p>
+                    En la configuración, usa el nombre
+                    <strong>“Experto LOPDP Ecuador”</strong> y añade una descripción breve.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-green">03</span>
+                  <p>
+                    Pega el prompt completo de esta página en el campo
+                    <strong>Instrucciones</strong>.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-green">04</span>
+                  <p>
+                    Sube la LOPDP, el Reglamento y las resoluciones en la sección
+                    <strong>Conocimiento</strong>.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-green">05</span>
+                  <p>
+                    Guarda el asistente con la visibilidad adecuada para tu caso de uso.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-green">06</span>
+                  <p>
+                    Para iniciar una auditoría, adjunta el documento y solicita:
+                    <strong>“Análisis de cumplimiento según el protocolo estructurado”</strong>.
+                  </p>
+                </article>
+              </div>
+
+              <aside class="platform-aside">
+                <div class="platform-aside-label">Mantenimiento</div>
+                <h4>Actualiza la base normativa</h4>
+                <p>
+                  Reemplaza o agrega archivos cuando existan nuevas resoluciones,
+                  cambios normativos o versiones actualizadas de políticas y contratos.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <section
+            class="platform-panel"
+            id="platform-panel-gem"
+            role="tabpanel"
+            aria-labelledby="platform-tab-gem"
+            hidden
+          >
+            <div class="platform-header">
+              <div>
+                <h3>Configuración como Gem en Gemini</h3>
+                <p>Flujo descrito para crear un asistente personalizado en Gemini.</p>
+              </div>
+
+              <span class="platform-pill tone-blue">Gem</span>
+            </div>
+
+            <div class="platform-body">
+              <div class="steps-list">
+                <article class="setup-step">
+                  <span class="setup-number tone-blue">01</span>
+                  <p>
+                    Ve a <strong>gemini.google.com</strong>, abre la sección
+                    <strong>Gems</strong> y selecciona <strong>Crear un Gem</strong>.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-blue">02</span>
+                  <p>
+                    Asigna el nombre <strong>“Experto LOPDP Ecuador”</strong>.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-blue">03</span>
+                  <p>
+                    Pega el prompt completo en el campo destinado a las instrucciones.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-blue">04</span>
+                  <p>
+                    Incorpora los tres documentos jurídicos desde el dispositivo o
+                    desde Google Drive.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-blue">05</span>
+                  <p>
+                    Guarda el Gem para incorporarlo a la lista de asistentes personalizados.
+                  </p>
+                </article>
+
+                <article class="setup-step">
+                  <span class="setup-number tone-blue">06</span>
+                  <p>
+                    Adjunta el archivo a auditar y solicita:
+                    <strong>“Análisis de cumplimiento según el protocolo estructurado”</strong>.
+                  </p>
+                </article>
+              </div>
+
+              <aside class="platform-aside">
+                <div class="platform-aside-label">Gestión documental</div>
+                <h4>Centraliza los archivos</h4>
+                <p>
+                  Cuando los documentos estén alojados en Drive, mantenlos organizados
+                  y actualizados para reducir versiones duplicadas o desfasadas.
+                </p>
+              </aside>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" id="prompt" aria-labelledby="prompt-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Instrucción principal</div>
+            <h2 class="section-title" id="prompt-title">Prompt completo del asistente</h2>
+          </div>
+
+          <p class="section-intro">
+            Pega este contenido en el campo de instrucciones del asistente. El botón
+            copia todo el texto sin necesidad de seleccionarlo manualmente.
+          </p>
+        </div>
+
+        <div class="prompt-shell">
+          <div class="prompt-header">
+            <div>
+              <h3>Experto en LOPDP Ecuador</h3>
+              <p>Prompt para GPT personalizado, Gem u otro entorno compatible.</p>
+            </div>
+
+            <button
+              class="copy-button"
+              id="copy-prompt"
+              type="button"
+              aria-label="Copiar prompt completo"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copiar prompt
+            </button>
+          </div>
+
+          <pre class="prompt-content" id="prompt-content">ROL:
 Eres un Asistente Experto en la Ley Orgánica de Protección de Datos Personales (LOPDP) de Ecuador. Tu función es realizar auditorías técnico-legales, asesorar a empresas y analizar archivos (contratos, políticas, manuales, cuadernos de notas) para garantizar el cumplimiento normativo en territorio ecuatoriano.
 
 TU BASE DE CONOCIMIENTO:
@@ -376,32 +2037,164 @@ TONO Y ESTILO
 ---
 
 NOTA DE DESCARGO (Obligatoria al final de cada consulta):
-"Esta respuesta es una guía informativa basada en la normativa vigente en Ecuador y los documentos proporcionados por el usuario; no constituye una asesoría legal formal ni un dictamen vinculante. Se recomienda la validación con un equipo legal especializado en protección de datos."</textarea>
-      <div class="copy-box-footer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
-      </div>
-    </div>
+"Esta respuesta es una guía informativa basada en la normativa vigente en Ecuador y los documentos proporcionados por el usuario; no constituye una asesoría legal formal ni un dictamen vinculante. Se recomienda la validación con un equipo legal especializado en protección de datos."</pre>
+
+          <div class="prompt-footer">
+            Revisa y actualiza periódicamente las instrucciones y los documentos de
+            conocimiento utilizados por el asistente.
+          </div>
+        </div>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-title">
+        <div class="closing-content">
+          <div>
+            <div class="section-kicker" style="color: #98958d;">Resultado esperado</div>
+            <h2 id="closing-title">Un diagnóstico trazable, no una respuesta jurídica genérica.</h2>
+            <p>
+              El asistente debe mostrar qué encontró, dónde lo encontró, qué requisito
+              aplica y qué acción concreta puede reducir la brecha identificada.
+            </p>
+          </div>
+
+          <div class="closing-card">
+            <div class="closing-card-label">Estructura de salida</div>
+            <div class="closing-card-value">
+              Actores → fundamento legal → evidencia documental → diagnóstico →
+              nivel de riesgo → recomendación de mitigación.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Experto en LOPDP Ecuador y Auditor Documental</span>
+      <span>Guía informativa · Requiere validación jurídica especializada</span>
+    </footer>
   </div>
 
-</div>
-<script>
-function showPlat(id, el) {
-  document.querySelectorAll('.platform-content').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
-  document.getElementById('plat-' + id).classList.add('active');
-  el.classList.add('active');
-}
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    Prompt copiado al portapapeles.
+  </div>
 
-function selectPrompt() {
-  const box = document.getElementById('prompt-box');
-  const ta = document.getElementById('prompt-ta');
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
-}
-</script>
+  <script>
+    (() => {
+      "use strict";
+
+      const tabs = Array.from(document.querySelectorAll(".platform-tab"));
+      const panels = Array.from(document.querySelectorAll(".platform-panel"));
+      const copyButton = document.getElementById("copy-prompt");
+      const promptContent = document.getElementById("prompt-content");
+      const toast = document.getElementById("toast");
+
+      let activeTab = 0;
+      let toastTimer;
+
+      function activatePlatform(index, focusTab = false) {
+        if (!Number.isInteger(index) || index < 0 || index >= tabs.length) {
+          return;
+        }
+
+        activeTab = index;
+
+        tabs.forEach((tab, tabIndex) => {
+          const isActive = tabIndex === index;
+
+          tab.setAttribute("aria-selected", String(isActive));
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          const isActive = panelIndex === index;
+
+          panel.classList.toggle("active", isActive);
+          panel.hidden = !isActive;
+        });
+
+        if (focusTab) {
+          tabs[index].focus();
+        }
+      }
+
+      function showToast(message) {
+        window.clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add("visible");
+
+        toastTimer = window.setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2200);
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.pointerEvents = "none";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        const copied = document.execCommand("copy");
+        textarea.remove();
+
+        if (!copied) {
+          throw new Error("No se pudo copiar el texto.");
+        }
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          activatePlatform(index);
+        });
+
+        tab.addEventListener("keydown", (event) => {
+          let nextIndex = activeTab;
+
+          if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+            nextIndex = (activeTab + 1) % tabs.length;
+          } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+            nextIndex = (activeTab - 1 + tabs.length) % tabs.length;
+          } else if (event.key === "Home") {
+            nextIndex = 0;
+          } else if (event.key === "End") {
+            nextIndex = tabs.length - 1;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          activatePlatform(nextIndex, true);
+        });
+      });
+
+      copyButton.addEventListener("click", async () => {
+        const originalContent = copyButton.innerHTML;
+
+        try {
+          await copyText(promptContent.textContent.trim());
+
+          copyButton.textContent = "Prompt copiado";
+          showToast("Prompt copiado al portapapeles.");
+
+          window.setTimeout(() => {
+            copyButton.innerHTML = originalContent;
+          }, 1800);
+        } catch (error) {
+          showToast("No se pudo copiar. Selecciona el texto manualmente.");
+        }
+      });
+
+      activatePlatform(0);
+    })();
+  </script>
 </body>
 </html>
