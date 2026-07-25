@@ -1,233 +1,2000 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agente de Inteligencia Energética LATAM — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --coral-bg: #faeae5; --coral-text: #8c3318; --coral-border: #f0a08a;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Flujo práctico para investigar el sector energético de América Latina con NotebookLM y convertir los hallazgos en un dashboard interactivo con Claude."
+  >
+  <title>Agente de Inteligencia Energética LATAM</title>
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--amber-bg); color: var(--amber-text); margin-bottom: 0.75rem; }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
 
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-  /* OVERVIEW PILLS */
-  .overview { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.75rem; }
-  .pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 999px; }
-  .pill svg { width: 12px; height: 12px; }
-  .p-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .p-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .p-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .p-green { background: var(--green-bg); color: var(--green-text); }
+    :root {
+      --page-bg: #f5f4ef;
+      --surface: #ffffff;
+      --surface-soft: #fbfaf7;
+      --surface-dark: #171816;
 
-  /* FLOW PIPELINE */
-  .pipeline { display: flex; align-items: stretch; gap: 0; margin-bottom: 1.75rem; overflow-x: auto; padding-bottom: 4px; }
-  .pipe-step { flex: 1; min-width: 140px; background: var(--surface); border: 1px solid var(--border); padding: 14px 14px 12px; border-right: none; cursor: pointer; transition: background 0.15s; position: relative; }
-  .pipe-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
-  .pipe-step:last-child { border-right: 1px solid var(--border); border-radius: 0 var(--radius) var(--radius) 0; }
-  .pipe-step:hover { background: var(--bg); }
-  .pipe-step.active { background: var(--amber-bg); border-color: var(--amber-border); }
-  .pipe-step.active + .pipe-step { border-left-color: var(--amber-border); }
-  .pipe-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-faint); margin-bottom: 4px; }
-  .pipe-tool { font-size: 10px; font-weight: 500; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px; display: inline-block; }
-  .pt-nb { background: var(--teal-bg); color: var(--teal-text); }
-  .pt-cl { background: var(--purple-bg); color: var(--purple-text); }
-  .pt-dash { background: var(--green-bg); color: var(--green-text); }
-  .pt-pub { background: var(--amber-bg); color: var(--amber-text); }
-  .pipe-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
-  .pipe-arrow { display: flex; align-items: center; padding: 0 2px; color: var(--text-faint); font-size: 14px; flex-shrink: 0; margin-bottom: 0; }
+      --text: #191a17;
+      --text-soft: #625f58;
+      --text-faint: #918d84;
+      --text-inverse: #f8f6f0;
 
-  /* STEP DETAIL CARDS */
-  .step-detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; display: none; }
-  .step-detail.active { display: block; }
-  .step-detail-header { padding: 16px 18px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  .sdh-left { flex: 1; }
-  .sdh-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-faint); margin-bottom: 4px; }
-  .sdh-title { font-size: 17px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-  .sdh-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
-  .sdh-desc b { font-weight: 500; color: var(--text); }
-  .tool-badge { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
-  .tb-nb { background: var(--teal-bg); color: var(--teal-text); }
-  .tb-cl { background: var(--purple-bg); color: var(--purple-text); }
-  .tb-dash { background: var(--green-bg); color: var(--green-text); }
-  .tb-pub { background: var(--amber-bg); color: var(--amber-text); }
+      --border: #e4e0d7;
+      --border-strong: #c9c3b8;
 
-  /* ACTION ROWS */
-  .action-row { display: flex; gap: 10px; padding: 12px 18px; border-bottom: 0.5px solid var(--border); align-items: flex-start; }
-  .action-row:last-child { border-bottom: none; }
-  .action-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-  .action-icon svg { width: 13px; height: 13px; }
-  .ai-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .ai-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .ai-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .ai-green { background: var(--green-bg); color: var(--green-text); }
-  .ai-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .action-content { flex: 1; }
-  .action-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .action-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .action-desc b { font-weight: 500; color: var(--text); }
+      --blue-bg: #eaf2fb;
+      --blue: #175a94;
+      --blue-border: #bad2eb;
 
-  /* COPY AREA */
-  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 18px; background: var(--accent-bg); border-top: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
-  .copy-trigger:hover { background: var(--accent-border); }
-  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
-  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
-  .copy-hint b { font-weight: 500; opacity: 1; }
-  .copy-box { display: none; background: #f0f7ff; border-top: 1px solid var(--accent-border); }
-  .copy-box.open { display: block; }
-  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 18px; resize: none; line-height: 1.75; cursor: text; outline: none; }
-  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 18px 10px; font-size: 12px; color: var(--accent-text); }
-  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .copy-box-footer strong { font-weight: 500; }
+      --teal-bg: #e5f4ee;
+      --teal: #146247;
+      --teal-border: #addacb;
 
-  /* RESULT PREVIEW */
-  .result-box { margin: 12px 18px 16px; background: var(--bg); border-radius: var(--radius-sm); padding: 14px; }
-  .result-label { font-size: 10px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 8px; }
-  .result-items { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .result-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; }
-  .ri-tag { font-size: 10px; font-weight: 500; margin-bottom: 3px; }
-  .ri-val { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-  .tag-amber { color: var(--amber-text); }
-  .tag-teal { color: var(--teal-text); }
-  .tag-purple { color: var(--purple-text); }
-  .tag-green { color: var(--green-text); }
+      --purple-bg: #eeecfa;
+      --purple: #493992;
+      --purple-border: #cac4ed;
 
-  .tip-box { border-radius: var(--radius); padding: 11px 14px; font-size: 12px; line-height: 1.65; margin: 0 18px 14px; }
-  .tip-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .tip-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .tip-green { background: var(--green-bg); color: var(--green-text); }
-  .tip-purple { background: var(--purple-bg); color: var(--purple-text); }
-  .tip-box b { font-weight: 500; }
+      --amber-bg: #fbefd9;
+      --amber: #82500f;
+      --amber-border: #edcc91;
 
-  .nav-btns { display: flex; justify-content: space-between; padding: 12px 18px; border-top: 1px solid var(--border); }
-  .nav-btn { font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
-  .nav-btn:hover { background: var(--bg); color: var(--text); }
-  .nav-btn.primary { background: var(--amber-bg); color: var(--amber-text); border-color: var(--amber-border); }
-  .nav-btn.primary:hover { background: var(--amber-border); }
-  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+      --green-bg: #eaf3e4;
+      --green: #315b18;
+      --green-border: #c7ddb9;
 
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .pipeline { flex-direction: column; }
-    .pipe-step { border-right: 1px solid var(--border); border-bottom: none; border-radius: 0; min-width: unset; }
-    .pipe-step:first-child { border-radius: var(--radius) var(--radius) 0 0; }
-    .pipe-step:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); }
-    .result-items { grid-template-columns: 1fr; }
-    .copy-hint { display: none; }
-  }
-</style>
+      --coral-bg: #f9ebe6;
+      --coral: #8d3b22;
+      --coral-border: #edb49f;
+
+      --shadow-sm: 0 8px 24px rgba(28, 27, 23, 0.04);
+      --shadow-md: 0 18px 48px rgba(28, 27, 23, 0.07);
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 30px;
+
+      --page-width: 1180px;
+      --content-width: 860px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(234, 242, 251, 0.75), transparent 28rem),
+        radial-gradient(circle at 90% 12%, rgba(229, 244, 238, 0.65), transparent 26rem),
+        var(--page-bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    ::selection {
+      background: var(--purple-border);
+      color: var(--text);
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(23, 90, 148, 0.32);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      transform: translateY(-150%);
+      transition: transform 0.2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page-shell {
+      width: min(calc(100% - 32px), var(--page-width));
+      margin: 0 auto;
+      padding: 18px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      margin-bottom: 24px;
+      padding: 10px 12px 10px 18px;
+      border: 1px solid rgba(228, 224, 215, 0.9);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .brand-mark svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topnav a {
+      padding: 8px 10px;
+      border-radius: 9px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition:
+        color 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .topnav a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(251, 250, 247, 0.96)),
+        var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero::after {
+      position: absolute;
+      right: -90px;
+      bottom: -120px;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(199, 221, 185, 0.58), rgba(199, 221, 185, 0));
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-main {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(290px, 0.75fr);
+      gap: 40px;
+      padding: 54px 50px 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin-bottom: 19px;
+      padding: 7px 12px;
+      border: 1px solid var(--amber-border);
+      border-radius: 999px;
+      background: var(--amber-bg);
+      color: var(--amber);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 18px;
+      font-size: clamp(2.45rem, 6vw, 4.6rem);
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero-lead {
+      max-width: 740px;
+      margin-bottom: 25px;
+      color: var(--text-soft);
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      line-height: 1.72;
+    }
+
+    .hero-lead strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .button.primary {
+      border-color: var(--surface-dark);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hero-summary {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: start;
+      gap: 11px;
+    }
+
+    .summary-card {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.76);
+      backdrop-filter: blur(8px);
+    }
+
+    .summary-label {
+      margin-bottom: 5px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .hero-footer {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      background: rgba(251, 250, 247, 0.75);
+    }
+
+    .hero-stat {
+      min-height: 108px;
+      padding: 22px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child {
+      border-right: 0;
+    }
+
+    .hero-stat-number {
+      margin-bottom: 5px;
+      font-family: "DM Mono", monospace;
+      font-size: 23px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-stat-text {
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 72px;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      margin-bottom: 9px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin-bottom: 0;
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 1.06;
+    }
+
+    .section-intro {
+      max-width: 690px;
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .value-card {
+      min-height: 226px;
+      padding: 23px;
+    }
+
+    .icon-box {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 28px;
+      border-radius: 13px;
+    }
+
+    .icon-box svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .tone-teal {
+      border-color: var(--teal-border);
+      background: var(--teal-bg);
+      color: var(--teal);
+    }
+
+    .tone-purple {
+      border-color: var(--purple-border);
+      background: var(--purple-bg);
+      color: var(--purple);
+    }
+
+    .tone-green {
+      border-color: var(--green-border);
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .tone-amber {
+      border-color: var(--amber-border);
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .tone-blue {
+      border-color: var(--blue-border);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .tone-coral {
+      border-color: var(--coral-border);
+      background: var(--coral-bg);
+      color: var(--coral);
+    }
+
+    .card-label {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .value-card h3 {
+      margin-bottom: 8px;
+      font-size: 20px;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .value-card p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 14px;
+      line-height: 1.68;
+    }
+
+    .architecture {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .architecture-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-items: stretch;
+      padding: 24px;
+    }
+
+    .architecture-node {
+      display: flex;
+      min-height: 170px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface-soft);
+    }
+
+    .architecture-node.source {
+      grid-column: span 2;
+    }
+
+    .architecture-node.engine {
+      grid-column: span 2;
+    }
+
+    .architecture-node.output {
+      grid-column: span 2;
+    }
+
+    .architecture-arrow {
+      display: grid;
+      place-items: center;
+      color: var(--text-faint);
+    }
+
+    .architecture-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .node-number {
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .node-tool {
+      margin-bottom: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .architecture-node h3 {
+      margin-bottom: 6px;
+      font-size: 20px;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+
+    .architecture-node p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.58;
+    }
+
+    .architecture-footer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .architecture-meta {
+      padding: 16px 18px;
+      border-right: 1px solid var(--border);
+    }
+
+    .architecture-meta:last-child {
+      border-right: 0;
+    }
+
+    .architecture-meta span {
+      display: block;
+    }
+
+    .meta-k {
+      margin-bottom: 4px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .meta-v {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .workflow-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .workflow-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .workflow-tab {
+      position: relative;
+      min-height: 116px;
+      padding: 18px;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-soft);
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background 0.18s ease,
+        color 0.18s ease;
+    }
+
+    .workflow-tab:last-child {
+      border-right: 0;
+    }
+
+    .workflow-tab:hover {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .workflow-tab[aria-selected="true"] {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .workflow-tab[aria-selected="true"]::after {
+      position: absolute;
+      right: 18px;
+      bottom: -1px;
+      left: 18px;
+      height: 3px;
+      border-radius: 4px 4px 0 0;
+      background: var(--amber);
+      content: "";
+    }
+
+    .tab-number {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .tab-tool {
+      display: inline-flex;
+      margin-bottom: 7px;
+      padding: 3px 7px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .tab-title {
+      display: block;
+      max-width: 170px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .workflow-progress {
+      height: 4px;
+      background: var(--border);
+    }
+
+    .workflow-progress-bar {
+      width: 25%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber), #d79b3e);
+      transition: width 0.24s ease;
+    }
+
+    .workflow-panel {
+      display: none;
+    }
+
+    .workflow-panel.active {
+      display: block;
+      animation: panel-in 0.24s ease;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      padding: 28px 30px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-overline {
+      margin-bottom: 7px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+
+    .panel-header h3 {
+      margin-bottom: 8px;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      letter-spacing: -0.035em;
+      line-height: 1.12;
+    }
+
+    .panel-header p {
+      max-width: 760px;
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 14px;
+      line-height: 1.68;
+    }
+
+    .tool-pill {
+      align-self: start;
+      padding: 6px 10px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .panel-body {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(340px, 1.08fr);
+      gap: 24px;
+      padding: 25px 30px 30px;
+    }
+
+    .actions-list {
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .action-item {
+      display: grid;
+      grid-template-columns: 35px minmax(0, 1fr);
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-soft);
+    }
+
+    .action-number {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      border-radius: 11px;
+      background: var(--surface);
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      box-shadow: inset 0 0 0 1px var(--border);
+    }
+
+    .action-item h4 {
+      margin: 1px 0 4px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .action-item p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 12px;
+      line-height: 1.62;
+    }
+
+    .prompt-card {
+      overflow: hidden;
+      align-self: start;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #20211f;
+      color: #efede6;
+    }
+
+    .prompt-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      background: #191a18;
+    }
+
+    .prompt-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      color: #cbc7bd;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .prompt-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .prompt-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #5a5a55;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 32px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #efede6;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+    }
+
+    .copy-button:hover {
+      border-color: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .copy-button svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .prompt-content {
+      max-height: 480px;
+      overflow: auto;
+      padding: 18px;
+      color: #dcd8cf;
+      font-family: "DM Mono", monospace;
+      font-size: 12px;
+      line-height: 1.72;
+      white-space: pre-wrap;
+      scrollbar-color: #595a54 #20211f;
+      scrollbar-width: thin;
+    }
+
+    .prompt-note {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      color: #aaa69d;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .panel-callout {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 15px 17px;
+      border: 1px solid;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .panel-callout svg {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+    }
+
+    .panel-callout strong {
+      color: var(--text);
+    }
+
+    .panel-navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 30px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .panel-nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .panel-nav-button:hover {
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    .panel-nav-button.primary {
+      border-color: var(--surface-dark);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .panel-nav-button:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+    }
+
+    .output-card {
+      min-height: 202px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .output-index {
+      margin-bottom: 33px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .output-card h3 {
+      margin-bottom: 7px;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .output-card p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .quality-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+      gap: 16px;
+    }
+
+    .table-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .table-header {
+      padding: 20px 22px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table-header h3 {
+      margin-bottom: 5px;
+      font-size: 20px;
+      letter-spacing: -0.025em;
+    }
+
+    .table-header p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+      color: var(--text-faint);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-soft);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td:first-child {
+      width: 28%;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .checklist-card {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .checklist-card h3 {
+      margin-bottom: 7px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .checklist-card > p {
+      margin-bottom: 20px;
+      color: #bab7ae;
+      font-size: 13px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 9px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      color: #dedbd2;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .check-item:last-child {
+      border-bottom: 0;
+    }
+
+    .check-icon {
+      display: grid;
+      place-items: center;
+      width: 21px;
+      height: 21px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: rgba(199, 221, 185, 0.14);
+      color: #b9d9a6;
+    }
+
+    .check-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      margin-top: 72px;
+      padding: 38px;
+      border-radius: var(--radius-xl);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .closing::after {
+      position: absolute;
+      top: -110px;
+      right: -90px;
+      width: 330px;
+      height: 330px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(186, 210, 235, 0.2), transparent 68%);
+      content: "";
+    }
+
+    .closing-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(250px, 0.85fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .closing h2 {
+      max-width: 720px;
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    .closing p {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: #c9c6bd;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .closing-result {
+      padding: 19px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .closing-result-label {
+      margin-bottom: 7px;
+      color: #9e9b93;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .closing-result-value {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 4px 0;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 100;
+      max-width: min(360px, calc(100% - 36px));
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .hero-main {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-summary {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .architecture-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .architecture-node.source,
+      .architecture-node.engine,
+      .architecture-node.output {
+        grid-column: auto;
+      }
+
+      .architecture-arrow {
+        min-height: 26px;
+        transform: rotate(90deg);
+      }
+
+      .panel-body {
+        grid-template-columns: 1fr;
+      }
+
+      .output-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .quality-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell {
+        width: min(calc(100% - 20px), var(--page-width));
+        padding-top: 10px;
+      }
+
+      .topbar {
+        top: 6px;
+        min-height: 52px;
+        padding-left: 12px;
+      }
+
+      .brand-text {
+        display: none;
+      }
+
+      .topnav a {
+        padding: 7px 8px;
+        font-size: 11px;
+      }
+
+      .hero-main {
+        padding: 36px 24px 28px;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 13vw, 4rem);
+      }
+
+      .hero-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-footer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-stat {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-stat:nth-child(2) {
+        border-right: 0;
+      }
+
+      .hero-stat:nth-child(3),
+      .hero-stat:nth-child(4) {
+        border-bottom: 0;
+      }
+
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .architecture-footer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .architecture-meta:nth-child(2) {
+        border-right: 0;
+      }
+
+      .architecture-meta:nth-child(-n + 2) {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workflow-nav {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .workflow-tab {
+        min-height: 105px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workflow-tab:nth-child(2) {
+        border-right: 0;
+      }
+
+      .workflow-tab:nth-child(3),
+      .workflow-tab:nth-child(4) {
+        border-bottom: 0;
+      }
+
+      .panel-header {
+        grid-template-columns: 1fr;
+        padding: 23px 20px 19px;
+      }
+
+      .tool-pill {
+        width: fit-content;
+      }
+
+      .panel-body {
+        padding: 20px;
+      }
+
+      .panel-navigation {
+        padding: 14px 20px;
+      }
+
+      .output-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .closing {
+        padding: 28px 24px;
+      }
+
+      .closing-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topnav a:nth-child(2) {
+        display: none;
+      }
+
+      .hero-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-stat:nth-child(3) {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-stat:last-child {
+        border-bottom: 0;
+      }
+
+      .architecture-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .architecture-meta,
+      .architecture-meta:nth-child(2) {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .architecture-meta:last-child {
+        border-bottom: 0;
+      }
+
+      .workflow-nav {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-tab {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workflow-tab:nth-child(3) {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workflow-tab:last-child {
+        border-bottom: 0;
+      }
+
+      .tab-title {
+        max-width: none;
+      }
+
+      .panel-navigation {
+        flex-direction: column;
+      }
+
+      .panel-nav-button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page-shell {
+        width: 100%;
+        padding: 0;
+      }
+
+      .topbar,
+      .hero-actions,
+      .workflow-nav,
+      .workflow-progress,
+      .panel-navigation,
+      .copy-button,
+      .toast {
+        display: none !important;
+      }
+
+      .hero,
+      .card,
+      .architecture,
+      .workflow-shell,
+      .output-card,
+      .table-card,
+      .checklist-card,
+      .closing {
+        box-shadow: none;
+      }
+
+      .workflow-panel {
+        display: block !important;
+        break-inside: avoid;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .section,
+      .closing {
+        margin-top: 38px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="page">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header>
-    <div class="badge">IA Práctico — Flujo Avanzado</div>
-    <h1>Agente de Inteligencia Energética LATAM</h1>
-    <p class="subtitle">Un flujo de trabajo de 4 pasos que combina NotebookLM y Claude para construir un dashboard interactivo sobre energía en América Latina a partir de fuentes técnicas verificadas.</p>
-  </header>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h5l2-7 4 14 2-7h5"></path>
+          </svg>
+        </span>
+        <span class="brand-text">Inteligencia Energética LATAM</span>
+      </div>
 
-  <div class="overview">
-    <span class="pill p-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>NotebookLM</span>
-    <span class="pill p-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Claude</span>
-    <span class="pill p-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Dashboard interactivo</span>
-    <span class="pill p-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Publicable</span>
-  </div>
+      <nav class="topnav" aria-label="Navegación principal">
+        <a href="#arquitectura">Arquitectura</a>
+        <a href="#flujo">Flujo</a>
+        <a href="#resultado">Resultado</a>
+      </nav>
+    </header>
 
-  <!-- PIPELINE -->
-  <div class="section-label">Selecciona un paso para ver el detalle</div>
-  <div class="pipeline" id="pipeline">
-    <div class="pipe-step active" onclick="showStep(0)">
-      <div class="pipe-num">01</div>
-      <div class="pipe-tool pt-nb">NotebookLM</div>
-      <div class="pipe-title">Recolectar fuentes energéticas</div>
-    </div>
-    <div class="pipe-step" onclick="showStep(1)">
-      <div class="pipe-num">02</div>
-      <div class="pipe-tool pt-nb">NotebookLM</div>
-      <div class="pipe-title">Extraer datos cuantitativos</div>
-    </div>
-    <div class="pipe-step" onclick="showStep(2)">
-      <div class="pipe-num">03</div>
-      <div class="pipe-tool pt-cl">Claude</div>
-      <div class="pipe-title">Generar el dashboard</div>
-    </div>
-    <div class="pipe-step" onclick="showStep(3)">
-      <div class="pipe-num">04</div>
-      <div class="pipe-tool pt-pub">Publicar</div>
-      <div class="pipe-title">Compartir e incrustar</div>
-    </div>
-  </div>
+    <main id="contenido">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-main">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              IA Práctico · Flujo avanzado
+            </div>
 
-  <!-- STEP DETAILS -->
+            <h1 id="hero-title">De fuentes técnicas a un dashboard energético publicable.</h1>
 
-  <!-- STEP 0 -->
-  <div class="step-detail active" id="detail-0">
-    <div class="step-detail-header">
-      <div class="sdh-left">
-        <div class="sdh-num">Paso 01 — NotebookLM / Discover Sources</div>
-        <div class="sdh-title">Recolectar fuentes técnicas sobre energía en LATAM</div>
-        <div class="sdh-desc">Usas la función <b>Discover Sources</b> de NotebookLM para enviar al agente a navegar más de 100 sitios simultáneamente y traer reportes técnicos del BID, CEPAL, FMI, PwC, KPMG y otros organismos de alta autoridad.</div>
-      </div>
-      <span class="tool-badge tb-nb">NotebookLM</span>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Abre NotebookLM y crea un cuaderno nuevo</div>
-        <div class="action-desc">Ve a <b>notebooklm.google.com</b>, inicia sesión con tu cuenta de Google y haz clic en "Nuevo cuaderno". Dale un nombre como "Inteligencia Energética LATAM".</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Activa "Discover Sources"</div>
-        <div class="action-desc">En el panel de fuentes (lado izquierdo), busca el botón <b>Discover Sources</b> o el ícono de búsqueda web. Este es el modo agéntico que navega la web.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Copia y pega el prompt de recolección</div>
-        <div class="action-desc">Usa el botón de abajo para seleccionar el prompt, cópialo con <b>Ctrl+C</b> y pégalo en el campo de Discover Sources. El agente buscará 15 fuentes técnicas verificadas.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Importa las fuentes al cuaderno</div>
-        <div class="action-desc">Cuando el agente termine, verás una lista de fuentes con justificación técnica. Selecciona las más relevantes y haz clic en <b>Agregar al cuaderno</b>. Espera que se procesen.</div>
-      </div>
-    </div>
-    <div class="tip-box tip-amber" style="margin-top:0">
-      <b>Criterio de selección:</b> Prioriza fuentes con más de 15 páginas, metodología estadística y tablas de datos. Descarta artículos de opinión o noticias cortas — el prompt ya le indica esto al agente, pero conviene verificarlo.
-    </div>
-    <div class="copy-trigger" onclick="selectPrompt('p0')">
-      <div class="copy-trigger-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Seleccionar prompt de recolección para copiar
-      </div>
-      <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-    </div>
-    <div class="copy-box" id="box-p0">
-      <textarea id="ta-p0" rows="9" readonly>Actúa como un Analista de Infraestructura y Energía Senior para realizar un Deep Research sobre las alternativas y desafíos energéticos en América Latina ante el incremento de la demanda digital e industrial.
+            <p class="hero-lead">
+              Un flujo de cuatro pasos que combina <strong>NotebookLM</strong> y
+              <strong>Claude</strong> para investigar el sector energético de América
+              Latina, extraer datos cuantitativos y convertirlos en una experiencia
+              visual interactiva.
+            </p>
+
+            <div class="hero-actions">
+              <a class="button primary" href="#flujo">
+                Ver flujo completo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m9 18 6-6-6-6"></path>
+                </svg>
+              </a>
+
+              <a class="button" href="#prompts">
+                Ir a los prompts
+              </a>
+            </div>
+          </div>
+
+          <aside class="hero-summary" aria-label="Resumen del flujo">
+            <div class="summary-card">
+              <div class="summary-label">Entrada</div>
+              <div class="summary-value">Reportes, estudios y proyecciones técnicas sobre energía en LATAM.</div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Procesamiento</div>
+              <div class="summary-value">Investigación, selección de fuentes y extracción cuantitativa.</div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Salida</div>
+              <div class="summary-value">Dashboard interactivo con gráficos, KPIs y recomendaciones.</div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="hero-footer">
+          <div class="hero-stat">
+            <div class="hero-stat-number">04</div>
+            <div class="hero-stat-text">pasos operativos conectados de principio a fin</div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">15</div>
+            <div class="hero-stat-text">fuentes técnicas priorizadas en la etapa de investigación</div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">02</div>
+            <div class="hero-stat-text">herramientas principales: NotebookLM y Claude</div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">01</div>
+            <div class="hero-stat-text">resultado final compartible e incrustable</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="valor-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Resumen ejecutivo</div>
+            <h2 class="section-title" id="valor-title">Qué resuelve este agente</h2>
+          </div>
+
+          <p class="section-intro">
+            El valor no está en usar dos herramientas por separado. Está en conectar
+            investigación, extracción y visualización dentro de un proceso verificable,
+            donde cada salida se convierte en la entrada del paso siguiente.
+          </p>
+        </div>
+
+        <div class="value-grid">
+          <article class="card value-card">
+            <div class="icon-box tone-teal" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-teal">Investigación</span>
+            <h3>Fuentes con mayor rigor</h3>
+            <p>
+              Prioriza documentos técnicos, proyecciones económicas, estudios académicos
+              y reportes con metodología, tablas y datos cuantitativos.
+            </p>
+          </article>
+
+          <article class="card value-card">
+            <div class="icon-box tone-purple" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19V9"></path>
+                <path d="M10 19V5"></path>
+                <path d="M16 19v-7"></path>
+                <path d="M22 19V3"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-purple">Síntesis</span>
+            <h3>Datos listos para visualizar</h3>
+            <p>
+              Convierte respuestas extensas en bloques cuantitativos sobre generación,
+              renovables, demanda digital y proyecciones hacia 2030.
+            </p>
+          </article>
+
+          <article class="card value-card">
+            <div class="icon-box tone-green" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                <path d="M7 15v2"></path>
+                <path d="M12 11v6"></path>
+                <path d="M17 7v10"></path>
+              </svg>
+            </div>
+
+            <span class="card-label tone-green">Publicación</span>
+            <h3>Un recurso interactivo</h3>
+            <p>
+              Empaqueta los hallazgos en un dashboard con gráficos, KPIs y recomendaciones,
+              listo para compartir o incrustar.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="arquitectura" aria-labelledby="arquitectura-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Arquitectura del agente</div>
+            <h2 class="section-title" id="arquitectura-title">Tres capas, una cadena de valor</h2>
+          </div>
+
+          <p class="section-intro">
+            La arquitectura separa con claridad la búsqueda documental, el procesamiento
+            de información y la construcción del producto visual.
+          </p>
+        </div>
+
+        <div class="architecture">
+          <div class="architecture-grid">
+            <article class="architecture-node source">
+              <span class="node-number">01 · INPUT</span>
+
+              <div>
+                <div class="node-tool" style="color: var(--teal);">Fuentes</div>
+                <h3>Base documental</h3>
+                <p>
+                  Reportes técnicos, estudios, proyecciones, tesis y documentos de organismos
+                  de autoridad.
+                </p>
+              </div>
+            </article>
+
+            <div class="architecture-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </div>
+
+            <article class="architecture-node engine">
+              <span class="node-number">02 · ENGINE</span>
+
+              <div>
+                <div class="node-tool" style="color: var(--purple);">NotebookLM</div>
+                <h3>Investigación y extracción</h3>
+                <p>
+                  Descubre fuentes, procesa documentos y organiza los datos cuantitativos
+                  por bloques temáticos.
+                </p>
+              </div>
+            </article>
+
+            <div class="architecture-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </div>
+
+            <article class="architecture-node output">
+              <span class="node-number">03 · OUTPUT</span>
+
+              <div>
+                <div class="node-tool" style="color: var(--amber);">Claude</div>
+                <h3>Dashboard publicable</h3>
+                <p>
+                  Construye gráficos, KPIs, comparaciones y recomendaciones a partir de
+                  los datos extraídos.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="architecture-footer">
+            <div class="architecture-meta">
+              <span class="meta-k">Horizonte histórico</span>
+              <span class="meta-v">2020–2025</span>
+            </div>
+
+            <div class="architecture-meta">
+              <span class="meta-k">Proyecciones</span>
+              <span class="meta-v">2025–2030</span>
+            </div>
+
+            <div class="architecture-meta">
+              <span class="meta-k">Cobertura</span>
+              <span class="meta-v">América Latina</span>
+            </div>
+
+            <div class="architecture-meta">
+              <span class="meta-k">Entrega</span>
+              <span class="meta-v">URL o iframe</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="flujo" aria-labelledby="flujo-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Flujo operativo</div>
+            <h2 class="section-title" id="flujo-title">Cómo ejecutarlo de punta a punta</h2>
+          </div>
+
+          <p class="section-intro">
+            Selecciona un paso para consultar las acciones, copiar el prompt correspondiente
+            y continuar al siguiente punto del proceso.
+          </p>
+        </div>
+
+        <div class="workflow-shell" id="prompts">
+          <div class="workflow-nav" role="tablist" aria-label="Pasos del flujo">
+            <button
+              class="workflow-tab"
+              id="tab-0"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-0"
+              data-step="0"
+            >
+              <span class="tab-number">PASO 01</span>
+              <span class="tab-tool tone-teal">NotebookLM</span>
+              <span class="tab-title">Recolectar fuentes energéticas</span>
+            </button>
+
+            <button
+              class="workflow-tab"
+              id="tab-1"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-1"
+              data-step="1"
+              tabindex="-1"
+            >
+              <span class="tab-number">PASO 02</span>
+              <span class="tab-tool tone-teal">NotebookLM</span>
+              <span class="tab-title">Extraer datos cuantitativos</span>
+            </button>
+
+            <button
+              class="workflow-tab"
+              id="tab-2"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-2"
+              data-step="2"
+              tabindex="-1"
+            >
+              <span class="tab-number">PASO 03</span>
+              <span class="tab-tool tone-purple">Claude</span>
+              <span class="tab-title">Generar el dashboard</span>
+            </button>
+
+            <button
+              class="workflow-tab"
+              id="tab-3"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-3"
+              data-step="3"
+              tabindex="-1"
+            >
+              <span class="tab-number">PASO 04</span>
+              <span class="tab-tool tone-amber">Publicar</span>
+              <span class="tab-title">Compartir e incrustar</span>
+            </button>
+          </div>
+
+          <div
+            class="workflow-progress"
+            role="progressbar"
+            aria-label="Progreso del flujo"
+            aria-valuemin="1"
+            aria-valuemax="4"
+            aria-valuenow="1"
+          >
+            <div class="workflow-progress-bar"></div>
+          </div>
+
+          <section
+            class="workflow-panel active"
+            id="panel-0"
+            role="tabpanel"
+            aria-labelledby="tab-0"
+          >
+            <div class="panel-header">
+              <div>
+                <div class="panel-overline">PASO 01 · NOTEBOOKLM / DISCOVER SOURCES</div>
+                <h3>Recolectar fuentes técnicas sobre energía en LATAM</h3>
+                <p>
+                  Usa Discover Sources para localizar documentos técnicos, reportes de
+                  sostenibilidad, proyecciones económicas, tesis y estudios de organismos
+                  y universidades.
+                </p>
+              </div>
+
+              <span class="tool-pill tone-teal">NotebookLM</span>
+            </div>
+
+            <div class="panel-body">
+              <div class="actions-list">
+                <article class="action-item">
+                  <span class="action-number">01</span>
+                  <div>
+                    <h4>Crea un cuaderno nuevo</h4>
+                    <p>
+                      Abre NotebookLM, inicia sesión y crea un cuaderno llamado
+                      “Inteligencia Energética LATAM”.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">02</span>
+                  <div>
+                    <h4>Activa Discover Sources</h4>
+                    <p>
+                      En el panel de fuentes, abre la búsqueda web para iniciar la
+                      investigación documental.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">03</span>
+                  <div>
+                    <h4>Pega el prompt de recolección</h4>
+                    <p>
+                      El objetivo es obtener una selección inicial de 15 fuentes con una
+                      justificación técnica de su valor.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">04</span>
+                  <div>
+                    <h4>Revisa e importa</h4>
+                    <p>
+                      Prioriza documentos extensos, con metodología, tablas, datos o
+                      proyecciones. Después agrégalos al cuaderno.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <div class="prompt-card">
+                <div class="prompt-toolbar">
+                  <div class="prompt-title">
+                    <span class="prompt-dots" aria-hidden="true">
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                    </span>
+                    prompt-recoleccion.txt
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-0"
+                    aria-label="Copiar prompt de recolección"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+
+                <div class="prompt-content" id="prompt-0">Actúa como un Analista de Infraestructura y Energía Senior para realizar un Deep Research sobre las alternativas y desafíos energéticos en América Latina ante el incremento de la demanda digital e industrial.
 
 Estrategia de Rastreo y Fuentes:
 Localiza y prepara para importación documentos técnicos, reportes de sostenibilidad y proyecciones económicas publicados entre 2020 y 2026. Prioriza el anclaje de fuentes en organismos de alta autoridad como el BID, FMI, ONU (CEPAL), UNESCO, PwC, KPMG, Statista y el reporte anual de Atlantico VC. Incluye también tesis y estudios de observatorios energéticos y universidades líderes en la región.
@@ -243,121 +2010,258 @@ Disruptores Tecnológicos: Investiga el impacto positivo y negativo de la IA (ce
 Criterios de Calidad:
 Filtra exclusivamente fuentes con rigor metodológico (mínimo 15 páginas) y evita artículos de opinión o noticias de prensa general. El agente debe navegar por la web utilizando embeddings vectoriales para asegurar que los hallazgos sean técnicamente densos y contengan tablas de datos o proyecciones financieras.
 
-Resultado: Identifica las 15 fuentes más relevantes y presenta una breve justificación técnica de su valor antes de integrarlas al cuaderno.</textarea>
-      <div class="copy-box-footer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac)
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="nav-btn" disabled>← Anterior</button>
-      <button class="nav-btn primary" onclick="showStep(1)">Siguiente → Extraer datos</button>
-    </div>
-  </div>
+Resultado: Identifica las 15 fuentes más relevantes y presenta una breve justificación técnica de su valor antes de integrarlas al cuaderno.</div>
 
-  <!-- STEP 1 -->
-  <div class="step-detail" id="detail-1">
-    <div class="step-detail-header">
-      <div class="sdh-left">
-        <div class="sdh-num">Paso 02 — NotebookLM / Chat del cuaderno</div>
-        <div class="sdh-title">Extraer los datos cuantitativos de las fuentes</div>
-        <div class="sdh-desc">Con las fuentes ya importadas en tu cuaderno, cambias al <b>chat de NotebookLM</b> para pedirle que organice todos los datos numéricos relevantes. Este resultado es la materia prima que llevarás a Claude en el paso siguiente.</div>
-      </div>
-      <span class="tool-badge tb-nb">NotebookLM</span>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Cambia al chat del cuaderno</div>
-        <div class="action-desc">Una vez que todas las fuentes estén procesadas (verás una palomita verde junto a cada una), haz clic en el área de chat a la derecha del cuaderno para comenzar una conversación.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Copia y pega el prompt de extracción</div>
-        <div class="action-desc">Pega el prompt de abajo en el chat. NotebookLM analizará todas las fuentes importadas y organizará los datos cuantitativos en bloques temáticos.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Copia el resultado completo</div>
-        <div class="action-desc">Cuando NotebookLM entregue la respuesta con los datos organizados por bloques, <b>selecciona todo el texto y cópialo</b>. Este contenido lo pegarás en el prompt de Claude en el paso 3.</div>
-      </div>
-    </div>
-    <div class="tip-box tip-teal" style="margin-top:0">
-      <b>Consejo:</b> Si el resultado es muy extenso, pide a NotebookLM que lo divida: "Organiza los datos en bloques de: generación convencional, renovables, demanda digital y proyecciones 2030". Eso facilita el trabajo de Claude después.
-    </div>
-    <div class="copy-trigger" onclick="selectPrompt('p1')">
-      <div class="copy-trigger-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Seleccionar prompt de extracción para copiar
-      </div>
-      <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-    </div>
-    <div class="copy-box" id="box-p1">
-      <textarea id="ta-p1" rows="3" readonly>Recopila todos los puntos cuantitativos más relevantes organizados por bloques que nos ayude posteriormente a crear un panel con todos esos datos.</textarea>
-      <div class="copy-box-footer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac)
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="nav-btn" onclick="showStep(0)">← Recolectar fuentes</button>
-      <button class="nav-btn primary" onclick="showStep(2)">Siguiente → Generar dashboard</button>
-    </div>
-  </div>
+                <div class="prompt-note">
+                  Revisa manualmente la metodología y la calidad de cada fuente antes de importarla.
+                </div>
+              </div>
 
-  <!-- STEP 2 -->
-  <div class="step-detail" id="detail-2">
-    <div class="step-detail-header">
-      <div class="sdh-left">
-        <div class="sdh-num">Paso 03 — Claude</div>
-        <div class="sdh-title">Generar el dashboard interactivo</div>
-        <div class="sdh-desc">Abres Claude y pegas el prompt de dashboard <b>junto con el resultado que copiaste de NotebookLM</b>. Claude generará un artefacto interactivo con gráficos, KPIs y recomendaciones estratégicas basadas en los datos reales de las fuentes.</div>
-      </div>
-      <span class="tool-badge tb-cl">Claude</span>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Abre Claude en claude.ai</div>
-        <div class="action-desc">Ve a <b>claude.ai</b> e inicia una nueva conversación. No necesitas ninguna configuración especial — el prompt ya lleva toda la instrucción.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Copia el prompt de dashboard</div>
-        <div class="action-desc">Selecciona el prompt con el botón de abajo. Al pegarlo en Claude, <b>reemplaza el marcador</b> <code style="font-size:11px;background:var(--bg);padding:1px 5px;border-radius:4px">:: Coloca aquí el resultado ::</code> con el texto que copiaste de NotebookLM en el paso anterior.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Claude genera el artefacto automáticamente</div>
-        <div class="action-desc">Claude producirá un dashboard con gráficos interactivos de crecimiento, visualización de renovables vs. convencionales, niveles de adopción y KPIs. Revisa que los datos coincidan con tus fuentes.</div>
-      </div>
-    </div>
-    <div class="result-box">
-      <div class="result-label">El dashboard incluirá</div>
-      <div class="result-items">
-        <div class="result-item"><div class="ri-tag tag-amber">Gráficos interactivos</div><div class="ri-val">Tasas de crecimiento proyectadas por segmento energético</div></div>
-        <div class="result-item"><div class="ri-tag tag-teal">Tendencias</div><div class="ri-val">Automatización y transición hacia renovables en la región</div></div>
-        <div class="result-item"><div class="ri-tag tag-purple">Niveles de adopción</div><div class="ri-val">Solar, eólica y convencional por país en LATAM</div></div>
-        <div class="result-item"><div class="ri-tag tag-green">3 recomendaciones</div><div class="ri-val">Estrategias para empresas con transformación digital pendiente</div></div>
-      </div>
-    </div>
-    <div class="copy-trigger" onclick="selectPrompt('p2')">
-      <div class="copy-trigger-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Seleccionar prompt de dashboard para copiar
-      </div>
-      <span class="copy-hint">Luego <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-    </div>
-    <div class="copy-box" id="box-p2">
-      <textarea id="ta-p2" rows="10" readonly>Crear un panel interactivo que muestre los insights principales de los informes de outlook del sector de energía, específicamente transformación de la generación convencional hacia nuevas fuentes en Latinoamérica, y el gap existente con energías renovables como la energía solar y la energía eólica.
+              <div class="panel-callout tone-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 9v4"></path>
+                  <path d="M12 17h.01"></path>
+                  <path d="M10.3 2.9 1.8 17a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 2.9a2 2 0 0 0-3.4 0Z"></path>
+                </svg>
+
+                <div>
+                  <strong>Criterio de selección:</strong> prioriza fuentes de más de
+                  15 páginas, con metodología estadística y tablas de datos. Descarta
+                  artículos de opinión o noticias breves.
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-navigation">
+              <button class="panel-nav-button" type="button" disabled>
+                ← Anterior
+              </button>
+
+              <button class="panel-nav-button primary" type="button" data-go-step="1">
+                Siguiente · Extraer datos →
+              </button>
+            </div>
+          </section>
+
+          <section
+            class="workflow-panel"
+            id="panel-1"
+            role="tabpanel"
+            aria-labelledby="tab-1"
+            hidden
+          >
+            <div class="panel-header">
+              <div>
+                <div class="panel-overline">PASO 02 · NOTEBOOKLM / CHAT DEL CUADERNO</div>
+                <h3>Extraer los datos cuantitativos de las fuentes</h3>
+                <p>
+                  Con las fuentes procesadas, pide a NotebookLM que reúna y organice los
+                  datos numéricos. Esa respuesta será la materia prima del dashboard.
+                </p>
+              </div>
+
+              <span class="tool-pill tone-teal">NotebookLM</span>
+            </div>
+
+            <div class="panel-body">
+              <div class="actions-list">
+                <article class="action-item">
+                  <span class="action-number">01</span>
+                  <div>
+                    <h4>Confirma que las fuentes estén listas</h4>
+                    <p>
+                      Espera a que cada documento termine de procesarse antes de iniciar
+                      la extracción.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">02</span>
+                  <div>
+                    <h4>Abre el chat del cuaderno</h4>
+                    <p>
+                      Trabaja dentro del mismo notebook para que la respuesta se base en
+                      las fuentes incorporadas.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">03</span>
+                  <div>
+                    <h4>Pega el prompt de extracción</h4>
+                    <p>
+                      Solicita una organización por bloques que luego pueda convertirse
+                      en gráficos, KPIs y comparaciones.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">04</span>
+                  <div>
+                    <h4>Copia la respuesta completa</h4>
+                    <p>
+                      Conserva cifras, unidades, periodos, países y contexto. Llevarás
+                      todo ese contenido al paso 3.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <div class="prompt-card">
+                <div class="prompt-toolbar">
+                  <div class="prompt-title">
+                    <span class="prompt-dots" aria-hidden="true">
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                    </span>
+                    prompt-extraccion.txt
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-1"
+                    aria-label="Copiar prompt de extracción"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+
+                <div class="prompt-content" id="prompt-1">Recopila todos los puntos cuantitativos más relevantes organizados por bloques que nos ayude posteriormente a crear un panel con todos esos datos.</div>
+
+                <div class="prompt-note">
+                  Para respuestas extensas, organiza la salida por generación convencional,
+                  renovables, demanda digital y proyecciones 2030.
+                </div>
+              </div>
+
+              <div class="panel-callout tone-teal">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 16v-4"></path>
+                  <path d="M12 8h.01"></path>
+                </svg>
+
+                <div>
+                  <strong>Consejo:</strong> si el resultado es demasiado largo, pide que
+                  lo divida en bloques de generación convencional, renovables, demanda
+                  digital y proyecciones 2030.
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-navigation">
+              <button class="panel-nav-button" type="button" data-go-step="0">
+                ← Recolectar fuentes
+              </button>
+
+              <button class="panel-nav-button primary" type="button" data-go-step="2">
+                Siguiente · Generar dashboard →
+              </button>
+            </div>
+          </section>
+
+          <section
+            class="workflow-panel"
+            id="panel-2"
+            role="tabpanel"
+            aria-labelledby="tab-2"
+            hidden
+          >
+            <div class="panel-header">
+              <div>
+                <div class="panel-overline">PASO 03 · CLAUDE</div>
+                <h3>Generar el dashboard interactivo</h3>
+                <p>
+                  Combina el prompt de construcción con la respuesta obtenida en
+                  NotebookLM para producir gráficos, KPIs y recomendaciones.
+                </p>
+              </div>
+
+              <span class="tool-pill tone-purple">Claude</span>
+            </div>
+
+            <div class="panel-body">
+              <div class="actions-list">
+                <article class="action-item">
+                  <span class="action-number">01</span>
+                  <div>
+                    <h4>Abre una conversación nueva</h4>
+                    <p>
+                      Inicia una conversación en Claude para construir el dashboard a
+                      partir del material consolidado.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">02</span>
+                  <div>
+                    <h4>Copia el prompt del dashboard</h4>
+                    <p>
+                      Usa el bloque completo para conservar las instrucciones de gráficos,
+                      KPIs y recomendaciones.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">03</span>
+                  <div>
+                    <h4>Reemplaza el marcador</h4>
+                    <p>
+                      Sustituye el texto indicado por la respuesta cuantitativa que
+                      copiaste desde NotebookLM.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">04</span>
+                  <div>
+                    <h4>Valida el resultado</h4>
+                    <p>
+                      Comprueba que cifras, periodos y comparaciones coincidan con las
+                      fuentes antes de publicar.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <div class="prompt-card">
+                <div class="prompt-toolbar">
+                  <div class="prompt-title">
+                    <span class="prompt-dots" aria-hidden="true">
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                    </span>
+                    prompt-dashboard.txt
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-2"
+                    aria-label="Copiar prompt de dashboard"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+
+                <div class="prompt-content" id="prompt-2">Crear un panel interactivo que muestre los insights principales de los informes de outlook del sector de energía, específicamente transformación de la generación convencional hacia nuevas fuentes en Latinoamérica, y el gap existente con energías renovables como la energía solar y la energía eólica.
 
 El Dashboard debe incluir:
 1. Gráficos interactivos con tasas de crecimiento proyectadas por segmento
@@ -367,78 +2271,508 @@ El Dashboard debe incluir:
 
 Adjuntaré nuestros datos para compararlos con los benchmark del sector. Propón 3 recomendaciones estratégicas importantes para quienes aún tienen pendiente iniciar transformación digital en su empresa.
 
-:: Coloca aquí el resultado de la consulta en NotebookLM ::</textarea>
-      <div class="copy-box-footer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        Texto seleccionado — reemplaza <strong>:: Coloca aquí el resultado ::</strong> con los datos de NotebookLM antes de enviar
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="nav-btn" onclick="showStep(1)">← Extraer datos</button>
-      <button class="nav-btn primary" onclick="showStep(3)">Siguiente → Publicar</button>
-    </div>
+:: Coloca aquí el resultado de la consulta en NotebookLM ::</div>
+
+                <div class="prompt-note">
+                  Reemplaza el marcador final con el contenido completo obtenido en NotebookLM.
+                </div>
+              </div>
+
+              <div class="panel-callout tone-purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3v18h18"></path>
+                  <path d="m7 16 4-5 4 3 5-7"></path>
+                </svg>
+
+                <div>
+                  <strong>Salida esperada:</strong> gráficos de crecimiento, comparación
+                  entre fuentes convencionales y renovables, niveles de adopción, KPIs y
+                  tres recomendaciones estratégicas.
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-navigation">
+              <button class="panel-nav-button" type="button" data-go-step="1">
+                ← Extraer datos
+              </button>
+
+              <button class="panel-nav-button primary" type="button" data-go-step="3">
+                Siguiente · Publicar →
+              </button>
+            </div>
+          </section>
+
+          <section
+            class="workflow-panel"
+            id="panel-3"
+            role="tabpanel"
+            aria-labelledby="tab-3"
+            hidden
+          >
+            <div class="panel-header">
+              <div>
+                <div class="panel-overline">PASO 04 · PUBLICAR Y COMPARTIR</div>
+                <h3>Convertir el dashboard en un recurso público</h3>
+                <p>
+                  Empaqueta el resultado como artefacto, genera una URL pública y utiliza
+                  el código de incrustación cuando necesites integrarlo en otra plataforma.
+                </p>
+              </div>
+
+              <span class="tool-pill tone-amber">Publicar</span>
+            </div>
+
+            <div class="panel-body">
+              <div class="actions-list">
+                <article class="action-item">
+                  <span class="action-number">01</span>
+                  <div>
+                    <h4>Solicita el artefacto</h4>
+                    <p>
+                      En la misma conversación, pide a Claude que convierta el resultado
+                      en un artefacto.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">02</span>
+                  <div>
+                    <h4>Revisa el componente</h4>
+                    <p>
+                      Confirma que las visualizaciones funcionan y que la información se
+                      presenta con claridad.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">03</span>
+                  <div>
+                    <h4>Publica el artefacto</h4>
+                    <p>
+                      Usa la opción de compartir o publicar para generar el acceso al
+                      dashboard.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="action-item">
+                  <span class="action-number">04</span>
+                  <div>
+                    <h4>Comparte o incrusta</h4>
+                    <p>
+                      Utiliza la URL directa o el iframe disponible para Moodle o una
+                      página web.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <div class="prompt-card">
+                <div class="prompt-toolbar">
+                  <div class="prompt-title">
+                    <span class="prompt-dots" aria-hidden="true">
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                      <span class="prompt-dot"></span>
+                    </span>
+                    prompt-publicacion.txt
+                  </div>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-3"
+                    aria-label="Copiar prompt de publicación"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+
+                <div class="prompt-content" id="prompt-3">Genera un artefacto con este resultado</div>
+
+                <div class="prompt-note">
+                  Después de generar el artefacto, utiliza la opción de publicación para
+                  obtener la URL y el código de incrustación.
+                </div>
+              </div>
+
+              <div class="panel-callout tone-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m20 6-11 11-5-5"></path>
+                </svg>
+
+                <div>
+                  <strong>Resultado final:</strong> un dashboard interactivo con acceso
+                  propio, compartible e incrustable, construido a partir de fuentes
+                  técnicas seleccionadas.
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-navigation">
+              <button class="panel-nav-button" type="button" data-go-step="2">
+                ← Generar dashboard
+              </button>
+
+              <button class="panel-nav-button primary" type="button" data-go-step="0">
+                Reiniciar flujo ↻
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" id="resultado" aria-labelledby="resultado-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Entregable</div>
+            <h2 class="section-title" id="resultado-title">Qué debe contener el dashboard</h2>
+          </div>
+
+          <p class="section-intro">
+            La salida debe facilitar lectura ejecutiva sin perder trazabilidad. Los datos
+            visuales necesitan conservar su relación con los periodos, países y fuentes
+            utilizadas en el análisis.
+          </p>
+        </div>
+
+        <div class="output-grid">
+          <article class="output-card">
+            <div class="output-index">01 · GROWTH</div>
+            <h3>Tasas de crecimiento</h3>
+            <p>
+              Gráficos interactivos con proyecciones por segmento energético.
+            </p>
+          </article>
+
+          <article class="output-card">
+            <div class="output-index">02 · TRENDS</div>
+            <h3>Tendencias de transición</h3>
+            <p>
+              Evolución desde generación convencional hacia fuentes renovables.
+            </p>
+          </article>
+
+          <article class="output-card">
+            <div class="output-index">03 · ADOPTION</div>
+            <h3>Niveles de adopción</h3>
+            <p>
+              Comparaciones regionales de energía solar, eólica y convencional.
+            </p>
+          </article>
+
+          <article class="output-card">
+            <div class="output-index">04 · ACTION</div>
+            <h3>Recomendaciones</h3>
+            <p>
+              Tres acciones estratégicas para empresas con transformación digital pendiente.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="control-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Control de calidad</div>
+            <h2 class="section-title" id="control-title">Lo que debes verificar antes de publicar</h2>
+          </div>
+
+          <p class="section-intro">
+            Un dashboard atractivo no compensa una cifra mal interpretada. La validación
+            final debe concentrarse en consistencia, trazabilidad y claridad.
+          </p>
+        </div>
+
+        <div class="quality-layout">
+          <div class="table-card">
+            <div class="table-header">
+              <h3>Revisión por etapa</h3>
+              <p>Un control breve para evitar errores acumulativos entre herramientas.</p>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Etapa</th>
+                    <th>Revisar</th>
+                    <th>Señal de calidad</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>Fuentes</td>
+                    <td>Extensión, metodología, fecha, tablas y autoridad del emisor.</td>
+                    <td>Documentos técnicos con datos y proyecciones.</td>
+                  </tr>
+
+                  <tr>
+                    <td>Extracción</td>
+                    <td>Cifras, unidades, periodos, países y segmentación temática.</td>
+                    <td>Bloques cuantitativos comparables y comprensibles.</td>
+                  </tr>
+
+                  <tr>
+                    <td>Dashboard</td>
+                    <td>Correspondencia entre gráficos y contenido de las fuentes.</td>
+                    <td>Visualizaciones que no alteran ni mezclan los datos.</td>
+                  </tr>
+
+                  <tr>
+                    <td>Publicación</td>
+                    <td>Funcionamiento, legibilidad y visualización en distintos tamaños.</td>
+                    <td>URL o iframe usable sin perder contexto.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <aside class="checklist-card">
+            <h3>Checklist final</h3>
+            <p>Completa esta revisión antes de compartir el resultado.</p>
+
+            <div class="checklist">
+              <div class="check-item">
+                <span class="check-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="m20 6-11 11-5-5"></path>
+                  </svg>
+                </span>
+                <span>Las cifras coinciden con las fuentes procesadas.</span>
+              </div>
+
+              <div class="check-item">
+                <span class="check-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="m20 6-11 11-5-5"></path>
+                  </svg>
+                </span>
+                <span>Los periodos históricos y proyectados están diferenciados.</span>
+              </div>
+
+              <div class="check-item">
+                <span class="check-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="m20 6-11 11-5-5"></path>
+                  </svg>
+                </span>
+                <span>Las comparaciones regionales mantienen unidades consistentes.</span>
+              </div>
+
+              <div class="check-item">
+                <span class="check-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="m20 6-11 11-5-5"></path>
+                  </svg>
+                </span>
+                <span>Los gráficos son legibles en escritorio y móvil.</span>
+              </div>
+
+              <div class="check-item">
+                <span class="check-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="m20 6-11 11-5-5"></path>
+                  </svg>
+                </span>
+                <span>La URL o el iframe funcionan fuera de la conversación.</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-title">
+        <div class="closing-content">
+          <div>
+            <div class="section-kicker" style="color: #96938b;">Resultado del sistema</div>
+            <h2 id="closing-title">Una investigación técnica convertida en una herramienta visual.</h2>
+            <p>
+              El flujo termina cuando los datos dejan de ser una colección de documentos
+              y se convierten en un recurso claro, navegable y reutilizable.
+            </p>
+          </div>
+
+          <div class="closing-result">
+            <div class="closing-result-label">Entrega final</div>
+            <div class="closing-result-value">
+              Dashboard interactivo con gráficos, KPIs, tendencias, recomendaciones,
+              URL propia y opción de incrustación.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Agente de Inteligencia Energética LATAM</span>
+      <span>NotebookLM → Claude → Dashboard publicable</span>
+    </footer>
   </div>
 
-  <!-- STEP 3 -->
-  <div class="step-detail" id="detail-3">
-    <div class="step-detail-header">
-      <div class="sdh-left">
-        <div class="sdh-num">Paso 04 — Publicar y compartir</div>
-        <div class="sdh-title">Convertir el dashboard en un recurso público</div>
-        <div class="sdh-desc">Una vez que Claude entrega el dashboard, lo conviertes en un <b>artefacto publicable</b> con una URL propia. Puedes compartirlo como enlace o incrustarlo en Moodle, una presentación o cualquier página web.</div>
-      </div>
-      <span class="tool-badge tb-pub">Publicar</span>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Pide a Claude que genere el artefacto</div>
-        <div class="action-desc">En la misma conversación de Claude, envía el siguiente mensaje exacto: <b>"Genera un artefacto con este resultado"</b>. Claude empaquetará el dashboard como un componente interactivo independiente.</div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Publica el artefacto</div>
-        <div class="action-desc">En el panel del artefacto (lado derecho de Claude), haz clic en el botón <b>Publicar</b> o el ícono de compartir. Claude generará una URL pública con el formato <code style="font-size:11px;background:var(--bg);padding:1px 5px;border-radius:4px">claude.ai/public/artifacts/...</code></div>
-      </div>
-    </div>
-    <div class="action-row">
-      <div class="action-icon ai-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-      <div class="action-content">
-        <div class="action-title">Comparte el enlace o incrústalo</div>
-        <div class="action-desc">Copia la URL para compartirla directamente. Para incrustar en Moodle o una web, usa el código iframe que Claude también provee al publicar.</div>
-      </div>
-    </div>
-    <div class="tip-box tip-purple">
-      <b>Prompt exacto para este paso:</b> Una vez que Claude entregue el dashboard, envía en la misma conversación: <br><br>"Genera un artefacto con este resultado" <br><br>Luego usa el botón de publicar en el panel del artefacto para obtener la URL y el código de incrustación.
-    </div>
-    <div class="tip-box tip-green">
-      <b>Resultado final:</b> Un dashboard interactivo con URL propia, incrustable en cualquier plataforma, basado en fuentes técnicas verificadas del BID, CEPAL, McKinsey y otros organismos de autoridad sobre el sector energético en América Latina.
-    </div>
-    <div class="nav-btns">
-      <button class="nav-btn" onclick="showStep(2)">← Generar dashboard</button>
-      <button class="nav-btn primary" onclick="showStep(0)">Reiniciar flujo</button>
-    </div>
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    Prompt copiado al portapapeles.
   </div>
 
-</div>
-<script>
-function showStep(n) {
-  document.querySelectorAll('.pipe-step').forEach((s, i) => s.classList.toggle('active', i === n));
-  document.querySelectorAll('.step-detail').forEach((d, i) => d.classList.toggle('active', i === n));
-  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
-}
+  <script>
+    (() => {
+      "use strict";
 
-function selectPrompt(id) {
-  const box = document.getElementById('box-' + id);
-  const ta = document.getElementById('ta-' + id);
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
-}
-</script>
+      const tabs = Array.from(document.querySelectorAll(".workflow-tab"));
+      const panels = Array.from(document.querySelectorAll(".workflow-panel"));
+      const progress = document.querySelector(".workflow-progress");
+      const progressBar = document.querySelector(".workflow-progress-bar");
+      const toast = document.getElementById("toast");
+
+      let activeStep = 0;
+      let toastTimer;
+
+      function showStep(step, focusTab = false) {
+        const targetStep = Number(step);
+
+        if (
+          !Number.isInteger(targetStep) ||
+          targetStep < 0 ||
+          targetStep >= tabs.length
+        ) {
+          return;
+        }
+
+        activeStep = targetStep;
+
+        tabs.forEach((tab, index) => {
+          const isActive = index === targetStep;
+
+          tab.setAttribute("aria-selected", String(isActive));
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+
+        panels.forEach((panel, index) => {
+          const isActive = index === targetStep;
+
+          panel.classList.toggle("active", isActive);
+          panel.hidden = !isActive;
+        });
+
+        const progressPercent = ((targetStep + 1) / tabs.length) * 100;
+
+        progressBar.style.width = `${progressPercent}%`;
+        progress.setAttribute("aria-valuenow", String(targetStep + 1));
+
+        if (focusTab) {
+          tabs[targetStep].focus();
+        }
+      }
+
+      function showToast(message) {
+        window.clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add("visible");
+
+        toastTimer = window.setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2200);
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const temporaryTextarea = document.createElement("textarea");
+        temporaryTextarea.value = text;
+        temporaryTextarea.setAttribute("readonly", "");
+        temporaryTextarea.style.position = "fixed";
+        temporaryTextarea.style.opacity = "0";
+        temporaryTextarea.style.pointerEvents = "none";
+
+        document.body.appendChild(temporaryTextarea);
+        temporaryTextarea.select();
+
+        const copied = document.execCommand("copy");
+        temporaryTextarea.remove();
+
+        if (!copied) {
+          throw new Error("No se pudo copiar el contenido.");
+        }
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          showStep(index);
+        });
+
+        tab.addEventListener("keydown", (event) => {
+          let nextStep = activeStep;
+
+          if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+            nextStep = (activeStep + 1) % tabs.length;
+          } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+            nextStep = (activeStep - 1 + tabs.length) % tabs.length;
+          } else if (event.key === "Home") {
+            nextStep = 0;
+          } else if (event.key === "End") {
+            nextStep = tabs.length - 1;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          showStep(nextStep, true);
+        });
+      });
+
+      document.querySelectorAll("[data-go-step]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const step = Number(button.dataset.goStep);
+
+          showStep(step);
+
+          document
+            .querySelector(".workflow-shell")
+            .scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      document.querySelectorAll("[data-copy-target]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const targetId = button.dataset.copyTarget;
+          const target = document.getElementById(targetId);
+
+          if (!target) {
+            showToast("No se encontró el prompt.");
+            return;
+          }
+
+          const originalLabel = button.innerHTML;
+
+          try {
+            await copyText(target.textContent.trim());
+
+            button.textContent = "Copiado";
+            showToast("Prompt copiado al portapapeles.");
+
+            window.setTimeout(() => {
+              button.innerHTML = originalLabel;
+            }, 1800);
+          } catch (error) {
+            showToast("Selecciona el texto y cópialo manualmente.");
+          }
+        });
+      });
+
+      showStep(0);
+    })();
+  </script>
 </body>
 </html>
