@@ -1,422 +1,2879 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GEM + NotebookLM — Conexión nativa LOPDP</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --navy-bg: #e8eef8; --navy-text: #1e3a6e; --navy-border: #a8bfe0;
-    --coral-bg: #faeae5; --coral-text: #8c3318;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
-  .badge-navy { background: var(--navy-bg); color: var(--navy-text); }
-  .badge-teal { background: var(--teal-bg); color: var(--teal-text); }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 580px; }
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+  <meta
+    name="description"
+    content="Guía visual para conectar un Gem especializado en LOPDP de Ecuador con un cuaderno de NotebookLM como base de conocimiento dinámica."
+  >
 
-  /* INTRO BOX */
-  .intro-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
-  .intro-box b { font-weight: 500; color: var(--text); }
-  .intro-box-accent { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent-text); }
-  .intro-box-accent b { color: var(--accent-text); }
+  <title>Gem + NotebookLM — Sistema conectado para LOPDP</title>
 
-  /* ROLES */
-  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.75rem; }
-  .role-card { border-radius: var(--radius); padding: 14px 16px; border: 1px solid; }
-  .rc-gem { background: var(--accent-bg); border-color: var(--accent-border); }
-  .rc-nb { background: var(--teal-bg); border-color: var(--teal-border); }
-  .role-tool { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-  .rc-gem .role-tool { color: var(--accent-text); }
-  .rc-nb .role-tool { color: var(--teal-text); }
-  .role-name { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
-  .rc-gem .role-name { color: var(--accent-text); }
-  .rc-nb .role-name { color: var(--teal-text); }
-  .role-desc { font-size: 12px; line-height: 1.6; }
-  .rc-gem .role-desc { color: var(--accent-text); opacity: 0.85; }
-  .rc-nb .role-desc { color: var(--teal-text); opacity: 0.85; }
-  .role-items { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
-  .role-item { font-size: 11px; }
-  .rc-gem .role-item { color: var(--accent-text); }
-  .rc-nb .role-item { color: var(--teal-text); }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  /* PREREQUISITE */
-  .prereq-card { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 1.75rem; display: flex; gap: 12px; align-items: flex-start; }
-  .prereq-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--amber-text); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .prereq-icon svg { width: 14px; height: 14px; color: #fff; }
-  .prereq-text { font-size: 13px; color: var(--amber-text); line-height: 1.7; }
-  .prereq-text b { font-weight: 500; }
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
 
-  /* CONNECTION STEPS — featured */
-  .connect-steps { display: flex; flex-direction: column; gap: 0; margin-bottom: 1.75rem; }
-  .connect-step { background: var(--surface); border: 1px solid var(--border); border-top: none; padding: 0; overflow: hidden; }
-  .connect-step:first-child { border-top: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
-  .connect-step:last-child { border-radius: 0 0 var(--radius) var(--radius); }
-  .cs-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; user-select: none; }
-  .cs-header:hover { background: var(--bg); }
-  .cs-num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-bg); color: var(--accent-text); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .cs-num.highlight { background: var(--accent-text); color: #fff; }
-  .cs-meta { flex: 1; }
-  .cs-title { font-size: 14px; font-weight: 500; color: var(--text); }
-  .cs-where { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
-  .chevron { width: 16px; height: 16px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
-  .chevron.open { transform: rotate(180deg); }
-  .cs-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px; }
-  .cs-body.open { display: block; }
-  .cs-actions { display: flex; flex-direction: column; gap: 9px; }
-  .cs-action { display: flex; gap: 10px; align-items: flex-start; }
-  .cs-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-text); flex-shrink: 0; margin-top: 7px; }
-  .cs-text { font-size: 13px; color: var(--text-muted); line-height: 1.65; flex: 1; }
-  .cs-text b { font-weight: 500; color: var(--text); }
-  .cs-text code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--bg); padding: 1px 6px; border-radius: 4px; color: var(--text); }
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-  /* OPTIONS MENU MOCK */
-  .options-mock { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin: 10px 0; max-width: 260px; }
-  .opt-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 0.5px solid var(--border); font-size: 12px; color: var(--text-muted); }
-  .opt-item:last-child { border-bottom: none; }
-  .opt-item.selected { background: var(--accent-bg); color: var(--accent-text); font-weight: 500; }
-  .opt-icon { width: 16px; height: 16px; border-radius: 3px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .opt-icon svg { width: 10px; height: 10px; }
-  .oi-gray { background: var(--border); color: var(--text-faint); }
-  .oi-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .oi-teal { background: var(--teal-bg); color: var(--teal-text); }
+    :root {
+      --page-bg: #f5f4ef;
+      --surface: #ffffff;
+      --surface-soft: #faf9f6;
+      --surface-muted: #f0eee8;
+      --surface-dark: #171917;
 
-  .cs-tip { border-radius: var(--radius-sm); padding: 9px 12px; margin-top: 10px; font-size: 12px; line-height: 1.6; }
-  .ct-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .ct-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .ct-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .ct-green { background: var(--green-bg); color: var(--green-text); }
-  .cs-tip b { font-weight: 500; }
+      --text: #191a17;
+      --text-soft: #625f58;
+      --text-faint: #918d84;
+      --text-inverse: #f7f5ef;
 
-  /* FLOW DIAGRAM */
-  .flow-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; }
-  .flow-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 1rem; }
-  .flow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .flow-node { font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: var(--radius-sm); white-space: nowrap; }
-  .fn-gem { background: var(--accent-bg); color: var(--accent-text); }
-  .fn-nb { background: var(--teal-bg); color: var(--teal-text); }
-  .fn-doc { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
-  .fn-out { background: var(--green-bg); color: var(--green-text); }
-  .flow-arrow { font-size: 14px; color: var(--text-faint); }
-  .flow-label { font-size: 11px; color: var(--text-faint); padding-left: 4px; margin-bottom: 12px; }
+      --border: #e3dfd6;
+      --border-strong: #c8c1b5;
 
-  /* HOW TO USE */
-  .use-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
-  .use-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; cursor: pointer; user-select: none; }
-  .use-header:hover { background: var(--bg); }
-  .use-circle { width: 28px; height: 28px; border-radius: 50%; background: var(--teal-bg); color: var(--teal-text); font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .use-meta { flex: 1; }
-  .use-title { font-size: 14px; font-weight: 500; color: var(--text); }
-  .use-sub { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
-  .use-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px; font-size: 13px; color: var(--text-muted); line-height: 1.75; }
-  .use-body.open { display: block; }
-  .use-body b { font-weight: 500; color: var(--text); }
-  .use-body code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--bg); padding: 2px 7px; border-radius: 4px; color: var(--text); display: block; margin: 6px 0; line-height: 1.6; }
+      --blue-bg: #eaf2fb;
+      --blue: #175b96;
+      --blue-border: #b9d2ec;
 
-  /* GROWTH */
-  .growth-list { display: flex; flex-direction: column; gap: 8px; }
-  .growth-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; display: flex; gap: 12px; align-items: flex-start; }
-  .growth-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .growth-icon svg { width: 13px; height: 13px; }
-  .gi-teal { background: var(--teal-bg); color: var(--teal-text); }
-  .gi-amber { background: var(--amber-bg); color: var(--amber-text); }
-  .gi-navy { background: var(--navy-bg); color: var(--navy-text); }
-  .gi-green { background: var(--green-bg); color: var(--green-text); }
-  .growth-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .growth-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .growth-desc b { font-weight: 500; color: var(--text); }
+      --teal-bg: #e5f4ee;
+      --teal: #156047;
+      --teal-border: #abd8c8;
 
-  @media (max-width: 520px) {
-    h1 { font-size: 22px; }
-    .roles { grid-template-columns: 1fr; }
-  }
-</style>
+      --purple-bg: #efedfa;
+      --purple: #49398f;
+      --purple-border: #cbc5ee;
+
+      --amber-bg: #fbefd9;
+      --amber: #80500f;
+      --amber-border: #ebca8f;
+
+      --green-bg: #eaf3e4;
+      --green: #315b18;
+      --green-border: #c6ddb7;
+
+      --coral-bg: #faebe6;
+      --coral: #8c3b22;
+      --coral-border: #edb49f;
+
+      --shadow-sm: 0 8px 26px rgba(30, 29, 25, 0.04);
+      --shadow-md: 0 18px 52px rgba(30, 29, 25, 0.07);
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 30px;
+
+      --page-width: 1160px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 92px;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(
+          circle at 2% 0,
+          rgba(234, 242, 251, 0.82),
+          transparent 30rem
+        ),
+        radial-gradient(
+          circle at 98% 10%,
+          rgba(229, 244, 238, 0.64),
+          transparent 29rem
+        ),
+        var(--page-bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    svg {
+      display: block;
+    }
+
+    ::selection {
+      background: var(--blue-border);
+      color: var(--text);
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(23, 91, 150, 0.3);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      text-decoration: none;
+      transform: translateY(-160%);
+      transition: transform 0.2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page-shell {
+      width: min(calc(100% - 32px), var(--page-width));
+      margin: 0 auto;
+      padding: 18px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      margin-bottom: 24px;
+      padding: 10px 12px 10px 18px;
+      border: 1px solid rgba(227, 223, 214, 0.9);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.87);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .brand-mark svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topnav a {
+      padding: 8px 10px;
+      border-radius: 9px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease;
+    }
+
+    .topnav a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 249, 246, 0.96)
+        ),
+        var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero::after {
+      position: absolute;
+      right: -100px;
+      bottom: -135px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle,
+          rgba(171, 216, 200, 0.48),
+          transparent 69%
+        );
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-main {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(290px, 0.78fr);
+      gap: 42px;
+      padding: 52px 50px 42px;
+    }
+
+    .eyebrows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 800px;
+      margin-bottom: 18px;
+      font-size: clamp(2.45rem, 6vw, 4.65rem);
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero-lead {
+      max-width: 760px;
+      margin-bottom: 25px;
+      color: var(--text-soft);
+      font-size: clamp(1rem, 2vw, 1.16rem);
+      line-height: 1.72;
+    }
+
+    .hero-lead strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .button.primary {
+      border-color: var(--surface-dark);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hero-summary {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: start;
+      gap: 11px;
+    }
+
+    .summary-card {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(8px);
+    }
+
+    .summary-label {
+      margin-bottom: 5px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .hero-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      background: rgba(250, 249, 246, 0.74);
+    }
+
+    .hero-stat {
+      min-height: 108px;
+      padding: 21px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child {
+      border-right: 0;
+    }
+
+    .hero-stat-number {
+      margin-bottom: 5px;
+      font-family: "DM Mono", monospace;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-stat-text {
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .tone-blue {
+      border-color: var(--blue-border);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .tone-teal {
+      border-color: var(--teal-border);
+      background: var(--teal-bg);
+      color: var(--teal);
+    }
+
+    .tone-purple {
+      border-color: var(--purple-border);
+      background: var(--purple-bg);
+      color: var(--purple);
+    }
+
+    .tone-amber {
+      border-color: var(--amber-border);
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .tone-green {
+      border-color: var(--green-border);
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .tone-coral {
+      border-color: var(--coral-border);
+      background: var(--coral-bg);
+      color: var(--coral);
+    }
+
+    .section {
+      margin-top: 72px;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      margin-bottom: 9px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin-bottom: 0;
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 1.06;
+    }
+
+    .section-intro {
+      max-width: 700px;
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .role-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 330px;
+      padding: 25px;
+      border: 1px solid;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .role-card::after {
+      position: absolute;
+      right: -70px;
+      bottom: -90px;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      content: "";
+      pointer-events: none;
+    }
+
+    .role-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 52px;
+    }
+
+    .role-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid currentColor;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.52);
+    }
+
+    .role-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .role-badge {
+      padding: 5px 9px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.46);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .role-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .role-tool {
+      margin-bottom: 8px;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .role-card h3 {
+      margin-bottom: 9px;
+      font-size: 25px;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+    }
+
+    .role-card p {
+      max-width: 470px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      line-height: 1.67;
+      opacity: 0.9;
+    }
+
+    .role-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .role-list-item {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .role-list-icon {
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .role-list-icon svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .prerequisite {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 15px;
+      align-items: center;
+      margin-top: 16px;
+      padding: 18px 20px;
+      border: 1px solid var(--amber-border);
+      border-radius: var(--radius-md);
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .prerequisite-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--amber);
+      color: #ffffff;
+    }
+
+    .prerequisite-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .prerequisite h3 {
+      margin-bottom: 3px;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .prerequisite p {
+      margin-bottom: 0;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .prerequisite-tag {
+      padding: 5px 9px;
+      border: 1px solid var(--amber-border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.48);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .architecture-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .architecture-main {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        52px
+        minmax(0, 1fr)
+        52px
+        minmax(0, 1fr);
+      align-items: stretch;
+      padding: 25px;
+    }
+
+    .architecture-node {
+      display: flex;
+      min-height: 206px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: var(--surface-soft);
+    }
+
+    .node-index {
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .node-label {
+      margin-bottom: 7px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .architecture-node h3 {
+      margin-bottom: 7px;
+      font-size: 20px;
+      letter-spacing: -0.027em;
+      line-height: 1.14;
+    }
+
+    .architecture-node p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .architecture-arrow {
+      display: grid;
+      place-items: center;
+      color: var(--text-faint);
+    }
+
+    .architecture-arrow svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .architecture-footer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .architecture-meta {
+      padding: 17px 20px;
+      border-right: 1px solid var(--border);
+    }
+
+    .architecture-meta:last-child {
+      border-right: 0;
+    }
+
+    .meta-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .steps-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .steps-progress {
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .steps-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .small-button {
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--text-soft);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        border-color 0.16s ease,
+        color 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .small-button:hover {
+      border-color: var(--border-strong);
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .steps-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    details.step {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    details.step:last-child {
+      border-bottom: 0;
+    }
+
+    details.step[open] {
+      background: var(--surface-soft);
+    }
+
+    details.step summary {
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr) auto 18px;
+      gap: 13px;
+      align-items: center;
+      padding: 17px 20px;
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.16s ease;
+    }
+
+    details.step summary:hover {
+      background: var(--surface-soft);
+    }
+
+    details.step summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--blue-border);
+      border-radius: 13px;
+      background: var(--blue-bg);
+      color: var(--blue);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .step.is-key .step-number {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #ffffff;
+    }
+
+    .step-title {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .step-location {
+      display: block;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .step-status {
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text-faint);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .step.is-key .step-status {
+      border-color: var(--blue-border);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .summary-chevron {
+      width: 17px;
+      height: 17px;
+      color: var(--text-faint);
+      transition: transform 0.2s ease;
+    }
+
+    details[open] .summary-chevron {
+      transform: rotate(180deg);
+    }
+
+    .step-content {
+      padding: 0 20px 22px 73px;
+    }
+
+    .action-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .action-item {
+      display: grid;
+      grid-template-columns: 8px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .action-dot {
+      width: 7px;
+      height: 7px;
+      margin-top: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .action-item strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .menu-mock {
+      width: min(100%, 310px);
+      margin-top: 15px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .menu-item {
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 45px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-soft);
+      font-size: 12px;
+    }
+
+    .menu-item:last-child {
+      border-bottom: 0;
+    }
+
+    .menu-item.selected {
+      background: var(--blue-bg);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .menu-icon {
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border-radius: 8px;
+      background: var(--surface-muted);
+      color: var(--text-faint);
+    }
+
+    .menu-item.selected .menu-icon {
+      background: rgba(255, 255, 255, 0.65);
+      color: var(--teal);
+    }
+
+    .menu-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .menu-hint {
+      color: var(--blue);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .step-callout {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      margin-top: 15px;
+      padding: 13px 14px;
+      border: 1px solid;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.62;
+    }
+
+    .step-callout svg {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+    }
+
+    .step-callout strong {
+      color: var(--text);
+    }
+
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .use-card {
+      display: flex;
+      min-height: 360px;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .use-card-header {
+      padding: 21px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .use-card-index {
+      display: block;
+      margin-bottom: 28px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+    }
+
+    .use-card h3 {
+      margin-bottom: 6px;
+      font-size: 19px;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .use-card-subtitle {
+      margin-bottom: 0;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .use-card-body {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .use-card-body > p {
+      margin-bottom: 16px;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.66;
+    }
+
+    .prompt-box {
+      position: relative;
+      margin-top: auto;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 13px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .prompt-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 10px 9px 13px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .prompt-label {
+      color: #a7a49c;
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 29px;
+      padding: 5px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-inverse);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .copy-button:hover {
+      background: rgba(255, 255, 255, 0.11);
+    }
+
+    .copy-button svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .prompt-text {
+      margin: 0;
+      padding: 14px;
+      color: #ddd9d0;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      line-height: 1.66;
+      white-space: pre-wrap;
+    }
+
+    .growth-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 13px;
+    }
+
+    .growth-card {
+      display: grid;
+      grid-template-columns: 43px minmax(0, 1fr);
+      gap: 14px;
+      min-height: 170px;
+      padding: 20px;
+    }
+
+    .growth-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border: 1px solid;
+      border-radius: 13px;
+    }
+
+    .growth-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .growth-card h3 {
+      margin: 2px 0 7px;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .growth-card p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .growth-card strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .maintenance-note {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      margin-top: 14px;
+      padding: 16px 18px;
+      border: 1px solid var(--teal-border);
+      border-radius: var(--radius-md);
+      background: var(--teal-bg);
+      color: var(--teal);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .maintenance-note svg {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+    }
+
+    .maintenance-note strong {
+      color: var(--text);
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      margin-top: 72px;
+      padding: 38px;
+      border-radius: var(--radius-xl);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .closing::after {
+      position: absolute;
+      top: -120px;
+      right: -90px;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle,
+          rgba(185, 210, 236, 0.21),
+          transparent 68%
+        );
+      content: "";
+    }
+
+    .closing-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+      gap: 30px;
+      align-items: center;
+    }
+
+    .closing h2 {
+      max-width: 730px;
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    .closing p {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: #c9c6bd;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .closing-card {
+      padding: 19px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .closing-card-label {
+      margin-bottom: 7px;
+      color: #9d9a92;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .closing-card-value {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.58;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 4px 0;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 100;
+      max-width: min(360px, calc(100% - 36px));
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 12px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1020px) {
+      .hero-main {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-summary {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .architecture-main {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .architecture-arrow {
+        min-height: 28px;
+        transform: rotate(90deg);
+      }
+
+      .use-cases-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .use-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell {
+        width: min(calc(100% - 20px), var(--page-width));
+        padding-top: 10px;
+      }
+
+      .topbar {
+        top: 6px;
+        min-height: 52px;
+        padding-left: 12px;
+      }
+
+      .brand-text {
+        display: none;
+      }
+
+      .topnav a {
+        padding: 7px 8px;
+        font-size: 11px;
+      }
+
+      .hero-main {
+        padding: 36px 24px 29px;
+      }
+
+      h1 {
+        font-size: clamp(2.35rem, 13vw, 4rem);
+      }
+
+      .hero-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-stat:last-child {
+        border-bottom: 0;
+      }
+
+      .roles-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role-card {
+        min-height: auto;
+      }
+
+      .prerequisite {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .prerequisite-tag {
+        display: none;
+      }
+
+      .architecture-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .architecture-meta {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .architecture-meta:last-child {
+        border-bottom: 0;
+      }
+
+      details.step summary {
+        grid-template-columns: 38px minmax(0, 1fr) 18px;
+        padding: 15px;
+      }
+
+      .step-number {
+        width: 38px;
+        height: 38px;
+      }
+
+      .step-status {
+        display: none;
+      }
+
+      .step-content {
+        padding: 0 15px 20px 65px;
+      }
+
+      .growth-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .closing {
+        padding: 28px 24px;
+      }
+
+      .closing-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topnav a:nth-child(2) {
+        display: none;
+      }
+
+      .steps-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .steps-actions {
+        width: 100%;
+      }
+
+      .small-button {
+        flex: 1;
+      }
+
+      .step-content {
+        padding-left: 15px;
+      }
+
+      .growth-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page-shell {
+        width: 100%;
+        padding: 0;
+      }
+
+      .topbar,
+      .hero-actions,
+      .steps-toolbar,
+      .copy-button,
+      .toast {
+        display: none !important;
+      }
+
+      .hero,
+      .card,
+      .role-card,
+      .architecture-shell,
+      .steps-shell,
+      .use-card,
+      .closing {
+        box-shadow: none;
+      }
+
+      details.step > * {
+        display: block;
+      }
+
+      details.step .step-content {
+        display: block !important;
+      }
+
+      .section,
+      .closing {
+        margin-top: 36px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="page">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header>
-    <div class="badges">
-      <span class="badge badge-navy">IA Práctico — Flujo avanzado</span>
-      <span class="badge badge-teal">LOPDP Ecuador</span>
-    </div>
-    <h1>Conectar el GEM de LOPDP con NotebookLM</h1>
-    <p class="subtitle">Cómo vincular el cuaderno de NotebookLM directamente al GEM como base de conocimiento dinámica, usando la integración nativa de Gemini.</p>
-  </header>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M4 7h6"></path>
+            <path d="M14 7h6"></path>
+            <path d="M10 7a4 4 0 0 1 4 4v2"></path>
+            <path d="M14 17h6"></path>
+            <path d="M4 17h6"></path>
+            <path d="M10 17a4 4 0 0 0 4-4v-2"></path>
+          </svg>
+        </span>
 
-  <div class="intro-box">
-    El <b>GEM es el protagonista</b>: tiene el prompt especializado, la lógica de auditoría y la base legal. NotebookLM es el <b>corpus dinámico</b> que le alimenta: resoluciones recientes, noticias, jurisprudencia y notas propias que puedes seguir añadiendo con el tiempo. Gemini permite conectar un cuaderno de NotebookLM <b>directamente como Knowledge del GEM</b> — sin copiar ni pegar nada. El GEM lo consulta en tiempo real cada vez que lo necesita.
-  </div>
-
-  <!-- ROL DE CADA HERRAMIENTA -->
-  <div class="section-label">El rol de cada herramienta</div>
-  <div class="roles">
-    <div class="role-card rc-gem">
-      <div class="role-tool">Gemini GEM — protagonista</div>
-      <div class="role-name">El analista especializado</div>
-      <div class="role-desc">Tiene el prompt y accede al cuaderno como Knowledge en tiempo real.</div>
-      <div class="role-items">
-        <div class="role-item">→ LOPDP + Reglamento (base fija)</div>
-        <div class="role-item">→ Protocolo de auditoría estructurado</div>
-        <div class="role-item">→ Cuaderno NotebookLM conectado</div>
-        <div class="role-item">→ Detecta brechas y cita artículos</div>
+        <span class="brand-text">Gem + NotebookLM</span>
       </div>
-    </div>
-    <div class="role-card rc-nb">
-      <div class="role-tool">NotebookLM — base contextual dinámica</div>
-      <div class="role-name">El corpus que crece</div>
-      <div class="role-desc">Se conecta al GEM como Knowledge. El GEM lo consulta directamente.</div>
-      <div class="role-items">
-        <div class="role-item">→ Resoluciones y criterios recientes</div>
-        <div class="role-item">→ Noticias y casos regulatorios</div>
-        <div class="role-item">→ Notas y análisis propios</div>
-        <div class="role-item">→ Fuentes añadidas progresivamente</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- PREREQUISITO -->
-  <div class="prereq-card">
-    <div class="prereq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-    <div class="prereq-text"><b>Antes de empezar:</b> el cuaderno de NotebookLM debe estar creado y con las fuentes cargadas. Ve a <b>notebooklm.google.com</b>, crea un cuaderno nuevo y agrega como fuentes la LOPDP, el Reglamento, las resoluciones de la Autoridad de Datos y cualquier otro documento relevante. Solo entonces puedes vincularlo al GEM.</div>
-  </div>
+      <nav class="topnav" aria-label="Navegación principal">
+        <a href="#arquitectura">Arquitectura</a>
+        <a href="#conexion">Conexión</a>
+        <a href="#usos">Casos de uso</a>
+      </nav>
+    </header>
 
-  <!-- PASOS DE CONEXIÓN -->
-  <div class="section-label">Cómo conectar el cuaderno al GEM — paso a paso</div>
-  <div class="connect-steps" id="connect-steps"></div>
+    <main id="contenido">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-main">
+          <div>
+            <div class="eyebrows">
+              <span class="eyebrow tone-blue">
+                <span class="eyebrow-dot" aria-hidden="true"></span>
+                IA Práctico · Flujo avanzado
+              </span>
 
-  <!-- DIAGRAMA -->
-  <div class="section-label">Cómo trabaja el sistema una vez conectado</div>
-  <div class="flow-diagram">
-    <div class="flow-title">El GEM consulta simultáneamente su Knowledge fijo y el cuaderno dinámico</div>
-    <div class="flow-row">
-      <span class="flow-node fn-doc">Documento a auditar</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-node fn-gem">GEM LOPDP</span>
-    </div>
-    <div class="flow-label">El usuario sube el contrato o política al GEM</div>
-    <div class="flow-row">
-      <span class="flow-node fn-gem">GEM LOPDP</span>
-      <span class="flow-arrow">↕</span>
-      <span class="flow-node fn-doc" style="border-color:var(--accent-border)">LOPDP + Reglamento</span>
-      <span class="flow-arrow">+</span>
-      <span class="flow-node fn-nb">Cuaderno NotebookLM</span>
-    </div>
-    <div class="flow-label">El GEM cruza el documento con la base legal fija y el corpus dinámico del cuaderno</div>
-    <div class="flow-row">
-      <span class="flow-node fn-gem">GEM LOPDP</span>
-      <span class="flow-arrow">→</span>
-      <span class="flow-node fn-out">Análisis jurídico enriquecido</span>
-    </div>
-    <div class="flow-label">El resultado combina rigor jurídico con el contexto regulatorio más actualizado del cuaderno</div>
-  </div>
+              <span class="eyebrow tone-teal">
+                <span class="eyebrow-dot" aria-hidden="true"></span>
+                LOPDP Ecuador
+              </span>
+            </div>
 
-  <!-- CÓMO USARLO -->
-  <div class="section-label">Cómo sacarle el máximo al sistema conectado</div>
-  <div id="use-cases"></div>
+            <h1 id="hero-title">
+              Conecta el Gem de LOPDP con un corpus dinámico en NotebookLM.
+            </h1>
 
-  <!-- CRECIMIENTO DEL CORPUS -->
-  <div class="section-label">Cómo mantener el cuaderno creciendo</div>
-  <div class="growth-list">
-    <div class="growth-item">
-      <div class="growth-icon gi-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-      <div>
-        <div class="growth-title">Añade resoluciones cuando se publican</div>
-        <div class="growth-desc">Cada vez que la DINARDAP emita una resolución o guía nueva, súbela al cuaderno. El GEM la incorporará en el próximo análisis <b>sin necesidad de reconfigurar nada</b>.</div>
-      </div>
-    </div>
-    <div class="growth-item">
-      <div class="growth-icon gi-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-      <div>
-        <div class="growth-title">Guarda noticias y análisis especializados</div>
-        <div class="growth-desc">Artículos de medios legales, análisis de firmas especializadas o casos relevantes en Ecuador. Pégalos como texto o sube el PDF directamente al cuaderno.</div>
-      </div>
-    </div>
-    <div class="growth-item">
-      <div class="growth-icon gi-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-      <div>
-        <div class="growth-title">Archiva notas de casos reales</div>
-        <div class="growth-desc">Tras atender una consultoría real, escribe una nota con el contexto y el criterio aplicado. Pégala como fuente de texto en el cuaderno — es el conocimiento tácito más valioso del sistema.</div>
-      </div>
-    </div>
-    <div class="growth-item">
-      <div class="growth-icon gi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-      <div>
-        <div class="growth-title">Vincula carpetas de Drive con fuentes recurrentes</div>
-        <div class="growth-desc">Si tienes una carpeta en Google Drive donde guardas los PDFs regulatorios, puedes vincularla directamente como fuente del cuaderno desde NotebookLM. Se actualiza sola cuando añades archivos a la carpeta.</div>
-      </div>
-    </div>
-  </div>
+            <p class="hero-lead">
+              El <strong>Gem conserva la lógica de auditoría</strong> y NotebookLM
+              aporta una base contextual que crece con resoluciones, casos,
+              noticias especializadas y notas internas.
+            </p>
 
-</div>
+            <div class="hero-actions">
+              <a class="button primary" href="#conexion">
+                Ver pasos de conexión
 
-<script>
-const connectSteps = [
-  {
-    num: 1,
-    title: "Abre el GEM en modo edición",
-    where: "gemini.google.com → Mis Gems",
-    highlight: false,
-    actions: [
-      { text: "Ve a <b>gemini.google.com</b> y en el menú lateral busca <b>Mis Gems</b>." },
-      { text: "Localiza el <b>Experto LOPDP Ecuador</b> y haz clic en el ícono de lápiz o en <b>Editar</b> para abrir el panel de configuración del GEM." }
-    ],
-    tip: null
-  },
-  {
-    num: 2,
-    title: "Ve a la sección Conocimiento",
-    where: "Panel de edición del GEM",
-    highlight: false,
-    actions: [
-      { text: "Dentro del panel de edición, desplázate hasta la sección <b>Conocimiento</b>. Verás el texto: <b>\"Agrega archivos para que tu Gem los use como referencia\"</b>." },
-      { text: "Haz clic en el signo <b>+</b> que aparece junto a esa sección." }
-    ],
-    tip: null
-  },
-  {
-    num: 3,
-    title: "Selecciona NotebookLM entre las opciones",
-    where: "Menú desplegable de la sección Conocimiento",
-    highlight: true,
-    actions: [
-      { text: "Al hacer clic en <b>+</b> aparecerá un menú con 4 opciones:" }
-    ],
-    menu: true,
-    tip: { text: "Selecciona <b>NotebookLM</b> — la cuarta opción del menú.", clase: "ct-blue" }
-  },
-  {
-    num: 4,
-    title: "Elige el cuaderno a conectar",
-    where: "Ventana emergente de NotebookLM",
-    highlight: true,
-    actions: [
-      { text: "Se abrirá una ventana emergente mostrando los cuadernos que tienes creados en tu cuenta de NotebookLM." },
-      { text: "Selecciona el cuaderno de LOPDP que preparaste previamente — el que tiene cargadas la ley, el reglamento, las resoluciones y tus fuentes adicionales." },
-      { text: "Si aún no tienes el cuaderno creado, cierra esta ventana, ve a <b>notebooklm.google.com</b>, créalo con las fuentes y vuelve a este paso." }
-    ],
-    tip: { text: "Solo puedes ver los cuadernos asociados a la misma cuenta de Google con la que estás usando Gemini.", clase: "ct-amber" }
-  },
-  {
-    num: 5,
-    title: "Haz clic en Actualizar",
-    where: "Panel de edición del GEM",
-    highlight: true,
-    actions: [
-      { text: "Después de seleccionar el cuaderno, haz clic en <b>Actualizar</b> en el panel de edición del GEM." },
-      { text: "El cuaderno de NotebookLM aparecerá listado en la sección Conocimiento junto a los demás archivos del GEM." },
-      { text: "A partir de ahora, el GEM tiene acceso al cuaderno como base contextual dinámica. <b>Cada vez que hagas una consulta, el GEM podrá consultar las fuentes del cuaderno automáticamente.</b>" }
-    ],
-    tip: { text: "No necesitas repetir este proceso. Si añades fuentes nuevas al cuaderno en NotebookLM, el GEM las tendrá disponibles en la próxima conversación sin que tengas que reconfigurar nada.", clase: "ct-green" }
-  }
-];
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="m9 18 6-6-6-6"></path>
+                </svg>
+              </a>
 
-const useCases = [
-  {
-    num: 1,
-    title: "Auditar un contrato con contexto regulatorio actualizado",
-    sub: "Uso principal del sistema conectado",
-    body: `Abre el GEM y sube el contrato o política que quieres auditar. Escribe:<br><br>
-<code>Realiza un análisis de cumplimiento según el protocolo estructurado sobre el documento adjunto. Utiliza también el contexto disponible en el cuaderno de NotebookLM conectado para complementar el análisis con resoluciones y criterios regulatorios recientes.</code>
-El GEM cruzará el documento con la LOPDP de su Knowledge y con las fuentes más recientes del cuaderno simultáneamente.`
-  },
-  {
-    num: 2,
-    title: "Consultar el estado de una normativa específica",
-    sub: "El cuaderno como fuente de actualización regulatoria",
-    body: `Si quieres saber si hay criterios recientes sobre un tema concreto antes de auditar un documento, pregunta directamente:<br><br>
-<code>¿Qué criterios recientes existen sobre transferencias internacionales de datos según las fuentes de mi cuaderno de NotebookLM?</code>
-El GEM consultará el cuaderno y presentará los puntos relevantes con referencia a las fuentes específicas donde los encontró.`
-  },
-  {
-    num: 3,
-    title: "Comparar un documento con auditorías anteriores",
-    sub: "Si guardaste análisis previos en el cuaderno",
-    body: `Si has ido guardando análisis anteriores del GEM como fuentes del cuaderno, puedes pedir comparaciones:<br><br>
-<code>Compara el nivel de cumplimiento de este contrato con los contratos de encargado que hemos auditado previamente y que están en el cuaderno.</code>
-El GEM usará el historial acumulado como referencia comparativa.`
-  }
-];
-
-document.getElementById('connect-steps').innerHTML = connectSteps.map(s => `
-  <div class="connect-step">
-    <div class="cs-header" onclick="toggleCS(${s.num})">
-      <div class="cs-num${s.highlight ? ' highlight' : ''}">${s.num}</div>
-      <div class="cs-meta">
-        <div class="cs-title">${s.title}</div>
-        <div class="cs-where">${s.where}</div>
-      </div>
-      <svg class="chevron" id="cs-chev-${s.num}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="cs-body" id="cs-body-${s.num}">
-      <div class="cs-actions">
-        ${s.actions.map(a => `
-          <div class="cs-action">
-            <div class="cs-dot"></div>
-            <div class="cs-text">${a.text}</div>
+              <a class="button" href="#usos">
+                Explorar casos de uso
+              </a>
+            </div>
           </div>
-        `).join('')}
-      </div>
-      ${s.menu ? `
-        <div class="options-mock">
-          <div class="opt-item"><div class="opt-icon oi-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>Subir archivos</div>
-          <div class="opt-item"><div class="opt-icon oi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>Agregar desde Drive</div>
-          <div class="opt-item"><div class="opt-icon oi-gray"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>Importar código</div>
-          <div class="opt-item selected"><div class="opt-icon oi-teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>NotebookLM ← este</div>
+
+          <aside class="hero-summary" aria-label="Resumen del sistema">
+            <div class="summary-card">
+              <div class="summary-label">Protagonista</div>
+              <div class="summary-value">
+                El Gem aplica el prompt, el protocolo y la lógica de auditoría.
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Corpus dinámico</div>
+              <div class="summary-value">
+                NotebookLM reúne las fuentes regulatorias y contextuales.
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Resultado</div>
+              <div class="summary-value">
+                Un análisis jurídico enriquecido con contexto acumulado.
+              </div>
+            </div>
+          </aside>
         </div>
-      ` : ''}
-      ${s.tip ? `<div class="cs-tip ${s.tip.clase}">${s.tip.text}</div>` : ''}
-    </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-number">02</div>
+            <div class="hero-stat-text">
+              herramientas con responsabilidades claramente separadas
+            </div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">05</div>
+            <div class="hero-stat-text">
+              pasos descritos para establecer la conexión
+            </div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">01</div>
+            <div class="hero-stat-text">
+              flujo integrado para auditoría y consulta regulatoria
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section"
+        id="arquitectura"
+        aria-labelledby="roles-title"
+      >
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Diseño del sistema</div>
+            <h2 class="section-title" id="roles-title">
+              Cada herramienta cumple una función distinta
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            El Gem no reemplaza a NotebookLM y NotebookLM no reemplaza al Gem.
+            La utilidad aparece cuando la lógica especializada se mantiene
+            separada del corpus documental que evoluciona.
+          </p>
+        </div>
+
+        <div class="roles-grid">
+          <article class="role-card tone-blue">
+            <div class="role-top">
+              <span class="role-icon" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 2 3 7l9 5 9-5-9-5Z"></path>
+                  <path d="m3 12 9 5 9-5"></path>
+                  <path d="m3 17 9 5 9-5"></path>
+                </svg>
+              </span>
+
+              <span class="role-badge">Protagonista</span>
+            </div>
+
+            <div class="role-content">
+              <div class="role-tool">Gemini Gem</div>
+              <h3>El analista especializado</h3>
+
+              <p>
+                Conserva el prompt, la lógica de auditoría y el protocolo que
+                define cómo debe responder el asistente.
+              </p>
+
+              <div class="role-list">
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>LOPDP y Reglamento como base fija.</span>
+                </div>
+
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Protocolo de auditoría estructurado.</span>
+                </div>
+
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Detección de brechas y referencias jurídicas.</span>
+                </div>
+
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Acceso al cuaderno conectado como conocimiento.</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="role-card tone-teal">
+            <div class="role-top">
+              <span class="role-icon" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2Z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7Z"></path>
+                </svg>
+              </span>
+
+              <span class="role-badge">Corpus dinámico</span>
+            </div>
+
+            <div class="role-content">
+              <div class="role-tool">NotebookLM</div>
+              <h3>La base contextual que crece</h3>
+
+              <p>
+                Reúne documentos y conocimiento contextual que puede seguir
+                ampliándose sin modificar la lógica principal del Gem.
+              </p>
+
+              <div class="role-list">
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Resoluciones y criterios recientes.</span>
+                </div>
+
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Noticias, casos y análisis especializados.</span>
+                </div>
+
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Notas y aprendizajes derivados de casos reales.</span>
+                </div>
+
+                <div class="role-list-item">
+                  <span class="role-list-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                    >
+                      <path d="m20 6-11 11-5-5"></path>
+                    </svg>
+                  </span>
+
+                  <span>Fuentes incorporadas progresivamente.</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="prerequisite">
+          <span class="prerequisite-icon" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4"></path>
+              <path d="M12 16h.01"></path>
+            </svg>
+          </span>
+
+          <div>
+            <h3>Antes de comenzar</h3>
+
+            <p>
+              El cuaderno debe estar creado y contener la LOPDP, el Reglamento,
+              las resoluciones y las fuentes adicionales que quieras utilizar.
+              Después podrás vincularlo al Gem.
+            </p>
+          </div>
+
+          <span class="prerequisite-tag">Prerrequisito</span>
+        </aside>
+      </section>
+
+      <section class="section" aria-labelledby="flujo-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Arquitectura operativa</div>
+            <h2 class="section-title" id="flujo-title">
+              Cómo circula la información
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            El documento que se audita entra por el Gem. El Gem combina su
+            conocimiento jurídico fijo con las fuentes contextuales del cuaderno
+            y produce una respuesta enriquecida.
+          </p>
+        </div>
+
+        <div class="architecture-shell">
+          <div class="architecture-main">
+            <article class="architecture-node">
+              <span class="node-index">01 · ENTRADA</span>
+
+              <div>
+                <div class="node-label" style="color: var(--text-faint);">
+                  Usuario
+                </div>
+
+                <h3>Documento a auditar</h3>
+
+                <p>
+                  Contrato, política de privacidad, manual, ficha técnica u otro
+                  archivo sometido a revisión.
+                </p>
+              </div>
+            </article>
+
+            <div class="architecture-arrow" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </div>
+
+            <article class="architecture-node">
+              <span class="node-index">02 · PROCESAMIENTO</span>
+
+              <div>
+                <div class="node-label" style="color: var(--blue);">
+                  Gem LOPDP
+                </div>
+
+                <h3>Lógica y análisis</h3>
+
+                <p>
+                  Aplica el protocolo, identifica actores, detecta brechas y
+                  estructura la respuesta.
+                </p>
+              </div>
+            </article>
+
+            <div class="architecture-arrow" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M5 12h14"></path>
+                <path d="m13 6 6 6-6 6"></path>
+              </svg>
+            </div>
+
+            <article class="architecture-node">
+              <span class="node-index">03 · CONTEXTO</span>
+
+              <div>
+                <div class="node-label" style="color: var(--teal);">
+                  NotebookLM
+                </div>
+
+                <h3>Corpus documental</h3>
+
+                <p>
+                  Aporta resoluciones, criterios, noticias, antecedentes y notas
+                  acumuladas en el cuaderno.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="architecture-footer">
+            <div class="architecture-meta">
+              <span class="meta-label">Base fija</span>
+              <span class="meta-value">LOPDP + Reglamento</span>
+            </div>
+
+            <div class="architecture-meta">
+              <span class="meta-label">Base dinámica</span>
+              <span class="meta-value">Fuentes del cuaderno</span>
+            </div>
+
+            <div class="architecture-meta">
+              <span class="meta-label">Salida</span>
+              <span class="meta-value">Análisis jurídico enriquecido</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section"
+        id="conexion"
+        aria-labelledby="conexion-title"
+      >
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Configuración</div>
+            <h2 class="section-title" id="conexion-title">
+              Conectar el cuaderno en cinco pasos
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            Abre cada paso para consultar las instrucciones. Los pasos centrales
+            de selección y vinculación aparecen destacados.
+          </p>
+        </div>
+
+        <div class="steps-toolbar">
+          <span class="steps-progress">05 pasos · configuración única</span>
+
+          <div class="steps-actions">
+            <button class="small-button" id="expand-steps" type="button">
+              Expandir todo
+            </button>
+
+            <button class="small-button" id="collapse-steps" type="button">
+              Contraer
+            </button>
+          </div>
+        </div>
+
+        <div class="steps-shell">
+          <details class="step" open>
+            <summary>
+              <span class="step-number">01</span>
+
+              <span>
+                <span class="step-title">Abre el Gem en modo edición</span>
+                <span class="step-location">
+                  gemini.google.com → Mis Gems
+                </span>
+              </span>
+
+              <span class="step-status">Preparación</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="step-content">
+              <div class="action-list">
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Ve a <strong>gemini.google.com</strong> y abre
+                    <strong>Mis Gems</strong> desde el menú lateral.
+                  </span>
+                </div>
+
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Localiza el <strong>Experto LOPDP Ecuador</strong> y
+                    selecciona el icono de edición para abrir su configuración.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="step">
+            <summary>
+              <span class="step-number">02</span>
+
+              <span>
+                <span class="step-title">
+                  Ve a la sección Conocimiento
+                </span>
+
+                <span class="step-location">
+                  Panel de edición del Gem
+                </span>
+              </span>
+
+              <span class="step-status">Knowledge</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="step-content">
+              <div class="action-list">
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Dentro del panel de edición, desplázate hasta la sección
+                    <strong>Conocimiento</strong>.
+                  </span>
+                </div>
+
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Localiza el control utilizado para agregar archivos o fuentes
+                    de referencia y selecciona el signo <strong>+</strong>.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="step is-key">
+            <summary>
+              <span class="step-number">03</span>
+
+              <span>
+                <span class="step-title">
+                  Selecciona NotebookLM entre las opciones
+                </span>
+
+                <span class="step-location">
+                  Menú de la sección Conocimiento
+                </span>
+              </span>
+
+              <span class="step-status">Paso clave</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="step-content">
+              <div class="action-list">
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Al abrir el menú de fuentes, identifica la opción
+                    <strong>NotebookLM</strong>.
+                  </span>
+                </div>
+              </div>
+
+              <div class="menu-mock" aria-label="Representación del menú">
+                <div class="menu-item">
+                  <span class="menu-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M12 3v12"></path>
+                      <path d="m7 8 5-5 5 5"></path>
+                      <path d="M5 21h14"></path>
+                    </svg>
+                  </span>
+
+                  <span>Subir archivos</span>
+                  <span></span>
+                </div>
+
+                <div class="menu-item">
+                  <span class="menu-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M3 7h6l2 3h10v9H3Z"></path>
+                    </svg>
+                  </span>
+
+                  <span>Agregar desde Drive</span>
+                  <span></span>
+                </div>
+
+                <div class="menu-item">
+                  <span class="menu-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="m8 9-4 3 4 3"></path>
+                      <path d="m16 9 4 3-4 3"></path>
+                    </svg>
+                  </span>
+
+                  <span>Importar código</span>
+                  <span></span>
+                </div>
+
+                <div class="menu-item selected">
+                  <span class="menu-icon" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2Z"></path>
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7Z"></path>
+                    </svg>
+                  </span>
+
+                  <span>NotebookLM</span>
+                  <span class="menu-hint">Seleccionar</span>
+                </div>
+              </div>
+
+              <div class="step-callout tone-blue">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 8v4"></path>
+                  <path d="M12 16h.01"></path>
+                </svg>
+
+                <span>
+                  Selecciona <strong>NotebookLM</strong> para continuar con la
+                  elección del cuaderno.
+                </span>
+              </div>
+            </div>
+          </details>
+
+          <details class="step is-key">
+            <summary>
+              <span class="step-number">04</span>
+
+              <span>
+                <span class="step-title">Elige el cuaderno a conectar</span>
+                <span class="step-location">
+                  Ventana de selección de NotebookLM
+                </span>
+              </span>
+
+              <span class="step-status">Paso clave</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="step-content">
+              <div class="action-list">
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Se mostrará una ventana con los cuadernos disponibles en tu
+                    cuenta de NotebookLM.
+                  </span>
+                </div>
+
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Selecciona el cuaderno que contiene la ley, el Reglamento,
+                    las resoluciones y las fuentes adicionales de LOPDP.
+                  </span>
+                </div>
+
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Si el cuaderno todavía no existe, créalo y carga las fuentes
+                    antes de continuar.
+                  </span>
+                </div>
+              </div>
+
+              <div class="step-callout tone-amber">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 9v4"></path>
+                  <path d="M12 17h.01"></path>
+                  <path d="M10.3 2.9 1.8 17a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 2.9a2 2 0 0 0-3.4 0Z"></path>
+                </svg>
+
+                <span>
+                  Utiliza la misma cuenta de Google en Gemini y NotebookLM para
+                  localizar el cuaderno correspondiente.
+                </span>
+              </div>
+            </div>
+          </details>
+
+          <details class="step is-key">
+            <summary>
+              <span class="step-number">05</span>
+
+              <span>
+                <span class="step-title">
+                  Guarda o actualiza la configuración
+                </span>
+
+                <span class="step-location">
+                  Panel de edición del Gem
+                </span>
+              </span>
+
+              <span class="step-status">Finalización</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="step-content">
+              <div class="action-list">
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Después de seleccionar el cuaderno, guarda o actualiza la
+                    configuración del Gem.
+                  </span>
+                </div>
+
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    Comprueba que el cuaderno aparezca en la sección
+                    <strong>Conocimiento</strong> junto con las demás fuentes.
+                  </span>
+                </div>
+
+                <div class="action-item">
+                  <span class="action-dot" aria-hidden="true"></span>
+
+                  <span>
+                    A partir de ese momento, el Gem podrá utilizar las fuentes
+                    del cuaderno durante sus análisis.
+                  </span>
+                </div>
+              </div>
+
+              <div class="step-callout tone-green">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="m20 6-11 11-5-5"></path>
+                </svg>
+
+                <span>
+                  <strong>Conexión completada:</strong> el sistema queda listo
+                  para trabajar con su base jurídica fija y el corpus del
+                  cuaderno.
+                </span>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="section" id="usos" aria-labelledby="usos-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Aplicación práctica</div>
+            <h2 class="section-title" id="usos-title">
+              Tres formas de utilizar el sistema conectado
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            Los siguientes prompts aprovechan la lógica del Gem y el contenido
+            acumulado en NotebookLM. Cada bloque se puede copiar directamente.
+          </p>
+        </div>
+
+        <div class="use-cases-grid">
+          <article class="use-card">
+            <header class="use-card-header">
+              <span class="use-card-index">01 · AUDITORÍA</span>
+
+              <h3>Auditar con contexto regulatorio</h3>
+
+              <p class="use-card-subtitle">
+                Uso principal del sistema conectado
+              </p>
+            </header>
+
+            <div class="use-card-body">
+              <p>
+                Adjunta el contrato o política al Gem y solicita que combine la
+                base legal fija con el contenido del cuaderno.
+              </p>
+
+              <div class="prompt-box">
+                <div class="prompt-toolbar">
+                  <span class="prompt-label">Prompt sugerido</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-auditoria"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-auditoria">Realiza un análisis de cumplimiento según el protocolo estructurado sobre el documento adjunto. Utiliza también el contexto disponible en el cuaderno de NotebookLM conectado para complementar el análisis con resoluciones y criterios regulatorios recientes.</pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="use-card">
+            <header class="use-card-header">
+              <span class="use-card-index">02 · CONSULTA</span>
+
+              <h3>Consultar criterios recientes</h3>
+
+              <p class="use-card-subtitle">
+                El cuaderno como fuente de actualización
+              </p>
+            </header>
+
+            <div class="use-card-body">
+              <p>
+                Formula una consulta concreta para revisar qué documentos del
+                cuaderno contienen criterios relacionados con un tema.
+              </p>
+
+              <div class="prompt-box">
+                <div class="prompt-toolbar">
+                  <span class="prompt-label">Prompt sugerido</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-criterios"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-criterios">¿Qué criterios recientes existen sobre transferencias internacionales de datos según las fuentes de mi cuaderno de NotebookLM?</pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="use-card">
+            <header class="use-card-header">
+              <span class="use-card-index">03 · COMPARACIÓN</span>
+
+              <h3>Comparar con casos previos</h3>
+
+              <p class="use-card-subtitle">
+                Utiliza análisis anteriores como referencia
+              </p>
+            </header>
+
+            <div class="use-card-body">
+              <p>
+                Cuando el cuaderno contenga análisis anteriores, pide al Gem que
+                identifique similitudes, diferencias y patrones.
+              </p>
+
+              <div class="prompt-box">
+                <div class="prompt-toolbar">
+                  <span class="prompt-label">Prompt sugerido</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-comparacion"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-comparacion">Compara el nivel de cumplimiento de este contrato con los contratos de encargado que hemos auditado previamente y que están en el cuaderno.</pre>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="crecimiento-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Mantenimiento</div>
+            <h2 class="section-title" id="crecimiento-title">
+              Cómo hacer crecer el corpus
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            El valor del sistema aumenta cuando el cuaderno se mantiene ordenado,
+            actualizado y conectado con la experiencia obtenida durante casos
+            reales.
+          </p>
+        </div>
+
+        <div class="growth-grid">
+          <article class="card growth-card">
+            <span class="growth-icon tone-teal" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+              </svg>
+            </span>
+
+            <div>
+              <h3>Añade nuevas resoluciones</h3>
+
+              <p>
+                Incorpora resoluciones o guías cuando sean publicadas para
+                mantener disponible el contexto regulatorio más reciente.
+              </p>
+            </div>
+          </article>
+
+          <article class="card growth-card">
+            <span class="growth-icon tone-amber" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"></path>
+                <path d="m22 6-10 7L2 6"></path>
+              </svg>
+            </span>
+
+            <div>
+              <h3>Guarda análisis especializados</h3>
+
+              <p>
+                Añade artículos, análisis jurídicos y casos relevantes como PDF,
+                texto o fuente documental.
+              </p>
+            </div>
+          </article>
+
+          <article class="card growth-card">
+            <span class="growth-icon tone-blue" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                <path d="M14 2v6h6"></path>
+              </svg>
+            </span>
+
+            <div>
+              <h3>Documenta aprendizajes internos</h3>
+
+              <p>
+                Después de cada caso, registra el contexto y el criterio aplicado.
+                Ese conocimiento tácito puede convertirse en una fuente útil.
+              </p>
+            </div>
+          </article>
+
+          <article class="card growth-card">
+            <span class="growth-icon tone-green" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+              </svg>
+            </span>
+
+            <div>
+              <h3>Organiza fuentes recurrentes</h3>
+
+              <p>
+                Mantén documentos regulatorios y materiales internos organizados
+                para evitar duplicados, versiones desactualizadas o referencias
+                ambiguas.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <aside class="maintenance-note">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+            <path d="M3 3v6h6"></path>
+          </svg>
+
+          <div>
+            <strong>Regla de mantenimiento:</strong> revisa periódicamente la
+            calidad, vigencia y procedencia de las fuentes. Un corpus más grande
+            no siempre es un corpus más útil.
+          </div>
+        </aside>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-title">
+        <div class="closing-content">
+          <div>
+            <div class="section-kicker" style="color: #98958d;">
+              Resultado del sistema
+            </div>
+
+            <h2 id="closing-title">
+              Lógica estable, conocimiento en evolución.
+            </h2>
+
+            <p>
+              El Gem mantiene el método de auditoría. NotebookLM concentra las
+              fuentes que cambian con el tiempo. La separación permite actualizar
+              el contexto sin reconstruir continuamente el asistente.
+            </p>
+          </div>
+
+          <div class="closing-card">
+            <div class="closing-card-label">Modelo operativo</div>
+
+            <div class="closing-card-value">
+              Documento → Gem especializado → base legal fija + corpus dinámico →
+              análisis jurídico enriquecido.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Gem + NotebookLM · Flujo LOPDP Ecuador</span>
+      <span>Lógica especializada + base contextual dinámica</span>
+    </footer>
   </div>
-`).join('');
 
-document.getElementById('use-cases').innerHTML = useCases.map(u => `
-  <div class="use-card">
-    <div class="use-header" onclick="toggleUC(${u.num})">
-      <div class="use-circle">${u.num}</div>
-      <div class="use-meta">
-        <div class="use-title">${u.title}</div>
-        <div class="use-sub">${u.sub}</div>
-      </div>
-      <svg class="chevron" id="uc-chev-${u.num}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    <div class="use-body" id="uc-body-${u.num}">${u.body}</div>
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    Prompt copiado al portapapeles.
   </div>
-`).join('');
 
-function toggleCS(n) {
-  const body = document.getElementById('cs-body-' + n);
-  const chev = document.getElementById('cs-chev-' + n);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.cs-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.cs-header .chevron').forEach(c => c.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
-}
+  <script>
+    (() => {
+      "use strict";
 
-function toggleUC(n) {
-  const body = document.getElementById('uc-body-' + n);
-  const chev = document.getElementById('uc-chev-' + n);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.use-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.use-header .chevron').forEach(c => c.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
-}
-</script>
+      const stepDetails = Array.from(
+        document.querySelectorAll("details.step")
+      );
+
+      const expandButton = document.getElementById("expand-steps");
+      const collapseButton = document.getElementById("collapse-steps");
+      const toast = document.getElementById("toast");
+
+      let toastTimer;
+
+      function showToast(message) {
+        window.clearTimeout(toastTimer);
+
+        toast.textContent = message;
+        toast.classList.add("visible");
+
+        toastTimer = window.setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2200);
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.pointerEvents = "none";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        const copied = document.execCommand("copy");
+
+        textarea.remove();
+
+        if (!copied) {
+          throw new Error("No se pudo copiar el texto.");
+        }
+      }
+
+      expandButton.addEventListener("click", () => {
+        stepDetails.forEach((detail) => {
+          detail.open = true;
+        });
+      });
+
+      collapseButton.addEventListener("click", () => {
+        stepDetails.forEach((detail) => {
+          detail.open = false;
+        });
+      });
+
+      document
+        .querySelectorAll("[data-copy-target]")
+        .forEach((button) => {
+          button.addEventListener("click", async () => {
+            const targetId = button.dataset.copyTarget;
+            const target = document.getElementById(targetId);
+
+            if (!target) {
+              showToast("No se encontró el prompt.");
+              return;
+            }
+
+            const originalContent = button.innerHTML;
+
+            try {
+              await copyText(target.textContent.trim());
+
+              button.textContent = "Copiado";
+              showToast("Prompt copiado al portapapeles.");
+
+              window.setTimeout(() => {
+                button.innerHTML = originalContent;
+              }, 1700);
+            } catch (error) {
+              showToast(
+                "No se pudo copiar. Selecciona el texto manualmente."
+              );
+            }
+          });
+        });
+    })();
+  </script>
 </body>
 </html>
