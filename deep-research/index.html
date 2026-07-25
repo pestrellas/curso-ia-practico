@@ -1,372 +1,2812 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prompts para Deep Research — IA Práctico</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f7f6f3; --surface: #ffffff; --border: #e4e2dc; --border-strong: #c8c5bc;
-    --text: #1a1917; --text-muted: #6b6860; --text-faint: #9e9b95;
-    --accent-bg: #eef3fb; --accent-text: #0c407a; --accent-border: #b5d4f4;
-    --teal-bg: #e3f5ef; --teal-text: #0d6348; --teal-border: #9fe1cb;
-    --amber-bg: #fdf0d8; --amber-text: #7a4a0a; --amber-border: #f5c97a;
-    --purple-bg: #eeedfb; --purple-text: #3d348a; --purple-border: #c4c0f0;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #c0dd97;
-    --coral-bg: #faeae5; --coral-text: #8c3318;
-    --radius: 10px; --radius-sm: 6px;
-  }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem 4rem; }
-  .page { max-width: 780px; margin: 0 auto; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  header { padding: 2rem 0 1.75rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--teal-bg); color: var(--teal-text); margin-bottom: 0.75rem; }
-  h1 { font-size: 26px; font-weight: 500; line-height: 1.3; margin-bottom: 0.4rem; }
-  .subtitle { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 560px; }
+  <meta
+    name="description"
+    content="Biblioteca de prompts para investigación profunda con instrucciones de activación en ChatGPT, Gemini y Claude."
+  >
 
-  .stats { display: flex; gap: 10px; margin-bottom: 1.75rem; flex-wrap: wrap; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; flex: 1; min-width: 100px; }
-  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 2px; }
-  .stat-value { font-size: 18px; font-weight: 500; line-height: 1.3; }
+  <title>Prompts para Deep Research — IA Práctico</title>
 
-  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); margin: 2rem 0 0.75rem; }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  /* PLATFORM TABS */
-  .plat-tabs { display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .ptab { font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .ptab:hover { border-color: var(--border-strong); color: var(--text); }
-  .ptab-chatgpt.active { background: var(--green-bg); color: var(--green-text); border-color: var(--green-border); }
-  .ptab-gemini.active { background: var(--accent-bg); color: var(--accent-text); border-color: var(--accent-border); }
-  .ptab-claude.active { background: var(--coral-bg); color: var(--coral-text); border-color: #f0a08a; }
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
 
-  .plat-content { display: none; }
-  .plat-content.active { display: block; }
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
 
-  .plat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
-  .plat-card-header { padding: 14px 16px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-  .plat-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .plat-icon svg { width: 15px; height: 15px; }
-  .pi-green { background: var(--green-bg); color: var(--green-text); }
-  .pi-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .pi-coral { background: var(--coral-bg); color: var(--coral-text); }
-  .plat-card-title { font-size: 15px; font-weight: 500; color: var(--text); }
-  .plat-card-sub { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+    :root {
+      --page-bg: #f5f4ef;
+      --surface: #ffffff;
+      --surface-soft: #faf9f6;
+      --surface-muted: #f0eee8;
+      --surface-dark: #171917;
 
-  .plat-steps { padding: 0; }
-  .plat-step { display: flex; gap: 0; border-bottom: 0.5px solid var(--border); }
-  .plat-step:last-child { border-bottom: none; }
-  .step-num-col { width: 48px; flex-shrink: 0; display: flex; align-items: flex-start; justify-content: center; padding: 14px 0 14px; }
-  .step-num { width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
-  .sn-green { background: var(--green-bg); color: var(--green-text); }
-  .sn-blue { background: var(--accent-bg); color: var(--accent-text); }
-  .sn-coral { background: var(--coral-bg); color: var(--coral-text); }
-  .step-content { flex: 1; padding: 13px 16px 13px 0; }
-  .step-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-  .step-desc b { font-weight: 500; color: var(--text); }
-  .step-ui { background: var(--bg); border-radius: var(--radius-sm); padding: 8px 10px; margin-top: 7px; font-size: 11px; color: var(--text-faint); line-height: 1.6; }
-  .step-ui b { font-weight: 500; color: var(--text-muted); }
+      --text: #191a17;
+      --text-soft: #625f58;
+      --text-faint: #918d84;
+      --text-inverse: #f7f5ef;
 
-  .plat-note { padding: 10px 16px 14px; font-size: 12px; line-height: 1.6; }
-  .pn-green { color: var(--green-text); background: var(--green-bg); border-top: 1px solid var(--green-border); }
-  .pn-blue { color: var(--accent-text); background: var(--accent-bg); border-top: 1px solid var(--accent-border); }
-  .pn-coral { color: var(--coral-text); background: var(--coral-bg); border-top: 1px solid #f0a08a; }
-  .plat-note b { font-weight: 500; }
+      --border: #e3dfd6;
+      --border-strong: #c8c1b5;
 
-  /* PROMPTS */
-  .tip { background: var(--teal-bg); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--teal-text); line-height: 1.65; margin-bottom: 1.75rem; }
-  .tip b { font-weight: 500; }
-  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; transition: border-color 0.15s; }
-  .prompt-card:hover { border-color: var(--border-strong); }
-  .prompt-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 12px; gap: 12px; cursor: pointer; user-select: none; }
-  .prompt-left { display: flex; align-items: center; gap: 10px; }
-  .prompt-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--teal-text); background: var(--teal-bg); padding: 2px 7px; border-radius: var(--radius-sm); flex-shrink: 0; }
-  .prompt-title { font-size: 15px; font-weight: 500; color: var(--text); }
-  .chevron { width: 18px; height: 18px; color: var(--text-faint); flex-shrink: 0; transition: transform 0.2s; }
-  .chevron.open { transform: rotate(180deg); }
-  .prompt-body { display: none; border-top: 1px solid var(--border); }
-  .prompt-body.open { display: block; }
-  .copy-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--accent-bg); border-bottom: 1px solid var(--accent-border); cursor: pointer; gap: 10px; }
-  .copy-trigger:hover { background: var(--accent-border); }
-  .copy-trigger-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--accent-text); }
-  .copy-trigger-left svg { width: 14px; height: 14px; flex-shrink: 0; }
-  .copy-hint { font-size: 11px; color: var(--accent-text); opacity: 0.7; white-space: nowrap; }
-  .copy-hint b { font-weight: 500; opacity: 1; }
-  .copy-box { display: none; background: #f0f7ff; border-bottom: 1px solid var(--accent-border); }
-  .copy-box.open { display: block; }
-  .copy-box textarea { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-muted); background: transparent; border: none; padding: 12px 16px; resize: none; line-height: 1.75; cursor: text; outline: none; }
-  .copy-box-footer { display: flex; align-items: center; gap: 8px; padding: 6px 16px 10px; font-size: 12px; color: var(--accent-text); }
-  .copy-box-footer svg { width: 13px; height: 13px; flex-shrink: 0; }
-  .copy-box-footer strong { font-weight: 500; }
+      --blue-bg: #eaf2fb;
+      --blue: #175b96;
+      --blue-border: #b9d2ec;
 
-  @media (max-width: 480px) { h1 { font-size: 22px; } .copy-hint { display: none; } }
-</style>
+      --teal-bg: #e5f4ee;
+      --teal: #156047;
+      --teal-border: #abd8c8;
+
+      --purple-bg: #efedfa;
+      --purple: #49398f;
+      --purple-border: #cbc5ee;
+
+      --amber-bg: #fbefd9;
+      --amber: #80500f;
+      --amber-border: #ebca8f;
+
+      --green-bg: #eaf3e4;
+      --green: #315b18;
+      --green-border: #c6ddb7;
+
+      --coral-bg: #faebe6;
+      --coral: #8c3b22;
+      --coral-border: #edb49f;
+
+      --shadow-sm: 0 8px 26px rgba(30, 29, 25, 0.04);
+      --shadow-md: 0 18px 52px rgba(30, 29, 25, 0.07);
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 30px;
+
+      --page-width: 1160px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 94px;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(
+          circle at 2% 0,
+          rgba(229, 244, 238, 0.74),
+          transparent 30rem
+        ),
+        radial-gradient(
+          circle at 98% 10%,
+          rgba(234, 242, 251, 0.68),
+          transparent 29rem
+        ),
+        var(--page-bg);
+      color: var(--text);
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input,
+    a {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    svg {
+      display: block;
+    }
+
+    ::selection {
+      background: var(--teal-border);
+      color: var(--text);
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(21, 96, 71, 0.28);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      text-decoration: none;
+      transform: translateY(-160%);
+      transition: transform 0.2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page-shell {
+      width: min(calc(100% - 32px), var(--page-width));
+      margin: 0 auto;
+      padding: 18px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 58px;
+      margin-bottom: 24px;
+      padding: 10px 12px 10px 18px;
+      border: 1px solid rgba(227, 223, 214, 0.9);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.87);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(16px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .brand-mark svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .topnav a {
+      padding: 8px 10px;
+      border-radius: 9px;
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease;
+    }
+
+    .topnav a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 249, 246, 0.96)
+        ),
+        var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero::after {
+      position: absolute;
+      right: -110px;
+      bottom: -145px;
+      width: 410px;
+      height: 410px;
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle,
+          rgba(171, 216, 200, 0.47),
+          transparent 69%
+        );
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-main {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(290px, 0.78fr);
+      gap: 42px;
+      padding: 52px 50px 42px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 20px;
+      padding: 7px 12px;
+      border: 1px solid var(--teal-border);
+      border-radius: 999px;
+      background: var(--teal-bg);
+      color: var(--teal);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 800px;
+      margin-bottom: 18px;
+      font-size: clamp(2.45rem, 6vw, 4.65rem);
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero-lead {
+      max-width: 770px;
+      margin-bottom: 25px;
+      color: var(--text-soft);
+      font-size: clamp(1rem, 2vw, 1.16rem);
+      line-height: 1.72;
+    }
+
+    .hero-lead strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .button.primary {
+      border-color: var(--surface-dark);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hero-summary {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: start;
+      gap: 11px;
+    }
+
+    .summary-card {
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(8px);
+    }
+
+    .summary-label {
+      margin-bottom: 5px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .summary-value {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .hero-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+      background: rgba(250, 249, 246, 0.74);
+    }
+
+    .hero-stat {
+      min-height: 108px;
+      padding: 21px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:last-child {
+      border-right: 0;
+    }
+
+    .hero-stat-number {
+      margin-bottom: 5px;
+      font-family: "DM Mono", monospace;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-stat-text {
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .tone-blue {
+      border-color: var(--blue-border);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    .tone-teal {
+      border-color: var(--teal-border);
+      background: var(--teal-bg);
+      color: var(--teal);
+    }
+
+    .tone-purple {
+      border-color: var(--purple-border);
+      background: var(--purple-bg);
+      color: var(--purple);
+    }
+
+    .tone-amber {
+      border-color: var(--amber-border);
+      background: var(--amber-bg);
+      color: var(--amber);
+    }
+
+    .tone-green {
+      border-color: var(--green-border);
+      background: var(--green-bg);
+      color: var(--green);
+    }
+
+    .tone-coral {
+      border-color: var(--coral-border);
+      background: var(--coral-bg);
+      color: var(--coral);
+    }
+
+    .workflow-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .workflow-step {
+      display: grid;
+      grid-template-columns: 33px minmax(0, 1fr);
+      gap: 11px;
+      min-height: 100px;
+      padding: 18px;
+      border-right: 1px solid var(--border);
+    }
+
+    .workflow-step:last-child {
+      border-right: 0;
+    }
+
+    .workflow-number {
+      display: grid;
+      place-items: center;
+      width: 33px;
+      height: 33px;
+      border: 1px solid var(--teal-border);
+      border-radius: 11px;
+      background: var(--teal-bg);
+      color: var(--teal);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .workflow-step h3 {
+      margin: 1px 0 4px;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .workflow-step p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .section {
+      margin-top: 72px;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+      gap: 34px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      margin-bottom: 9px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin-bottom: 0;
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 1.06;
+    }
+
+    .section-intro {
+      max-width: 720px;
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .platform-shell {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-md);
+    }
+
+    .platform-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-soft);
+    }
+
+    .platform-tab {
+      position: relative;
+      min-height: 81px;
+      padding: 17px 19px;
+      border-right: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-soft);
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background 0.17s ease,
+        color 0.17s ease;
+    }
+
+    .platform-tab:last-child {
+      border-right: 0;
+    }
+
+    .platform-tab:hover {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .platform-tab[aria-selected="true"] {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .platform-tab[aria-selected="true"]::after {
+      position: absolute;
+      right: 19px;
+      bottom: -1px;
+      left: 19px;
+      height: 3px;
+      border-radius: 4px 4px 0 0;
+      background: var(--teal);
+      content: "";
+    }
+
+    .platform-index {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--text-faint);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .platform-name {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .platform-panel {
+      display: none;
+    }
+
+    .platform-panel.active {
+      display: block;
+      animation: panel-in 0.23s ease;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .platform-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      padding: 24px 26px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .platform-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+    }
+
+    .platform-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      border: 1px solid;
+      border-radius: 13px;
+    }
+
+    .platform-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .platform-header h3 {
+      margin: 1px 0 4px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .platform-header p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .platform-pill {
+      align-self: start;
+      padding: 6px 10px;
+      border: 1px solid;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .platform-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 0.38fr);
+      gap: 22px;
+      padding: 24px 26px 27px;
+    }
+
+    .platform-steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .platform-step {
+      display: grid;
+      grid-template-columns: 35px minmax(0, 1fr);
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface-soft);
+    }
+
+    .platform-step-number {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      border: 1px solid;
+      border-radius: 11px;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .platform-step h4 {
+      margin: 1px 0 4px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .platform-step p {
+      margin-bottom: 0;
+      color: var(--text-soft);
+      font-size: 12px;
+      line-height: 1.62;
+    }
+
+    .platform-step strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .ui-location {
+      margin-top: 8px;
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--text-faint);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .ui-location strong {
+      color: var(--text-soft);
+    }
+
+    .platform-note {
+      align-self: start;
+      padding: 19px;
+      border: 1px solid;
+      border-radius: 16px;
+    }
+
+    .platform-note-label {
+      margin-bottom: 8px;
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .platform-note h4 {
+      margin-bottom: 7px;
+      color: var(--text);
+      font-size: 17px;
+      letter-spacing: -0.02em;
+    }
+
+    .platform-note p {
+      margin-bottom: 0;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .library-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box svg {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      width: 17px;
+      height: 17px;
+      color: var(--text-faint);
+      pointer-events: none;
+      transform: translateY(-50%);
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 16px 11px 42px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-faint);
+    }
+
+    .search-input:hover,
+    .search-input:focus {
+      border-color: var(--border-strong);
+    }
+
+    .library-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .small-button {
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text-soft);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        border-color 0.16s ease;
+    }
+
+    .small-button:hover {
+      border-color: var(--border-strong);
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .library-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .result-count {
+      font-family: "DM Mono", monospace;
+    }
+
+    .library-note {
+      margin-bottom: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--teal-border);
+      border-radius: 13px;
+      background: var(--teal-bg);
+      color: var(--teal);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .library-note strong {
+      color: var(--text);
+    }
+
+    .prompt-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    details.prompt-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    details.prompt-card[open] {
+      border-color: var(--border-strong);
+    }
+
+    details.prompt-card[hidden] {
+      display: none;
+    }
+
+    details.prompt-card summary {
+      display: grid;
+      grid-template-columns: 43px minmax(0, 1fr) auto 18px;
+      gap: 13px;
+      align-items: center;
+      padding: 17px 19px;
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.16s ease;
+    }
+
+    details.prompt-card summary:hover {
+      background: var(--surface-soft);
+    }
+
+    details.prompt-card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .prompt-number {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border: 1px solid var(--teal-border);
+      border-radius: 13px;
+      background: var(--teal-bg);
+      color: var(--teal);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .prompt-card-title {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .prompt-card-subtitle {
+      display: block;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .prompt-status {
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--text-faint);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .summary-chevron {
+      width: 17px;
+      height: 17px;
+      color: var(--text-faint);
+      transition: transform 0.2s ease;
+    }
+
+    details[open] .summary-chevron {
+      transform: rotate(180deg);
+    }
+
+    .prompt-body {
+      padding: 0 19px 19px 75px;
+    }
+
+    .prompt-shell {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+    }
+
+    .prompt-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px 11px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      background: #121411;
+    }
+
+    .prompt-filename {
+      color: #aaa79f;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 33px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-inverse);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        background 0.16s ease,
+        border-color 0.16s ease;
+    }
+
+    .copy-button:hover {
+      border-color: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.11);
+    }
+
+    .copy-button svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .prompt-text {
+      margin: 0;
+      padding: 18px;
+      color: #ddd9d0;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+
+    .prompt-footer {
+      padding: 11px 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      color: #aaa79f;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 34px 24px;
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-md);
+      background: var(--surface-soft);
+      color: var(--text-soft);
+      text-align: center;
+    }
+
+    .empty-state.visible {
+      display: block;
+    }
+
+    .empty-state h3 {
+      margin-bottom: 5px;
+      font-size: 17px;
+    }
+
+    .empty-state p {
+      margin-bottom: 0;
+      font-size: 13px;
+    }
+
+    .closing {
+      position: relative;
+      overflow: hidden;
+      margin-top: 72px;
+      padding: 38px;
+      border-radius: var(--radius-xl);
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+    }
+
+    .closing::after {
+      position: absolute;
+      top: -120px;
+      right: -90px;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle,
+          rgba(171, 216, 200, 0.2),
+          transparent 68%
+        );
+      content: "";
+    }
+
+    .closing-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+      gap: 30px;
+      align-items: center;
+    }
+
+    .closing h2 {
+      max-width: 730px;
+      margin-bottom: 12px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: -0.05em;
+      line-height: 1.02;
+    }
+
+    .closing p {
+      max-width: 700px;
+      margin-bottom: 0;
+      color: #c9c6bd;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .closing-card {
+      padding: 19px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .closing-card-label {
+      margin-bottom: 7px;
+      color: #9d9a92;
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .closing-card-value {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.58;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 22px 4px 0;
+      color: var(--text-faint);
+      font-size: 11px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 100;
+      max-width: min(360px, calc(100% - 36px));
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 12px;
+      background: var(--surface-dark);
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1020px) {
+      .hero-main {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-summary {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .platform-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page-shell {
+        width: min(calc(100% - 20px), var(--page-width));
+        padding-top: 10px;
+      }
+
+      .topbar {
+        top: 6px;
+        min-height: 52px;
+        padding-left: 12px;
+      }
+
+      .brand-text {
+        display: none;
+      }
+
+      .topnav a {
+        padding: 7px 8px;
+        font-size: 11px;
+      }
+
+      .hero-main {
+        padding: 36px 24px 29px;
+      }
+
+      h1 {
+        font-size: clamp(2.35rem, 13vw, 4rem);
+      }
+
+      .hero-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero-stat:last-child {
+        border-bottom: 0;
+      }
+
+      .workflow-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-step {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workflow-step:last-child {
+        border-bottom: 0;
+      }
+
+      .platform-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .platform-tab {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .platform-tab:last-child {
+        border-bottom: 0;
+      }
+
+      .platform-header {
+        grid-template-columns: 1fr;
+      }
+
+      .platform-pill {
+        width: fit-content;
+      }
+
+      .library-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .library-actions {
+        width: 100%;
+      }
+
+      .small-button {
+        flex: 1;
+      }
+
+      details.prompt-card summary {
+        grid-template-columns: 40px minmax(0, 1fr) 18px;
+        padding: 15px;
+      }
+
+      .prompt-number {
+        width: 40px;
+        height: 40px;
+      }
+
+      .prompt-status {
+        display: none;
+      }
+
+      .prompt-body {
+        padding: 0 15px 15px;
+      }
+
+      .closing {
+        padding: 28px 24px;
+      }
+
+      .closing-content {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topnav a:nth-child(2) {
+        display: none;
+      }
+
+      .platform-heading {
+        flex-direction: column;
+      }
+
+      .library-meta {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .prompt-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .copy-button {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page-shell {
+        width: 100%;
+        padding: 0;
+      }
+
+      .topbar,
+      .hero-actions,
+      .platform-tabs,
+      .library-toolbar,
+      .library-meta,
+      .copy-button,
+      .toast {
+        display: none !important;
+      }
+
+      .hero,
+      .platform-shell,
+      .prompt-card,
+      .closing {
+        box-shadow: none;
+      }
+
+      .platform-panel {
+        display: block !important;
+        break-inside: avoid;
+        border-bottom: 1px solid var(--border);
+      }
+
+      details.prompt-card > * {
+        display: block;
+      }
+
+      .prompt-body {
+        display: block !important;
+      }
+
+      .closing {
+        margin-top: 38px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="page">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header>
-    <div class="badge">IA Práctico — Deep Research</div>
-    <h1>Prompts para Investigación Profunda</h1>
-    <p class="subtitle">Prompts listos para usar en cualquier LLM con modo de investigación profunda. Incluye instrucciones para activar el modo correcto en cada plataforma antes de enviar el prompt.</p>
-  </header>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+            <path d="M8 11h6"></path>
+            <path d="M11 8v6"></path>
+          </svg>
+        </span>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Prompts disponibles</div><div class="stat-value">8</div></div>
-    <div class="stat"><div class="stat-label">Compatibles con</div><div class="stat-value">ChatGPT, Gemini, Claude</div></div>
-    <div class="stat"><div class="stat-label">Paso previo</div><div class="stat-value">Activar modo Deep Research</div></div>
+        <span class="brand-text">Prompts para Deep Research</span>
+      </div>
+
+      <nav class="topnav" aria-label="Navegación principal">
+        <a href="#plataformas">Plataformas</a>
+        <a href="#prompts">Prompts</a>
+        <a href="#flujo-final">Flujo</a>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-main">
+          <div>
+            <div class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              IA Práctico · Deep Research
+            </div>
+
+            <h1 id="hero-title">
+              Ocho prompts para convertir preguntas amplias en investigaciones.
+            </h1>
+
+            <p class="hero-lead">
+              Una biblioteca lista para usar en herramientas con modo de
+              investigación profunda. Primero activa la función correspondiente,
+              después elige un tema y <strong>copia el prompt completo</strong>.
+            </p>
+
+            <div class="hero-actions">
+              <a class="button primary" href="#prompts">
+                Explorar los prompts
+
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="m9 18 6-6-6-6"></path>
+                </svg>
+              </a>
+
+              <a class="button" href="#plataformas">
+                Activar Deep Research
+              </a>
+            </div>
+          </div>
+
+          <aside class="hero-summary" aria-label="Resumen de la página">
+            <div class="summary-card">
+              <div class="summary-label">Paso 01</div>
+              <div class="summary-value">
+                Activa el modo de investigación profunda.
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Paso 02</div>
+              <div class="summary-value">
+                Elige uno de los ocho temas disponibles.
+              </div>
+            </div>
+
+            <div class="summary-card">
+              <div class="summary-label">Paso 03</div>
+              <div class="summary-value">
+                Revisa el plan, responde preguntas y valida el informe.
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-number">08</div>
+            <div class="hero-stat-text">
+              prompts de investigación disponibles
+            </div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">03</div>
+            <div class="hero-stat-text">
+              plataformas descritas en la guía
+            </div>
+          </div>
+
+          <div class="hero-stat">
+            <div class="hero-stat-number">01</div>
+            <div class="hero-stat-text">
+              paso previo: activar el modo Deep Research
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="workflow-strip" id="flujo-final">
+        <article class="workflow-step">
+          <span class="workflow-number">01</span>
+
+          <div>
+            <h3>Activa la herramienta</h3>
+            <p>
+              Selecciona el modo de investigación profunda en la plataforma.
+            </p>
+          </div>
+        </article>
+
+        <article class="workflow-step">
+          <span class="workflow-number">02</span>
+
+          <div>
+            <h3>Pega el prompt</h3>
+            <p>
+              Copia el bloque completo y envíalo en una conversación nueva.
+            </p>
+          </div>
+        </article>
+
+        <article class="workflow-step">
+          <span class="workflow-number">03</span>
+
+          <div>
+            <h3>Refina y verifica</h3>
+            <p>
+              Responde preguntas, revisa el plan y valida las fuentes finales.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <section
+        class="section"
+        id="plataformas"
+        aria-labelledby="plataformas-title"
+      >
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Paso 1</div>
+
+            <h2 class="section-title" id="plataformas-title">
+              Activa el modo de investigación
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            La ubicación exacta de los controles puede variar según la
+            plataforma, la cuenta o la versión de la interfaz. Selecciona una
+            plataforma para consultar el procedimiento descrito en el material
+            original.
+          </p>
+        </div>
+
+        <div class="platform-shell">
+          <div
+            class="platform-tabs"
+            role="tablist"
+            aria-label="Plataformas compatibles"
+          >
+            <button
+              class="platform-tab"
+              id="platform-tab-chatgpt"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="platform-panel-chatgpt"
+              data-platform-index="0"
+            >
+              <span class="platform-index">01 · PLATAFORMA</span>
+              <span class="platform-name">ChatGPT</span>
+            </button>
+
+            <button
+              class="platform-tab"
+              id="platform-tab-gemini"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="platform-panel-gemini"
+              data-platform-index="1"
+              tabindex="-1"
+            >
+              <span class="platform-index">02 · PLATAFORMA</span>
+              <span class="platform-name">Gemini</span>
+            </button>
+
+            <button
+              class="platform-tab"
+              id="platform-tab-claude"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="platform-panel-claude"
+              data-platform-index="2"
+              tabindex="-1"
+            >
+              <span class="platform-index">03 · PLATAFORMA</span>
+              <span class="platform-name">Claude</span>
+            </button>
+          </div>
+
+          <section
+            class="platform-panel active"
+            id="platform-panel-chatgpt"
+            role="tabpanel"
+            aria-labelledby="platform-tab-chatgpt"
+          >
+            <div class="platform-header">
+              <div class="platform-heading">
+                <span class="platform-icon tone-green" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 8v4l3 3"></path>
+                  </svg>
+                </span>
+
+                <div>
+                  <h3>ChatGPT — Deep Research</h3>
+                  <p>
+                    Requiere plan Plus, Pro o Team · chatgpt.com
+                  </p>
+                </div>
+              </div>
+
+              <span class="platform-pill tone-green">ChatGPT</span>
+            </div>
+
+            <div class="platform-body">
+              <div class="platform-steps">
+                <article class="platform-step">
+                  <span class="platform-step-number tone-green">01</span>
+
+                  <div>
+                    <h4>Abre una conversación nueva</h4>
+
+                    <p>
+                      Ve a <strong>chatgpt.com</strong> e inicia un chat nuevo.
+                      Asegúrate de estar en la ventana principal de conversación,
+                      no dentro de un GPT personalizado.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-green">02</span>
+
+                  <div>
+                    <h4>Busca el icono de herramientas</h4>
+
+                    <p>
+                      En la barra inferior del chat, junto al campo de texto,
+                      localiza el control de herramientas adicionales.
+                    </p>
+
+                    <div class="ui-location">
+                      <strong>Ubicación descrita:</strong> barra inferior del
+                      chat → herramientas o menú “+”.
+                    </div>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-green">03</span>
+
+                  <div>
+                    <h4>Selecciona Deep Research</h4>
+
+                    <p>
+                      En el menú de herramientas, selecciona
+                      <strong>Deep Research</strong> o
+                      <strong>Investigación profunda</strong> y confirma que el
+                      modo quede activo.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-green">04</span>
+
+                  <div>
+                    <h4>Pega el prompt y envía</h4>
+
+                    <p>
+                      Copia el prompt elegido y envíalo. Si aparecen preguntas de
+                      refinamiento, <strong>respóndelas con detalle</strong>.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-green">05</span>
+
+                  <div>
+                    <h4>Espera el informe</h4>
+
+                    <p>
+                      El material original indica un tiempo aproximado de entre
+                      5 y 15 minutos y una salida con citas y fuentes
+                      verificables.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <aside class="platform-note tone-green">
+                <div class="platform-note-label">Nota de uso</div>
+                <h4>Revisa la disponibilidad</h4>
+
+                <p>
+                  El material señala que el número de consultas puede depender
+                  del plan. Si la función no aparece, revisa la disponibilidad
+                  en la cuenta.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <section
+            class="platform-panel"
+            id="platform-panel-gemini"
+            role="tabpanel"
+            aria-labelledby="platform-tab-gemini"
+            hidden
+          >
+            <div class="platform-header">
+              <div class="platform-heading">
+                <span class="platform-icon tone-blue" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="m12 2 2.4 6.4L21 11l-6.6 2.6L12 20l-2.4-6.4L3 11l6.6-2.6Z"></path>
+                  </svg>
+                </span>
+
+                <div>
+                  <h3>Gemini — Investigación profunda</h3>
+                  <p>
+                    Disponible en Gemini Advanced · gemini.google.com
+                  </p>
+                </div>
+              </div>
+
+              <span class="platform-pill tone-blue">Gemini</span>
+            </div>
+
+            <div class="platform-body">
+              <div class="platform-steps">
+                <article class="platform-step">
+                  <span class="platform-step-number tone-blue">01</span>
+
+                  <div>
+                    <h4>Abre Gemini</h4>
+
+                    <p>
+                      Ve a <strong>gemini.google.com</strong> e inicia una
+                      conversación nueva con la cuenta correspondiente.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-blue">02</span>
+
+                  <div>
+                    <h4>Localiza el selector de herramientas</h4>
+
+                    <p>
+                      Busca el botón de
+                      <strong>Investigación profunda</strong> o la opción de
+                      Deep Research en la barra de herramientas.
+                    </p>
+
+                    <div class="ui-location">
+                      <strong>Ubicación descrita:</strong> barra inferior →
+                      herramientas → Investigación profunda.
+                    </div>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-blue">03</span>
+
+                  <div>
+                    <h4>Activa la función</h4>
+
+                    <p>
+                      Selecciona la herramienta y confirma visualmente que el
+                      modo de investigación quede activo.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-blue">04</span>
+
+                  <div>
+                    <h4>Pega el prompt</h4>
+
+                    <p>
+                      Envía el prompt seleccionado. El material indica que
+                      Gemini puede generar primero un
+                      <strong>plan de investigación</strong>.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-blue">05</span>
+
+                  <div>
+                    <h4>Revisa y aprueba el plan</h4>
+
+                    <p>
+                      Ajusta las dimensiones propuestas antes de iniciar la
+                      investigación y espera el informe con sus fuentes.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <aside class="platform-note tone-blue">
+                <div class="platform-note-label">Ventaja descrita</div>
+                <h4>Revisión previa del plan</h4>
+
+                <p>
+                  El plan permite eliminar subtemas irrelevantes o incorporar
+                  dimensiones antes de ejecutar la investigación.
+                </p>
+              </aside>
+            </div>
+          </section>
+
+          <section
+            class="platform-panel"
+            id="platform-panel-claude"
+            role="tabpanel"
+            aria-labelledby="platform-tab-claude"
+            hidden
+          >
+            <div class="platform-header">
+              <div class="platform-heading">
+                <span class="platform-icon tone-coral" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>
+                  </svg>
+                </span>
+
+                <div>
+                  <h3>Claude — Investigación profunda</h3>
+                  <p>
+                    Disponible en planes Pro y Team · claude.ai
+                  </p>
+                </div>
+              </div>
+
+              <span class="platform-pill tone-coral">Claude</span>
+            </div>
+
+            <div class="platform-body">
+              <div class="platform-steps">
+                <article class="platform-step">
+                  <span class="platform-step-number tone-coral">01</span>
+
+                  <div>
+                    <h4>Abre Claude</h4>
+
+                    <p>
+                      Ve a <strong>claude.ai</strong> e inicia una conversación
+                      nueva desde el chat principal.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-coral">02</span>
+
+                  <div>
+                    <h4>Localiza las herramientas</h4>
+
+                    <p>
+                      Busca en la barra inferior el control de investigación o
+                      búsqueda web avanzada descrito en el material.
+                    </p>
+
+                    <div class="ui-location">
+                      <strong>Ubicación descrita:</strong> barra inferior →
+                      herramientas → investigación o búsqueda avanzada.
+                    </div>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-coral">03</span>
+
+                  <div>
+                    <h4>Activa el modo</h4>
+
+                    <p>
+                      Selecciona la herramienta correspondiente y comprueba el
+                      cambio visual o indicador de activación.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-coral">04</span>
+
+                  <div>
+                    <h4>Pega el prompt y responde aclaraciones</h4>
+
+                    <p>
+                      Envía el prompt y responde las preguntas de clarificación
+                      para mejorar la precisión del resultado.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="platform-step">
+                  <span class="platform-step-number tone-coral">05</span>
+
+                  <div>
+                    <h4>Revisa el informe</h4>
+
+                    <p>
+                      El material describe una salida estructurada con fuentes
+                      citadas y un tono profesional.
+                    </p>
+                  </div>
+                </article>
+              </div>
+
+              <aside class="platform-note tone-coral">
+                <div class="platform-note-label">Disponibilidad</div>
+                <h4>Puede variar por cuenta</h4>
+
+                <p>
+                  El material original advierte que la función y la búsqueda web
+                  pueden depender de la región, el plan o la configuración.
+                </p>
+              </aside>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section" id="prompts" aria-labelledby="prompts-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Paso 2</div>
+
+            <h2 class="section-title" id="prompts-title">
+              Elige y copia un prompt
+            </h2>
+          </div>
+
+          <p class="section-intro">
+            Busca por tema, abre la tarjeta y copia el texto completo. Los ocho
+            prompts mantienen la redacción del archivo original.
+          </p>
+        </div>
+
+        <div class="library-note">
+          <strong>Cómo usar la biblioteca:</strong> activa primero el modo de
+          investigación profunda, copia un prompt y pégalo en una conversación
+          nueva. Después responde las preguntas de refinamiento y revisa el plan
+          antes de ejecutar.
+        </div>
+
+        <div class="library-toolbar">
+          <label class="search-box">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-4-4"></path>
+            </svg>
+
+            <span class="skip-link">Buscar prompts</span>
+
+            <input
+              class="search-input"
+              id="prompt-search"
+              type="search"
+              placeholder="Buscar: tokens, RAG, embeddings, AGI..."
+              autocomplete="off"
+            >
+          </label>
+
+          <div class="library-actions">
+            <button class="small-button" id="expand-prompts" type="button">
+              Expandir todo
+            </button>
+
+            <button class="small-button" id="collapse-prompts" type="button">
+              Contraer
+            </button>
+          </div>
+        </div>
+
+        <div class="library-meta">
+          <span class="result-count" id="result-count">
+            8 prompts disponibles
+          </span>
+
+          <span>Haz clic en una tarjeta para ver el contenido completo.</span>
+        </div>
+
+        <div class="prompt-list" id="prompt-list">
+          <details
+            class="prompt-card"
+            data-search="tokens inteligencia artificial palabras llm api whatsapp telegram costos plataformas"
+          >
+            <summary>
+              <span class="prompt-number">01</span>
+
+              <span>
+                <span class="prompt-card-title">Tokens</span>
+                <span class="prompt-card-subtitle">
+                  Uso, APIs, conversaciones y costos
+                </span>
+              </span>
+
+              <span class="prompt-status">Fundamentos</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">01-tokens.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-01"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-01">Genera una investigación sobre que son Tokens en la IA, junto con una explicación de las relaciones aproximadas con la cantidad de palabras y como los diferentes LLM existentes utilizan los tokens. Añade por qué es importante entender el uso de tokens, principalmente en el uso de los APIs disponibles, y cómo esto incide por ejemplo en conversaciones de chat (como WhatsApp, o Telegram), donde los clientes interactúan con la inteligencia artificial. Concluye con un detalle aproximado de los costos de Tokens en diferentes plataformas.</pre>
+
+                <div class="prompt-footer">
+                  Tema: fundamentos de IA, consumo y costos.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="embeddings matemática espacio latente llm transformers rag búsqueda semántica"
+          >
+            <summary>
+              <span class="prompt-number">02</span>
+
+              <span>
+                <span class="prompt-card-title">Embeddings</span>
+                <span class="prompt-card-subtitle">
+                  Espacio latente, RAG y búsqueda semántica
+                </span>
+              </span>
+
+              <span class="prompt-status">Fundamentos</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">02-embeddings.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-02"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-02">Genera una investigación acerca de Embeddings, qué son, el concepto matemático detrás, el espacio latente, y lo relacionado con el funcionamiento en LLM y transformers. Cómo los Embeddings se relacionan con RAG (Retrieval-Augmented Generation) y la Búsqueda Semántica, y por qué es importante este concepto.</pre>
+
+                <div class="prompt-footer">
+                  Tema: representación vectorial y recuperación semántica.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="ventana de contexto chatgpt claude grok gemini gratis pagado rag límite profesionales"
+          >
+            <summary>
+              <span class="prompt-number">03</span>
+
+              <span>
+                <span class="prompt-card-title">Ventana de contexto</span>
+                <span class="prompt-card-subtitle">
+                  Evolución, modelos y técnicas de eficiencia
+                </span>
+              </span>
+
+              <span class="prompt-status">Modelos</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">03-contexto.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-03"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-03">Genera una investigación sobre Ventana de Contexto en IA. Explica los conceptos básicos de la ventana de contexto, haciendo ejemplos. Incluye una revisión histórica de la ventana y su incremento en estos dos últimos años, y obtén un detalle de la ventana de contexto disponible en ChatGPT, Claude, Grok y Gemini, categorizando de acuerdo a versiones gratuitas y versiones pagadas. Por qué es importante la ventana de contexto, y cómo podemos hacer eficiente este límite valiéndonos de diferentes técnicas, como RAG. El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA.</pre>
+
+                <div class="prompt-footer">
+                  Tema: límites de contexto y comparación entre plataformas.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="data datos inteligencia artificial entrenamiento gobernanza estructura actualización data sintética"
+          >
+            <summary>
+              <span class="prompt-number">04</span>
+
+              <span>
+                <span class="prompt-card-title">Data</span>
+                <span class="prompt-card-subtitle">
+                  Gobernanza, crecimiento y datos sintéticos
+                </span>
+              </span>
+
+              <span class="prompt-status">Datos</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">04-data.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-04"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-04">Genera una investigación sobre cómo la data es importante para la IA, cómo priorizar el manejo de data en esta era, en que la IA consume data, tanto para entrenarse, como para generar nueva data. Incluye los desafíos a los que se enfrenta la humanidad hoy, en relación con la cantidad de data existente y que se está generando de manera rápida todos los días, y cómo la gobernanza de data es clave para generar procesos de inteligencia artificial que requieran data que deba estar estructurada y que se deba actualizar en el tiempo. Incluye una explicación de data sintética, y explica qué beneficios otorgaría tener data sintética para tener una mejor IA, por qué y en que incide.</pre>
+
+                <div class="prompt-footer">
+                  Tema: gestión de datos y calidad de sistemas de IA.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="rag retrieval augmented generation documentos organización embeddings chunking bases vectoriales herramientas"
+          >
+            <summary>
+              <span class="prompt-number">05</span>
+
+              <span>
+                <span class="prompt-card-title">RAG</span>
+                <span class="prompt-card-subtitle">
+                  Documentación, chunking y bases vectoriales
+                </span>
+              </span>
+
+              <span class="prompt-status">Arquitectura</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">05-rag.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-05"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-05">Genera una investigación sobre RAG (Retrieval-Augmented Generation), cómo RAG conecta la IA a la documentación, archivos y datos de una organización. Incluye el concepto principal y casos de uso, además de por qué los conceptos de embeddings, chunking, bases vectoriales, son importantes para entender mejor cómo funciona un RAG. Añade herramientas actuales que permiten hacer RAG y métodos disponibles.</pre>
+
+                <div class="prompt-footer">
+                  Tema: conexión entre IA y conocimiento organizacional.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="alucinaciones inteligencia artificial llm entrenamiento contexto sesgo geográfico detección human in the loop"
+          >
+            <summary>
+              <span class="prompt-number">06</span>
+
+              <span>
+                <span class="prompt-card-title">Alucinaciones</span>
+                <span class="prompt-card-subtitle">
+                  Causas, sesgos, detección y corrección
+                </span>
+              </span>
+
+              <span class="prompt-status">Riesgo</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">06-alucinaciones.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-06"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-06">Genera una investigación sobre las alucinaciones en IA, qué son, razones y su relación con el entrenamiento de los LLMs, una pobre contextualización de consultas. Incluye en tu investigación información sobre sesgo geográfico, ejemplos de alucinación y tipos. Añade cómo detectarlas, y claves para corregir una vez que la hemos detectado. Explica también el concepto human-in-the-loop.</pre>
+
+                <div class="prompt-footer">
+                  Tema: confiabilidad, sesgos y supervisión humana.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="agentic ai inteligencia artificial agéntica chat agentes cronología herramientas evolución casos de uso"
+          >
+            <summary>
+              <span class="prompt-number">07</span>
+
+              <span>
+                <span class="prompt-card-title">Agentic AI</span>
+                <span class="prompt-card-subtitle">
+                  Agentes, evolución y casos de uso
+                </span>
+              </span>
+
+              <span class="prompt-status">Tendencias</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">07-agentic-ai.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-07"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-07">Haz una investigación para generar un documento que explique que es Agentic AI, en qué consiste, qué abarca, en qué se diferencia o qué adiciona sobre una interacción común de chat. Incluye además un repaso cronológico de su aparición indicando herramientas. Explica todas las características de la chat agéntica y hacia dónde se estima que evolucionará, incluyendo ejemplos de uso. El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA.</pre>
+
+                <div class="prompt-footer">
+                  Tema: sistemas agénticos y evolución de la interacción.
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details
+            class="prompt-card"
+            data-search="agi inteligencia artificial general singularidad expertos empresas modelos llm posiciones científicas"
+          >
+            <summary>
+              <span class="prompt-number">08</span>
+
+              <span>
+                <span class="prompt-card-title">AGI y Singularidad</span>
+                <span class="prompt-card-subtitle">
+                  Conceptos, diferencias y posiciones expertas
+                </span>
+              </span>
+
+              <span class="prompt-status">Futuro</span>
+
+              <svg
+                class="summary-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </summary>
+
+            <div class="prompt-body">
+              <div class="prompt-shell">
+                <div class="prompt-toolbar">
+                  <span class="prompt-filename">08-agi-singularidad.txt</span>
+
+                  <button
+                    class="copy-button"
+                    type="button"
+                    data-copy-target="prompt-08"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+
+                    Copiar
+                  </button>
+                </div>
+
+                <pre class="prompt-text" id="prompt-08">Haz una investigación para generar un ensayo didáctico sobre la AGI Inteligencia Artificial General y la singularidad. Explica cada una de ellas y en qué se diferencian de los modelos actuales de IA que usamos hoy. Incluye posiciones de expertos sobre ambas, tanto si son opiniones a favor, en contra o enfoques cautelosos. Prioriza datos de organismos técnicos y científicos relacionados con la investigación de IA, con las empresas detrás del entrenamiento y masificación de IA (a través de LLMs). El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA.</pre>
+
+                <div class="prompt-footer">
+                  Tema: evolución futura de la inteligencia artificial.
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="empty-state" id="empty-state">
+          <h3>No se encontraron prompts</h3>
+          <p>
+            Prueba con otra palabra, como “RAG”, “tokens”, “data” o “AGI”.
+          </p>
+        </div>
+      </section>
+
+      <section class="closing" aria-labelledby="closing-title">
+        <div class="closing-content">
+          <div>
+            <div class="section-kicker" style="color: #98958d;">
+              Flujo recomendado
+            </div>
+
+            <h2 id="closing-title">
+              El prompt inicia la investigación; la revisión la convierte en trabajo útil.
+            </h2>
+
+            <p>
+              Después de ejecutar, revisa el plan, responde las preguntas de
+              refinamiento y verifica los datos, enlaces y conclusiones antes de
+              utilizar el informe.
+            </p>
+          </div>
+
+          <div class="closing-card">
+            <div class="closing-card-label">Secuencia</div>
+
+            <div class="closing-card-value">
+              Activar Deep Research → copiar prompt → delimitar alcance →
+              revisar plan → ejecutar → verificar fuentes.
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Prompts para Investigación Profunda</span>
+      <span>8 temas · 3 plataformas · copiado directo</span>
+    </footer>
   </div>
 
-  <!-- CÓMO ACTIVAR -->
-  <div class="section-label">Paso 1 — Activa el modo de investigación profunda en tu plataforma</div>
-  <p style="font-size:13px;color:var(--text-muted);line-height:1.65;margin-bottom:1rem">Antes de pegar cualquier prompt, debes activar la herramienta de investigación profunda dentro del chat. El proceso varía según la plataforma. Selecciona la tuya:</p>
-
-  <div class="plat-tabs">
-    <button class="ptab ptab-chatgpt active" onclick="showPlat('chatgpt', this)">ChatGPT</button>
-    <button class="ptab ptab-gemini" onclick="showPlat('gemini', this)">Gemini</button>
-    <button class="ptab ptab-claude" onclick="showPlat('claude', this)">Claude</button>
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    Prompt copiado al portapapeles.
   </div>
 
-  <!-- CHATGPT -->
-  <div class="plat-content active" id="plat-chatgpt">
-    <div class="plat-card">
-      <div class="plat-card-header">
-        <div class="plat-icon pi-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
-        <div>
-          <div class="plat-card-title">ChatGPT — Deep Research</div>
-          <div class="plat-card-sub">Requiere plan Plus, Pro o Team · chatgpt.com</div>
-        </div>
-      </div>
-      <div class="plat-steps">
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-green">1</div></div>
-          <div class="step-content">
-            <div class="step-title">Abre una conversación nueva</div>
-            <div class="step-desc">Ve a <b>chatgpt.com</b> e inicia un chat nuevo. Asegúrate de que estás en la ventana principal de conversación, no dentro de un GPT personalizado.</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-green">2</div></div>
-          <div class="step-content">
-            <div class="step-title">Busca el ícono de herramientas en el campo de texto</div>
-            <div class="step-desc">En la barra inferior del chat, junto al campo donde escribes, verás una fila de íconos. Busca el ícono que parece una lupa con ondas o el botón de <b>herramientas adicionales</b> (generalmente representado por un ícono de rayo ⚡ o un cuadrado con puntos).</div>
-            <div class="step-ui"><b>Ubicación:</b> barra inferior del chat → ícono de herramientas o el menú "+" junto al campo de texto</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-green">3</div></div>
-          <div class="step-content">
-            <div class="step-title">Selecciona "Deep Research" o "Investigación profunda"</div>
-            <div class="step-desc">En el menú desplegable de herramientas, selecciona <b>Deep Research</b>. Verás que el chat cambia de modo — generalmente aparece un indicador visual que confirma que el modo está activo.</div>
-            <div class="step-ui"><b>Indicador de activación:</b> aparece un badge o texto junto al campo que dice "Deep Research activado" o cambia el color del botón de envío</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-green">4</div></div>
-          <div class="step-content">
-            <div class="step-title">Pega el prompt y envía</div>
-            <div class="step-desc">Copia el prompt que elijas de la sección siguiente, pégalo en el campo de texto y presiona Enter. ChatGPT te hará preguntas de refinamiento antes de ejecutar la investigación — <b>respóndelas con detalle</b>, no las omitas.</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-green">5</div></div>
-          <div class="step-content">
-            <div class="step-title">Espera entre 5 y 15 minutos</div>
-            <div class="step-desc">Verás una barra de progreso o indicador de actividad mientras el agente navega la web. <b>No cierres la ventana.</b> Al terminar recibirás un informe con citas y fuentes verificables.</div>
-          </div>
-        </div>
-      </div>
-      <div class="plat-note pn-green"><b>Nota:</b> Deep Research en ChatGPT tiene un límite de consultas por mes según el plan. Si el modo no aparece, verifica que tu plan incluya esta función o espera a que se renueve tu cuota.</div>
-    </div>
-  </div>
+  <script>
+    (() => {
+      "use strict";
 
-  <!-- GEMINI -->
-  <div class="plat-content" id="plat-gemini">
-    <div class="plat-card">
-      <div class="plat-card-header">
-        <div class="plat-icon pi-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <div>
-          <div class="plat-card-title">Gemini — Investigación profunda</div>
-          <div class="plat-card-sub">Disponible en Gemini Advanced · gemini.google.com</div>
-        </div>
-      </div>
-      <div class="plat-steps">
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-blue">1</div></div>
-          <div class="step-content">
-            <div class="step-title">Abre Gemini en tu navegador</div>
-            <div class="step-desc">Ve a <b>gemini.google.com</b> e inicia una conversación nueva. Asegúrate de estar con tu cuenta de Google que tiene Gemini Advanced activo.</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-blue">2</div></div>
-          <div class="step-content">
-            <div class="step-title">Localiza el selector de herramientas en la barra inferior</div>
-            <div class="step-desc">Debajo del campo de texto, verás una fila de opciones o íconos. Busca el botón que dice <b>"Investigación profunda"</b> o el ícono de lupa con el texto "Deep Research". En versiones recientes aparece como una opción destacada en la barra de herramientas.</div>
-            <div class="step-ui"><b>Ubicación:</b> barra de herramientas debajo del campo de texto → botón "Investigación profunda" o ícono de documento con lupa</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-blue">3</div></div>
-          <div class="step-content">
-            <div class="step-title">Haz clic en "Investigación profunda" para activarlo</div>
-            <div class="step-desc">Al seleccionarlo, el modo cambia y aparece un indicador en el campo de texto confirmando que la investigación profunda está activa. La interfaz puede mostrar un cambio visual en el botón de envío o un texto de confirmación.</div>
-            <div class="step-ui"><b>Confirmación:</b> el botón de envío cambia o aparece el texto "Investigación profunda activada" junto al campo</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-blue">4</div></div>
-          <div class="step-content">
-            <div class="step-title">Pega el prompt y envía</div>
-            <div class="step-desc">Copia el prompt de la sección siguiente, pégalo y presiona Enter. Gemini generará primero un <b>plan de investigación</b> que puedes revisar y ajustar antes de que comience la ejecución.</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-blue">5</div></div>
-          <div class="step-content">
-            <div class="step-title">Aprueba el plan y espera el informe</div>
-            <div class="step-desc">Revisa las dimensiones de análisis que Gemini propone y apruébalas o ajústalas. La investigación puede tomar entre 5 y 20 minutos. El resultado incluirá fuentes con enlaces directos.</div>
-          </div>
-        </div>
-      </div>
-      <div class="plat-note pn-blue"><b>Ventaja de Gemini:</b> muestra el plan de investigación antes de ejecutar, lo que permite ajustar el alcance sin reescribir el prompt. Si ves subtemas que no son relevantes, elimínalos antes de confirmar.</div>
-    </div>
-  </div>
+      const platformTabs = Array.from(
+        document.querySelectorAll(".platform-tab")
+      );
 
-  <!-- CLAUDE -->
-  <div class="plat-content" id="plat-claude">
-    <div class="plat-card">
-      <div class="plat-card-header">
-        <div class="plat-icon pi-coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <div>
-          <div class="plat-card-title">Claude — Investigación profunda</div>
-          <div class="plat-card-sub">Disponible en planes Pro y Team · claude.ai</div>
-        </div>
-      </div>
-      <div class="plat-steps">
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-coral">1</div></div>
-          <div class="step-content">
-            <div class="step-title">Abre Claude en tu navegador</div>
-            <div class="step-desc">Ve a <b>claude.ai</b> e inicia una conversación nueva. La investigación profunda está disponible directamente desde el chat principal.</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-coral">2</div></div>
-          <div class="step-content">
-            <div class="step-title">Localiza el selector de herramientas en la barra del chat</div>
-            <div class="step-desc">En la barra inferior del campo de texto, verás íconos de herramientas disponibles. Busca el ícono o botón que corresponde a <b>"Investigación profunda"</b> o <b>"Deep Research"</b> — generalmente representado por un ícono de documento con lupa o de búsqueda web.</div>
-            <div class="step-ui"><b>Ubicación:</b> barra inferior del chat → fila de íconos de herramientas → ícono de investigación o búsqueda web avanzada</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-coral">3</div></div>
-          <div class="step-content">
-            <div class="step-title">Activa el modo de investigación profunda</div>
-            <div class="step-desc">Haz clic en el ícono correspondiente. El campo de texto o el botón de envío cambiarán visualmente para indicar que el modo está activo. En algunas versiones aparece un texto de confirmación junto al campo.</div>
-            <div class="step-ui"><b>Confirmación:</b> cambio visual en la barra del chat o badge que indica "Investigación profunda" activa</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-coral">4</div></div>
-          <div class="step-content">
-            <div class="step-title">Pega el prompt y envía</div>
-            <div class="step-desc">Copia el prompt de la sección siguiente, pégalo en el campo y presiona Enter. Claude puede hacer preguntas de clarificación antes de comenzar — <b>respóndelas para obtener un resultado más preciso</b>.</div>
-          </div>
-        </div>
-        <div class="plat-step">
-          <div class="step-num-col"><div class="step-num sn-coral">5</div></div>
-          <div class="step-content">
-            <div class="step-title">Espera el informe con fuentes citadas</div>
-            <div class="step-desc">Claude entregará un informe estructurado con citas de fuentes. Su fortaleza es la <b>precisión factual y el tono académico</b> — ideal para investigaciones que requieren redacción profesional sin alucinaciones.</div>
-          </div>
-        </div>
-      </div>
-      <div class="plat-note pn-coral"><b>Nota sobre Claude:</b> la función de investigación profunda con búsqueda web puede tener disponibilidad variable según la región y el plan. Si no aparece el modo, verifica en la configuración de tu cuenta que la búsqueda web esté habilitada.</div>
-    </div>
-  </div>
+      const platformPanels = Array.from(
+        document.querySelectorAll(".platform-panel")
+      );
 
-  <!-- PROMPTS -->
-  <div class="section-label">Paso 2 — Elige un prompt y cópialo</div>
-  <div class="tip">
-    <b>¿Cómo usarlo?</b> Con el modo de investigación profunda ya activo en tu plataforma, abre cualquier tarjeta y haz clic en <b>Seleccionar prompt</b> — el texto se resaltará automáticamente. Presiona <b>Ctrl+C</b> (Windows) o <b>Cmd+C</b> (Mac) para copiarlo y pégalo en el campo de chat.
-  </div>
+      const promptCards = Array.from(
+        document.querySelectorAll(".prompt-card")
+      );
 
-  <div id="prompts-list"></div>
+      const searchInput = document.getElementById("prompt-search");
+      const resultCount = document.getElementById("result-count");
+      const emptyState = document.getElementById("empty-state");
+      const expandButton = document.getElementById("expand-prompts");
+      const collapseButton = document.getElementById("collapse-prompts");
+      const toast = document.getElementById("toast");
 
-</div>
-<script>
-const prompts = [
-  { id:1, title:"Tokens", text:"Genera una investigación sobre que son Tokens en la IA, junto con una explicación de las relaciones aproximadas con la cantidad de palabras y como los diferentes LLM existentes utilizan los tokens. Añade por qué es importante entender el uso de tokens, principalmente en el uso de los APIs disponibles, y cómo esto incide por ejemplo en conversaciones de chat (como WhatsApp, o Telegram), donde los clientes interactúan con la inteligencia artificial. Concluye con un detalle aproximado de los costos de Tokens en diferentes plataformas." },
-  { id:2, title:"Embeddings", text:"Genera una investigación acerca de Embeddings, qué son, el concepto matemático detrás, el espacio latente, y lo relacionado con el funcionamiento en LLM y transformers. Cómo los Embeddings se relacionan con RAG (Retrieval-Augmented Generation) y la Búsqueda Semántica, y por qué es importante este concepto." },
-  { id:3, title:"Ventana de contexto", text:"Genera una investigación sobre Ventana de Contexto en IA. Explica los conceptos básicos de la ventana de contexto, haciendo ejemplos. Incluye una revisión histórica de la ventana y su incremento en estos dos últimos años, y obtén un detalle de la ventana de contexto disponible en ChatGPT, Claude, Grok y Gemini, categorizando de acuerdo a versiones gratuitas y versiones pagadas. Por qué es importante la ventana de contexto, y cómo podemos hacer eficiente este límite valiéndonos de diferentes técnicas, como RAG. El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA." },
-  { id:4, title:"Data", text:"Genera una investigación sobre cómo la data es importante para la IA, cómo priorizar el manejo de data en esta era, en que la IA consume data, tanto para entrenarse, como para generar nueva data. Incluye los desafíos a los que se enfrenta la humanidad hoy, en relación con la cantidad de data existente y que se está generando de manera rápida todos los días, y cómo la gobernanza de data es clave para generar procesos de inteligencia artificial que requieran data que deba estar estructurada y que se deba actualizar en el tiempo. Incluye una explicación de data sintética, y explica qué beneficios otorgaría tener data sintética para tener una mejor IA, por qué y en que incide." },
-  { id:5, title:"RAG", text:"Genera una investigación sobre RAG (Retrieval-Augmented Generation), cómo RAG conecta la IA a la documentación, archivos y datos de una organización. Incluye el concepto principal y casos de uso, además de por qué los conceptos de embeddings, chunking, bases vectoriales, son importantes para entender mejor cómo funciona un RAG. Añade herramientas actuales que permiten hacer RAG y métodos disponibles." },
-  { id:6, title:"Alucinaciones", text:"Genera una investigación sobre las alucinaciones en IA, qué son, razones y su relación con el entrenamiento de los LLMs, una pobre contextualización de consultas. Incluye en tu investigación información sobre sesgo geográfico, ejemplos de alucinación y tipos. Añade cómo detectarlas, y claves para corregir una vez que la hemos detectado. Explica también el concepto human-in-the-loop." },
-  { id:7, title:"Agentic AI", text:"Haz una investigación para generar un documento que explique que es Agentic AI, en qué consiste, qué abarca, en qué se diferencia o qué adiciona sobre una interacción común de chat. Incluye además un repaso cronológico de su aparición indicando herramientas. Explica todas las características de la chat agéntica y hacia dónde se estima que evolucionará, incluyendo ejemplos de uso. El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA." },
-  { id:8, title:"AGI y Singularidad", text:"Haz una investigación para generar un ensayo didáctico sobre la AGI Inteligencia Artificial General y la singularidad. Explica cada una de ellas y en qué se diferencian de los modelos actuales de IA que usamos hoy. Incluye posiciones de expertos sobre ambas, tanto si son opiniones a favor, en contra o enfoques cautelosos. Prioriza datos de organismos técnicos y científicos relacionados con la investigación de IA, con las empresas detrás del entrenamiento y masificación de IA (a través de LLMs). El resultado debe ser didáctico orientado a profesionales de diferentes carreras, que están ingresando al mundo de la IA." }
-];
+      let activePlatform = 0;
+      let toastTimer;
 
-function render() {
-  document.getElementById('prompts-list').innerHTML = prompts.map((p, i) => `
-    <div class="prompt-card">
-      <div class="prompt-header" onclick="toggle(${p.id})">
-        <div class="prompt-left">
-          <span class="prompt-num">${String(i+1).padStart(2,'0')}</span>
-          <span class="prompt-title">${p.title}</span>
-        </div>
-        <svg class="chevron" id="chev-${p.id}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <div class="prompt-body" id="body-${p.id}">
-        <div class="copy-trigger" onclick="selectPrompt(${p.id})">
-          <div class="copy-trigger-left">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Seleccionar prompt para copiar
-          </div>
-          <span class="copy-hint">Luego presiona <b>Ctrl+C</b> / <b>Cmd+C</b></span>
-        </div>
-        <div class="copy-box" id="box-${p.id}">
-          <textarea id="ta-${p.id}" rows="5" readonly>${p.text}</textarea>
-          <div class="copy-box-footer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            Texto seleccionado — presiona <strong>Ctrl+C</strong> (Windows) o <strong>Cmd+C</strong> (Mac) para copiar
-          </div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
+      function normalizeText(text) {
+        return text
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .trim();
+      }
 
-function toggle(id) {
-  const body = document.getElementById('body-' + id);
-  const chev = document.getElementById('chev-' + id);
-  const isOpen = body.classList.contains('open');
-  document.querySelectorAll('.prompt-body').forEach(b => b.classList.remove('open'));
-  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
-  document.querySelectorAll('.copy-box').forEach(b => b.classList.remove('open'));
-  if (!isOpen) { body.classList.add('open'); chev.classList.add('open'); }
-}
+      function activatePlatform(index, focusTab = false) {
+        if (
+          !Number.isInteger(index) ||
+          index < 0 ||
+          index >= platformTabs.length
+        ) {
+          return;
+        }
 
-function selectPrompt(id) {
-  const box = document.getElementById('box-' + id);
-  const ta = document.getElementById('ta-' + id);
-  box.classList.add('open');
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-  ta.select();
-}
+        activePlatform = index;
 
-function showPlat(id, el) {
-  document.querySelectorAll('.plat-content').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
-  document.getElementById('plat-' + id).classList.add('active');
-  el.classList.add('active');
-}
+        platformTabs.forEach((tab, tabIndex) => {
+          const isActive = tabIndex === index;
 
-render();
-</script>
+          tab.setAttribute("aria-selected", String(isActive));
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+
+        platformPanels.forEach((panel, panelIndex) => {
+          const isActive = panelIndex === index;
+
+          panel.classList.toggle("active", isActive);
+          panel.hidden = !isActive;
+        });
+
+        if (focusTab) {
+          platformTabs[index].focus();
+        }
+      }
+
+      function showToast(message) {
+        window.clearTimeout(toastTimer);
+
+        toast.textContent = message;
+        toast.classList.add("visible");
+
+        toastTimer = window.setTimeout(() => {
+          toast.classList.remove("visible");
+        }, 2200);
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.pointerEvents = "none";
+
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        const copied = document.execCommand("copy");
+
+        textarea.remove();
+
+        if (!copied) {
+          throw new Error("No se pudo copiar el texto.");
+        }
+      }
+
+      function filterPrompts() {
+        const query = normalizeText(searchInput.value);
+        let visibleCount = 0;
+
+        promptCards.forEach((card) => {
+          const searchableText = normalizeText(
+            [
+              card.dataset.search || "",
+              card.textContent || ""
+            ].join(" ")
+          );
+
+          const isVisible =
+            query.length === 0 || searchableText.includes(query);
+
+          card.hidden = !isVisible;
+
+          if (isVisible) {
+            visibleCount += 1;
+          }
+        });
+
+        resultCount.textContent =
+          visibleCount === 1
+            ? "1 prompt disponible"
+            : `${visibleCount} prompts disponibles`;
+
+        emptyState.classList.toggle("visible", visibleCount === 0);
+      }
+
+      platformTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          activatePlatform(index);
+        });
+
+        tab.addEventListener("keydown", (event) => {
+          let nextIndex = activePlatform;
+
+          if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+            nextIndex = (activePlatform + 1) % platformTabs.length;
+          } else if (
+            event.key === "ArrowLeft" ||
+            event.key === "ArrowUp"
+          ) {
+            nextIndex =
+              (activePlatform - 1 + platformTabs.length) %
+              platformTabs.length;
+          } else if (event.key === "Home") {
+            nextIndex = 0;
+          } else if (event.key === "End") {
+            nextIndex = platformTabs.length - 1;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          activatePlatform(nextIndex, true);
+        });
+      });
+
+      searchInput.addEventListener("input", filterPrompts);
+
+      expandButton.addEventListener("click", () => {
+        promptCards.forEach((card) => {
+          if (!card.hidden) {
+            card.open = true;
+          }
+        });
+      });
+
+      collapseButton.addEventListener("click", () => {
+        promptCards.forEach((card) => {
+          card.open = false;
+        });
+      });
+
+      document.querySelectorAll("[data-copy-target]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const targetId = button.dataset.copyTarget;
+          const target = document.getElementById(targetId);
+
+          if (!target) {
+            showToast("No se encontró el prompt.");
+            return;
+          }
+
+          const originalContent = button.innerHTML;
+
+          try {
+            await copyText(target.textContent.trim());
+
+            button.textContent = "Copiado";
+            showToast("Prompt copiado al portapapeles.");
+
+            window.setTimeout(() => {
+              button.innerHTML = originalContent;
+            }, 1700);
+          } catch (error) {
+            showToast(
+              "No se pudo copiar. Selecciona el texto manualmente."
+            );
+          }
+        });
+      });
+
+      activatePlatform(0);
+      filterPrompts();
+    })();
+  </script>
 </body>
 </html>
