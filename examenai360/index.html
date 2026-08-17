@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Guía visual del Examen Final del Programa AI 360: estructura, categorías, reglas de evaluación y camino a la certificación.">
+<title>AI 360 · Examen Final del Programa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-soft: #fbfaf7;
+
+  --text: #181714;
+  --muted: #69655d;
+  --faint: #979188;
+
+  --border: #e6e1d8;
+  --border-strong: #d1c9bb;
+
+  --purple-bg: #efecfb;
+  --purple: #493891;
+  --purple-border: #d2c9f3;
+
+  --blue-bg: #eaf2fa;
+  --blue: #22629b;
+  --blue-border: #bed4e9;
+
+  --green-bg: #eaf4e5;
+  --green: #345e20;
+  --green-border: #cadfbe;
+
+  --amber-bg: #fdf1da;
+  --amber: #85540f;
+  --amber-border: #efd09a;
+
+  --coral-bg: #faebe6;
+  --coral: #923f27;
+  --coral-border: #edb8a6;
+
+  --dark: #191815;
+
+  --radius-sm: 12px;
+  --radius: 18px;
+  --radius-lg: 26px;
+
+  --shadow: 0 12px 36px rgba(30, 25, 15, 0.05);
+  --max: 1120px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 28px 18px 56px;
+}
+
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.hero {
+  background: linear-gradient(180deg, #fff 0%, #fcfbf8 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.hero-main {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 30px;
+  padding: 38px 34px 28px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--purple-bg);
+  color: var(--purple);
+  border: 1px solid var(--purple-border);
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  max-width: 700px;
+  margin-top: 16px;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.hero-lead {
+  max-width: 720px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.hero-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+  align-content: start;
+}
+
+.stat {
+  min-height: 130px;
+  padding: 18px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.stat-number {
+  font-family: "DM Mono", monospace;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.stat-label {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hero-note {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 17px 34px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.hero-note strong {
+  color: var(--text);
+}
+
+.section {
+  margin-top: 34px;
+}
+
+.section-label {
+  margin-bottom: 9px;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  max-width: 800px;
+  font-size: clamp(27px, 4vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.section-subtitle {
+  max-width: 820px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.grid-3,
+.grid-4 {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.tag {
+  display: inline-flex;
+  margin-bottom: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.tag.purple {
+  background: var(--purple-bg);
+  color: var(--purple);
+  border-color: var(--purple-border);
+}
+
+.tag.blue {
+  background: var(--blue-bg);
+  color: var(--blue);
+  border-color: var(--blue-border);
+}
+
+.tag.green {
+  background: var(--green-bg);
+  color: var(--green);
+  border-color: var(--green-border);
+}
+
+.tag.amber {
+  background: var(--amber-bg);
+  color: var(--amber);
+  border-color: var(--amber-border);
+}
+
+.tag.coral {
+  background: var(--coral-bg);
+  color: var(--coral);
+  border-color: var(--coral-border);
+}
+
+.card h3 {
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.card p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.metric-big {
+  margin-bottom: 8px;
+  font-family: "DM Mono", monospace;
+  font-size: 29px;
+  line-height: 1;
+}
+
+.panel {
+  margin-top: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-head h3 {
+  font-size: 21px;
+  letter-spacing: -0.015em;
+}
+
+.panel-head p {
+  max-width: 700px;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+  background: var(--surface);
+  font-size: 13px;
+}
+
+th {
+  padding: 12px 14px;
+  background: var(--surface-soft);
+  border-bottom: 1px solid var(--border);
+  color: var(--faint);
+  font-size: 10px;
+  text-align: left;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  vertical-align: top;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+td.category {
+  min-width: 230px;
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+td.center {
+  width: 95px;
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  text-align: center;
+}
+
+.num {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  place-items: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--faint);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+}
+
+.priority {
+  background: rgba(239, 236, 251, .38);
+}
+
+.total-row td {
+  background: var(--dark);
+  border-bottom: 0;
+  color: #f3efe8;
+  font-weight: 600;
+}
+
+.total-row td:first-child {
+  border-radius: 0;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.callout {
+  padding: 19px 20px;
+  border: 1px solid;
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+.callout + .callout {
+  margin-top: 12px;
+}
+
+.callout strong {
+  color: var(--text);
+}
+
+.callout.green {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  color: var(--green);
+}
+
+.callout.amber {
+  background: var(--amber-bg);
+  border-color: var(--amber-border);
+  color: var(--amber);
+}
+
+.callout.purple {
+  background: var(--purple-bg);
+  border-color: var(--purple-border);
+  color: var(--purple);
+}
+
+.study-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.study-rank {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rank-number {
+  display: grid;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--purple-bg);
+  color: var(--purple);
+  font-family: "DM Mono", monospace;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.study-card:nth-child(2) .rank-number {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+
+.study-card:nth-child(3) .rank-number {
+  background: var(--green-bg);
+  color: var(--green);
+}
+
+.weight-bar {
+  height: 7px;
+  margin-top: 15px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #efede7;
+}
+
+.weight-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--purple);
+}
+
+.weight-fill.blue {
+  background: var(--blue);
+}
+
+.weight-fill.green {
+  background: var(--green);
+}
+
+.list {
+  display: grid;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.list-item {
+  position: relative;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.list-item::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-strong);
+}
+
+.certification {
+  margin-top: 18px;
+  padding: 25px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+.flow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 11px;
+  margin-top: 20px;
+}
+
+.step {
+  position: relative;
+  min-height: 190px;
+  padding: 18px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.step-number {
+  margin-bottom: 14px;
+  color: var(--faint);
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+}
+
+.step h4 {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.step p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.step.pass {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+}
+
+.step.retry {
+  background: var(--amber-bg);
+  border-color: var(--amber-border);
+}
+
+.footer {
+  margin-top: 34px;
+  padding: 28px;
+  background: var(--dark);
+  border-radius: 22px;
+  color: #f5f1e9;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 28px;
+}
+
+.footer h2 {
+  max-width: 650px;
+  font-size: 27px;
+  line-height: 1.18;
+}
+
+.footer p {
+  margin-top: 10px;
+  color: #cbc4b9;
+  font-size: 14px;
+}
+
+.footer-score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-circle {
+  display: grid;
+  width: 150px;
+  height: 150px;
+  place-items: center;
+  border: 1px solid #47433c;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.score-circle strong {
+  display: block;
+  font-family: "DM Mono", monospace;
+  font-size: 35px;
+  line-height: 1;
+}
+
+.score-circle span {
+  display: block;
+  margin-top: 7px;
+  color: #c9c1b6;
+  font-size: 12px;
+}
+
+.brand {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #393630;
+  color: #a8a095;
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 980px) {
+  .hero-main,
+  .split,
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-score {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 14px 10px 35px;
+  }
+
+  .hero-main {
+    padding: 26px 18px 22px;
+  }
+
+  .hero-side,
+  .grid-3,
+  .grid-4,
+  .flow {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-note,
+  .panel-head {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .panel-head {
+    display: block;
+  }
+
+  .stat {
+    min-height: auto;
+  }
+
+  .certification,
+  .footer {
+    padding: 20px 18px;
+  }
+
+  .step {
+    min-height: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+
+  <header class="hero">
+    <div class="hero-main">
+      <div>
+        <span class="eyebrow">AI 360 · TechXpert Guru · by Opendireito</span>
+
+        <h1>Examen Final del Programa</h1>
+
+        <p class="hero-lead">
+          Guía visual para entender cómo está construido el examen, qué categorías
+          evalúa, cómo se califica y qué necesitas para quedar habilitado para la
+          certificación del programa AI 360.
+        </p>
+      </div>
+
+      <div class="hero-side">
+        <div class="stat">
+          <div class="stat-number">20</div>
+          <div class="stat-label">preguntas de opción múltiple</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">45</div>
+          <div class="stat-label">minutos en una sesión continua</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">2</div>
+          <div class="stat-label">intentos permitidos</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">70%</div>
+          <div class="stat-label">calificación mínima para aprobar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-note">
+      <div>✓</div>
+      <div>
+        <strong>La cifra clave:</strong> necesitas al menos
+        <strong>14 respuestas correctas de 20</strong> para aprobar el examen.
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="section-label">01 · Reglas generales</div>
+    <h2 class="section-title">Qué debes saber antes de comenzar</h2>
+    <p class="section-subtitle">
+      El examen se realiza en Moodle y utiliza preguntas de opción múltiple:
+      una respuesta correcta entre cuatro alternativas.
+    </p>
+
+    <div class="grid-4">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag blue">Duración</span>
+          <div class="metric-big">45 min</div>
+          <p>Se toman en una sola sesión continua dentro de la plataforma.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-body">
+          <span class="tag amber">Intentos</span>
+          <div class="metric-big">2</div>
+          <p>
+            Puedes volver a rendir si no apruebas en el primero o si deseas
+            mejorar tu calificación.
+          </p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-body">
+          <span class="tag green">Aprobación</span>
+          <div class="metric-big">70%</div>
+          <p>Equivale a obtener como mínimo 14 respuestas correctas de 20.</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-body">
+          <span class="tag purple">Certificación</span>
+          <div class="metric-big">14/20</div>
+          <p>
+            Al alcanzar el mínimo en cualquiera de los intentos quedas
+            habilitado para certificarte en AI 360.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">02 · Cobertura temática</div>
+    <h2 class="section-title">9 categorías cubren el programa completo</h2>
+    <p class="section-subtitle">
+      La evaluación combina fundamentos técnicos, prompting, herramientas
+      avanzadas, generación visual y aplicación empresarial en casos reales.
+      La cantidad de preguntas no es uniforme entre categorías.
+    </p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Distribución del examen</h3>
+          <p>
+            Técnicas de Prompting concentra el mayor número de preguntas,
+            seguida por Embeddings, Búsqueda Semántica y RAG.
+          </p>
+        </div>
+        <span class="tag purple">20 preguntas · 100%</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Categoría</th>
+              <th>Preguntas</th>
+              <th>Peso</th>
+              <th>Temas incluidos</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="center">01</td>
+              <td class="category">Fundamentos de LLMs</td>
+              <td class="center">2</td>
+              <td class="center">10%</td>
+              <td>
+                Qué es un LLM y cómo predice texto, tokens y su costo,
+                ventana de contexto.
+              </td>
+            </tr>
+
+            <tr>
+              <td class="center">02</td>
+              <td class="category">Ecosistema de Herramientas de IA</td>
+              <td class="center">2</td>
+              <td class="center">8%</td>
+              <td>
+                ChatGPT vs. Claude vs. Gemini: fortalezas, límites y cuándo
+                usar cada uno.
+              </td>
+            </tr>
+
+            <tr class="priority">
+              <td class="center">03</td>
+              <td class="category">Técnicas de Prompting</td>
+              <td class="center">4</td>
+              <td class="center">18%</td>
+              <td>
+                TCREI, Zero-shot, Few-shot, Chain-of-Thought,
+                Encadenamiento y Meta Prompting.
+              </td>
+            </tr>
+
+            <tr>
+              <td class="center">04</td>
+              <td class="category">Alucinaciones y Uso Responsable</td>
+              <td class="center">2</td>
+              <td class="center">8%</td>
+              <td>
+                Por qué ocurren las alucinaciones, cómo validar resultados
+                y clasificación de información sensible.
+              </td>
+            </tr>
+
+            <tr>
+              <td class="center">05</td>
+              <td class="category">
+                Prompt de Sistema/Usuario y Agentes Personalizados
+              </td>
+              <td class="center">1</td>
+              <td class="center">8%</td>
+              <td>
+                Jerarquía sistema vs. usuario, GPTs y GEMs personalizados.
+              </td>
+            </tr>
+
+            <tr class="priority">
+              <td class="center">06</td>
+              <td class="category">
+                Embeddings, Búsqueda Semántica y RAG
+              </td>
+              <td class="center">3</td>
+              <td class="center">14%</td>
+              <td>
+                Representaciones vectoriales, búsqueda semántica,
+                cómo funciona RAG e higiene documental.
+              </td>
+            </tr>
+
+            <tr>
+              <td class="center">07</td>
+              <td class="category">Herramientas Avanzadas</td>
+              <td class="center">2</td>
+              <td class="center">10%</td>
+              <td>
+                Projects (ChatGPT/Claude), NotebookLM, Deep Research
+                y transcripción de audio a texto.
+              </td>
+            </tr>
+
+            <tr>
+              <td class="center">08</td>
+              <td class="category">Generación de Contenido Visual con IA</td>
+              <td class="center">2</td>
+              <td class="center">12%</td>
+              <td>
+                Estructura de prompts visuales, Sistema Visual de Marca,
+                formatos por canal y prompts de video.
+              </td>
+            </tr>
+
+            <tr>
+              <td class="center">09</td>
+              <td class="category">
+                Aplicación Empresarial / Casos Reales (Eclipsoft)
+              </td>
+              <td class="center">2</td>
+              <td class="center">12%</td>
+              <td>
+                Documentos de contexto + asistentes, investigación delimitada,
+                actas de reunión con IA y niveles de madurez de IA.
+              </td>
+            </tr>
+
+            <tr class="total-row">
+              <td></td>
+              <td>Total</td>
+              <td class="center">20</td>
+              <td class="center">100%</td>
+              <td>Cobertura completa del programa AI 360.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">03 · Estrategia de estudio</div>
+    <h2 class="section-title">Dónde conviene concentrar más tiempo</h2>
+    <p class="section-subtitle">
+      Todas las categorías deben repasarse. Sin embargo, el documento identifica
+      dos bloques con especial relevancia por la cantidad de preguntas que
+      concentran.
+    </p>
+
+    <div class="grid-3">
+      <article class="card study-card">
+        <div class="card-body">
+          <div class="study-rank">
+            <div class="rank-number">01</div>
+            <div>
+              <span class="tag purple">Prioridad principal</span>
+              <h3>Técnicas de Prompting</h3>
+            </div>
+          </div>
+
+          <p>
+            Es la habilidad práctica central del curso y aparece transversalmente
+            en los demás bloques.
+          </p>
+
+          <div class="weight-bar">
+            <div class="weight-fill" style="width:100%"></div>
+          </div>
+
+          <div class="list">
+            <div class="list-item">4 preguntas de 20.</div>
+            <div class="list-item">Peso indicado: 18%.</div>
+            <div class="list-item">
+              TCREI, Zero-shot, Few-shot, Chain-of-Thought,
+              Encadenamiento y Meta Prompting.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card study-card">
+        <div class="card-body">
+          <div class="study-rank">
+            <div class="rank-number">02</div>
+            <div>
+              <span class="tag blue">Prioridad alta</span>
+              <h3>Embeddings, Semántica y RAG</h3>
+            </div>
+          </div>
+
+          <p>
+            Constituye la base técnica de herramientas avanzadas con
+            conocimiento propio.
+          </p>
+
+          <div class="weight-bar">
+            <div class="weight-fill blue" style="width:78%"></div>
+          </div>
+
+          <div class="list">
+            <div class="list-item">3 preguntas de 20.</div>
+            <div class="list-item">Peso indicado: 14%.</div>
+            <div class="list-item">
+              Vectores, búsqueda semántica, funcionamiento de RAG
+              e higiene documental.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card study-card">
+        <div class="card-body">
+          <div class="study-rank">
+            <div class="rank-number">03</div>
+            <div>
+              <span class="tag green">Cobertura completa</span>
+              <h3>No ignores las demás categorías</h3>
+            </div>
+          </div>
+
+          <p>
+            Una pregunta incorrecta tiene el mismo efecto sobre la nota,
+            independientemente de la categoría de la que provenga.
+          </p>
+
+          <div class="weight-bar">
+            <div class="weight-fill green" style="width:62%"></div>
+          </div>
+
+          <div class="list">
+            <div class="list-item">Repasa las 9 categorías.</div>
+            <div class="list-item">
+              Visual y Casos Reales tienen 2 preguntas cada una.
+            </div>
+            <div class="list-item">
+              Sistema/Usuario y Agentes es la única categoría con 1 pregunta.
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="split">
+      <div class="callout green">
+        <strong>Recomendación de estudio:</strong>
+        dedica más tiempo a Técnicas de Prompting y a Embeddings/RAG,
+        pero mantén cobertura sobre las nueve categorías.
+      </div>
+
+      <div class="callout amber">
+        <strong>No subestimes una categoría pequeña:</strong>
+        el examen asigna 1 punto a cada pregunta, por lo que fallar una
+        pregunta tiene el mismo impacto en la calificación final.
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">04 · Lectura práctica</div>
+    <h2 class="section-title">Qué significa esto para el participante</h2>
+
+    <div class="split">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag green">Objetivo</span>
+          <h3>Tu referencia de aprobación es 14/20</h3>
+
+          <div class="list">
+            <div class="list-item">
+              El examen contiene 20 preguntas en total.
+            </div>
+            <div class="list-item">
+              Cada pregunta vale 1 punto.
+            </div>
+            <div class="list-item">
+              Con 14 respuestas correctas alcanzas el mínimo de aprobación.
+            </div>
+            <div class="list-item">
+              Con menos de 14 respuestas correctas puedes utilizar
+              el segundo intento.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div>
+        <div class="callout purple">
+          <strong>Bloques prácticos de cierre:</strong>
+          Generación de Contenido Visual y Aplicación Empresarial /
+          Casos Reales cuentan con 2 preguntas cada uno y corresponden
+          a los bloques prácticos finales del programa.
+        </div>
+
+        <div class="callout amber">
+          <strong>Sobre los pesos mostrados:</strong>
+          esta página conserva los porcentajes temáticos exactamente
+          como aparecen en el documento original y, al mismo tiempo,
+          mantiene la regla indicada allí de que cada pregunta vale 1 punto.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">05 · Camino a la certificación</div>
+    <h2 class="section-title">Del programa completado a la certificación</h2>
+    <p class="section-subtitle">
+      El examen final constituye el último requisito de evaluación del
+      programa AI 360.
+    </p>
+
+    <div class="certification">
+      <div class="flow">
+
+        <div class="step">
+          <div class="step-number">PASO 01</div>
+          <h4>Completar el programa</h4>
+          <p>
+            Finalizas las sesiones y prácticas correspondientes
+            a los Bloques 1 a 4.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">PASO 02</div>
+          <h4>Rendir el examen</h4>
+          <p>
+            Dispones de 45 minutos para responder 20 preguntas
+            sobre las 9 categorías.
+          </p>
+        </div>
+
+        <div class="step pass">
+          <div class="step-number">PASO 03</div>
+          <h4>¿Obtienes 70% o más?</h4>
+          <p>
+            Con 14 respuestas correctas o más quedas habilitado
+            para la certificación.
+          </p>
+        </div>
+
+        <div class="step retry">
+          <div class="step-number">PASO 04</div>
+          <h4>Segundo intento</h4>
+          <p>
+            Si no alcanzas el mínimo en el primero, puedes volver
+            a rendir el examen completo.
+          </p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">PASO 05</div>
+          <h4>Se considera la nota más alta</h4>
+          <p>
+            Para la certificación cuenta la mejor calificación
+            obtenida entre los dos intentos.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="section-label" style="color:#8f887e;">Resumen final</div>
+        <h2>La meta es simple: dominar la cobertura completa y superar 14 respuestas correctas.</h2>
+
+        <p>
+          Prioriza Prompting y Embeddings/RAG, repasa las nueve categorías
+          y administra los 45 minutos con claridad. Al alcanzar el 70% o más
+          en cualquiera de los dos intentos, quedas habilitado para
+          certificarte en AI 360.
+        </p>
+      </div>
+
+      <div class="footer-score">
+        <div class="score-circle">
+          <div>
+            <strong>≥70%</strong>
+            <span>mínimo de aprobación</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand">
+      AI 360 · TechXpert Guru · by Opendireito · Programa Ejecutivo 2026
+    </div>
+  </footer>
+
+</main>
+</body>
+</html>
