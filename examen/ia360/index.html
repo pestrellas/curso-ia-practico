@@ -3,690 +3,552 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Guía visual del Examen Final del Programa AI 360: estructura, categorías, reglas de evaluación y camino a la certificación.">
-<title>AI 360 · Examen Final del Programa</title>
+<title>AI 360 — Preguntas de Repaso · Examen Final</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-:root {
-  --bg: #f6f5f1;
-  --surface: #ffffff;
-  --surface-soft: #fbfaf7;
+:root{
+  --bg:#f5f4f0;
+  --surface:#ffffff;
+  --surface-soft:#faf9f6;
+  --text:#191817;
+  --muted:#69655e;
+  --faint:#969086;
+  --border:#e5e1d8;
+  --border-strong:#cec7ba;
 
-  --text: #181714;
-  --muted: #69655d;
-  --faint: #979188;
+  --purple-bg:#efecfb;
+  --purple:#4a3d91;
+  --purple-border:#d3caf6;
 
-  --border: #e6e1d8;
-  --border-strong: #d1c9bb;
+  --blue-bg:#eaf3fb;
+  --blue:#215f98;
+  --blue-border:#bfd8ec;
 
-  --purple-bg: #efecfb;
-  --purple: #493891;
-  --purple-border: #d2c9f3;
+  --green-bg:#edf5e9;
+  --green:#35651d;
+  --green-border:#cbe1be;
 
-  --blue-bg: #eaf2fa;
-  --blue: #22629b;
-  --blue-border: #bed4e9;
+  --amber-bg:#fdf3df;
+  --amber:#855714;
+  --amber-border:#edd19e;
 
-  --green-bg: #eaf4e5;
-  --green: #345e20;
-  --green-border: #cadfbe;
+  --coral-bg:#faece7;
+  --coral:#923f26;
+  --coral-border:#edb9a7;
 
-  --amber-bg: #fdf1da;
-  --amber: #85540f;
-  --amber-border: #efd09a;
-
-  --coral-bg: #faebe6;
-  --coral: #923f27;
-  --coral-border: #edb8a6;
-
-  --dark: #191815;
-
-  --radius-sm: 12px;
-  --radius: 18px;
-  --radius-lg: 26px;
-
-  --shadow: 0 12px 36px rgba(30, 25, 15, 0.05);
-  --max: 1120px;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "DM Sans", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  padding: 28px 18px 56px;
-}
-
-.page {
-  max-width: var(--max);
-  margin: 0 auto;
-}
-
-.hero {
-  background: linear-gradient(180deg, #fff 0%, #fcfbf8 100%);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-
-.hero-main {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 30px;
-  padding: 38px 34px 28px;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  background: var(--purple-bg);
-  color: var(--purple);
-  border: 1px solid var(--purple-border);
-  border-radius: 999px;
-  font-size: 11px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-}
-
-.hero h1 {
-  max-width: 700px;
-  margin-top: 16px;
-  font-size: clamp(34px, 5vw, 52px);
-  line-height: 1.04;
-  letter-spacing: -0.04em;
+  --max:1180px;
+  --radius:18px;
+  --shadow:0 12px 36px rgba(20,18,15,.045);
 }
 
-.hero-lead {
-  max-width: 720px;
-  margin-top: 18px;
-  color: var(--muted);
-  font-size: 17px;
+html{
+  scroll-behavior:smooth;
 }
 
-.hero-side {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 11px;
-  align-content: start;
+body{
+  font-family:"DM Sans",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  padding:28px 18px 60px;
 }
 
-.stat {
-  min-height: 130px;
-  padding: 18px;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+.page{
+  max-width:var(--max);
+  margin:0 auto;
 }
 
-.stat-number {
-  font-family: "DM Mono", monospace;
-  font-size: 30px;
-  line-height: 1;
-  font-weight: 500;
-  letter-spacing: -0.04em;
+.eyebrow,
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.07em;
 }
 
-.stat-label {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 13px;
+.eyebrow{
+  padding:7px 12px;
+  background:var(--purple-bg);
+  color:var(--purple);
+  border:1px solid var(--purple-border);
 }
 
-.hero-note {
-  display: flex;
-  gap: 13px;
-  align-items: flex-start;
-  padding: 17px 34px 20px;
-  border-top: 1px solid var(--border);
-  background: var(--surface-soft);
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.hero-note strong {
-  color: var(--text);
-}
-
-.section {
-  margin-top: 34px;
-}
-
-.section-label {
-  margin-bottom: 9px;
-  color: var(--faint);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-}
-
-.section-title {
-  max-width: 800px;
-  font-size: clamp(27px, 4vw, 34px);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-}
+/* HERO */
 
-.section-subtitle {
-  max-width: 820px;
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 15px;
+.hero{
+  background:linear-gradient(180deg,#fff 0%,#fcfbf8 100%);
+  border:1px solid var(--border);
+  border-radius:26px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
 
-.grid-3,
-.grid-4 {
-  display: grid;
-  gap: 14px;
-  margin-top: 18px;
+.hero-main{
+  display:grid;
+  grid-template-columns:1.35fr .85fr;
+  gap:30px;
+  padding:38px 34px 30px;
 }
 
-.grid-3 {
-  grid-template-columns: repeat(3, 1fr);
+.hero h1{
+  margin-top:16px;
+  font-size:46px;
+  line-height:1.06;
+  letter-spacing:-.04em;
+  max-width:760px;
 }
 
-.grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+.hero .lead{
+  margin-top:18px;
+  max-width:760px;
+  font-size:17px;
+  color:var(--muted);
 }
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+.hero-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  align-content:start;
 }
 
-.card-body {
-  padding: 20px;
+.stat{
+  padding:16px;
+  border-radius:15px;
+  border:1px solid var(--border);
+  background:var(--surface-soft);
 }
 
-.tag {
-  display: inline-flex;
-  margin-bottom: 12px;
-  padding: 5px 10px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
+.stat-number{
+  font-family:"DM Mono",monospace;
+  font-size:25px;
+  font-weight:500;
+  color:var(--text);
 }
 
-.tag.purple {
-  background: var(--purple-bg);
-  color: var(--purple);
-  border-color: var(--purple-border);
+.stat-label{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:12px;
 }
 
-.tag.blue {
-  background: var(--blue-bg);
-  color: var(--blue);
-  border-color: var(--blue-border);
+.hero-note{
+  padding:18px 34px 22px;
+  border-top:1px solid var(--border);
+  background:var(--surface-soft);
+  display:flex;
+  gap:12px;
+  color:var(--muted);
+  font-size:14px;
 }
 
-.tag.green {
-  background: var(--green-bg);
-  color: var(--green);
-  border-color: var(--green-border);
+.hero-note strong{
+  color:var(--text);
 }
 
-.tag.amber {
-  background: var(--amber-bg);
-  color: var(--amber);
-  border-color: var(--amber-border);
-}
-
-.tag.coral {
-  background: var(--coral-bg);
-  color: var(--coral);
-  border-color: var(--coral-border);
-}
+/* GENERAL */
 
-.card h3 {
-  font-size: 18px;
-  line-height: 1.25;
+.section{
+  margin-top:34px;
 }
 
-.card p {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 14px;
+.section-label{
+  margin-bottom:8px;
+  color:var(--faint);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
 }
 
-.metric-big {
-  margin-bottom: 8px;
-  font-family: "DM Mono", monospace;
-  font-size: 29px;
-  line-height: 1;
+.section-title{
+  font-size:31px;
+  line-height:1.15;
+  letter-spacing:-.025em;
 }
 
-.panel {
-  margin-top: 18px;
-  overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
+.section-sub{
+  max-width:790px;
+  margin-top:9px;
+  color:var(--muted);
+  font-size:15px;
 }
 
-.panel-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: flex-start;
-  padding: 20px 22px 16px;
-  border-bottom: 1px solid var(--border);
+.panel{
+  margin-top:17px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow:var(--shadow);
 }
 
-.panel-head h3 {
-  font-size: 21px;
-  letter-spacing: -0.015em;
-}
+/* CATEGORIES */
 
-.panel-head p {
-  max-width: 700px;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 14px;
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:17px;
 }
 
-.table-wrap {
-  overflow-x: auto;
+.category{
+  min-height:126px;
+  padding:17px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:17px;
+  box-shadow:var(--shadow);
 }
 
-table {
-  width: 100%;
-  min-width: 920px;
-  border-collapse: collapse;
-  background: var(--surface);
-  font-size: 13px;
+.category-count{
+  font-family:"DM Mono",monospace;
+  font-size:11px;
+  color:var(--faint);
 }
 
-th {
-  padding: 12px 14px;
-  background: var(--surface-soft);
-  border-bottom: 1px solid var(--border);
-  color: var(--faint);
-  font-size: 10px;
-  text-align: left;
-  letter-spacing: .07em;
-  text-transform: uppercase;
+.category h3{
+  margin-top:9px;
+  font-size:16px;
+  line-height:1.25;
 }
 
-td {
-  padding: 14px;
-  border-bottom: 1px solid var(--border);
-  color: var(--muted);
-  vertical-align: top;
+.category p{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:13px;
 }
 
-tbody tr:last-child td {
-  border-bottom: 0;
-}
+/* STUDY METHOD */
 
-td.category {
-  min-width: 230px;
-  color: var(--text);
-  font-weight: 700;
-  line-height: 1.35;
+.study-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:17px;
 }
 
-td.center {
-  width: 95px;
-  color: var(--text);
-  font-family: "DM Mono", monospace;
-  text-align: center;
+.study-step{
+  padding:19px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:17px;
 }
 
-.num {
-  display: inline-grid;
-  width: 28px;
-  height: 28px;
-  margin-right: 8px;
-  place-items: center;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--faint);
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
+.study-step .number{
+  font-family:"DM Mono",monospace;
+  color:var(--faint);
+  font-size:12px;
 }
 
-.priority {
-  background: rgba(239, 236, 251, .38);
+.study-step h3{
+  margin-top:8px;
+  font-size:18px;
 }
 
-.total-row td {
-  background: var(--dark);
-  border-bottom: 0;
-  color: #f3efe8;
-  font-weight: 600;
+.study-step p{
+  margin-top:6px;
+  font-size:14px;
+  color:var(--muted);
 }
 
-.total-row td:first-child {
-  border-radius: 0;
-}
+/* QUESTION CARDS */
 
-.split {
-  display: grid;
-  grid-template-columns: 1.15fr .85fr;
-  gap: 16px;
-  margin-top: 18px;
+.questions{
+  display:grid;
+  gap:13px;
+  margin-top:19px;
 }
 
-.callout {
-  padding: 19px 20px;
-  border: 1px solid;
-  border-radius: var(--radius);
-  font-size: 14px;
+.question-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:19px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
 
-.callout + .callout {
-  margin-top: 12px;
+.question-head{
+  padding:19px 20px 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-.callout strong {
-  color: var(--text);
+.q-number{
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  border-radius:10px;
+  background:#191817;
+  color:white;
+  font-family:"DM Mono",monospace;
+  font-size:12px;
 }
 
-.callout.green {
-  background: var(--green-bg);
-  border-color: var(--green-border);
-  color: var(--green);
+.tag{
+  padding:5px 9px;
+  border:1px solid transparent;
 }
 
-.callout.amber {
-  background: var(--amber-bg);
-  border-color: var(--amber-border);
-  color: var(--amber);
+.purple{
+  background:var(--purple-bg);
+  color:var(--purple);
+  border-color:var(--purple-border);
 }
 
-.callout.purple {
-  background: var(--purple-bg);
-  border-color: var(--purple-border);
-  color: var(--purple);
+.blue{
+  background:var(--blue-bg);
+  color:var(--blue);
+  border-color:var(--blue-border);
 }
 
-.study-card {
-  position: relative;
-  overflow: hidden;
+.green{
+  background:var(--green-bg);
+  color:var(--green);
+  border-color:var(--green-border);
 }
 
-.study-rank {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+.amber{
+  background:var(--amber-bg);
+  color:var(--amber);
+  border-color:var(--amber-border);
 }
 
-.rank-number {
-  display: grid;
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--purple-bg);
-  color: var(--purple);
-  font-family: "DM Mono", monospace;
-  font-size: 15px;
-  font-weight: 500;
+.coral{
+  background:var(--coral-bg);
+  color:var(--coral);
+  border-color:var(--coral-border);
 }
 
-.study-card:nth-child(2) .rank-number {
-  background: var(--blue-bg);
-  color: var(--blue);
+.question-text{
+  padding:2px 20px 18px;
+  font-size:18px;
+  line-height:1.4;
+  font-weight:700;
+  letter-spacing:-.01em;
 }
 
-.study-card:nth-child(3) .rank-number {
-  background: var(--green-bg);
-  color: var(--green);
+details.answer{
+  border-top:1px solid var(--border);
+  background:var(--surface-soft);
 }
 
-.weight-bar {
-  height: 7px;
-  margin-top: 15px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #efede7;
+details.answer summary{
+  list-style:none;
+  cursor:pointer;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:center;
+  color:var(--purple);
+  font-size:13px;
+  font-weight:700;
 }
 
-.weight-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: var(--purple);
+details.answer summary::-webkit-details-marker{
+  display:none;
 }
 
-.weight-fill.blue {
-  background: var(--blue);
+details.answer summary::after{
+  content:"+";
+  width:26px;
+  height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  border-radius:8px;
+  background:var(--purple-bg);
+  border:1px solid var(--purple-border);
+  font-family:"DM Mono",monospace;
+  font-size:17px;
 }
 
-.weight-fill.green {
-  background: var(--green);
+details.answer[open] summary::after{
+  content:"–";
 }
 
-.list {
-  display: grid;
-  gap: 9px;
-  margin-top: 14px;
+.answer-content{
+  padding:0 20px 20px;
+  color:var(--muted);
+  font-size:15px;
 }
 
-.list-item {
-  position: relative;
-  padding-left: 18px;
-  color: var(--muted);
-  font-size: 14px;
+.answer-content strong{
+  color:var(--text);
 }
 
-.list-item::before {
-  content: "";
-  position: absolute;
-  top: 9px;
-  left: 1px;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--border-strong);
+.answer-content .key{
+  margin-top:12px;
+  padding:13px 15px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:13px;
+  color:var(--text);
 }
 
-.certification {
-  margin-top: 18px;
-  padding: 25px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  box-shadow: var(--shadow);
+.answer-content ul{
+  padding-left:20px;
+  margin-top:8px;
 }
 
-.flow {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 11px;
-  margin-top: 20px;
+.answer-content li + li{
+  margin-top:5px;
 }
 
-.step {
-  position: relative;
-  min-height: 190px;
-  padding: 18px;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
+/* MEMORY MAP */
 
-.step-number {
-  margin-bottom: 14px;
-  color: var(--faint);
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
+.memory-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:17px;
 }
 
-.step h4 {
-  font-size: 16px;
-  line-height: 1.3;
+.memory-card{
+  padding:18px;
+  border-radius:17px;
+  border:1px solid var(--border);
+  background:var(--surface);
 }
 
-.step p {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 13px;
+.memory-card .mini-label{
+  font-family:"DM Mono",monospace;
+  color:var(--faint);
+  font-size:11px;
+  text-transform:uppercase;
 }
 
-.step.pass {
-  background: var(--green-bg);
-  border-color: var(--green-border);
+.memory-card h3{
+  margin-top:7px;
+  font-size:18px;
 }
 
-.step.retry {
-  background: var(--amber-bg);
-  border-color: var(--amber-border);
+.memory-card p{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:13px;
 }
 
-.footer {
-  margin-top: 34px;
-  padding: 28px;
-  background: var(--dark);
-  border-radius: 22px;
-  color: #f5f1e9;
-}
+/* CALLOUT */
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: 28px;
+.callout{
+  margin-top:17px;
+  padding:19px 21px;
+  border-radius:18px;
+  background:var(--green-bg);
+  border:1px solid var(--green-border);
+  color:var(--green);
+  font-size:14px;
 }
 
-.footer h2 {
-  max-width: 650px;
-  font-size: 27px;
-  line-height: 1.18;
+.callout strong{
+  color:var(--text);
 }
 
-.footer p {
-  margin-top: 10px;
-  color: #cbc4b9;
-  font-size: 14px;
-}
+/* FOOTER */
 
-.footer-score {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.footer{
+  margin-top:34px;
+  padding:27px;
+  border-radius:22px;
+  background:#191817;
+  color:#f8f5ef;
 }
 
-.score-circle {
-  display: grid;
-  width: 150px;
-  height: 150px;
-  place-items: center;
-  border: 1px solid #47433c;
-  border-radius: 50%;
-  text-align: center;
+.footer-label{
+  color:#ada69a;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
 }
 
-.score-circle strong {
-  display: block;
-  font-family: "DM Mono", monospace;
-  font-size: 35px;
-  line-height: 1;
+.footer h2{
+  margin-top:8px;
+  font-size:26px;
+  letter-spacing:-.02em;
 }
 
-.score-circle span {
-  display: block;
-  margin-top: 7px;
-  color: #c9c1b6;
-  font-size: 12px;
+.footer p{
+  margin-top:9px;
+  max-width:820px;
+  color:#d7d1c7;
+  font-size:14px;
 }
 
-.brand {
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid #393630;
-  color: #a8a095;
-  font-size: 11px;
-  letter-spacing: .04em;
-  text-transform: uppercase;
+.footer-meta{
+  margin-top:18px;
+  padding-top:15px;
+  border-top:1px solid #383530;
+  color:#9d968b;
+  font-family:"DM Mono",monospace;
+  font-size:11px;
 }
 
-@media (max-width: 980px) {
-  .hero-main,
-  .split,
-  .footer-grid {
-    grid-template-columns: 1fr;
+@media(max-width:960px){
+  .hero-main{
+    grid-template-columns:1fr;
   }
 
-  .grid-4 {
-    grid-template-columns: repeat(2, 1fr);
+  .category-grid{
+    grid-template-columns:repeat(2,1fr);
   }
 
-  .grid-3 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .flow {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .footer-score {
-    justify-content: flex-start;
+  .memory-grid{
+    grid-template-columns:repeat(2,1fr);
   }
 }
 
-@media (max-width: 640px) {
-  body {
-    padding: 14px 10px 35px;
+@media(max-width:680px){
+  body{
+    padding:14px 10px 38px;
   }
 
-  .hero-main {
-    padding: 26px 18px 22px;
+  .hero-main{
+    padding:25px 19px 23px;
   }
 
-  .hero-side,
-  .grid-3,
-  .grid-4,
-  .flow {
-    grid-template-columns: 1fr;
+  .hero h1{
+    font-size:34px;
   }
 
-  .hero-note,
-  .panel-head {
-    padding-left: 18px;
-    padding-right: 18px;
+  .hero-note{
+    padding:16px 19px 19px;
   }
 
-  .panel-head {
-    display: block;
+  .hero-stats,
+  .category-grid,
+  .study-grid,
+  .memory-grid{
+    grid-template-columns:1fr;
   }
 
-  .stat {
-    min-height: auto;
+  .section-title{
+    font-size:25px;
   }
 
-  .certification,
-  .footer {
-    padding: 20px 18px;
-  }
-
-  .step {
-    min-height: auto;
+  .question-text{
+    font-size:17px;
   }
 }
 </style>
@@ -695,503 +557,539 @@ td.center {
 <body>
 <main class="page">
 
-  <header class="hero">
-    <div class="hero-main">
-      <div>
-        <span class="eyebrow">AI 360 · TechXpert Guru · by Opendireito</span>
-
-        <h1>Examen Final del Programa</h1>
-
-        <p class="hero-lead">
-          Guía visual para entender cómo está construido el examen, qué categorías
-          evalúa, cómo se califica y qué necesitas para quedar habilitado para la
-          certificación del programa AI 360.
-        </p>
-      </div>
-
-      <div class="hero-side">
-        <div class="stat">
-          <div class="stat-number">20</div>
-          <div class="stat-label">preguntas de opción múltiple</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number">45</div>
-          <div class="stat-label">minutos en una sesión continua</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number">2</div>
-          <div class="stat-label">intentos permitidos</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-number">70%</div>
-          <div class="stat-label">calificación mínima para aprobar</div>
-        </div>
-      </div>
+<section class="hero">
+  <div class="hero-main">
+    <div>
+      <div class="eyebrow">AI 360 · TechXpert Guru · by Opendireito</div>
+      <h1>Preguntas de Repaso — Examen Final</h1>
+      <p class="lead">
+        15 preguntas de autoevaluación para repasar los principales conceptos del programa.
+        Intenta responder cada pregunta de memoria antes de abrir la solución.
+      </p>
     </div>
 
-    <div class="hero-note">
-      <div>✓</div>
-      <div>
-        <strong>La cifra clave:</strong> necesitas al menos
-        <strong>14 respuestas correctas de 20</strong> para aprobar el examen.
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">15</div>
+        <div class="stat-label">Preguntas de repaso</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">9</div>
+        <div class="stat-label">Áreas temáticas</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">01</div>
+        <div class="stat-label">Objetivo: detectar vacíos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">2026</div>
+        <div class="stat-label">Programa Ejecutivo</div>
       </div>
     </div>
-  </header>
+  </div>
 
-  <section class="section">
-    <div class="section-label">01 · Reglas generales</div>
-    <h2 class="section-title">Qué debes saber antes de comenzar</h2>
-    <p class="section-subtitle">
-      El examen se realiza en Moodle y utiliza preguntas de opción múltiple:
-      una respuesta correcta entre cuatro alternativas.
-    </p>
-
-    <div class="grid-4">
-      <article class="card">
-        <div class="card-body">
-          <span class="tag blue">Duración</span>
-          <div class="metric-big">45 min</div>
-          <p>Se toman en una sola sesión continua dentro de la plataforma.</p>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-body">
-          <span class="tag amber">Intentos</span>
-          <div class="metric-big">2</div>
-          <p>
-            Puedes volver a rendir si no apruebas en el primero o si deseas
-            mejorar tu calificación.
-          </p>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-body">
-          <span class="tag green">Aprobación</span>
-          <div class="metric-big">70%</div>
-          <p>Equivale a obtener como mínimo 14 respuestas correctas de 20.</p>
-        </div>
-      </article>
-
-      <article class="card">
-        <div class="card-body">
-          <span class="tag purple">Certificación</span>
-          <div class="metric-big">14/20</div>
-          <p>
-            Al alcanzar el mínimo en cualquiera de los intentos quedas
-            habilitado para certificarte en AI 360.
-          </p>
-        </div>
-      </article>
+  <div class="hero-note">
+    <span>◎</span>
+    <div>
+      <strong>Cómo usar esta guía:</strong>
+      estas no son las preguntas literales del examen. Cubren los mismos temas y categorías.
+      La recomendación es intentar responder primero y revelar la respuesta después.
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="section-label">02 · Cobertura temática</div>
-    <h2 class="section-title">9 categorías cubren el programa completo</h2>
-    <p class="section-subtitle">
-      La evaluación combina fundamentos técnicos, prompting, herramientas
-      avanzadas, generación visual y aplicación empresarial en casos reales.
-      La cantidad de preguntas no es uniforme entre categorías.
-    </p>
 
-    <div class="panel">
-      <div class="panel-head">
-        <div>
-          <h3>Distribución del examen</h3>
-          <p>
-            Técnicas de Prompting concentra el mayor número de preguntas,
-            seguida por Embeddings, Búsqueda Semántica y RAG.
-          </p>
-        </div>
-        <span class="tag purple">20 preguntas · 100%</span>
+<section class="section">
+  <div class="section-label">Mapa de contenidos</div>
+  <h2 class="section-title">Qué necesitas dominar</h2>
+  <p class="section-sub">
+    El repaso combina fundamentos técnicos, prompting, herramientas, uso responsable,
+    contenido visual y aplicación empresarial.
+  </p>
+
+  <div class="category-grid">
+    <article class="category">
+      <div class="category-count">02 preguntas</div>
+      <h3>Fundamentos de LLMs</h3>
+      <p>Tokens y ventana de contexto.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">01 pregunta</div>
+      <h3>Ecosistema de Herramientas</h3>
+      <p>Selección de herramientas según el entorno de trabajo.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">03 preguntas</div>
+      <h3>Técnicas de Prompting</h3>
+      <p>TCREI, encadenamiento y Meta Prompting.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">01 pregunta</div>
+      <h3>Uso Responsable</h3>
+      <p>Validación y control de alucinaciones.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">01 pregunta</div>
+      <h3>Prompts de Sistema</h3>
+      <p>Jerarquía entre instrucciones.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">02 preguntas</div>
+      <h3>Embeddings + RAG</h3>
+      <p>Búsqueda semántica e higiene documental.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">01 pregunta</div>
+      <h3>Herramientas Avanzadas</h3>
+      <p>NotebookLM y Audio Overview.</p>
+    </article>
+
+    <article class="category">
+      <div class="category-count">04 preguntas</div>
+      <h3>Visual + Empresa</h3>
+      <p>SVM, hero + derivados, madurez y asistentes.</p>
+    </article>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="section-label">Método recomendado</div>
+  <h2 class="section-title">Estudia en tres movimientos</h2>
+
+  <div class="study-grid">
+    <article class="study-step">
+      <div class="number">01</div>
+      <h3>Responde de memoria</h3>
+      <p>No abras la solución inmediatamente. Formula tu respuesta primero, aunque sea incompleta.</p>
+    </article>
+
+    <article class="study-step">
+      <div class="number">02</div>
+      <h3>Compara</h3>
+      <p>Abre la respuesta y detecta conceptos, términos o relaciones que hayas omitido.</p>
+    </article>
+
+    <article class="study-step">
+      <div class="number">03</div>
+      <h3>Refuerza</h3>
+      <p>Vuelve especialmente sobre las preguntas donde recordaste la idea, pero no pudiste explicarla con precisión.</p>
+    </article>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="section-label">Autoevaluación</div>
+  <h2 class="section-title">15 preguntas clave</h2>
+  <p class="section-sub">
+    Haz clic en “Ver respuesta” únicamente después de intentar formular tu propia explicación.
+  </p>
+
+  <div class="questions">
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">01</div>
+        <div class="tag purple">Fundamentos de LLMs</div>
       </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Categoría</th>
-              <th>Preguntas</th>
-              <th>Peso</th>
-              <th>Temas incluidos</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td class="center">01</td>
-              <td class="category">Fundamentos de LLMs</td>
-              <td class="center">2</td>
-              <td class="center">10%</td>
-              <td>
-                Qué es un LLM y cómo predice texto, tokens y su costo,
-                ventana de contexto.
-              </td>
-            </tr>
-
-            <tr>
-              <td class="center">02</td>
-              <td class="category">Ecosistema de Herramientas de IA</td>
-              <td class="center">2</td>
-              <td class="center">8%</td>
-              <td>
-                ChatGPT vs. Claude vs. Gemini: fortalezas, límites y cuándo
-                usar cada uno.
-              </td>
-            </tr>
-
-            <tr class="priority">
-              <td class="center">03</td>
-              <td class="category">Técnicas de Prompting</td>
-              <td class="center">4</td>
-              <td class="center">18%</td>
-              <td>
-                TCREI, Zero-shot, Few-shot, Chain-of-Thought,
-                Encadenamiento y Meta Prompting.
-              </td>
-            </tr>
-
-            <tr>
-              <td class="center">04</td>
-              <td class="category">Alucinaciones y Uso Responsable</td>
-              <td class="center">2</td>
-              <td class="center">8%</td>
-              <td>
-                Por qué ocurren las alucinaciones, cómo validar resultados
-                y clasificación de información sensible.
-              </td>
-            </tr>
-
-            <tr>
-              <td class="center">05</td>
-              <td class="category">
-                Prompt de Sistema/Usuario y Agentes Personalizados
-              </td>
-              <td class="center">1</td>
-              <td class="center">8%</td>
-              <td>
-                Jerarquía sistema vs. usuario, GPTs y GEMs personalizados.
-              </td>
-            </tr>
-
-            <tr class="priority">
-              <td class="center">06</td>
-              <td class="category">
-                Embeddings, Búsqueda Semántica y RAG
-              </td>
-              <td class="center">3</td>
-              <td class="center">14%</td>
-              <td>
-                Representaciones vectoriales, búsqueda semántica,
-                cómo funciona RAG e higiene documental.
-              </td>
-            </tr>
-
-            <tr>
-              <td class="center">07</td>
-              <td class="category">Herramientas Avanzadas</td>
-              <td class="center">2</td>
-              <td class="center">10%</td>
-              <td>
-                Projects (ChatGPT/Claude), NotebookLM, Deep Research
-                y transcripción de audio a texto.
-              </td>
-            </tr>
-
-            <tr>
-              <td class="center">08</td>
-              <td class="category">Generación de Contenido Visual con IA</td>
-              <td class="center">2</td>
-              <td class="center">12%</td>
-              <td>
-                Estructura de prompts visuales, Sistema Visual de Marca,
-                formatos por canal y prompts de video.
-              </td>
-            </tr>
-
-            <tr>
-              <td class="center">09</td>
-              <td class="category">
-                Aplicación Empresarial / Casos Reales (Eclipsoft)
-              </td>
-              <td class="center">2</td>
-              <td class="center">12%</td>
-              <td>
-                Documentos de contexto + asistentes, investigación delimitada,
-                actas de reunión con IA y niveles de madurez de IA.
-              </td>
-            </tr>
-
-            <tr class="total-row">
-              <td></td>
-              <td>Total</td>
-              <td class="center">20</td>
-              <td class="center">100%</td>
-              <td>Cobertura completa del programa AI 360.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="question-text">
+        ¿Qué es un token y por qué “cien palabras” no es lo mismo que “cien tokens” en español?
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-label">03 · Estrategia de estudio</div>
-    <h2 class="section-title">Dónde conviene concentrar más tiempo</h2>
-    <p class="section-subtitle">
-      Todas las categorías deben repasarse. Sin embargo, el documento identifica
-      dos bloques con especial relevancia por la cantidad de preguntas que
-      concentran.
-    </p>
-
-    <div class="grid-3">
-      <article class="card study-card">
-        <div class="card-body">
-          <div class="study-rank">
-            <div class="rank-number">01</div>
-            <div>
-              <span class="tag purple">Prioridad principal</span>
-              <h3>Técnicas de Prompting</h3>
-            </div>
-          </div>
-
-          <p>
-            Es la habilidad práctica central del curso y aparece transversalmente
-            en los demás bloques.
-          </p>
-
-          <div class="weight-bar">
-            <div class="weight-fill" style="width:100%"></div>
-          </div>
-
-          <div class="list">
-            <div class="list-item">4 preguntas de 20.</div>
-            <div class="list-item">Peso indicado: 18%.</div>
-            <div class="list-item">
-              TCREI, Zero-shot, Few-shot, Chain-of-Thought,
-              Encadenamiento y Meta Prompting.
-            </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Un <strong>token</strong> es la unidad mínima de texto que procesa un modelo.
+          Puede ser una palabra completa, parte de una palabra o un símbolo; por eso no equivale directamente a una palabra.
+          <div class="key">
+            En español, la relación aproximada es de <strong>1 token por cada 4 caracteres</strong>.
+            Por ello, 100 palabras equivalen aproximadamente a 150 tokens y el español es cerca de un 20% menos eficiente en tokens que el inglés.
           </div>
         </div>
-      </article>
+      </details>
+    </article>
 
-      <article class="card study-card">
-        <div class="card-body">
-          <div class="study-rank">
-            <div class="rank-number">02</div>
-            <div>
-              <span class="tag blue">Prioridad alta</span>
-              <h3>Embeddings, Semántica y RAG</h3>
-            </div>
-          </div>
 
-          <p>
-            Constituye la base técnica de herramientas avanzadas con
-            conocimiento propio.
-          </p>
-
-          <div class="weight-bar">
-            <div class="weight-fill blue" style="width:78%"></div>
-          </div>
-
-          <div class="list">
-            <div class="list-item">3 preguntas de 20.</div>
-            <div class="list-item">Peso indicado: 14%.</div>
-            <div class="list-item">
-              Vectores, búsqueda semántica, funcionamiento de RAG
-              e higiene documental.
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="card study-card">
-        <div class="card-body">
-          <div class="study-rank">
-            <div class="rank-number">03</div>
-            <div>
-              <span class="tag green">Cobertura completa</span>
-              <h3>No ignores las demás categorías</h3>
-            </div>
-          </div>
-
-          <p>
-            Una pregunta incorrecta tiene el mismo efecto sobre la nota,
-            independientemente de la categoría de la que provenga.
-          </p>
-
-          <div class="weight-bar">
-            <div class="weight-fill green" style="width:62%"></div>
-          </div>
-
-          <div class="list">
-            <div class="list-item">Repasa las 9 categorías.</div>
-            <div class="list-item">
-              Visual y Casos Reales tienen 2 preguntas cada una.
-            </div>
-            <div class="list-item">
-              Sistema/Usuario y Agentes es la única categoría con 1 pregunta.
-            </div>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <div class="split">
-      <div class="callout green">
-        <strong>Recomendación de estudio:</strong>
-        dedica más tiempo a Técnicas de Prompting y a Embeddings/RAG,
-        pero mantén cobertura sobre las nueve categorías.
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">02</div>
+        <div class="tag purple">Fundamentos de LLMs</div>
       </div>
-
-      <div class="callout amber">
-        <strong>No subestimes una categoría pequeña:</strong>
-        el examen asigna 1 punto a cada pregunta, por lo que fallar una
-        pregunta tiene el mismo impacto en la calificación final.
+      <div class="question-text">
+        ¿Qué significa que la ventana de contexto de un modelo “se llene”? ¿Qué le pasa a la IA en ese momento?
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-label">04 · Lectura práctica</div>
-    <h2 class="section-title">Qué significa esto para el participante</h2>
-
-    <div class="split">
-      <article class="card">
-        <div class="card-body">
-          <span class="tag green">Objetivo</span>
-          <h3>Tu referencia de aprobación es 14/20</h3>
-
-          <div class="list">
-            <div class="list-item">
-              El examen contiene 20 preguntas en total.
-            </div>
-            <div class="list-item">
-              Cada pregunta vale 1 punto.
-            </div>
-            <div class="list-item">
-              Con 14 respuestas correctas alcanzas el mínimo de aprobación.
-            </div>
-            <div class="list-item">
-              Con menos de 14 respuestas correctas puedes utilizar
-              el segundo intento.
-            </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          La <strong>ventana de contexto</strong> es el límite máximo de tokens que el modelo procesa
+          en una interacción: instrucciones, historial y respuesta.
+          <div class="key">
+            Cuando se llena, se aplica una especie de <strong>ventana deslizante</strong>:
+            el modelo empieza a ignorar mensajes más antiguos para hacer espacio a los nuevos,
+            por lo que puede parecer que “olvida” información del inicio.
           </div>
         </div>
-      </article>
+      </details>
+    </article>
 
-      <div>
-        <div class="callout purple">
-          <strong>Bloques prácticos de cierre:</strong>
-          Generación de Contenido Visual y Aplicación Empresarial /
-          Casos Reales cuentan con 2 preguntas cada uno y corresponden
-          a los bloques prácticos finales del programa.
-        </div>
 
-        <div class="callout amber">
-          <strong>Sobre los pesos mostrados:</strong>
-          esta página conserva los porcentajes temáticos exactamente
-          como aparecen en el documento original y, al mismo tiempo,
-          mantiene la regla indicada allí de que cada pregunta vale 1 punto.
-        </div>
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">03</div>
+        <div class="tag blue">Ecosistema de Herramientas</div>
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section-label">05 · Camino a la certificación</div>
-    <h2 class="section-title">Del programa completado a la certificación</h2>
-    <p class="section-subtitle">
-      El examen final constituye el último requisito de evaluación del
-      programa AI 360.
-    </p>
-
-    <div class="certification">
-      <div class="flow">
-
-        <div class="step">
-          <div class="step-number">PASO 01</div>
-          <h4>Completar el programa</h4>
-          <p>
-            Finalizas las sesiones y prácticas correspondientes
-            a los Bloques 1 a 4.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">PASO 02</div>
-          <h4>Rendir el examen</h4>
-          <p>
-            Dispones de 45 minutos para responder 20 preguntas
-            sobre las 9 categorías.
-          </p>
-        </div>
-
-        <div class="step pass">
-          <div class="step-number">PASO 03</div>
-          <h4>¿Obtienes 70% o más?</h4>
-          <p>
-            Con 14 respuestas correctas o más quedas habilitado
-            para la certificación.
-          </p>
-        </div>
-
-        <div class="step retry">
-          <div class="step-number">PASO 04</div>
-          <h4>Segundo intento</h4>
-          <p>
-            Si no alcanzas el mínimo en el primero, puedes volver
-            a rendir el examen completo.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">PASO 05</div>
-          <h4>Se considera la nota más alta</h4>
-          <p>
-            Para la certificación cuenta la mejor calificación
-            obtenida entre los dos intentos.
-          </p>
-        </div>
-
+      <div class="question-text">
+        Si necesitan trabajar dentro de Google —Docs, Sheets y Drive— con información actualizada, ¿cuál herramienta conviene más?
       </div>
-    </div>
-  </section>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          <strong>Gemini</strong>, por su integración nativa con el ecosistema Google y su acceso a información en tiempo real.
+        </div>
+      </details>
+    </article>
 
-  <footer class="footer">
-    <div class="footer-grid">
-      <div>
-        <div class="section-label" style="color:#8f887e;">Resumen final</div>
-        <h2>La meta es simple: dominar la cobertura completa y superar 14 respuestas correctas.</h2>
 
-        <p>
-          Prioriza Prompting y Embeddings/RAG, repasa las nueve categorías
-          y administra los 45 minutos con claridad. Al alcanzar el 70% o más
-          en cualquiera de los dos intentos, quedas habilitado para
-          certificarte en AI 360.
-        </p>
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">04</div>
+        <div class="tag amber">Técnicas de Prompting</div>
       </div>
+      <div class="question-text">
+        ¿Qué es el marco TCREI y cuáles son sus cinco elementos?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          TCREI es un marco para construir prompts de alta calidad:
+          <ul>
+            <li><strong>Tarea:</strong> qué quieres que haga.</li>
+            <li><strong>Contexto:</strong> quién eres y para qué necesitas el resultado.</li>
+            <li><strong>Referencia:</strong> ejemplos o guías que reducen alucinaciones.</li>
+            <li><strong>Evaluación:</strong> criterios de éxito como formato, tono o longitud.</li>
+            <li><strong>Iteración:</strong> ajustar el resultado utilizando retroalimentación.</li>
+          </ul>
+        </div>
+      </details>
+    </article>
 
-      <div class="footer-score">
-        <div class="score-circle">
-          <div>
-            <strong>≥70%</strong>
-            <span>mínimo de aprobación</span>
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">05</div>
+        <div class="tag amber">Técnicas de Prompting</div>
+      </div>
+      <div class="question-text">
+        ¿En qué se diferencia el Encadenamiento de Prompts de simplemente pedir todo en un solo prompt largo?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          En el <strong>encadenamiento de prompts</strong>, una tarea se divide en varios pasos.
+          La salida de un prompt se convierte en la entrada del siguiente, como una línea de producción.
+          <div class="key">
+            Esto permite revisar y corregir cada etapa. Un prompt largo intenta resolver todo de una vez
+            y no ofrece ese mismo nivel de control intermedio.
           </div>
         </div>
-      </div>
-    </div>
+      </details>
+    </article>
 
-    <div class="brand">
-      AI 360 · TechXpert Guru · by Opendireito · Programa Ejecutivo 2026
-    </div>
-  </footer>
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">06</div>
+        <div class="tag amber">Técnicas de Prompting</div>
+      </div>
+      <div class="question-text">
+        ¿Qué es el Meta Prompting? Den un ejemplo de cuándo lo usarían.
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Es utilizar el propio LLM para <strong>generar, mejorar o evaluar un prompt</strong>
+          antes de ejecutar la tarea real.
+          <div class="key">
+            Ejemplo: “Ayúdame a crear el prompt óptimo para resumir informes trimestrales dirigidos
+            a una junta directiva no técnica.”
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">07</div>
+        <div class="tag coral">Alucinaciones y Uso Responsable</div>
+      </div>
+      <div class="question-text">
+        Mencionen dos estrategias para validar que una respuesta de la IA es correcta antes de usarla en su trabajo.
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          <ul>
+            <li>Pedir siempre <strong>fuentes o citas verificables</strong>.</li>
+            <li>Contrastar datos críticos —cifras, fechas y nombres— con una <strong>fuente oficial</strong> antes de utilizarlos.</li>
+          </ul>
+          <div class="key">
+            Regla del curso: <strong>la IA es el borrador; ustedes son el editor.</strong>
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">08</div>
+        <div class="tag blue">Prompt de Sistema / Usuario</div>
+      </div>
+      <div class="question-text">
+        Si el prompt de sistema y el prompt de usuario se contradicen, ¿cuál gana? ¿Por qué tiene sentido esa jerarquía?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Gana el <strong>prompt de sistema</strong>.
+          <div class="key">
+            El sistema define el comportamiento permanente —rol, tono y límites— que debe mantenerse estable,
+            mientras que el prompt de usuario contiene tareas puntuales que cambian en cada turno.
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">09</div>
+        <div class="tag purple">Embeddings</div>
+      </div>
+      <div class="question-text">
+        ¿Qué diferencia hay entre una búsqueda por palabras clave y una búsqueda semántica?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          La búsqueda por palabras clave encuentra coincidencias exactas de texto.
+          La <strong>búsqueda semántica</strong> busca por significado.
+          <div class="key">
+            Por ejemplo, una búsqueda semántica de “liquidez” también podría encontrar
+            “flujo de caja” o “activos circulantes”, aunque no compartan las mismas palabras.
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">10</div>
+        <div class="tag green">RAG</div>
+      </div>
+      <div class="question-text">
+        ¿Por qué se dice que el éxito de RAG depende “20% de tecnología y 80% de información limpia”?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Porque RAG no corrige documentos deficientes.
+          Si la base de conocimiento está desactualizada, contradictoria o desordenada,
+          la IA seguirá produciendo respuestas deficientes aunque la tecnología sea excelente.
+          <div class="key">
+            La calidad depende, sobre todo, de la <strong>higiene documental</strong>.
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">11</div>
+        <div class="tag blue">Herramientas Avanzadas</div>
+      </div>
+      <div class="question-text">
+        ¿Qué es Audio Overview en NotebookLM y para qué sirve?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Es una función de <strong>NotebookLM</strong> que genera automáticamente un podcast
+          de aproximadamente 10 a 20 minutos en formato conversacional,
+          explicando el contenido de los documentos subidos.
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">12</div>
+        <div class="tag coral">Contenido Visual</div>
+      </div>
+      <div class="question-text">
+        ¿Qué es el Sistema Visual de Marca —SVM— y por qué se recomienda “pegarlo” en cada prompt visual?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Es un bloque fijo de texto que define la identidad visual:
+          <strong>paleta, tono, estilo fotográfico y atmósfera</strong>.
+          <div class="key">
+            Se recomienda repetirlo literalmente en cada prompt porque la coherencia de marca
+            nace de la repetición consistente, no de redescribir el estilo cada vez con palabras diferentes.
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">13</div>
+        <div class="tag coral">Contenido Visual</div>
+      </div>
+      <div class="question-text">
+        ¿Qué significa la técnica “hero + derivados” al generar piezas para distintos canales?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Consiste en generar una única pieza principal o <strong>hero</strong>,
+          dejando suficiente margen alrededor del sujeto.
+          <div class="key">
+            A partir de ella se derivan stories, banners, publicaciones de feed y otros formatos
+            mediante reencuadre, manteniendo la misma escena, personajes, luz y estilo,
+            en lugar de generar una imagen diferente para cada canal.
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">14</div>
+        <div class="tag green">Aplicación Empresarial</div>
+      </div>
+      <div class="question-text">
+        Según los niveles de madurez de IA vistos en el Bloque 4, ¿a qué nivel busca llevar el curso a los participantes?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          El curso busca mover a los participantes del <strong>Nivel 1–2</strong>
+          —uso personal y prompts aislados— al <strong>Nivel 3</strong>.
+          <div class="key">
+            Nivel 3 significa trabajar con asistentes y proyectos que tienen
+            <strong>fuentes, formato y controles definidos</strong>.
+            La automatización autónoma de niveles 4–5 queda fuera del alcance del curso.
+          </div>
+        </div>
+      </details>
+    </article>
+
+
+    <article class="question-card">
+      <div class="question-head">
+        <div class="q-number">15</div>
+        <div class="tag green">Aplicación Empresarial</div>
+      </div>
+      <div class="question-text">
+        ¿Qué debe incluir un “documento de contexto” antes de crear un asistente —GPT, Gem o Proyecto—?
+      </div>
+      <details class="answer">
+        <summary>Ver respuesta</summary>
+        <div class="answer-content">
+          Debe incluir:
+          <ul>
+            <li><strong>Identidad de marca:</strong> colores, tipografía y tono.</li>
+            <li><strong>Estructura del documento:</strong> encabezados, secciones fijas y aviso de confidencialidad si aplica.</li>
+            <li><strong>Reglas fijas:</strong> instrucciones que el asistente debe seguir siempre.</li>
+            <li>Al menos un <strong>prompt negativo</strong>: algo que el asistente nunca debe hacer.</li>
+          </ul>
+        </div>
+      </details>
+    </article>
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="section-label">Mapa mental final</div>
+  <h2 class="section-title">Seis ideas que conectan todo el examen</h2>
+  <p class="section-sub">
+    Si puedes explicar estas relaciones con tus propias palabras, tienes una buena base para el repaso final.
+  </p>
+
+  <div class="memory-grid">
+    <article class="memory-card">
+      <div class="mini-label">01 · Modelos</div>
+      <h3>Contexto tiene límites</h3>
+      <p>Tokens y ventana de contexto explican cuánto puede procesar un modelo en una interacción.</p>
+    </article>
+
+    <article class="memory-card">
+      <div class="mini-label">02 · Prompting</div>
+      <h3>Estructura mejora resultados</h3>
+      <p>TCREI, chaining y Meta Prompting convierten una petición genérica en un proceso controlable.</p>
+    </article>
+
+    <article class="memory-card">
+      <div class="mini-label">03 · Validación</div>
+      <h3>IA no reemplaza verificación</h3>
+      <p>Las fuentes y la revisión de datos críticos siguen siendo responsabilidad del usuario.</p>
+    </article>
+
+    <article class="memory-card">
+      <div class="mini-label">04 · Conocimiento</div>
+      <h3>Significado supera coincidencia</h3>
+      <p>Embeddings y búsqueda semántica permiten recuperar información por concepto, no solo por palabras.</p>
+    </article>
+
+    <article class="memory-card">
+      <div class="mini-label">05 · Información</div>
+      <h3>RAG depende del origen</h3>
+      <p>Una arquitectura potente no compensa una base documental desactualizada o contradictoria.</p>
+    </article>
+
+    <article class="memory-card">
+      <div class="mini-label">06 · Empresa</div>
+      <h3>De prompts a sistemas</h3>
+      <p>La madurez aumenta cuando fuentes, formatos, reglas y contexto dejan de depender de improvisación.</p>
+    </article>
+  </div>
+
+  <div class="callout">
+    <strong>Principio transversal:</strong>
+    el objetivo del programa no es solamente “saber pedirle cosas a una IA”, sino diseñar
+    contextos, procesos y controles que produzcan resultados consistentes.
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="footer-label">AI 360 · Repaso final</div>
+  <h2>Primero recuerda. Después verifica.</h2>
+  <p>
+    Usa estas preguntas como diagnóstico: las respuestas que puedes reconocer pero no explicar
+    con precisión son probablemente las que más conviene reforzar antes del examen.
+  </p>
+
+  <div class="footer-meta">
+    AI 360 · TechXpert Guru · by Opendireito · Programa Ejecutivo 2026
+  </div>
+</footer>
 
 </main>
 </body>
