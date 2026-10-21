@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Acerca de este repositorio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f6f7fb;
+  --surface:#ffffff;
+  --ink:#172033;
+  --muted:#667085;
+  --line:#e5e7eb;
+
+  --purple:#6d5dfc;
+  --purple-soft:#f1efff;
+
+  --blue:#3478f6;
+  --blue-soft:#edf4ff;
+
+  --green:#16805f;
+  --green-soft:#eaf8f2;
+
+  --amber:#a96912;
+  --amber-soft:#fff6e7;
+
+  --coral:#b84c45;
+  --coral-soft:#fff0ef;
+
+  --radius:20px;
+  --shadow:0 18px 45px rgba(22,32,51,.07);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"DM Sans",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.65;
+}
+
+.repository-page{
+  max-width:1180px;
+  margin:0 auto;
+  padding:32px 22px 72px;
+}
+
+.hero{
+  background:
+    radial-gradient(circle at top right, rgba(109,93,252,.16), transparent 34%),
+    linear-gradient(135deg,#ffffff 0%,#f8f8ff 100%);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:clamp(30px,6vw,66px);
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+}
+
+.eyebrow{
+  display:inline-block;
+  font-family:"DM Mono",monospace;
+  font-size:.77rem;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--purple);
+  background:var(--purple-soft);
+  padding:7px 11px;
+  border-radius:999px;
+  margin-bottom:18px;
+}
+
+.hero h1{
+  margin:0;
+  max-width:790px;
+  font-size:clamp(2.35rem,5vw,4.6rem);
+  line-height:1.02;
+  letter-spacing:-.055em;
+}
+
+.hero p{
+  max-width:780px;
+  margin:22px 0 0;
+  font-size:1.14rem;
+  color:var(--muted);
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:32px;
+}
+
+.hero-card{
+  background:rgba(255,255,255,.8);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:17px;
+}
+
+.hero-card strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.hero-card span{
+  color:var(--muted);
+  font-size:.93rem;
+}
+
+.section{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:clamp(24px,4vw,40px);
+  margin:20px 0;
+  box-shadow:0 10px 30px rgba(22,32,51,.04);
+}
+
+.section-head{
+  margin-bottom:24px;
+}
+
+.section-kicker{
+  font-family:"DM Mono",monospace;
+  color:var(--purple);
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  font-weight:500;
+}
+
+.section h2{
+  margin:7px 0 8px;
+  font-size:clamp(1.55rem,3vw,2.25rem);
+  letter-spacing:-.035em;
+  line-height:1.15;
+}
+
+.section-head p,
+.lead{
+  color:var(--muted);
+  max-width:800px;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px;
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  background:#fff;
+}
+
+.card h3{
+  margin:0 0 7px;
+  font-size:1.05rem;
+}
+
+.card p{
+  margin:0;
+  color:var(--muted);
+  font-size:.95rem;
+}
+
+.card ul{
+  margin:12px 0 0;
+  padding-left:20px;
+  color:var(--muted);
+}
+
+.card li{
+  margin:6px 0;
+}
+
+.before{background:var(--blue-soft)}
+.during{background:var(--purple-soft)}
+.after{background:var(--green-soft)}
+
+.callout{
+  border-radius:16px;
+  padding:18px 20px;
+  margin:22px 0 0;
+  border-left:4px solid var(--purple);
+  background:var(--purple-soft);
+}
+
+.callout strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.callout p{
+  margin:0;
+}
+
+.callout.green{
+  background:var(--green-soft);
+  border-left-color:var(--green);
+}
+
+.callout.amber{
+  background:var(--amber-soft);
+  border-left-color:var(--amber);
+}
+
+.resource-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.resource{
+  padding:16px 17px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+}
+
+.resource strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.resource p{
+  margin:0;
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+.flow{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+.flow-item{
+  flex:1;
+  min-width:145px;
+  padding:15px;
+  text-align:center;
+  font-weight:700;
+  border-radius:14px;
+  background:#f8fafc;
+  border:1px solid var(--line);
+}
+
+.arrow{
+  color:#9aa4b2;
+  font-size:1.35rem;
+}
+
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:.77rem;
+  font-weight:700;
+  background:#eef2f6;
+  color:#475467;
+  margin-bottom:9px;
+}
+
+.tag.live{
+  background:var(--purple-soft);
+  color:var(--purple);
+}
+
+.tag.bonus{
+  background:var(--green-soft);
+  color:var(--green);
+}
+
+.tag.reference{
+  background:var(--blue-soft);
+  color:var(--blue);
+}
+
+.numbered{
+  display:grid;
+  gap:11px;
+  margin-top:18px;
+}
+
+.number-row{
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:13px;
+  align-items:start;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.number-row:last-child{
+  border-bottom:0;
+}
+
+.num{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:var(--purple-soft);
+  color:var(--purple);
+  font-family:"DM Mono",monospace;
+  font-weight:700;
+}
+
+.number-row strong{
+  display:block;
+  margin-bottom:2px;
+}
+
+.number-row p{
+  margin:0;
+  color:var(--muted);
+}
+
+.quote{
+  padding:24px;
+  border-radius:18px;
+  background:#172033;
+  color:white;
+  font-size:1.17rem;
+  line-height:1.55;
+  margin-top:24px;
+}
+
+.quote strong{
+  color:#a8d8ff;
+}
+
+.closing{
+  background:
+    radial-gradient(circle at right bottom,rgba(109,93,252,.2),transparent 35%),
+    #172033;
+  color:#fff;
+}
+
+.closing h2{
+  color:#fff;
+}
+
+.closing p{
+  color:#cbd2dc;
+}
+
+.closing .card{
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.13);
+}
+
+.closing .card h3{
+  color:white;
+}
+
+.closing .card p{
+  color:#cbd2dc;
+}
+
+@media(max-width:850px){
+  .hero-grid,
+  .grid-3,
+  .grid-2,
+  .resource-list{
+    grid-template-columns:1fr;
+  }
+
+  .arrow{
+    display:none;
+  }
+
+  .flow{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:540px){
+  .repository-page{
+    padding:14px 12px 48px;
+  }
+
+  .hero{
+    border-radius:20px;
+  }
+
+  .section{
+    padding:22px 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="repository-page">
+
+  <section class="hero">
+    <span class="eyebrow">IA Aplicada al Crecimiento de Startups</span>
+
+    <h1>Acerca de este repositorio</h1>
+
+    <p>
+      Este espacio reúne materiales de apoyo, recursos prácticos y contenidos de
+      profundización para acompañarte durante el taller y permitirte seguir
+      practicando después de la sesión.
+    </p>
+
+    <div class="hero-grid">
+
+      <div class="hero-card">
+        <strong>Antes del taller</strong>
+        <span>Refuerza conceptos esenciales de IA y prompting.</span>
+      </div>
+
+      <div class="hero-card">
+        <strong>Durante el taller</strong>
+        <span>Accede a instrucciones, archivos y materiales de las prácticas.</span>
+      </div>
+
+      <div class="hero-card">
+        <strong>Después del taller</strong>
+        <span>Profundiza, experimenta y adapta lo aprendido a tu startup.</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">Primero, algo importante</span>
+      <h2>No tienes que completar todo este contenido</h2>
+
+      <p>
+        El repositorio no es un segundo curso que debas terminar antes de asistir.
+        Parte del contenido será utilizado directamente durante la sesión y otra parte
+        se ha incorporado como material adicional para continuar aprendiendo.
+      </p>
+    </div>
+
+    <div class="grid-3">
+
+      <article class="card before">
+        <h3>Antes</h3>
+        <p>
+          Puedes revisar fundamentos como IA, tokens, contexto, embeddings,
+          RAG y prompting para llegar con una base conceptual más sólida.
+        </p>
+      </article>
+
+      <article class="card during">
+        <h3>Durante</h3>
+        <p>
+          Utilizaremos instrucciones, archivos, complementos, Proyectos y otros
+          recursos que encontrarás organizados aquí.
+        </p>
+      </article>
+
+      <article class="card after">
+        <h3>Después</h3>
+        <p>
+          Regresa al repositorio para repetir ejercicios, probar otras herramientas,
+          investigar y construir nuevas capacidades de IA.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="callout">
+      <strong>La idea es simple</strong>
+      <p>
+        No memorices el repositorio. Úsalo como una <strong>caja de herramientas</strong>
+        a la que puedas regresar cuando aparezca una necesidad concreta.
+      </p>
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">01 · Fundamentos</span>
+      <h2>Comprender cómo funciona la IA</h2>
+
+      <p>
+        Estos materiales explican conceptos que aparecen una y otra vez cuando
+        trabajamos con modelos, documentos, contexto, búsqueda semántica y sistemas
+        especializados.
+      </p>
+    </div>
+
+    <div class="resource-list">
+
+      <div class="resource">
+        <span class="tag reference">Referencia</span>
+        <strong>Libro de IA</strong>
+        <p>
+          <em>IA - arquitectura, conceptos y aplicaciones modernas.</em>
+          Material de consulta para profundizar en los fundamentos de la Inteligencia Artificial.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Video</span>
+        <strong>Qué es la IA</strong>
+        <p>Introducción a qué entendemos actualmente por Inteligencia Artificial.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Video</span>
+        <strong>Tokens</strong>
+        <p>Qué son los tokens y por qué influyen en la forma en que trabajan los modelos.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag bonus">Práctica</span>
+        <strong>Práctica de tokens</strong>
+        <p>
+          Experimenta con un tokenizer y observa cómo distintos textos son convertidos
+          y contabilizados como tokens.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Video</span>
+        <strong>Ventana de Contexto</strong>
+        <p>
+          Comprende cuánto contexto puede manejar un modelo y cómo afecta una conversación
+          o una tarea.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Video</span>
+        <strong>Embeddings</strong>
+        <p>
+          Introducción a la representación semántica de información para búsqueda y comparación.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Video</span>
+        <strong>RAG</strong>
+        <p>
+          Introducción a Retrieval-Augmented Generation y al uso de conocimiento externo
+          para enriquecer respuestas.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag bonus">Para continuar</span>
+        <strong>Artículos y referencias</strong>
+        <p>
+          Enlaces seleccionados para seguir explorando conceptos, herramientas y aplicaciones de IA.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">02 · Prompting</span>
+      <h2>De una instrucción a un sistema de trabajo</h2>
+
+      <p>
+        En el taller no utilizaremos prompts como recetas aisladas. Aprenderemos
+        distintas formas de estructurarlos y, especialmente, cómo conectar unas tareas con otras.
+      </p>
+    </div>
+
+    <div class="resource-list">
+
+      <div class="resource">
+        <span class="tag live">Práctica</span>
+        <strong>Práctica de Prompts Básicos</strong>
+        <p>Introducción práctica a la construcción de instrucciones claras y útiles.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag live">Video</span>
+        <strong>Técnicas de prompting</strong>
+        <p>Recorrido por distintas formas de estructurar instrucciones para un modelo.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Método</span>
+        <strong>Zero-Shot &amp; Few-Shot Prompting</strong>
+        <p>
+          Cómo pedir directamente una tarea o utilizar ejemplos para orientar el resultado.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Método</span>
+        <strong>Chain of Thought Prompting</strong>
+        <p>Material para comprender instrucciones orientadas a procesos de razonamiento estructurado.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag live">Clave para el taller</span>
+        <strong>Meta Prompting y Encadenamiento</strong>
+        <p>
+          Utilizar IA para construir mejores instrucciones y convertir el resultado de una tarea
+          en la entrada de la siguiente.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag reference">Consulta</span>
+        <strong>Compendio de los 5 métodos</strong>
+        <p>Resumen de los principales métodos de prompting incluidos en el repositorio.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag live">Concepto</span>
+        <strong>Prompts de Sistema vs. Prompts de Usuario</strong>
+        <p>
+          Diferencia entre instrucciones que definen el comportamiento general de un sistema
+          y solicitudes realizadas durante una conversación.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="flow">
+      <div class="flow-item">Prompt</div>
+      <span class="arrow">→</span>
+      <div class="flow-item">Mejor instrucción</div>
+      <span class="arrow">→</span>
+      <div class="flow-item">Capacidad reutilizable</div>
+      <span class="arrow">→</span>
+      <div class="flow-item">Sistema de trabajo</div>
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">03 · Capacidades reutilizables</span>
+      <h2>Crear complementos especializados</h2>
+
+      <p>
+        Uno de los objetivos principales del taller es pasar de prompts que escribimos
+        repetidamente a capacidades especializadas que podamos reutilizar.
+      </p>
+    </div>
+
+    <div class="resource-list">
+
+      <div class="resource">
+        <span class="tag live">En clase</span>
+        <strong>Complementos en ChatGPT</strong>
+        <p>
+          Introducción al uso de complementos como capacidades especializadas dentro de ChatGPT.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag live">Archivo .md</span>
+        <strong>modelos-de-negocios</strong>
+        <p>
+          Instrucción para crear una capacidad especializada en análisis y estructuración
+          de modelos de negocio.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag live">Descarga</span>
+        <strong>Archivos para la base contextual del modelo de negocio</strong>
+        <p>
+          Documentos que aportan conocimiento adicional y sirven como fuentes de referencia.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag live">Archivo .md</span>
+        <strong>asistente-marketing</strong>
+        <p>
+          Instrucción para construir una capacidad enfocada en estrategia, identidad,
+          comunicación y contenido comercial.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="quote">
+      Una buena instrucción puede dejar de ser un prompt que copiamos una y otra vez y
+      convertirse en una <strong>capacidad reutilizable</strong>.
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">04 · Contexto</span>
+      <h2>Crear un entorno de trabajo para tu startup</h2>
+
+      <p>
+        Después de estructurar información sobre el negocio, podemos reunirla en un
+        espacio de trabajo persistente para que la IA tenga contexto suficiente para
+        producir resultados más coherentes.
+      </p>
+    </div>
+
+    <div class="grid-2">
+
+      <article class="card">
+        <span class="tag live">En clase</span>
+        <h3>Proyectos en ChatGPT</h3>
+        <p>
+          Cómo reunir conversaciones, instrucciones y documentos relacionados con un mismo objetivo.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="tag bonus">Comparación</span>
+        <h3>Proyectos en Claude</h3>
+        <p>
+          Referencia para comprender cómo aplicar un enfoque similar en otra plataforma.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="callout green">
+      <strong>Una diferencia útil</strong>
+      <p>
+        Un <strong>prompt</strong> permite pedir algo. Una <strong>capacidad especializada</strong>
+        sabe cómo realizar un tipo de tarea. Un <strong>Proyecto</strong> puede reunir el contexto
+        necesario para trabajar de forma continua sobre un mismo negocio.
+      </p>
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">05 · Investigación</span>
+      <h2>Cuando necesitamos conocimiento externo</h2>
+
+      <p>
+        La IA también puede apoyar procesos de investigación sobre mercados, tecnologías,
+        competidores, tendencias y otros temas relacionados con una startup.
+      </p>
+    </div>
+
+    <div class="grid-2">
+
+      <article class="card">
+        <span class="tag bonus">Bonus</span>
+        <h3>Guía de investigación profunda</h3>
+        <p>
+          Introducción al uso de herramientas de investigación asistida por IA.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="tag bonus">Bonus</span>
+        <h3>Prompts para Deep Research</h3>
+        <p>
+          Ejemplos de instrucciones que puedes adaptar para realizar investigaciones
+          más estructuradas.
+        </p>
+      </article>
+
+    </div>
+
+    <div class="callout amber">
+      <strong>Investigar con IA no elimina la validación</strong>
+      <p>
+        Revisa las fuentes, distingue hechos de inferencias y valida la información
+        antes de utilizarla para tomar decisiones.
+      </p>
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">06 · Fuentes controladas</span>
+      <h2>Trabajar con NotebookLM</h2>
+
+      <p>
+        Cuando necesitamos analizar documentación específica, podemos trabajar con
+        entornos orientados a un conjunto delimitado de fuentes.
+      </p>
+    </div>
+
+    <div class="resource-list">
+
+      <div class="resource">
+        <span class="tag bonus">Guía</span>
+        <strong>Guía Estratégica: obtención de fuentes en NotebookLM</strong>
+        <p>Cómo localizar, seleccionar e incorporar fuentes relevantes.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag bonus">Prompts</span>
+        <strong>Prompts para obtención de fuentes</strong>
+        <p>Ejemplos de instrucciones para apoyar la búsqueda y organización de información.</p>
+      </div>
+
+      <div class="resource">
+        <span class="tag bonus">Video</span>
+        <strong>Creación de un cuaderno con datos legales</strong>
+        <p>
+          Ejemplo práctico de construcción de un cuaderno para trabajar con documentación
+          relacionada con protección de datos.
+        </p>
+      </div>
+
+      <div class="resource">
+        <span class="tag bonus">Descarga</span>
+        <strong>Archivos de la Ley de Protección de Datos Personales</strong>
+        <p>
+          Documentación para practicar consultas y análisis sobre una base de fuentes definida.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="callout amber">
+      <strong>Importante</strong>
+      <p>
+        Este ejercicio demuestra cómo trabajar con fuentes específicas. No sustituye
+        asesoría jurídica ni convierte automáticamente un borrador en un documento legal validado.
+      </p>
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="section-head">
+      <span class="section-kicker">Cómo aprovecharlo</span>
+      <h2>Cuando tengas una necesidad, empieza por estas preguntas</h2>
+    </div>
+
+    <div class="numbered">
+
+      <div class="number-row">
+        <div class="num">01</div>
+        <div>
+          <strong>¿Necesito simplemente hacer una consulta?</strong>
+          <p>Probablemente una conversación normal sea suficiente.</p>
+        </div>
+      </div>
+
+      <div class="number-row">
+        <div class="num">02</div>
+        <div>
+          <strong>¿Necesito una mejor instrucción?</strong>
+          <p>Aplica las técnicas de prompting disponibles en el repositorio.</p>
+        </div>
+      </div>
+
+      <div class="number-row">
+        <div class="num">03</div>
+        <div>
+          <strong>¿Es una tarea que voy a repetir?</strong>
+          <p>Evalúa convertirla en una capacidad reutilizable.</p>
+        </div>
+      </div>
+
+      <div class="number-row">
+        <div class="num">04</div>
+        <div>
+          <strong>¿Necesito incorporar información de mi negocio?</strong>
+          <p>Utiliza documentos, fuentes e instrucciones dentro de un Proyecto.</p>
+        </div>
+      </div>
+
+      <div class="number-row">
+        <div class="num">05</div>
+        <div>
+          <strong>¿Necesito información externa?</strong>
+          <p>Considera una investigación profunda y valida las fuentes encontradas.</p>
+        </div>
+      </div>
+
+      <div class="number-row">
+        <div class="num">06</div>
+        <div>
+          <strong>¿Necesito trabajar únicamente con fuentes específicas?</strong>
+          <p>Un entorno como NotebookLM puede ser más adecuado.</p>
+        </div>
+      </div>
+
+      <div class="number-row">
+        <div class="num">07</div>
+        <div>
+          <strong>¿Puedo conectar una tarea con la siguiente?</strong>
+          <p>Utiliza encadenamiento para construir un flujo de trabajo más completo.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="section closing">
+
+    <div class="section-head">
+      <span class="section-kicker" style="color:#b9b0ff;">Contenido adicional</span>
+      <h2>Y sí… hay bastante contenido Bonus</h2>
+
+      <p>
+        No tienes que consumirlo todo ahora. Explóralo a tu ritmo, prueba los ejemplos
+        con tu propio emprendimiento y vuelve a estos recursos cuando aparezca una
+        necesidad concreta.
+      </p>
+    </div>
+
+    <div class="grid-3">
+
+      <article class="card">
+        <h3>Consulta</h3>
+        <p>Regresa cuando necesites recordar un concepto o técnica.</p>
+      </article>
+
+      <article class="card">
+        <h3>Experimenta</h3>
+        <p>Adapta prompts, complementos y prácticas a tu propio negocio.</p>
+      </article>
+
+      <article class="card">
+        <h3>Continúa aprendiendo</h3>
+        <p>Usa el repositorio como punto de partida para profundizar después del taller.</p>
+      </article>
+
+    </div>
+
+    <div class="quote" style="background:rgba(255,255,255,.08); margin-bottom:0;">
+      El objetivo es que un taller de tres horas pueda convertirse en
+      <strong>muchas más horas de práctica y aprendizaje aplicado.</strong>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>
