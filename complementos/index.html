@@ -184,4 +184,5 @@ const checks=$$('#self-check input[type="checkbox"]');function update(){const co
 $('#download-template').addEventListener('click',()=>{const data=$('#plantilla-codigo').textContent,url=URL.createObjectURL(new Blob([data],{type:'text/markdown;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='plantilla_acta.md';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)});
 function top(){ $('#back-top').hidden=window.scrollY<600 }window.addEventListener('scroll',top,{passive:true});top();$('#back-top').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 })();
-</script></body></html>
+</script><script src="/curso-ia-practico/embed.js"></script>
+</body></html>
